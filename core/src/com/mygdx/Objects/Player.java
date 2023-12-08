@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.Objects;
 
 public class Player extends Entity {
 

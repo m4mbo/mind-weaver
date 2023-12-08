@@ -1,10 +1,8 @@
-package com.mygdx.game;
+package com.mygdx.Game;
 
-import Screens.*;
+import com.mygdx.Screens.*;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
 
 public class Glissoar extends Game {
 	public SpriteBatch batch;

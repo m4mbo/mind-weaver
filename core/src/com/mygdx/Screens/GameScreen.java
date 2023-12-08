@@ -1,14 +1,14 @@
-package Screens;
+package com.mygdx.Screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.Glissoar;
+import com.mygdx.Game.Glissoar;
+import com.mygdx.Helpers.Constants;
 
 public class GameScreen implements Screen {
 
@@ -19,7 +19,7 @@ public class GameScreen implements Screen {
     public GameScreen(Glissoar game) {
         this.game = game;
         this.gameCam = new OrthographicCamera();
-        this.gamePort = new StretchViewport(800, 480, gameCam);
+        this.gamePort = new FitViewport(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT, gameCam);
         this.img = new Texture("badlogic.jpg");
     }
     @Override
