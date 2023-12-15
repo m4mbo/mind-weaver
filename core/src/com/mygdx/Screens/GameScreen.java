@@ -8,8 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.utils.viewport.*;
 import com.mygdx.Game.Glissoar;
 import com.mygdx.Helpers.Constants;
 
@@ -24,27 +23,31 @@ public class GameScreen implements Screen {
     private OrthogonalTiledMapRenderer renderer;
     public GameScreen(Glissoar game) {
         this.game = game;
+        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());      // Full-screen
         gameCam = new OrthographicCamera();
-        gamePort = new FitViewport(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT, gameCam);
-        img = new Texture("badlogic.jpg");
+        gamePort = new FitViewport(Constants.TILE_SIZE * 25, Constants.TILE_SIZE * 14, gameCam);
         maploader = new TmxMapLoader();
         map = maploader.load("test.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
+        gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
     }
+
+
     @Override
     public void show() {
-
     }
 
     @Override
     public void render(float delta) {
         // Clearing the screen
-        Gdx.gl.glClearColor( 1, 0, 0, 1 );
+        Gdx.gl.glClearColor( 0, 0, 0, 1 );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT);
+
+        renderer.setView(gameCam);
+        renderer.render();
 
         game.batch.setProjectionMatrix(gameCam.combined);
         game.batch.begin();
-        game.batch.draw(img, 0, 0);
         game.batch.end();
     }
 
