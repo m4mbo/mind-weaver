@@ -17,7 +17,6 @@ public class GameScreen implements Screen {
     private Glissoar game;
     private OrthographicCamera gameCam;
     private Viewport gamePort;
-    private Texture img;
     private TmxMapLoader maploader;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
@@ -37,8 +36,20 @@ public class GameScreen implements Screen {
     public void show() {
     }
 
+    public void handleInput(float dt) {
+        if (Gdx.input.isTouched()) gameCam.position.x += 100*dt;
+    }
+    public void update(float dt) {
+        handleInput(dt);
+        gameCam.update();
+        renderer.setView(gameCam);
+    }
+
     @Override
     public void render(float delta) {
+
+        update(delta);
+
         // Clearing the screen
         Gdx.gl.glClearColor( 0, 0, 0, 1 );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT);
