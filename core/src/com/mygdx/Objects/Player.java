@@ -28,11 +28,11 @@ public class Player extends Sprite {
     }
 
     public void moveRight() {
-        
+        b2body.applyLinearImpulse(new Vector2(0.05f, 0), b2body.getWorldCenter(), true);
     }
 
     public void moveLeft() {
-
+        b2body.applyLinearImpulse(new Vector2(-0.05f, 0), b2body.getWorldCenter(), true);
     }
 
     public void attack() {
@@ -46,4 +46,14 @@ public class Player extends Sprite {
     public void grab() {
 
     }
+
+    public boolean movingRight() {
+        return !(b2body.getLinearVelocity().x <= 2);
+    }
+
+    public boolean movingLeft() {
+        return !(b2body.getLinearVelocity().x >= -2);
+    }
+
+
 }
