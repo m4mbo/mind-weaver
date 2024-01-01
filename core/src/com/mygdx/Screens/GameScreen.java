@@ -69,8 +69,9 @@ public class GameScreen implements Screen {
 
     public void handleInput(float dt) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) player.jump();
-        if (Gdx.input.isKeyPressed(Input.Keys.D) && !player.movingRight()) player.moveRight();
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && !player.movingLeft()) player.moveLeft();
+        else if (Gdx.input.isKeyPressed(Input.Keys.D) && !player.movingRight()) player.moveRight();
+        else if (Gdx.input.isKeyPressed(Input.Keys.A) && !player.movingLeft()) player.moveLeft();
+        else player.stop();
     }
     public void update(float dt) {
         handleInput(dt);
