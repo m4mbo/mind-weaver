@@ -39,7 +39,7 @@ public class GameScreen implements Screen {
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(Constants.TILE_SIZE * 25 / Constants.PPM, Constants.TILE_SIZE * 14 / Constants.PPM, gameCam);
         maploader = new TmxMapLoader();
-        map = maploader.load("test.tmx");
+        map = maploader.load("test_upgrade.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
         world = new World(new Vector2(0, -10), true);

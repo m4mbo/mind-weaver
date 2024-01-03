@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="14">
+ <tileset firstgid="1" source="test_tiles.tsx"/>
+ <layer id="1" name="bg" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJztwwEJAAAMBKH7/qWXY6DgqqmqqqqqqqqqqurzBwHpCcU=
+  </data>
+ </layer>
+ <layer id="4" name="graphic" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJztzwEJADAMwLAx/6JvIzsNVEB3Zra4rurD0oelD0sflj4sfVj6sPRh6cPSh6UPSx+WPix9WPqw9GHpw9KHpQ9LH5Y+LH1Yfv0oowfIdgMB
+  </data>
+ </layer>
+ <objectgroup id="3" name="ground">
+  <object id="4" x="16" y="768" width="784" height="32"/>
+  <object id="6" x="0" y="0" width="32" height="768"/>
+  <object id="7" x="0" y="768" width="16" height="32"/>
+  <object id="8" x="32" y="0" width="768" height="32"/>
+  <object id="12" x="768" y="32" width="30" height="734"/>
+  <object id="13" x="915" y="507"/>
+ </objectgroup>
+</map>
