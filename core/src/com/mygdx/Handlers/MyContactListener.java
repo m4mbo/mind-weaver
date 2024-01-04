@@ -3,23 +3,23 @@ package com.mygdx.Handlers;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Objects.Player;
 
-public class CollisionHandler implements ContactListener {
+public class MyContactListener implements ContactListener {
 
-    Fixture fa;
-    Fixture fb;
-    Player player;
+    private Fixture fa;
+    private Fixture fb;
+    private Player player;
 
-    public CollisionHandler(Player player) {
+    public MyContactListener(Player player) {
         this.player = player;
     }
 
     @Override
     public void beginContact(Contact contact) {
 
-        if (!handleFixtures(contact)) return;
+        if (handleFixtures(contact)) return;
 
         if (fa.getUserData().equals("leftSensor") || fb.getUserData().equals("leftSensor")) {
-            player.setWallState(2);
+            player.setWallState(-1);
         } else if (fa.getUserData().equals("rightSensor") || fb.getUserData().equals("rightSensor")) {
             player.setWallState(1);
         } else if (fa.getUserData().equals("bottomSensor") || fb.getUserData().equals("bottomSensor")) {
@@ -30,7 +30,7 @@ public class CollisionHandler implements ContactListener {
     @Override
     public void endContact(Contact contact) {
 
-        if (!handleFixtures(contact)) return;
+        if (handleFixtures(contact)) return;
 
         if (fa.getUserData().equals("leftSensor") || fb.getUserData().equals("leftSensor") || fa.getUserData().equals("rightSensor") || fb.getUserData().equals("rightSensor")) {
             player.setWallState(0);
@@ -44,9 +44,9 @@ public class CollisionHandler implements ContactListener {
         fb = contact.getFixtureB();
 
         if (fa == null || fb == null) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override

@@ -12,7 +12,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.*;
 import com.mygdx.Game.Glissoar;
-import com.mygdx.Handlers.CollisionHandler;
+import com.mygdx.Handlers.MyContactListener;
+import com.mygdx.Handlers.MyInputProcessor;
 import com.mygdx.Tools.B2WorldCreator;
 import com.mygdx.Tools.Constants;
 import com.mygdx.Objects.Player;
@@ -39,7 +40,8 @@ public class GameScreen implements Screen {
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
         world = new World(new Vector2(0, -11), true);
         player = new Player(100, 100, world);
-        world.setContactListener(new CollisionHandler(player));
+        Gdx.input.setInputProcessor(new MyInputProcessor(player));
+        world.setContactListener(new MyContactListener(player));
         b2dr = new Box2DDebugRenderer();
         new B2WorldCreator(world, map);     //Creating world
     }
@@ -48,17 +50,8 @@ public class GameScreen implements Screen {
     public void show() {
     }
 
-    public void handleInput(float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.isOnGround()) player.jump();
-        else if (Gdx.input.isKeyPressed(Input.Keys.D)) player.moveRight();
-        else if (Gdx.input.isKeyPressed(Input.Keys.A)) player.moveLeft();
-        else if (Gdx.input.isKeyPressed(Input.Keys.J) && player.getWallState() != Constants.wallType.NONE && !player.isWallGrabbed()) player.grab();
-        //else if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && player.falling()) player.glide();
-        else player.reset();
-    }
-
     public void update(float delta) {
-        handleInput(delta);
+        player.update();
         world.step(1/60f, 6, 2);
         gameCam.update();
         renderer.setView(gameCam);

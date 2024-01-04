@@ -10,10 +10,13 @@ public class Player extends Sprite {
     private final Body b2body;
     private boolean onGround;
     private boolean glideConsumed;
-    private Constants.wallType wallState;
+    private int wallState;      // -1 for left, 1 for right, 0 for none
     private boolean wallGrabbed;
+    private Constants.DIRECTION direction;
     public Player(int x, int y, World world) {
+        direction = Constants.DIRECTION.STILL;
         onGround = true;
+
         this.world = world;
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, y / Constants.PPM);
@@ -47,6 +50,28 @@ public class Player extends Sprite {
         fdef.shape = polygonShape;
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData("bottomSensor");
+
+        wallState = 0;
+    }
+
+    public void update() {
+        switch (direction) {
+            case LEFT:
+                moveLeft();
+                break;
+            case RIGHT:
+                moveRight();
+                break;
+            case UP:
+                moveUp();
+                break;
+            case DOWN:
+                moveDown();
+                break;
+            default:
+                b2body.setLinearVelocity(0, b2body.getLinearVelocity().y);
+                break;
+        }
     }
 
     public void jump() {
@@ -55,7 +80,7 @@ public class Player extends Sprite {
     }
 
     public void wallJump() {
-        if (wallState == Constants.wallType.LEFT) {
+        if (wallState == -1) {
 
         } else {
 
@@ -74,11 +99,12 @@ public class Player extends Sprite {
         else b2body.setLinearVelocity(-Constants.MAX_SPEED, b2body.getLinearVelocity().y);
     }
 
-    public void reset() {
-        if (onGround) glideConsumed = false;
-        wallGrabbed = false;
-        world.setGravity(new Vector2(0, -11));
-        b2body.setLinearVelocity(0, b2body.getLinearVelocity().y);
+    public void moveUp() {
+        b2body.setLinearVelocity(0, 0.5f);
+    }
+
+    public void moveDown() {
+        b2body.setLinearVelocity(0, -0.5f);
     }
 
     public void attack() {
@@ -95,22 +121,22 @@ public class Player extends Sprite {
     }
 
     public void grab() {
+        wallGrabbed = true;
+        world.setGravity(new Vector2(0, 0));
         b2body.setLinearVelocity(0, 0);
     }
 
-    public boolean movingRight() {
-        return !(b2body.getLinearVelocity().x <= Constants.MAX_SPEED);
-    }
-
-    public boolean movingLeft() {
-        return !(b2body.getLinearVelocity().x >= -Constants.MAX_SPEED);
+    public void letGo() {
+        wallGrabbed = false;
+        b2body.applyLinearImpulse(new Vector2(0, -0.1f), b2body.getWorldCenter(), true);
+        world.setGravity(new Vector2(0, -11));
     }
 
     public boolean isOnGround() {
         return onGround;
     }
 
-    public boolean falling() {
+    public boolean isFalling() {
         return b2body.getLinearVelocity().y < 0;
     }
 
@@ -118,21 +144,17 @@ public class Player extends Sprite {
         this.onGround = onGround;
     }
 
-    public void setWallState(int i) {
-        if (i == 0) {
-            wallState = Constants.wallType.NONE;
-        } else if (i == 1) {
-            wallState = Constants.wallType.RIGHT;
-        } else {
-            wallState = Constants.wallType.LEFT;
-        }
-    }
+    public void setWallState(int wallState) { this.wallState = wallState; }
 
-    public Constants.wallType getWallState() {
+    public int getWallState() {
         return wallState;
     }
+
+    public void setDirection(Constants.DIRECTION direction) { this.direction = direction; }
 
     public boolean isWallGrabbed() {
         return wallGrabbed;
     }
+
+    public Constants.DIRECTION getDirection() { return direction; }
 }
