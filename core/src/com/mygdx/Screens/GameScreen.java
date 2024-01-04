@@ -5,22 +5,17 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.*;
 import com.mygdx.Game.Glissoar;
-import com.mygdx.Helpers.Constants;
+import com.mygdx.Handlers.CollisionHandler;
+import com.mygdx.Tools.B2WorldCreator;
+import com.mygdx.Tools.Constants;
 import com.mygdx.Objects.Player;
-import jdk.javadoc.internal.doclets.formats.html.markup.BodyContents;
 
 public class GameScreen implements Screen {
 
@@ -42,40 +37,28 @@ public class GameScreen implements Screen {
         map = maploader.load("test_upgrade.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
-        world = new World(new Vector2(0, -10), true);
-        b2dr = new Box2DDebugRenderer();
+        world = new World(new Vector2(0, -11), true);
         player = new Player(100, 100, world);
-        BodyDef bdef  = new BodyDef();
-        PolygonShape shape = new PolygonShape();
-        FixtureDef fdef = new FixtureDef();
-        Body body;
-
-        // Create ground bodies/fixtures
-        for (MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getHeight() / 2) / Constants.PPM);
-            body = world.createBody(bdef);
-            shape.setAsBox((rect.getWidth() / 2) / Constants.PPM, (rect.getHeight() / 2) / Constants.PPM);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
+        world.setContactListener(new CollisionHandler(player));
+        b2dr = new Box2DDebugRenderer();
+        new B2WorldCreator(world, map);     //Creating world
     }
-
 
     @Override
     public void show() {
     }
 
-    public void handleInput(float dt) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !player.aloft()) player.jump();
-        else if (Gdx.input.isKeyPressed(Input.Keys.D) && !player.movingRight()) player.moveRight();
-        else if (Gdx.input.isKeyPressed(Input.Keys.A) && !player.movingLeft()) player.moveLeft();
+    public void handleInput(float delta) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.isOnGround()) player.jump();
+        else if (Gdx.input.isKeyPressed(Input.Keys.D)) player.moveRight();
+        else if (Gdx.input.isKeyPressed(Input.Keys.A)) player.moveLeft();
+        else if (Gdx.input.isKeyPressed(Input.Keys.J) && player.getWallState() != Constants.wallType.NONE && !player.isWallGrabbed()) player.grab();
         //else if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && player.falling()) player.glide();
         else player.reset();
     }
-    public void update(float dt) {
-        handleInput(dt);
+
+    public void update(float delta) {
+        handleInput(delta);
         world.step(1/60f, 6, 2);
         gameCam.update();
         renderer.setView(gameCam);
