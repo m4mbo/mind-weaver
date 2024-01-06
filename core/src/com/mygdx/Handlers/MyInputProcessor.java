@@ -21,7 +21,8 @@ public class MyInputProcessor implements InputProcessor {
                     player.jump();
                     break;
                 }
-                if (player.isWallGrabbed()) {
+                if (player.getWallState() != 0) {
+                    player.setDirection(Constants.DIRECTION.PREV);
                     player.wallJump();
                     break;
                 }
@@ -53,23 +54,14 @@ public class MyInputProcessor implements InputProcessor {
 
         switch (keycode) {
             case Input.Keys.SPACE:
-                if (player.isOnGround() && !player.isWallGrabbed()) {
-                    player.jump();
-                    break;
-                }
-                if (player.isWallGrabbed()) {
-                    player.wallJump();
-                    break;
-                }
-                //player.glide();
                 break;
             case Input.Keys.D:
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) player.setDirection(Constants.DIRECTION.LEFT);
-                else player.setDirection(Constants.DIRECTION.STILL);
+                else player.setDirection(Constants.DIRECTION.HSTILL);
                 break;
             case Input.Keys.A:
                 if (Gdx.input.isKeyPressed(Input.Keys.D)) player.setDirection(Constants.DIRECTION.RIGHT);
-                else player.setDirection(Constants.DIRECTION.STILL);
+                else player.setDirection(Constants.DIRECTION.HSTILL);
                 break;
             case Input.Keys.J:
                 if (player.isWallGrabbed()) {
@@ -81,12 +73,12 @@ public class MyInputProcessor implements InputProcessor {
             case Input.Keys.W:
                 if (!player.isWallGrabbed()) break;
                 if (Gdx.input.isKeyPressed(Input.Keys.S)) player.setDirection(Constants.DIRECTION.DOWN);
-                else player.setDirection(Constants.DIRECTION.STILL);
+                else player.setDirection(Constants.DIRECTION.FSTILL);
                 break;
             case Input.Keys.S:
                 if (!player.isWallGrabbed()) break;
                 if (Gdx.input.isKeyPressed(Input.Keys.W)) player.setDirection(Constants.DIRECTION.UP);
-                else player.setDirection(Constants.DIRECTION.STILL);
+                else player.setDirection(Constants.DIRECTION.FSTILL);
                 break;
             default:
                 break;

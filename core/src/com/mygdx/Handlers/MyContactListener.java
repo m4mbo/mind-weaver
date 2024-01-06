@@ -2,6 +2,7 @@ package com.mygdx.Handlers;
 
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Objects.Player;
+import com.mygdx.Tools.Constants;
 
 public class MyContactListener implements ContactListener {
 
@@ -24,6 +25,7 @@ public class MyContactListener implements ContactListener {
             player.setWallState(1);
         } else if (fa.getUserData().equals("bottomSensor") || fb.getUserData().equals("bottomSensor")) {
             player.setOnGround(true);
+            if (player.getDirection() == Constants.DIRECTION.PREV) player.setDirection(Constants.DIRECTION.HSTILL);
         }
     }
 

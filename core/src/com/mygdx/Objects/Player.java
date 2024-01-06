@@ -3,9 +3,10 @@ package com.mygdx.Objects;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.Interfaces.Subscriber;
 import com.mygdx.Tools.Constants;
 
-public class Player extends Sprite {
+public class Player extends Sprite implements Subscriber {
     private final World world;
     private final Body b2body;
     private boolean onGround;
@@ -14,7 +15,7 @@ public class Player extends Sprite {
     private boolean wallGrabbed;
     private Constants.DIRECTION direction;
     public Player(int x, int y, World world) {
-        direction = Constants.DIRECTION.STILL;
+        direction = Constants.DIRECTION.HSTILL;
         onGround = true;
 
         this.world = world;
@@ -68,8 +69,14 @@ public class Player extends Sprite {
             case DOWN:
                 moveDown();
                 break;
-            default:
+            case PREV:
+                b2body.setLinearVelocity(b2body.getLinearVelocity().x, b2body.getLinearVelocity().y);
+                break;
+            case HSTILL:
                 b2body.setLinearVelocity(0, b2body.getLinearVelocity().y);
+                break;
+            case FSTILL:
+                b2body.setLinearVelocity(0, 0);
                 break;
         }
     }
@@ -80,10 +87,13 @@ public class Player extends Sprite {
     }
 
     public void wallJump() {
+
+        if (wallGrabbed) letGo();
+
         if (wallState == -1) {
-
+            b2body.applyLinearImpulse(new Vector2(2, 4), b2body.getWorldCenter(), true);
         } else {
-
+            b2body.applyLinearImpulse(new Vector2(-2, 4), b2body.getWorldCenter(), true);
         }
     }
 
@@ -129,7 +139,11 @@ public class Player extends Sprite {
     public void letGo() {
         wallGrabbed = false;
         b2body.applyLinearImpulse(new Vector2(0, -0.1f), b2body.getWorldCenter(), true);
-        world.setGravity(new Vector2(0, -11));
+        world.setGravity(new Vector2(0, -Constants.G));
+    }
+
+    public void notify(Constants.TIMER_FLAG flag) {
+
     }
 
     public boolean isOnGround() {
