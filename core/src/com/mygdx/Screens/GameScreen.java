@@ -34,6 +34,7 @@ public class GameScreen implements Screen {
     private World world;    // World holding all the physical objects
     private Box2DDebugRenderer b2dr;
     private Player player;
+    private MyInputProcessor inputProcessor;
     public GameScreen(Glissoar game, String stage) {
         this.stage = stage;
         this.game = game;
@@ -48,7 +49,8 @@ public class GameScreen implements Screen {
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
         world = new World(new Vector2(0, -Constants.G), true);
         player = new Player(100, 100, world, eidAllocator.getAndIncrement(), timer);
-        Gdx.input.setInputProcessor(new MyInputProcessor(player));
+        inputProcessor = new MyInputProcessor(player, world);
+        Gdx.input.setInputProcessor(inputProcessor);
         world.setContactListener(new MyContactListener(player));
         b2dr = new Box2DDebugRenderer();
         new B2WorldCreator(world, map);     //Creating world
@@ -63,6 +65,7 @@ public class GameScreen implements Screen {
         world.step(1/60f, 6, 2);
         gameCam.update();
         timer.update();
+        inputProcessor.update();
         renderer.setView(gameCam);
     }
 

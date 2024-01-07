@@ -24,7 +24,7 @@ public class MyContactListener implements ContactListener {
         } else if (fa.getUserData().equals("rightSensor") || fb.getUserData().equals("rightSensor")) {
             player.setWallState(1);
         } else if (fa.getUserData().equals("bottomSensor") || fb.getUserData().equals("bottomSensor")) {
-            player.setOnGround(true);
+            player.land();
             if (player.getMovementState() == Constants.MFLAG.PREV) player.setMovementState(Constants.MFLAG.HSTILL);
         }
     }

@@ -93,6 +93,12 @@ public class Player extends Entity implements Subscriber {
         }
     }
 
+    public void land() {
+        onGround = true;
+        glideConsumed = false;
+        world.setGravity(new Vector2(0, -Constants.G));
+    }
+
     public void jump() {
         b2body.applyLinearImpulse(new Vector2(0, 5f), b2body.getWorldCenter(), true);
         b2body.setLinearDamping(5);
@@ -137,15 +143,15 @@ public class Player extends Entity implements Subscriber {
     }
 
     public void glide() {
-        if (!glideConsumed) {
-            b2body.applyLinearImpulse(new Vector2((float) Math.pow(b2body.getLinearVelocity().x, 2), 0), b2body.getWorldCenter(), true);
-            b2body.applyLinearImpulse(new Vector2(0, (float) Math.pow(b2body.getLinearVelocity().y, 2)), b2body.getWorldCenter(), true);
-        }
+        if (glideConsumed) return;
         glideConsumed = true;
-        world.setGravity(new Vector2(0, -4));
+        b2body.applyLinearImpulse(new Vector2((float) Math.pow(b2body.getLinearVelocity().x, 2), 0), b2body.getWorldCenter(), true);
+        world.setGravity(new Vector2(0, (float) (Math.pow(b2body.getLinearVelocity().x, 2) + Math.pow(b2body.getLinearVelocity().y, 2))));
+        timer.start(0.2f, NFLAG.UPLIFT, this);
     }
 
     public void grab() {
+        if (stunned) return;
         wallGrabbed = true;
         world.setGravity(new Vector2(0, 0));
         b2body.setLinearVelocity(0, 0);
@@ -164,8 +170,8 @@ public class Player extends Entity implements Subscriber {
                 if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = MFLAG.RIGHT;
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = MFLAG.LEFT;
                 break;
-            case ZGRAVITY:
-                world.setGravity(new Vector2(0, -Constants.G));
+            case UPLIFT:
+                world.setGravity(new Vector2(0, -2));
                 break;
         }
     }
@@ -195,4 +201,6 @@ public class Player extends Entity implements Subscriber {
     }
 
     public MFLAG getMovementState() { return movementState; }
+
+    public boolean isGlideConsumed() { return glideConsumed; }
 }

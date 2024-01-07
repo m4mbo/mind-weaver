@@ -15,6 +15,6 @@ public class Constants {
     }
     // Notification Flag
     public enum NFLAG {
-        STUN, ZGRAVITY
+        STUN, UPLIFT
     }
 }

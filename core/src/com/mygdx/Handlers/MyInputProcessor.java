@@ -3,14 +3,18 @@ package com.mygdx.Handlers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.Objects.Player;
 import com.mygdx.Tools.Constants;
 
 public class MyInputProcessor implements InputProcessor {
 
     private Player player;
-    public MyInputProcessor(Player player) {
+    private World world;
+    public MyInputProcessor(Player player, World world) {
         this.player = player;
+        this.world = world;
     }
     @Override
     public boolean keyDown (int keycode) {
@@ -26,16 +30,13 @@ public class MyInputProcessor implements InputProcessor {
                     player.wallJump();
                     break;
                 }
-                //player.glide();
+                if (player.isFalling()) player.glide();
                 break;
             case Input.Keys.D:
                 if (!player.isWallGrabbed()) player.setMovementState(Constants.MFLAG.RIGHT);
                 break;
             case Input.Keys.A:
                 if (!player.isWallGrabbed()) player.setMovementState(Constants.MFLAG.LEFT);
-                break;
-            case Input.Keys.J:
-                if (player.getWallState() != 0) player.grab();
                 break;
             case Input.Keys.W:
                 if (player.isWallGrabbed()) player.setMovementState(Constants.MFLAG.UP);
@@ -54,6 +55,7 @@ public class MyInputProcessor implements InputProcessor {
 
         switch (keycode) {
             case Input.Keys.SPACE:
+                if (player.isFalling() && player.isGlideConsumed()) world.setGravity(new Vector2(0, -Constants.G));
                 break;
             case Input.Keys.D:
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) player.setMovementState(Constants.MFLAG.LEFT);
@@ -84,6 +86,13 @@ public class MyInputProcessor implements InputProcessor {
                 break;
         }
         return false;
+    }
+
+    // Input polling for a smoother experience
+    public void update() {
+        if (Gdx.input.isKeyPressed(Input.Keys.J)) {
+            if (player.getWallState() != 0) player.grab();
+        }
     }
 
     @Override
