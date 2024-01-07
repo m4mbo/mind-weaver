@@ -22,26 +22,26 @@ public class MyInputProcessor implements InputProcessor {
                     break;
                 }
                 if (player.getWallState() != 0) {
-                    player.setDirection(Constants.DIRECTION.PREV);
+                    player.setMovementState(Constants.MFLAG.PREV);
                     player.wallJump();
                     break;
                 }
                 //player.glide();
                 break;
             case Input.Keys.D:
-                if (!player.isWallGrabbed()) player.setDirection(Constants.DIRECTION.RIGHT);
+                if (!player.isWallGrabbed()) player.setMovementState(Constants.MFLAG.RIGHT);
                 break;
             case Input.Keys.A:
-                if (!player.isWallGrabbed()) player.setDirection(Constants.DIRECTION.LEFT);
+                if (!player.isWallGrabbed()) player.setMovementState(Constants.MFLAG.LEFT);
                 break;
             case Input.Keys.J:
                 if (player.getWallState() != 0) player.grab();
                 break;
             case Input.Keys.W:
-                if (player.isWallGrabbed()) player.setDirection(Constants.DIRECTION.UP);
+                if (player.isWallGrabbed()) player.setMovementState(Constants.MFLAG.UP);
                 break;
             case Input.Keys.S:
-                if (player.isWallGrabbed()) player.setDirection(Constants.DIRECTION.DOWN);
+                if (player.isWallGrabbed()) player.setMovementState(Constants.MFLAG.DOWN);
                 break;
             default:
                 break;
@@ -56,29 +56,29 @@ public class MyInputProcessor implements InputProcessor {
             case Input.Keys.SPACE:
                 break;
             case Input.Keys.D:
-                if (Gdx.input.isKeyPressed(Input.Keys.A)) player.setDirection(Constants.DIRECTION.LEFT);
-                else player.setDirection(Constants.DIRECTION.HSTILL);
+                if (Gdx.input.isKeyPressed(Input.Keys.A)) player.setMovementState(Constants.MFLAG.LEFT);
+                else player.setMovementState(Constants.MFLAG.HSTILL);
                 break;
             case Input.Keys.A:
-                if (Gdx.input.isKeyPressed(Input.Keys.D)) player.setDirection(Constants.DIRECTION.RIGHT);
-                else player.setDirection(Constants.DIRECTION.HSTILL);
+                if (Gdx.input.isKeyPressed(Input.Keys.D)) player.setMovementState(Constants.MFLAG.RIGHT);
+                else player.setMovementState(Constants.MFLAG.HSTILL);
                 break;
             case Input.Keys.J:
                 if (player.isWallGrabbed()) {
-                    if (Gdx.input.isKeyPressed(Input.Keys.D)) player.setDirection(Constants.DIRECTION.RIGHT);
-                    if (Gdx.input.isKeyPressed(Input.Keys.A)) player.setDirection(Constants.DIRECTION.LEFT);
+                    if (Gdx.input.isKeyPressed(Input.Keys.D)) player.setMovementState(Constants.MFLAG.RIGHT);
+                    if (Gdx.input.isKeyPressed(Input.Keys.A)) player.setMovementState(Constants.MFLAG.LEFT);
                     player.letGo();
                 }
                 break;
             case Input.Keys.W:
                 if (!player.isWallGrabbed()) break;
-                if (Gdx.input.isKeyPressed(Input.Keys.S)) player.setDirection(Constants.DIRECTION.DOWN);
-                else player.setDirection(Constants.DIRECTION.FSTILL);
+                if (Gdx.input.isKeyPressed(Input.Keys.S)) player.setMovementState(Constants.MFLAG.DOWN);
+                else player.setMovementState(Constants.MFLAG.FSTILL);
                 break;
             case Input.Keys.S:
                 if (!player.isWallGrabbed()) break;
-                if (Gdx.input.isKeyPressed(Input.Keys.W)) player.setDirection(Constants.DIRECTION.UP);
-                else player.setDirection(Constants.DIRECTION.FSTILL);
+                if (Gdx.input.isKeyPressed(Input.Keys.W)) player.setMovementState(Constants.MFLAG.UP);
+                else player.setMovementState(Constants.MFLAG.FSTILL);
                 break;
             default:
                 break;

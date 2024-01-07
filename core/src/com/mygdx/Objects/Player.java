@@ -1,24 +1,35 @@
 package com.mygdx.Objects;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.Handlers.MyTimer;
 import com.mygdx.Interfaces.Subscriber;
+import com.mygdx.Screens.GameScreen;
+import com.mygdx.Tools.Constants.*;
 import com.mygdx.Tools.Constants;
 
-public class Player extends Sprite implements Subscriber {
+public class Player extends Entity implements Subscriber {
+    private final MyTimer timer;
     private final World world;
     private final Body b2body;
     private boolean onGround;
     private boolean glideConsumed;
     private int wallState;      // -1 for left, 1 for right, 0 for none
     private boolean wallGrabbed;
-    private Constants.DIRECTION direction;
-    public Player(int x, int y, World world) {
-        direction = Constants.DIRECTION.HSTILL;
-        onGround = true;
+    private MFLAG movementState;
+    private boolean stunned;
+    public Player(int x, int y, World world, int id, MyTimer timer) {
 
+        super(id);
+        this.timer = timer;
         this.world = world;
+
+        movementState = MFLAG.HSTILL;
+        onGround = true;
+        stunned = false;
+
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, y / Constants.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
@@ -56,7 +67,8 @@ public class Player extends Sprite implements Subscriber {
     }
 
     public void update() {
-        switch (direction) {
+        if (stunned) movementState = MFLAG.PREV;
+        switch (movementState) {
             case LEFT:
                 moveLeft();
                 break;
@@ -95,6 +107,9 @@ public class Player extends Sprite implements Subscriber {
         } else {
             b2body.applyLinearImpulse(new Vector2(-2, 4), b2body.getWorldCenter(), true);
         }
+
+        stunned = true;
+        timer.start(0.2f, NFLAG.STUN, this);
     }
 
     public void moveRight() {
@@ -142,8 +157,17 @@ public class Player extends Sprite implements Subscriber {
         world.setGravity(new Vector2(0, -Constants.G));
     }
 
-    public void notify(Constants.TIMER_FLAG flag) {
-
+    public void notify(NFLAG flag) {
+        switch (flag){
+            case STUN:
+                stunned = false;
+                if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = MFLAG.RIGHT;
+                if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = MFLAG.LEFT;
+                break;
+            case ZGRAVITY:
+                world.setGravity(new Vector2(0, -Constants.G));
+                break;
+        }
     }
 
     public boolean isOnGround() {
@@ -164,11 +188,11 @@ public class Player extends Sprite implements Subscriber {
         return wallState;
     }
 
-    public void setDirection(Constants.DIRECTION direction) { this.direction = direction; }
+    public void setMovementState(Constants.MFLAG direction) { this.movementState = direction; }
 
     public boolean isWallGrabbed() {
         return wallGrabbed;
     }
 
-    public Constants.DIRECTION getDirection() { return direction; }
+    public MFLAG getMovementState() { return movementState; }
 }

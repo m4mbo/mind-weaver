@@ -6,15 +6,15 @@ public class Constants {
     public static final float PPM = 100;
     public static final float MAX_SPEED = 1.2F;
     public static final float G = 11;
-    public enum DIRECTION {
+    // Movement State Flag
+    public enum MFLAG {
         UP, DOWN, LEFT, RIGHT,
         PREV, // Keep previous direction
         HSTILL, // Horizontal still
         FSTILL; // Full still
     }
-
-    public enum TIMER_FLAG {
-
+    // Notification Flag
+    public enum NFLAG {
+        STUN, ZGRAVITY
     }
-
 }

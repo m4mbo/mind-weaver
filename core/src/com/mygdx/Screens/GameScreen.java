@@ -8,21 +8,24 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.viewport.*;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.Game.Glissoar;
 import com.mygdx.Handlers.MyContactListener;
 import com.mygdx.Handlers.MyInputProcessor;
-import com.mygdx.Interfaces.Publisher;
-import com.mygdx.Interfaces.Subscriber;
+import com.mygdx.Handlers.MyTimer;
+import com.mygdx.Objects.Player;
 import com.mygdx.Tools.B2WorldCreator;
 import com.mygdx.Tools.Constants;
-import com.mygdx.Objects.Player;
-import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class GameScreen implements Screen, Publisher {
-
+public class GameScreen implements Screen {
+    private String stage;
+    private MyTimer timer;
     private Glissoar game;
+    private static AtomicInteger eidAllocator;
     private OrthographicCamera gameCam;
     private Viewport gamePort;
     private TmxMapLoader maploader;
@@ -31,13 +34,12 @@ public class GameScreen implements Screen, Publisher {
     private World world;    // World holding all the physical objects
     private Box2DDebugRenderer b2dr;
     private Player player;
-    private LinkedList<float[]> timers;
-    private LinkedList<Constants.TIMER_FLAG> timerFlags;
-    public GameScreen(Glissoar game) {
+    public GameScreen(Glissoar game, String stage) {
+        this.stage = stage;
         this.game = game;
+        eidAllocator = new AtomicInteger();
+        timer = new MyTimer();
         Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());      // Full-screen
-        timers = new LinkedList<>();
-        timerFlags = new LinkedList<>();
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(Constants.TILE_SIZE * 25 / Constants.PPM, Constants.TILE_SIZE * 14 / Constants.PPM, gameCam);
         maploader = new TmxMapLoader();
@@ -45,7 +47,7 @@ public class GameScreen implements Screen, Publisher {
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
         world = new World(new Vector2(0, -Constants.G), true);
-        player = new Player(100, 100, world);
+        player = new Player(100, 100, world, eidAllocator.getAndIncrement(), timer);
         Gdx.input.setInputProcessor(new MyInputProcessor(player));
         world.setContactListener(new MyContactListener(player));
         b2dr = new Box2DDebugRenderer();
@@ -60,6 +62,7 @@ public class GameScreen implements Screen, Publisher {
         player.update();
         world.step(1/60f, 6, 2);
         gameCam.update();
+        timer.update();
         renderer.setView(gameCam);
     }
 
@@ -81,15 +84,7 @@ public class GameScreen implements Screen, Publisher {
         game.batch.begin();
         game.batch.end();
 
-        if (!timers.isEmpty()) {
-            for (int i = 0; i < timers.size(); i++) {
-                float[] timerPair = timers.get(i);
-                timerPair[0] += Gdx.graphics.getDeltaTime();
-                if (timerPair[0] >= timerPair[1]) {
-                    endTimer(i);
-                }
-            }
-        }
+
     }
 
     @Override
@@ -114,34 +109,6 @@ public class GameScreen implements Screen, Publisher {
 
     @Override
     public void dispose() {
-
-    }
-
-    public void startTimer(float seconds, Constants.TIMER_FLAG flag) {
-        float[] pair = new float[2];
-        pair[1] = seconds;
-        timers.add(pair);
-        timerFlags.add(flag);
-    }
-
-    public void endTimer(int index) {
-        timers.remove(index);
-        Constants.TIMER_FLAG flag = timerFlags.remove(index);
-
-    }
-
-    @Override
-    public void addSubscriber(Subscriber subscriber) {
-
-    }
-
-    @Override
-    public void removeSubscriber(Subscriber subscriber) {
-
-    }
-
-    @Override
-    public void notifySubscribers() {
 
     }
 }
