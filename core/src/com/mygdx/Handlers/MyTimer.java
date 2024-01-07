@@ -10,8 +10,8 @@ import java.util.LinkedList;
 
 public class MyTimer implements Publisher {
 
-    private LinkedList<TIMER_MD> timerMDs;
-    private LinkedList<Subscriber> subscribers;
+    private final LinkedList<TIMER_MD> timerMDs;
+    private final LinkedList<Subscriber> subscribers;
 
     public MyTimer() {
         timerMDs = new LinkedList<>();
@@ -35,11 +35,11 @@ public class MyTimer implements Publisher {
         timerMDs.add(new TIMER_MD(0f, seconds, flag, subscriber));
     }
     
-    private class TIMER_MD {
+    private static class TIMER_MD {
         private float time;
-        private float goal;
-        private Constants.NFLAG flag;
-        private Subscriber subscriber;
+        private final float goal;
+        private final Constants.NFLAG flag;
+        private final Subscriber subscriber;
         public TIMER_MD(float time, float goal, NFLAG flag, Subscriber subscriber) {
             this.time = time;
             this.goal = goal;

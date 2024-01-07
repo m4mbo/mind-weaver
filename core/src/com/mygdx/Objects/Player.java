@@ -142,16 +142,21 @@ public class Player extends Entity implements Subscriber {
 
     }
 
+    public void dash() {
+
+    }
+
     public void glide() {
         if (glideConsumed) return;
         glideConsumed = true;
-        b2body.applyLinearImpulse(new Vector2((float) Math.pow(b2body.getLinearVelocity().x, 2), 0), b2body.getWorldCenter(), true);
-        world.setGravity(new Vector2(0, (float) (Math.pow(b2body.getLinearVelocity().x, 2) + Math.pow(b2body.getLinearVelocity().y, 2))));
-        timer.start(0.2f, NFLAG.UPLIFT, this);
+        b2body.applyLinearImpulse(new Vector2((float) (Math.pow(b2body.getLinearVelocity().x, 3) * Math.pow(b2body.getLinearVelocity().y, 2)), 0), b2body.getWorldCenter(), true);
+        world.setGravity(new Vector2(0, (float) -Math.pow(b2body.getLinearVelocity().y, 3)));
+        timer.start(0.4f, NFLAG.UPLIFT, this);
     }
 
     public void grab() {
         if (stunned) return;
+        glideConsumed = false;
         wallGrabbed = true;
         world.setGravity(new Vector2(0, 0));
         b2body.setLinearVelocity(0, 0);
@@ -171,7 +176,8 @@ public class Player extends Entity implements Subscriber {
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = MFLAG.LEFT;
                 break;
             case UPLIFT:
-                world.setGravity(new Vector2(0, -2));
+                if (!onGround) world.setGravity(new Vector2(0, -3));
+                else land();
                 break;
         }
     }
