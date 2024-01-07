@@ -28,8 +28,8 @@ public class MyTimer implements Publisher {
         }
 
         LinkedList<TIMER_MD> timersToRemove = new LinkedList<>();
-
         Iterator<TIMER_MD> iterator = timers.iterator();
+
         while (iterator.hasNext()) {
             TIMER_MD timerMd = iterator.next();
             timerMd.time += Gdx.graphics.getDeltaTime();

@@ -8,6 +8,7 @@ import com.mygdx.Handlers.MyTimer;
 import com.mygdx.Interfaces.Subscriber;
 import com.mygdx.Tools.Constants.*;
 import com.mygdx.Tools.Constants;
+import jdk.internal.icu.lang.UCharacter;
 
 public class Player extends Entity implements Subscriber {
     private final MyTimer timer;
@@ -195,6 +196,10 @@ public class Player extends Entity implements Subscriber {
     public void glide() {
         if (glideConsumed) return;
         glideConsumed = true;
+        if (movementState == MFLAG.HSTILL) {
+            timer.start(0, NFLAG.UPLIFT, this);
+            return;
+        }
         b2body.applyLinearImpulse(new Vector2((float) (Math.pow(b2body.getLinearVelocity().x, 3) * Math.pow(b2body.getLinearVelocity().y, 2)), 0), b2body.getWorldCenter(), true);
         world.setGravity(new Vector2(0, (float) -Math.pow(b2body.getLinearVelocity().y, 3)));
         timer.start(0.4f, NFLAG.UPLIFT, this);
