@@ -10,29 +10,41 @@ import java.util.LinkedList;
 
 public class MyTimer implements Publisher {
 
-    private final LinkedList<TIMER_MD> timerMDs;
+    private final LinkedList<TIMER_MD> timers;
+    LinkedList<TIMER_MD> timersToAdd;
     private final LinkedList<Subscriber> subscribers;
 
     public MyTimer() {
-        timerMDs = new LinkedList<>();
+        timers = new LinkedList<>();
+        timersToAdd = new LinkedList<>();
         subscribers = new LinkedList<>();
     }
     public void update() {
-        if (timerMDs.isEmpty()) return;
+        if (timers.isEmpty() && timersToAdd.isEmpty()) return;
 
-        Iterator<TIMER_MD> iterator = timerMDs.iterator();
+        if (timers.isEmpty()) {
+            timers.addAll(timersToAdd);
+            timersToAdd.clear();
+        }
+
+        LinkedList<TIMER_MD> timersToRemove = new LinkedList<>();
+
+        Iterator<TIMER_MD> iterator = timers.iterator();
         while (iterator.hasNext()) {
             TIMER_MD timerMd = iterator.next();
             timerMd.time += Gdx.graphics.getDeltaTime();
             if (timerMd.time >= timerMd.goal) {
                 notifySubscriber(timerMd.flag, timerMd.subscriber);
-                iterator.remove();
+                timersToRemove.add(timerMd);
             }
         }
+        timers.removeAll(timersToRemove);
+        timers.addAll(timersToAdd);
+        timersToAdd.clear();
     }
 
     public void start(float seconds, NFLAG flag, Subscriber subscriber) {
-        timerMDs.add(new TIMER_MD(0f, seconds, flag, subscriber));
+        timersToAdd.add(new TIMER_MD(0f, seconds, flag, subscriber));
     }
     
     private static class TIMER_MD {

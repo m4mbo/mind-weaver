@@ -44,6 +44,9 @@ public class MyInputProcessor implements InputProcessor {
             case Input.Keys.S:
                 if (player.isWallGrabbed()) player.setMovementState(Constants.MFLAG.DOWN);
                 break;
+            case Input.Keys.CAPS_LOCK:
+                if (!player.isDashConsumed()) player.dash();
+                break;
             default:
                 break;
         }

@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Handlers.MyTimer;
 import com.mygdx.Interfaces.Subscriber;
-import com.mygdx.Screens.GameScreen;
 import com.mygdx.Tools.Constants.*;
 import com.mygdx.Tools.Constants;
 
@@ -14,8 +13,11 @@ public class Player extends Entity implements Subscriber {
     private final MyTimer timer;
     private final World world;
     private final Body b2body;
+    private boolean facingRight;
     private boolean onGround;
     private boolean glideConsumed;
+    private boolean dashConsumed;
+    private boolean dashing;
     private int wallState;      // -1 for left, 1 for right, 0 for none
     private boolean wallGrabbed;
     private MFLAG movementState;
@@ -67,12 +69,14 @@ public class Player extends Entity implements Subscriber {
     }
 
     public void update() {
-        if (stunned) movementState = MFLAG.PREV;
+        if (stunned || dashing) movementState = MFLAG.PREV;
         switch (movementState) {
             case LEFT:
+                facingRight = false;
                 moveLeft();
                 break;
             case RIGHT:
+                facingRight = true;
                 moveRight();
                 break;
             case UP:
@@ -96,6 +100,7 @@ public class Player extends Entity implements Subscriber {
     public void land() {
         onGround = true;
         glideConsumed = false;
+        dashConsumed = false;
         world.setGravity(new Vector2(0, -Constants.G));
     }
 
@@ -135,7 +140,7 @@ public class Player extends Entity implements Subscriber {
     }
 
     public void moveDown() {
-        b2body.setLinearVelocity(0, -0.5f);
+        b2body.setLinearVelocity(0, -0.9f);
     }
 
     public void attack() {
@@ -143,7 +148,48 @@ public class Player extends Entity implements Subscriber {
     }
 
     public void dash() {
+        dashing = true;
+        dashConsumed = true;
+        world.setGravity(new Vector2(0, 0));
+        if (Gdx.input.isKeyPressed(Input.Keys.D) && Gdx.input.isKeyPressed(Input.Keys.S)) {
+            b2body.applyLinearImpulse(new Vector2(4, -4), b2body.getWorldCenter(), true);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D) && Gdx.input.isKeyPressed(Input.Keys.W)) {
+            b2body.applyLinearImpulse(new Vector2(4, 4), b2body.getWorldCenter(), true);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            b2body.applyLinearImpulse(new Vector2(4, 0), b2body.getWorldCenter(), true);
+            if (onGround) {
+                timer.start(0.2f, NFLAG.GDASH, this);
+                return;
+            }
+        } else if (Gdx.input.isKeyPressed(Input.Keys.A) && Gdx.input.isKeyPressed(Input.Keys.S)) {
+            b2body.applyLinearImpulse(new Vector2(-4, -4), b2body.getWorldCenter(), true);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.A) && Gdx.input.isKeyPressed(Input.Keys.W)) {
+            b2body.applyLinearImpulse(new Vector2(-4, 4), b2body.getWorldCenter(), true);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            b2body.applyLinearImpulse(new Vector2(-4, 0), b2body.getWorldCenter(), true);
+            if (onGround) {
+                timer.start(0.2f, NFLAG.GDASH, this);
+                return;
+            }
+        } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            b2body.applyLinearImpulse(new Vector2(0, 4), b2body.getWorldCenter(), true);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            b2body.applyLinearImpulse(new Vector2(0, -4), b2body.getWorldCenter(), true);
+        } else if (facingRight) {
+            b2body.applyLinearImpulse(new Vector2(4, 0), b2body.getWorldCenter(), true);
+            if (onGround) {
+                timer.start(0.2f, NFLAG.GDASH, this);
+                return;
+            }
+        } else {
+            b2body.applyLinearImpulse(new Vector2(-4, 0), b2body.getWorldCenter(), true);
+            if (onGround) {
+                timer.start(0.2f, NFLAG.GDASH, this);
+                return;
+            }
+        }
 
+        timer.start(0.2f, NFLAG.ADASH, this);
     }
 
     public void glide() {
@@ -179,6 +225,22 @@ public class Player extends Entity implements Subscriber {
                 if (!onGround) world.setGravity(new Vector2(0, -3));
                 else land();
                 break;
+            case ADASH:
+                world.setGravity(new Vector2(0, -Constants.G));
+                dashing = false;
+                if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = MFLAG.RIGHT;
+                if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = MFLAG.LEFT;
+                break;
+            case GDASH:
+                world.setGravity(new Vector2(0, -Constants.G));
+                dashing = false;
+                timer.start(1, NFLAG.DASH_COOLDOWN, this);
+                if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = MFLAG.RIGHT;
+                if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = MFLAG.LEFT;
+                break;
+            case DASH_COOLDOWN:
+                dashConsumed = false;
+                break;
         }
     }
 
@@ -209,4 +271,6 @@ public class Player extends Entity implements Subscriber {
     public MFLAG getMovementState() { return movementState; }
 
     public boolean isGlideConsumed() { return glideConsumed; }
+
+    public boolean isDashConsumed() { return dashConsumed; }
 }

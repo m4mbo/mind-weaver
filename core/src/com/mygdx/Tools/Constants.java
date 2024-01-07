@@ -15,6 +15,10 @@ public class Constants {
     }
     // Notification Flag
     public enum NFLAG {
-        STUN, UPLIFT
+        STUN, UPLIFT,
+        ADASH, // Air dash
+        GDASH, // Ground dash
+        DASH_COOLDOWN
+
     }
 }
