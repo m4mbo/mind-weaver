@@ -8,7 +8,6 @@ import com.mygdx.Handlers.MyTimer;
 import com.mygdx.Interfaces.Subscriber;
 import com.mygdx.Tools.Constants.*;
 import com.mygdx.Tools.Constants;
-import jdk.internal.icu.lang.UCharacter;
 
 public class Player extends Entity implements Subscriber {
     private final MyTimer timer;
