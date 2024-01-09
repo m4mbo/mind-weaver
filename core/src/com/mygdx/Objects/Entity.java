@@ -1,7 +1,10 @@
 package com.mygdx.Objects;
 
-public abstract class Entity {
-    private final int ID;
+import com.mygdx.Sprites.B2Sprite;
+
+// Every entity has a sprite attached to it
+public abstract class Entity extends B2Sprite {
+    protected int ID;
 
     protected Entity(int id) {
         ID = id;

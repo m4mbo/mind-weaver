@@ -19,7 +19,7 @@ public class MyTimer implements Publisher {
         timersToAdd = new LinkedList<>();
         subscribers = new LinkedList<>();
     }
-    public void update() {
+    public void update(float delta) {
         if (timers.isEmpty() && timersToAdd.isEmpty()) return;
 
         if (timers.isEmpty()) {
@@ -32,7 +32,7 @@ public class MyTimer implements Publisher {
 
         while (iterator.hasNext()) {
             TIMER_MD timerMd = iterator.next();
-            timerMd.time += Gdx.graphics.getDeltaTime();
+            timerMd.time += delta;
             if (timerMd.time >= timerMd.goal) {
                 notifySubscriber(timerMd.flag, timerMd.subscriber);
                 timersToRemove.add(timerMd);

@@ -2,8 +2,10 @@ package com.mygdx.Objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.Handlers.MyResourceManager;
 import com.mygdx.Handlers.MyTimer;
 import com.mygdx.Interfaces.Subscriber;
 import com.mygdx.Tools.Constants.*;
@@ -11,26 +13,31 @@ import com.mygdx.Tools.Constants;
 
 public class Player extends Entity implements Subscriber {
     private final MyTimer timer;
+    private final MyResourceManager resourceManager;
     private final World world;
-    private final Body b2body;
     private boolean facingRight;
     private boolean onGround;
     private boolean glideConsumed;
     private boolean dashConsumed;
-    private boolean dashing;
-    private int wallState;      // -1 for left, 1 for right, 0 for none
+    private int wallState;  // -1 for left, 1 for right, 0 for none
     private boolean wallGrabbed;
     private MFLAG movementState;
     private boolean stunned;
-    public Player(int x, int y, World world, int id, MyTimer timer) {
+    private boolean dashing;
+    protected AFLAG currAState;
+    protected AFLAG prevAState;
+    public Player(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager) {
 
         super(id);
         this.timer = timer;
         this.world = world;
+        this.resourceManager = myResourceManager;
 
         movementState = MFLAG.HSTILL;
         onGround = true;
         stunned = false;
+        currAState = AFLAG.RSTAND;
+        prevAState = AFLAG.LSTAND;
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, y / Constants.PPM);
@@ -40,6 +47,13 @@ public class Player extends Entity implements Subscriber {
         FixtureDef fdef = new FixtureDef();
         CircleShape circleShape = new CircleShape();
         PolygonShape polygonShape = new PolygonShape();
+
+        // Loading all textures
+        resourceManager.loadTexture("bunny.png", "bunny");
+
+        // Initializing sprite
+        TextureRegion[] sprites = TextureRegion.split(resourceManager.getTexture("bunny"), 32, 32)[0];
+        setAnimation(sprites, 1/12f);
 
         //Create body fixture
         circleShape.setRadius(5 / Constants.PPM);
@@ -68,7 +82,16 @@ public class Player extends Entity implements Subscriber {
         wallState = 0;
     }
 
-    public void update() {
+    @Override
+    public void update(float delta) {
+
+        if (currAState != prevAState) {
+            handleAnimation();
+            prevAState = currAState;
+        }
+        // Update the animation
+        animation.update(delta);
+
         if (stunned || dashing) movementState = MFLAG.PREV;
         switch (movementState) {
             case LEFT:
@@ -93,6 +116,19 @@ public class Player extends Entity implements Subscriber {
                 break;
             case FSTILL:
                 b2body.setLinearVelocity(0, 0);
+                break;
+        }
+    }
+
+    public void handleAnimation() {
+        switch (currAState) {
+            case LRUN:
+                break;
+            case RRUN:
+                break;
+            case LSTAND:
+                break;
+            case RSTAND:
                 break;
         }
     }
@@ -148,48 +184,47 @@ public class Player extends Entity implements Subscriber {
     }
 
     public void dash() {
+
+        if (wallGrabbed) return;
+
         dashing = true;
         dashConsumed = true;
+
+        // Cancel out the world's gravity and previous velocity
         world.setGravity(new Vector2(0, 0));
+        b2body.setLinearVelocity(0, 0);
+
+        boolean groundDash = false;
+
+        // Handle direction
         if (Gdx.input.isKeyPressed(Input.Keys.D) && Gdx.input.isKeyPressed(Input.Keys.S)) {
             b2body.applyLinearImpulse(new Vector2(4, -4), b2body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.D) && Gdx.input.isKeyPressed(Input.Keys.W)) {
             b2body.applyLinearImpulse(new Vector2(4, 4), b2body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             b2body.applyLinearImpulse(new Vector2(4, 0), b2body.getWorldCenter(), true);
-            if (onGround) {
-                timer.start(0.2f, NFLAG.GDASH, this);
-                return;
-            }
+            if (onGround) groundDash = true;
         } else if (Gdx.input.isKeyPressed(Input.Keys.A) && Gdx.input.isKeyPressed(Input.Keys.S)) {
             b2body.applyLinearImpulse(new Vector2(-4, -4), b2body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.A) && Gdx.input.isKeyPressed(Input.Keys.W)) {
             b2body.applyLinearImpulse(new Vector2(-4, 4), b2body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             b2body.applyLinearImpulse(new Vector2(-4, 0), b2body.getWorldCenter(), true);
-            if (onGround) {
-                timer.start(0.2f, NFLAG.GDASH, this);
-                return;
-            }
+            if (onGround) groundDash = true;
         } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             b2body.applyLinearImpulse(new Vector2(0, 4), b2body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             b2body.applyLinearImpulse(new Vector2(0, -4), b2body.getWorldCenter(), true);
         } else if (facingRight) {
             b2body.applyLinearImpulse(new Vector2(4, 0), b2body.getWorldCenter(), true);
-            if (onGround) {
-                timer.start(0.2f, NFLAG.GDASH, this);
-                return;
-            }
+            if (onGround) groundDash = true;
         } else {
             b2body.applyLinearImpulse(new Vector2(-4, 0), b2body.getWorldCenter(), true);
-            if (onGround) {
-                timer.start(0.2f, NFLAG.GDASH, this);
-                return;
-            }
+            if (onGround) groundDash = true;
         }
 
-        timer.start(0.2f, NFLAG.ADASH, this);
+        if (groundDash) timer.start(0.2f, NFLAG.GDASH, this);
+        else timer.start(0.2f, NFLAG.ADASH, this);
     }
 
     public void glide() {

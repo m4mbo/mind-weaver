@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.Game.Glissoar;
 import com.mygdx.Handlers.MyContactListener;
 import com.mygdx.Handlers.MyInputProcessor;
+import com.mygdx.Handlers.MyResourceManager;
 import com.mygdx.Handlers.MyTimer;
 import com.mygdx.Objects.Player;
 import com.mygdx.Tools.B2WorldCreator;
@@ -35,7 +36,7 @@ public class GameScreen implements Screen {
     private Box2DDebugRenderer b2dr;
     private Player player;
     private MyInputProcessor inputProcessor;
-    public GameScreen(Glissoar game, String stage) {
+    public GameScreen(Glissoar game, String stage, MyResourceManager resourceManager) {
         this.stage = stage;
         this.game = game;
         eidAllocator = new AtomicInteger();
@@ -48,7 +49,7 @@ public class GameScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
         world = new World(new Vector2(0, -Constants.G), true);
-        player = new Player(100, 100, world, eidAllocator.getAndIncrement(), timer);
+        player = new Player(100, 100, world, eidAllocator.getAndIncrement(), timer, resourceManager);
         inputProcessor = new MyInputProcessor(player, world);
         Gdx.input.setInputProcessor(inputProcessor);
         world.setContactListener(new MyContactListener(player));
@@ -57,16 +58,14 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void show() {
-    }
+    public void show() {  }
 
     public void update(float delta) {
-        player.update();
+        player.update(delta);
         world.step(1/60f, 6, 2);
         gameCam.update();
-        timer.update();
+        timer.update(delta);
         inputProcessor.update();
-        renderer.setView(gameCam);
     }
 
     @Override
@@ -80,14 +79,15 @@ public class GameScreen implements Screen {
 
         renderer.setView(gameCam);
         renderer.render();
+        //player.render(game.batch);
 
         b2dr.render(world, gameCam.combined);
-
         game.batch.setProjectionMatrix(gameCam.combined);
+
+
+
         game.batch.begin();
         game.batch.end();
-
-
     }
 
     @Override
@@ -96,22 +96,14 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() { }
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() { }
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() { }
 
     @Override
-    public void dispose() {
-
-    }
+    public void dispose() { }
 }
