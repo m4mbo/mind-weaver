@@ -84,8 +84,6 @@ public class GameScreen implements Screen {
         b2dr.render(world, gameCam.combined);
         game.batch.setProjectionMatrix(gameCam.combined);
 
-
-
         game.batch.begin();
         game.batch.end();
     }

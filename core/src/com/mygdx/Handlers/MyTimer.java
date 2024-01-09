@@ -9,9 +9,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 public class MyTimer implements Publisher {
-
     private final LinkedList<TIMER_MD> timers;
-    LinkedList<TIMER_MD> timersToAdd;
+    private final LinkedList<TIMER_MD> timersToAdd;
     private final LinkedList<Subscriber> subscribers;
 
     public MyTimer() {

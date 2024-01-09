@@ -25,8 +25,8 @@ public class Player extends Entity implements Subscriber {
     private boolean stunned;
     private boolean dashing;
     private boolean gliding;
-    protected AFLAG currAState;
-    protected AFLAG prevAState;
+    protected AFLAG currAState;     // Current animation state
+    protected AFLAG prevAState;     // Previous animation state
     public Player(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager) {
 
         super(id);
@@ -34,12 +34,24 @@ public class Player extends Entity implements Subscriber {
         this.world = world;
         this.resourceManager = myResourceManager;
 
-        movementState = MFLAG.HSTILL;
+        // Initializing variables
         onGround = true;
         stunned = false;
         gliding = false;
+        dashing = false;
+        wallGrabbed = false;
+        glideConsumed = false;
+        dashConsumed = false;
         currAState = AFLAG.RSTAND;
         prevAState = AFLAG.LSTAND;
+        movementState = MFLAG.HSTILL;
+
+        // Loading all textures
+        resourceManager.loadTexture("bunny_right_run.png", "bunny_rr");
+        resourceManager.loadTexture("bunny_left_run.png", "bunny_lr");
+
+        // Initializing sprite
+        setAnimation(TextureRegion.split(resourceManager.getTexture("bunny_rr"), 32, 32)[0], 1/12f);
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, y / Constants.PPM);
@@ -50,16 +62,9 @@ public class Player extends Entity implements Subscriber {
         CircleShape circleShape = new CircleShape();
         PolygonShape polygonShape = new PolygonShape();
 
-        // Loading all textures
-        resourceManager.loadTexture("bunny_right_run.png", "bunny_rr");
-        resourceManager.loadTexture("bunny_left_run.png", "bunny_lr");
-
-        // Initializing sprite
-        setAnimation(TextureRegion.split(resourceManager.getTexture("bunny_rr"), 32, 32)[0], 1/12f);
-
         //Create body fixture
         circleShape.setRadius(16 / Constants.PPM);
-        fdef.friction = 0;  //Friction allows for players sliding next to walls
+        fdef.friction = 0;  // No friction allows for players sliding next to walls
         fdef.shape = circleShape;
         b2body.createFixture(fdef).setUserData("player");
 
@@ -95,6 +100,7 @@ public class Player extends Entity implements Subscriber {
         animation.update(delta);
 
         if (stunned || dashing) movementState = MFLAG.PREV;
+
         switch (movementState) {
             case LEFT:
                 if (onGround) currAState = AFLAG.LRUN;
@@ -260,6 +266,7 @@ public class Player extends Entity implements Subscriber {
         b2body.applyLinearImpulse(new Vector2(0, -0.8f), b2body.getWorldCenter(), true);
     }
 
+    @Override
     public void notify(NFLAG flag) {
         switch (flag){
             case STUN:
