@@ -43,7 +43,7 @@ public class GameScreen implements Screen {
         timer = new MyTimer();
         Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());      // Full-screen
         gameCam = new OrthographicCamera();
-        gamePort = new FitViewport(Constants.TILE_SIZE * 25 / Constants.PPM, Constants.TILE_SIZE * 14 / Constants.PPM, gameCam);
+        gamePort = new FitViewport(Constants.TILE_SIZE * 35 / Constants.PPM, Constants.TILE_SIZE * 19 / Constants.PPM, gameCam);
         maploader = new TmxMapLoader();
         map = maploader.load("test_upgrade.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
@@ -79,7 +79,7 @@ public class GameScreen implements Screen {
 
         renderer.setView(gameCam);
         renderer.render();
-        //player.render(game.batch);
+        player.render(game.batch);
 
         b2dr.render(world, gameCam.combined);
         game.batch.setProjectionMatrix(gameCam.combined);

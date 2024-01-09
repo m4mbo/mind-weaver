@@ -56,25 +56,25 @@ public class Player extends Entity implements Subscriber {
         setAnimation(sprites, 1/12f);
 
         //Create body fixture
-        circleShape.setRadius(5 / Constants.PPM);
+        circleShape.setRadius(16 / Constants.PPM);
         fdef.friction = 0;  //Friction allows for players sliding next to walls
         fdef.shape = circleShape;
         b2body.createFixture(fdef).setUserData("player");
 
         //Create right sensor
-        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(5 / Constants.PPM, 0), 0);
+        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(16 / Constants.PPM, 0), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData("rightSensor");
 
         //Create left sensor
-        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(-5 / Constants.PPM, 0), 0);
+        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(-16 / Constants.PPM, 0), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData("leftSensor");
 
         //Create bottom sensor
-        polygonShape.setAsBox(3 / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -5 / Constants.PPM), 0);
+        polygonShape.setAsBox(3 / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -16 / Constants.PPM), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData("bottomSensor");

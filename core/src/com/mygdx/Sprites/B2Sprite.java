@@ -29,7 +29,7 @@ public abstract class B2Sprite {
 
     public void render(SpriteBatch batch) {
         batch.begin();
-        batch.draw(animation.getFrame(), b2body.getPosition().x / Constants.PPM - width / 2, b2body.getPosition().y / Constants.PPM - height / 2);
+        batch.draw(animation.getFrame(), b2body.getPosition().x - (width / Constants.PPM) / 2, b2body.getPosition().y - (height / Constants.PPM) / 2, width / Constants.PPM, height / Constants.PPM);
         batch.end();
     }
 }
