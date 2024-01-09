@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="14">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="19">
  <tileset firstgid="1" source="test_tiles.tsx"/>
+ <tileset firstgid="3" source="demo.tsx"/>
  <layer id="1" name="bg" width="50" height="50">
   <data encoding="base64" compression="zlib">
    eJztwwEJAAAMBKH7/qWXY6DgqqmqqqqqqqqqqurzBwHpCcU=
@@ -8,7 +9,7 @@
  </layer>
  <layer id="4" name="graphic" width="50" height="50">
   <data encoding="base64" compression="zlib">
-   eJztzwEJADAMwLAx/6JvIzsNVEB3Zra4rurD0oelD0sflj4sfVj6sPRh6cPSh6UPSx+WPix9WPqw9GHpw9KHpQ9LH5Y+LH1Yfv0oowfIdgMB
+   eJzt0bENgEAQA8HT90X/bZEQERDPiR3JBax8ZuY0blvVYanDUoelDksdljosdVjqsNRhqcNSh6UOSx2WOix1WOqw1GGpw1KHpQ5LHZavjuvZBn/4Y5N3RzN2A5qoA3s=
   </data>
  </layer>
  <objectgroup id="3" name="ground">
@@ -18,5 +19,8 @@
   <object id="8" x="32" y="0" width="768" height="32"/>
   <object id="12" x="768" y="32" width="30" height="734"/>
   <object id="13" x="915" y="507"/>
+ </objectgroup>
+ <objectgroup id="5" name="hazards">
+  <object id="16" x="80.5" y="720" width="32.5" height="15.5"/>
  </objectgroup>
 </map>

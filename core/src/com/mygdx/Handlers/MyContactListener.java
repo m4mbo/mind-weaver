@@ -36,6 +36,7 @@ public class MyContactListener implements ContactListener {
 
         if (fa.getUserData().equals("leftSensor") || fb.getUserData().equals("leftSensor") || fa.getUserData().equals("rightSensor") || fb.getUserData().equals("rightSensor")) {
             player.setWallState(0);
+            player.letGo();
         } else if (fa.getUserData().equals("bottomSensor") || fb.getUserData().equals("bottomSensor")) {
             player.setOnGround(false);
         }

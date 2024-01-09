@@ -24,6 +24,7 @@ public class Player extends Entity implements Subscriber {
     private MFLAG movementState;
     private boolean stunned;
     private boolean dashing;
+    private boolean gliding;
     protected AFLAG currAState;
     protected AFLAG prevAState;
     public Player(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager) {
@@ -36,6 +37,7 @@ public class Player extends Entity implements Subscriber {
         movementState = MFLAG.HSTILL;
         onGround = true;
         stunned = false;
+        gliding = false;
         currAState = AFLAG.RSTAND;
         prevAState = AFLAG.LSTAND;
 
@@ -49,11 +51,11 @@ public class Player extends Entity implements Subscriber {
         PolygonShape polygonShape = new PolygonShape();
 
         // Loading all textures
-        resourceManager.loadTexture("bunny.png", "bunny");
+        resourceManager.loadTexture("bunny_right_run.png", "bunny_rr");
+        resourceManager.loadTexture("bunny_left_run.png", "bunny_lr");
 
         // Initializing sprite
-        TextureRegion[] sprites = TextureRegion.split(resourceManager.getTexture("bunny"), 32, 32)[0];
-        setAnimation(sprites, 1/12f);
+        setAnimation(TextureRegion.split(resourceManager.getTexture("bunny_rr"), 32, 32)[0], 1/12f);
 
         //Create body fixture
         circleShape.setRadius(16 / Constants.PPM);
@@ -95,10 +97,12 @@ public class Player extends Entity implements Subscriber {
         if (stunned || dashing) movementState = MFLAG.PREV;
         switch (movementState) {
             case LEFT:
+                if (onGround) currAState = AFLAG.LRUN;
                 facingRight = false;
                 moveLeft();
                 break;
             case RIGHT:
+                if (onGround) currAState = AFLAG.RRUN;
                 facingRight = true;
                 moveRight();
                 break;
@@ -123,8 +127,10 @@ public class Player extends Entity implements Subscriber {
     public void handleAnimation() {
         switch (currAState) {
             case LRUN:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("bunny_lr"), 32, 32)[0], 1/12f);
                 break;
             case RRUN:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("bunny_rr"), 32, 32)[0], 1/12f);
                 break;
             case LSTAND:
                 break;
@@ -141,7 +147,7 @@ public class Player extends Entity implements Subscriber {
     }
 
     public void jump() {
-        b2body.applyLinearImpulse(new Vector2(0, 5f), b2body.getWorldCenter(), true);
+        b2body.applyLinearImpulse(new Vector2(0, 6f), b2body.getWorldCenter(), true);
         b2body.setLinearDamping(5);
     }
 
@@ -150,9 +156,9 @@ public class Player extends Entity implements Subscriber {
         if (wallGrabbed) letGo();
 
         if (wallState == -1) {
-            b2body.applyLinearImpulse(new Vector2(2, 4), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(3, 4.5f), b2body.getWorldCenter(), true);
         } else {
-            b2body.applyLinearImpulse(new Vector2(-2, 4), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(-3, 4.5f), b2body.getWorldCenter(), true);
         }
 
         stunned = true;
@@ -230,13 +236,14 @@ public class Player extends Entity implements Subscriber {
     public void glide() {
         if (glideConsumed) return;
         glideConsumed = true;
+        gliding = true;
         if (movementState == MFLAG.HSTILL) {
             timer.start(0, NFLAG.UPLIFT, this);
             return;
         }
         b2body.applyLinearImpulse(new Vector2((float) (Math.pow(b2body.getLinearVelocity().x, 3) * Math.pow(b2body.getLinearVelocity().y, 2)), 0), b2body.getWorldCenter(), true);
         world.setGravity(new Vector2(0, (float) -Math.pow(b2body.getLinearVelocity().y, 3)));
-        timer.start(0.4f, NFLAG.UPLIFT, this);
+        timer.start(0.5f, NFLAG.UPLIFT, this);
     }
 
     public void grab() {
@@ -249,8 +256,8 @@ public class Player extends Entity implements Subscriber {
 
     public void letGo() {
         wallGrabbed = false;
-        b2body.applyLinearImpulse(new Vector2(0, -0.1f), b2body.getWorldCenter(), true);
         world.setGravity(new Vector2(0, -Constants.G));
+        b2body.applyLinearImpulse(new Vector2(0, -0.8f), b2body.getWorldCenter(), true);
     }
 
     public void notify(NFLAG flag) {
@@ -261,8 +268,9 @@ public class Player extends Entity implements Subscriber {
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = MFLAG.LEFT;
                 break;
             case UPLIFT:
-                if (!onGround) world.setGravity(new Vector2(0, -3));
-                else land();
+                if (!onGround && gliding) world.setGravity(new Vector2(0, -3));
+                else if (onGround) land();
+                else world.setGravity(new Vector2(0, -Constants.G));
                 break;
             case ADASH:
                 world.setGravity(new Vector2(0, -Constants.G));
@@ -312,4 +320,5 @@ public class Player extends Entity implements Subscriber {
     public boolean isGlideConsumed() { return glideConsumed; }
 
     public boolean isDashConsumed() { return dashConsumed; }
+    public void setGliding(boolean state) { this.gliding = state; }
 }

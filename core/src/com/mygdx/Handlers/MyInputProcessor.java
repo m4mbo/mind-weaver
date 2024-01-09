@@ -58,7 +58,10 @@ public class MyInputProcessor implements InputProcessor {
 
         switch (keycode) {
             case Input.Keys.SPACE:
-                if (player.isFalling() && player.isGlideConsumed()) world.setGravity(new Vector2(0, -Constants.G));
+                if (player.isGlideConsumed()) {
+                    world.setGravity(new Vector2(0, -Constants.G));
+                    player.setGliding(false);
+                }
                 break;
             case Input.Keys.D:
                 if (Gdx.input.isKeyPressed(Input.Keys.A) && !player.isWallGrabbed()) player.setMovementState(Constants.MFLAG.LEFT);
