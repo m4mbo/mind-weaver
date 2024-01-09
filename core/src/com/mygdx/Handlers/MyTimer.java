@@ -9,9 +9,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 public class MyTimer implements Publisher {
-
     private final LinkedList<TIMER_MD> timers;
-    LinkedList<TIMER_MD> timersToAdd;
+    private final LinkedList<TIMER_MD> timersToAdd;
     private final LinkedList<Subscriber> subscribers;
 
     public MyTimer() {
@@ -19,7 +18,7 @@ public class MyTimer implements Publisher {
         timersToAdd = new LinkedList<>();
         subscribers = new LinkedList<>();
     }
-    public void update() {
+    public void update(float delta) {
         if (timers.isEmpty() && timersToAdd.isEmpty()) return;
 
         if (timers.isEmpty()) {
@@ -32,7 +31,7 @@ public class MyTimer implements Publisher {
 
         while (iterator.hasNext()) {
             TIMER_MD timerMd = iterator.next();
-            timerMd.time += Gdx.graphics.getDeltaTime();
+            timerMd.time += delta;
             if (timerMd.time >= timerMd.goal) {
                 notifySubscriber(timerMd.flag, timerMd.subscriber);
                 timersToRemove.add(timerMd);
