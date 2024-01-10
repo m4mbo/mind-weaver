@@ -17,9 +17,12 @@ import com.mygdx.Handlers.MyContactListener;
 import com.mygdx.Handlers.MyInputProcessor;
 import com.mygdx.Handlers.MyResourceManager;
 import com.mygdx.Handlers.MyTimer;
+import com.mygdx.Objects.Entity;
 import com.mygdx.Objects.Player;
 import com.mygdx.Tools.B2WorldCreator;
 import com.mygdx.Tools.Constants;
+
+import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameScreen implements Screen {
@@ -35,6 +38,7 @@ public class GameScreen implements Screen {
     private World world;    // World holding all the physical objects
     private Box2DDebugRenderer b2dr;
     private Player player;
+    private LinkedList<Entity> deadEntities;
     private MyInputProcessor inputProcessor;
     public GameScreen(Glissoar game, String stage, MyResourceManager resourceManager) {
         this.stage = stage;
@@ -49,10 +53,11 @@ public class GameScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
         world = new World(new Vector2(0, -Constants.G), true);
-        player = new Player(100, 100, world, eidAllocator.getAndIncrement(), timer, resourceManager);
+        player = new Player(200, 100, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3);
+        deadEntities = new LinkedList<>();
         inputProcessor = new MyInputProcessor(player, world);
         Gdx.input.setInputProcessor(inputProcessor);
-        world.setContactListener(new MyContactListener(player));
+        world.setContactListener(new MyContactListener(player, this));
         b2dr = new Box2DDebugRenderer();
         new B2WorldCreator(world, map);     //Creating world
     }
@@ -63,6 +68,7 @@ public class GameScreen implements Screen {
     public void update(float delta) {
         player.update(delta);
         world.step(1/60f, 6, 2);
+        handleDeadEntities();    // Handling dead entities after world step to avoid errors
         gameCam.update();
         timer.update(delta);
         inputProcessor.update();
@@ -104,4 +110,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() { }
+
+    public void addDeadEntity(Entity entity) { deadEntities.add(entity); }
+
+    public void handleDeadEntities() {
+        for (Entity entity : deadEntities) {
+            entity.die();
+        }
+        deadEntities.clear();
+    }
 }

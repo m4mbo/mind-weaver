@@ -22,6 +22,7 @@ public class B2WorldCreator {
             body = world.createBody(bdef);
             shape.setAsBox((rect.getWidth() / 2) / Constants.PPM, (rect.getHeight() / 2) / Constants.PPM);
             fdef.shape = shape;
+            fdef.filter.categoryBits = Constants.BIT_GROUND;
             body.createFixture(fdef).setUserData("floor");
         }
 
@@ -33,6 +34,7 @@ public class B2WorldCreator {
             body = world.createBody(bdef);
             shape.setAsBox((rect.getWidth() / 2) / Constants.PPM, (rect.getHeight() / 2) / Constants.PPM);
             fdef.shape = shape;
+            fdef.filter.categoryBits = Constants.BIT_HAZARD;
             body.createFixture(fdef).setUserData("hazard");
         }
     }

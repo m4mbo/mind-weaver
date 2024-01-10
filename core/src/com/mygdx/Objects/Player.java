@@ -19,17 +19,22 @@ public class Player extends Entity implements Subscriber {
     private final MyResourceManager resourceManager;
     private final World world;
     private int wallState;  // -1 for left, 1 for right, 0 for none
+    private int lives;
+    private Vector2 currCheckPoint;
     private MSTATE movementState;
     private ASTATE currAState;     // Current animation state
     private ASTATE prevAState;     // Previous animation state
-    private EnumSet<PSTATE> playerStates;       // Set of player states
+    private final EnumSet<PSTATE> playerStates;       // Set of player states
 
-    public Player(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager) {
+    public Player(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, int lives) {
 
         super(id);
         this.timer = timer;
         this.world = world;
         this.resourceManager = myResourceManager;
+        this.lives = lives;
+
+        currCheckPoint = new Vector2(x / Constants.PPM, y / Constants.PPM);
 
         // Initializing states
         playerStates = EnumSet.noneOf(PSTATE.class);
@@ -58,24 +63,35 @@ public class Player extends Entity implements Subscriber {
         circleShape.setRadius(16 / Constants.PPM);
         fdef.friction = 0;  // No friction allows for players sliding next to walls
         fdef.shape = circleShape;
+        fdef.filter.maskBits = Constants.BIT_GROUND;
         b2body.createFixture(fdef).setUserData("player");
+
+        //Create player hitbox
+        circleShape.setRadius(15f / Constants.PPM);
+        fdef.shape = circleShape;
+        fdef.filter.maskBits = Constants.BIT_HAZARD;
+        fdef.isSensor = true;
+        b2body.createFixture(fdef).setUserData("player_hb");
 
         //Create right sensor
         polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(16 / Constants.PPM, 0), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
+        fdef.filter.maskBits = Constants.BIT_GROUND;
         b2body.createFixture(fdef).setUserData("rightSensor");
 
         //Create left sensor
         polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(-16 / Constants.PPM, 0), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
+        fdef.filter.maskBits = Constants.BIT_GROUND;
         b2body.createFixture(fdef).setUserData("leftSensor");
 
         //Create bottom sensor
         polygonShape.setAsBox(3 / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -16 / Constants.PPM), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
+        fdef.filter.maskBits = Constants.BIT_GROUND;
         b2body.createFixture(fdef).setUserData("bottomSensor");
 
         wallState = 0;
@@ -259,6 +275,17 @@ public class Player extends Entity implements Subscriber {
     }
 
     @Override
+    public void die() {
+        lives--;
+        if (lives == 0) return;     // Handle later
+        respawn();
+    }
+
+    public void respawn() {
+        b2body.setTransform(currCheckPoint, b2body.getAngle());
+    }
+
+    @Override
     public void notify(NFLAG flag) {
         switch (flag){
             case STUN:
@@ -290,15 +317,11 @@ public class Player extends Entity implements Subscriber {
         }
     }
 
-    public boolean isFalling() {
-        return b2body.getLinearVelocity().y < 0;
-    }
+    public boolean isFalling() { return b2body.getLinearVelocity().y < 0; }
 
     public void setWallState(int wallState) { this.wallState = wallState; }
 
-    public int getWallState() {
-        return wallState;
-    }
+    public int getWallState() { return wallState; }
 
     public void setMovementState(Constants.MSTATE direction) { this.movementState = direction; }
 
@@ -309,5 +332,7 @@ public class Player extends Entity implements Subscriber {
     public void removePlayerState(PSTATE state) { playerStates.remove(state); }
 
     public boolean isStateActive(PSTATE state) { return playerStates.contains(state); }
+
+    public void setCheckPoint(Vector2 position) { currCheckPoint = position; }
 
 }

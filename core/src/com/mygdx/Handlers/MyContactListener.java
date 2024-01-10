@@ -2,6 +2,7 @@ package com.mygdx.Handlers;
 
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Objects.Player;
+import com.mygdx.Screens.GameScreen;
 import com.mygdx.Tools.Constants;
 import com.mygdx.Tools.Constants.*;
 
@@ -10,9 +11,11 @@ public class MyContactListener implements ContactListener {
     private Fixture fa;
     private Fixture fb;
     private Player player;
+    private GameScreen screen;
 
-    public MyContactListener(Player player) {
+    public MyContactListener(Player player, GameScreen screen) {
         this.player = player;
+        this.screen = screen;
     }
 
     @Override
@@ -27,6 +30,8 @@ public class MyContactListener implements ContactListener {
         } else if (fa.getUserData().equals("bottomSensor") || fb.getUserData().equals("bottomSensor")) {
             player.land();
             if (player.getMovementState() == MSTATE.PREV) player.setMovementState(MSTATE.HSTILL);
+        } else if (fa.getUserData().equals("player_hb") || fb.getUserData().equals("player_hb")) {
+            screen.addDeadEntity(player);
         }
     }
 

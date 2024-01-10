@@ -13,4 +13,6 @@ public abstract class Entity extends B2Sprite {
     public int getID() {
         return ID;
     }
+
+    public void die() {}
 }
