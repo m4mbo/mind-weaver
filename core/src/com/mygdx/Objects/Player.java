@@ -10,23 +10,20 @@ import com.mygdx.Handlers.MyTimer;
 import com.mygdx.Interfaces.Subscriber;
 import com.mygdx.Tools.Constants.*;
 import com.mygdx.Tools.Constants;
+import com.sun.tools.javac.code.Attribute;
+
+import java.util.EnumSet;
 
 public class Player extends Entity implements Subscriber {
     private final MyTimer timer;
     private final MyResourceManager resourceManager;
     private final World world;
-    private boolean facingRight;
-    private boolean onGround;
-    private boolean glideConsumed;
-    private boolean dashConsumed;
     private int wallState;  // -1 for left, 1 for right, 0 for none
-    private boolean wallGrabbed;
-    private MFLAG movementState;
-    private boolean stunned;
-    private boolean dashing;
-    private boolean gliding;
-    protected AFLAG currAState;     // Current animation state
-    protected AFLAG prevAState;     // Previous animation state
+    private MSTATE movementState;
+    private ASTATE currAState;     // Current animation state
+    private ASTATE prevAState;     // Previous animation state
+    private EnumSet<PSTATE> playerStates;       // Set of player states
+
     public Player(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager) {
 
         super(id);
@@ -34,17 +31,11 @@ public class Player extends Entity implements Subscriber {
         this.world = world;
         this.resourceManager = myResourceManager;
 
-        // Initializing variables
-        onGround = true;
-        stunned = false;
-        gliding = false;
-        dashing = false;
-        wallGrabbed = false;
-        glideConsumed = false;
-        dashConsumed = false;
-        currAState = AFLAG.RSTAND;
-        prevAState = AFLAG.LSTAND;
-        movementState = MFLAG.HSTILL;
+        // Initializing states
+        addPlayerState(PSTATE.ON_GROUND);
+        currAState = ASTATE.RSTAND;
+        prevAState = ASTATE.LSTAND;
+        movementState = MSTATE.HSTILL;
 
         // Loading all textures
         resourceManager.loadTexture("bunny_right_run.png", "bunny_rr");
@@ -99,16 +90,17 @@ public class Player extends Entity implements Subscriber {
         // Update the animation
         animation.update(delta);
 
-        if (stunned || dashing) movementState = MFLAG.PREV;
+        if (isStateActive(PSTATE.STUNNED) || isStateActive(PSTATE.DASHING)) movementState = MSTATE.PREV;
 
         switch (movementState) {
             case LEFT:
-                if (onGround) currAState = AFLAG.LRUN;
-                facingRight = false;
+                if (isStateActive(PSTATE.ON_GROUND)) currAState = ASTATE.LRUN;
+                removePlayerState(PSTATE.FACING_RIGHT);
+                addPlayerState(PSTATE.FACING_LEFT);
                 moveLeft();
                 break;
             case RIGHT:
-                if (onGround) currAState = AFLAG.RRUN;
+                if (onGround) currAState = ASTATE.RRUN;
                 facingRight = true;
                 moveRight();
                 break;
@@ -243,7 +235,7 @@ public class Player extends Entity implements Subscriber {
         if (glideConsumed) return;
         glideConsumed = true;
         gliding = true;
-        if (movementState == MFLAG.HSTILL) {
+        if (movementState == MSTATE.HSTILL) {
             timer.start(0, NFLAG.UPLIFT, this);
             return;
         }
@@ -254,14 +246,14 @@ public class Player extends Entity implements Subscriber {
 
     public void grab() {
         if (stunned) return;
-        glideConsumed = false;
-        wallGrabbed = true;
+        removePlayerState(PSTATE.GLIDE_CONSUMED);
+        addPlayerState(PSTATE.STUNNED);
         world.setGravity(new Vector2(0, 0));
         b2body.setLinearVelocity(0, 0);
     }
 
     public void letGo() {
-        wallGrabbed = false;
+        removePlayerState(PSTATE.WALL_GRABBED);
         world.setGravity(new Vector2(0, -Constants.G));
         b2body.applyLinearImpulse(new Vector2(0, -0.8f), b2body.getWorldCenter(), true);
     }
@@ -270,9 +262,9 @@ public class Player extends Entity implements Subscriber {
     public void notify(NFLAG flag) {
         switch (flag){
             case STUN:
-                stunned = false;
-                if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = MFLAG.RIGHT;
-                if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = MFLAG.LEFT;
+                removePlayerState(PSTATE.STUNNED);
+                if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = MSTATE.RIGHT;
+                if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = MSTATE.LEFT;
                 break;
             case UPLIFT:
                 if (!onGround && gliding) world.setGravity(new Vector2(0, -3));
@@ -281,33 +273,25 @@ public class Player extends Entity implements Subscriber {
                 break;
             case ADASH:
                 world.setGravity(new Vector2(0, -Constants.G));
-                dashing = false;
-                if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = MFLAG.RIGHT;
-                if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = MFLAG.LEFT;
+                removePlayerState(PSTATE.DASHING);
+                if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = MSTATE.RIGHT;
+                if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = MSTATE.LEFT;
                 break;
             case GDASH:
                 world.setGravity(new Vector2(0, -Constants.G));
-                dashing = false;
+                removePlayerState(PSTATE.DASHING);
                 timer.start(1, NFLAG.DASH_COOLDOWN, this);
-                if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = MFLAG.RIGHT;
-                if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = MFLAG.LEFT;
+                if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = MSTATE.RIGHT;
+                if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = MSTATE.LEFT;
                 break;
             case DASH_COOLDOWN:
-                dashConsumed = false;
+                removePlayerState(PSTATE.DASH_CONSUMED);
                 break;
         }
     }
 
-    public boolean isOnGround() {
-        return onGround;
-    }
-
     public boolean isFalling() {
         return b2body.getLinearVelocity().y < 0;
-    }
-
-    public void setOnGround(boolean onGround) {
-        this.onGround = onGround;
     }
 
     public void setWallState(int wallState) { this.wallState = wallState; }
@@ -316,16 +300,14 @@ public class Player extends Entity implements Subscriber {
         return wallState;
     }
 
-    public void setMovementState(Constants.MFLAG direction) { this.movementState = direction; }
+    public void setMovementState(Constants.MSTATE direction) { this.movementState = direction; }
 
-    public boolean isWallGrabbed() {
-        return wallGrabbed;
-    }
+    public MSTATE getMovementState() { return movementState; }
 
-    public MFLAG getMovementState() { return movementState; }
+    public void addPlayerState(PSTATE state) { playerStates.add(state); }
 
-    public boolean isGlideConsumed() { return glideConsumed; }
+    public void removePlayerState(PSTATE state) { playerStates.remove(state); }
 
-    public boolean isDashConsumed() { return dashConsumed; }
-    public void setGliding(boolean state) { this.gliding = state; }
+    public boolean isStateActive(PSTATE state) { return playerStates.contains(state); }
+
 }

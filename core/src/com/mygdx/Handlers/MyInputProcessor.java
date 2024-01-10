@@ -26,23 +26,23 @@ public class MyInputProcessor implements InputProcessor {
                     break;
                 }
                 if (player.getWallState() != 0) {
-                    player.setMovementState(Constants.MFLAG.PREV);
+                    player.setMovementState(Constants.MSTATE.PREV);
                     player.wallJump();
                     break;
                 }
                 if (player.isFalling()) player.glide();
                 break;
             case Input.Keys.D:
-                if (!player.isWallGrabbed()) player.setMovementState(Constants.MFLAG.RIGHT);
+                if (!player.isWallGrabbed()) player.setMovementState(Constants.MSTATE.RIGHT);
                 break;
             case Input.Keys.A:
-                if (!player.isWallGrabbed()) player.setMovementState(Constants.MFLAG.LEFT);
+                if (!player.isWallGrabbed()) player.setMovementState(Constants.MSTATE.LEFT);
                 break;
             case Input.Keys.W:
-                if (player.isWallGrabbed()) player.setMovementState(Constants.MFLAG.UP);
+                if (player.isWallGrabbed()) player.setMovementState(Constants.MSTATE.UP);
                 break;
             case Input.Keys.S:
-                if (player.isWallGrabbed()) player.setMovementState(Constants.MFLAG.DOWN);
+                if (player.isWallGrabbed()) player.setMovementState(Constants.MSTATE.DOWN);
                 break;
             case Input.Keys.CAPS_LOCK:
                 if (!player.isDashConsumed()) player.dash();
@@ -64,29 +64,29 @@ public class MyInputProcessor implements InputProcessor {
                 }
                 break;
             case Input.Keys.D:
-                if (Gdx.input.isKeyPressed(Input.Keys.A) && !player.isWallGrabbed()) player.setMovementState(Constants.MFLAG.LEFT);
-                else player.setMovementState(Constants.MFLAG.HSTILL);
+                if (Gdx.input.isKeyPressed(Input.Keys.A) && !player.isWallGrabbed()) player.setMovementState(Constants.MSTATE.LEFT);
+                else player.setMovementState(Constants.MSTATE.HSTILL);
                 break;
             case Input.Keys.A:
-                if (Gdx.input.isKeyPressed(Input.Keys.D) && !player.isWallGrabbed()) player.setMovementState(Constants.MFLAG.RIGHT);
-                else player.setMovementState(Constants.MFLAG.HSTILL);
+                if (Gdx.input.isKeyPressed(Input.Keys.D) && !player.isWallGrabbed()) player.setMovementState(Constants.MSTATE.RIGHT);
+                else player.setMovementState(Constants.MSTATE.HSTILL);
                 break;
             case Input.Keys.J:
                 if (player.isWallGrabbed()) {
-                    if (Gdx.input.isKeyPressed(Input.Keys.D)) player.setMovementState(Constants.MFLAG.RIGHT);
-                    if (Gdx.input.isKeyPressed(Input.Keys.A)) player.setMovementState(Constants.MFLAG.LEFT);
+                    if (Gdx.input.isKeyPressed(Input.Keys.D)) player.setMovementState(Constants.MSTATE.RIGHT);
+                    if (Gdx.input.isKeyPressed(Input.Keys.A)) player.setMovementState(Constants.MSTATE.LEFT);
                     player.letGo();
                 }
                 break;
             case Input.Keys.W:
                 if (!player.isWallGrabbed()) break;
-                if (Gdx.input.isKeyPressed(Input.Keys.S) && player.isWallGrabbed()) player.setMovementState(Constants.MFLAG.DOWN);
-                else player.setMovementState(Constants.MFLAG.FSTILL);
+                if (Gdx.input.isKeyPressed(Input.Keys.S) && player.isWallGrabbed()) player.setMovementState(Constants.MSTATE.DOWN);
+                else player.setMovementState(Constants.MSTATE.FSTILL);
                 break;
             case Input.Keys.S:
                 if (!player.isWallGrabbed()) break;
-                if (Gdx.input.isKeyPressed(Input.Keys.W) && player.isWallGrabbed()) player.setMovementState(Constants.MFLAG.UP);
-                else player.setMovementState(Constants.MFLAG.FSTILL);
+                if (Gdx.input.isKeyPressed(Input.Keys.W) && player.isWallGrabbed()) player.setMovementState(Constants.MSTATE.UP);
+                else player.setMovementState(Constants.MSTATE.FSTILL);
                 break;
             default:
                 break;

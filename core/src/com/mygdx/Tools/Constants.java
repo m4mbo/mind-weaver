@@ -6,14 +6,18 @@ public class Constants {
     public static final float MAX_SPEED = 1.5F;
     public static final float G = 11;
     // Movement state Flag
-    public enum MFLAG {
+    public enum MSTATE {
         UP, DOWN, LEFT, RIGHT,
         PREV, // Keep previous direction
         HSTILL, // Horizontal still
         FSTILL; // Full still
     }
+    // Player state flag
+    public enum PSTATE {
+        DASHING, STUNNED, WALL_GRABBED, ON_GROUND, GLIDING, GLIDE_CONSUMED, DASH_CONSUMED, FACING_RIGHT, FACING_LEFT
+    }
     // Animation state flag
-    public enum AFLAG {
+    public enum ASTATE {
         RRUN, LRUN, JUMP, RSTAND, LSTAND
     }
     // Notification Flag
@@ -23,4 +27,8 @@ public class Constants {
         GDASH, // Ground dash
         DASH_COOLDOWN
     }
+
+    // Bits for collision masking
+    public static final short BIT_GROUND = 2;   // Includes ground and walls (because some times the ground can be a wall)
+    public static final short BIT_HAZARD = 8;
 }
