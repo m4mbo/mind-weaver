@@ -32,6 +32,7 @@ public class Player extends Entity implements Subscriber {
         this.resourceManager = myResourceManager;
 
         // Initializing states
+        playerStates = EnumSet.noneOf(PSTATE.class);
         addPlayerState(PSTATE.ON_GROUND);
         currAState = ASTATE.RSTAND;
         prevAState = ASTATE.LSTAND;
@@ -96,12 +97,11 @@ public class Player extends Entity implements Subscriber {
             case LEFT:
                 if (isStateActive(PSTATE.ON_GROUND)) currAState = ASTATE.LRUN;
                 removePlayerState(PSTATE.FACING_RIGHT);
-                addPlayerState(PSTATE.FACING_LEFT);
                 moveLeft();
                 break;
             case RIGHT:
-                if (onGround) currAState = ASTATE.RRUN;
-                facingRight = true;
+                if (isStateActive(PSTATE.ON_GROUND)) currAState = ASTATE.RRUN;
+                addPlayerState(PSTATE.FACING_RIGHT);
                 moveRight();
                 break;
             case UP:
@@ -138,9 +138,9 @@ public class Player extends Entity implements Subscriber {
     }
 
     public void land() {
-        onGround = true;
-        glideConsumed = false;
-        dashConsumed = false;
+        addPlayerState(PSTATE.ON_GROUND);
+        removePlayerState(PSTATE.GLIDE_CONSUMED);
+        removePlayerState(PSTATE.DASH_CONSUMED);
         world.setGravity(new Vector2(0, -Constants.G));
     }
 
@@ -151,7 +151,7 @@ public class Player extends Entity implements Subscriber {
 
     public void wallJump() {
 
-        if (wallGrabbed) letGo();
+        if (isStateActive(PSTATE.WALL_GRABBED)) letGo();
 
         if (wallState == -1) {
             b2body.applyLinearImpulse(new Vector2(3, 4.5f), b2body.getWorldCenter(), true);
@@ -159,7 +159,7 @@ public class Player extends Entity implements Subscriber {
             b2body.applyLinearImpulse(new Vector2(-3, 4.5f), b2body.getWorldCenter(), true);
         }
 
-        stunned = true;
+        addPlayerState(PSTATE.STUNNED);
         timer.start(0.2f, NFLAG.STUN, this);
     }
 
@@ -189,10 +189,10 @@ public class Player extends Entity implements Subscriber {
 
     public void dash() {
 
-        if (wallGrabbed) return;
+        if (isStateActive(PSTATE.WALL_GRABBED)) return;
 
-        dashing = true;
-        dashConsumed = true;
+        addPlayerState(PSTATE.DASHING);
+        addPlayerState(PSTATE.DASH_CONSUMED);
 
         // Cancel out the world's gravity and previous velocity
         world.setGravity(new Vector2(0, 0));
@@ -207,24 +207,24 @@ public class Player extends Entity implements Subscriber {
             b2body.applyLinearImpulse(new Vector2(4, 4), b2body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             b2body.applyLinearImpulse(new Vector2(4, 0), b2body.getWorldCenter(), true);
-            if (onGround) groundDash = true;
+            if (isStateActive(PSTATE.ON_GROUND)) groundDash = true;
         } else if (Gdx.input.isKeyPressed(Input.Keys.A) && Gdx.input.isKeyPressed(Input.Keys.S)) {
             b2body.applyLinearImpulse(new Vector2(-4, -4), b2body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.A) && Gdx.input.isKeyPressed(Input.Keys.W)) {
             b2body.applyLinearImpulse(new Vector2(-4, 4), b2body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             b2body.applyLinearImpulse(new Vector2(-4, 0), b2body.getWorldCenter(), true);
-            if (onGround) groundDash = true;
+            if (isStateActive(PSTATE.ON_GROUND)) groundDash = true;
         } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             b2body.applyLinearImpulse(new Vector2(0, 4), b2body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             b2body.applyLinearImpulse(new Vector2(0, -4), b2body.getWorldCenter(), true);
-        } else if (facingRight) {
+        } else if (isStateActive(PSTATE.FACING_RIGHT)) {
             b2body.applyLinearImpulse(new Vector2(4, 0), b2body.getWorldCenter(), true);
-            if (onGround) groundDash = true;
+            if (isStateActive(PSTATE.ON_GROUND)) groundDash = true;
         } else {
             b2body.applyLinearImpulse(new Vector2(-4, 0), b2body.getWorldCenter(), true);
-            if (onGround) groundDash = true;
+            if (isStateActive(PSTATE.ON_GROUND)) groundDash = true;
         }
 
         if (groundDash) timer.start(0.2f, NFLAG.GDASH, this);
@@ -232,9 +232,9 @@ public class Player extends Entity implements Subscriber {
     }
 
     public void glide() {
-        if (glideConsumed) return;
-        glideConsumed = true;
-        gliding = true;
+        if (isStateActive(PSTATE.GLIDE_CONSUMED)) return;
+        addPlayerState(PSTATE.GLIDE_CONSUMED);
+        addPlayerState(PSTATE.GLIDING);
         if (movementState == MSTATE.HSTILL) {
             timer.start(0, NFLAG.UPLIFT, this);
             return;
@@ -245,9 +245,9 @@ public class Player extends Entity implements Subscriber {
     }
 
     public void grab() {
-        if (stunned) return;
+        if (isStateActive(PSTATE.STUNNED)) return;
         removePlayerState(PSTATE.GLIDE_CONSUMED);
-        addPlayerState(PSTATE.STUNNED);
+        addPlayerState(PSTATE.WALL_GRABBED);
         world.setGravity(new Vector2(0, 0));
         b2body.setLinearVelocity(0, 0);
     }
@@ -267,8 +267,8 @@ public class Player extends Entity implements Subscriber {
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = MSTATE.LEFT;
                 break;
             case UPLIFT:
-                if (!onGround && gliding) world.setGravity(new Vector2(0, -3));
-                else if (onGround) land();
+                if (!isStateActive(PSTATE.ON_GROUND) && isStateActive(PSTATE.GLIDING)) world.setGravity(new Vector2(0, -3));
+                else if (isStateActive(PSTATE.ON_GROUND)) land();
                 else world.setGravity(new Vector2(0, -Constants.G));
                 break;
             case ADASH:

@@ -3,6 +3,7 @@ package com.mygdx.Handlers;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Objects.Player;
 import com.mygdx.Tools.Constants;
+import com.mygdx.Tools.Constants.*;
 
 public class MyContactListener implements ContactListener {
 
@@ -25,7 +26,7 @@ public class MyContactListener implements ContactListener {
             player.setWallState(1);
         } else if (fa.getUserData().equals("bottomSensor") || fb.getUserData().equals("bottomSensor")) {
             player.land();
-            if (player.getMovementState() == Constants.MSTATE.PREV) player.setMovementState(Constants.MSTATE.HSTILL);
+            if (player.getMovementState() == MSTATE.PREV) player.setMovementState(MSTATE.HSTILL);
         }
     }
 
@@ -38,7 +39,7 @@ public class MyContactListener implements ContactListener {
             player.setWallState(0);
             player.letGo();
         } else if (fa.getUserData().equals("bottomSensor") || fb.getUserData().equals("bottomSensor")) {
-            player.setOnGround(false);
+            player.removePlayerState(PSTATE.ON_GROUND);
         }
     }
 

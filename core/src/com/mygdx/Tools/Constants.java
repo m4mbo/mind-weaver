@@ -14,7 +14,7 @@ public class Constants {
     }
     // Player state flag
     public enum PSTATE {
-        DASHING, STUNNED, WALL_GRABBED, ON_GROUND, GLIDING, GLIDE_CONSUMED, DASH_CONSUMED, FACING_RIGHT, FACING_LEFT
+        DASHING, STUNNED, WALL_GRABBED, ON_GROUND, GLIDING, GLIDE_CONSUMED, DASH_CONSUMED, FACING_RIGHT
     }
     // Animation state flag
     public enum ASTATE {
@@ -29,6 +29,6 @@ public class Constants {
     }
 
     // Bits for collision masking
-    public static final short BIT_GROUND = 2;   // Includes ground and walls (because some times the ground can be a wall)
-    public static final short BIT_HAZARD = 8;
+    public static final short BIT_GROUND = 2;   // Includes ground and walls (because sometimes the ground can be a wall)
+    public static final short BIT_HAZARD = 4;
 }
