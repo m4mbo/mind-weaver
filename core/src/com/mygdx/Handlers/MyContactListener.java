@@ -25,7 +25,7 @@ public class MyContactListener implements ContactListener {
             player.setWallState(1);
         } else if (fa.getUserData().equals("bottomSensor") || fb.getUserData().equals("bottomSensor")) {
             player.land();
-            if (player.getMovementState() == Constants.MFLAG.PREV) player.setMovementState(Constants.MFLAG.HSTILL);
+            if (player.getMovementState() == Constants.MSTATE.PREV) player.setMovementState(Constants.MSTATE.HSTILL);
         }
     }
 
