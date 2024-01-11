@@ -100,6 +100,8 @@ public class Player extends Entity implements Subscriber {
     @Override
     public void update(float delta) {
 
+        if (isFalling()) b2body.setLinearDamping(0);
+
         if (currAState != prevAState) {
             handleAnimation();
             prevAState = currAState;
@@ -158,11 +160,16 @@ public class Player extends Entity implements Subscriber {
         removePlayerState(PSTATE.GLIDE_CONSUMED);
         removePlayerState(PSTATE.DASH_CONSUMED);
         world.setGravity(new Vector2(0, -Constants.G));
+        b2body.setLinearDamping(0);
     }
 
     public void jump() {
-        b2body.applyLinearImpulse(new Vector2(0, 6f), b2body.getWorldCenter(), true);
-        b2body.setLinearDamping(5);
+        b2body.applyLinearImpulse(new Vector2(0, 4.6f), b2body.getWorldCenter(), true);
+    }
+
+    public void fall() {
+        world.setGravity(new Vector2(0, -Constants.G_ENHANCED));
+        if (!isFalling()) b2body.setLinearDamping(6);   // If not falling, set linear damping to regulate height
     }
 
     public void wallJump() {
@@ -170,9 +177,9 @@ public class Player extends Entity implements Subscriber {
         if (isStateActive(PSTATE.WALL_GRABBED)) letGo();
 
         if (wallState == -1) {
-            b2body.applyLinearImpulse(new Vector2(3, 4.5f), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(20, 20f), b2body.getWorldCenter(), true);
         } else {
-            b2body.applyLinearImpulse(new Vector2(-3, 4.5f), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(-6, 8f), b2body.getWorldCenter(), true);
         }
 
         addPlayerState(PSTATE.STUNNED);
@@ -192,11 +199,11 @@ public class Player extends Entity implements Subscriber {
     }
 
     public void moveUp() {
-        b2body.setLinearVelocity(0, 0.5f);
+        b2body.setLinearVelocity(0, Constants.MAX_SPEED / 1.5f);
     }
 
     public void moveDown() {
-        b2body.setLinearVelocity(0, -0.9f);
+        b2body.setLinearVelocity(0, -Constants.MAX_SPEED);
     }
 
     public void attack() {
@@ -211,6 +218,7 @@ public class Player extends Entity implements Subscriber {
         addPlayerState(PSTATE.DASH_CONSUMED);
 
         // Cancel out the world's gravity and previous velocity
+        b2body.setLinearDamping(2);
         world.setGravity(new Vector2(0, 0));
         b2body.setLinearVelocity(0, 0);
 
@@ -218,28 +226,28 @@ public class Player extends Entity implements Subscriber {
 
         // Handle direction
         if (Gdx.input.isKeyPressed(Input.Keys.D) && Gdx.input.isKeyPressed(Input.Keys.S)) {
-            b2body.applyLinearImpulse(new Vector2(4, -4), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(Constants.DASH_FORCE / 1.5f, -Constants.DASH_FORCE / 1.5f), b2body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.D) && Gdx.input.isKeyPressed(Input.Keys.W)) {
-            b2body.applyLinearImpulse(new Vector2(4, 4), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(Constants.DASH_FORCE / 1.5f, Constants.DASH_FORCE / 1.5f), b2body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            b2body.applyLinearImpulse(new Vector2(4, 0), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(Constants.DASH_FORCE, 0), b2body.getWorldCenter(), true);
             if (isStateActive(PSTATE.ON_GROUND)) groundDash = true;
         } else if (Gdx.input.isKeyPressed(Input.Keys.A) && Gdx.input.isKeyPressed(Input.Keys.S)) {
-            b2body.applyLinearImpulse(new Vector2(-4, -4), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(-Constants.DASH_FORCE / 1.5f, -Constants.DASH_FORCE / 1.5f), b2body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.A) && Gdx.input.isKeyPressed(Input.Keys.W)) {
-            b2body.applyLinearImpulse(new Vector2(-4, 4), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(-Constants.DASH_FORCE / 1.5f, Constants.DASH_FORCE / 1.5f), b2body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            b2body.applyLinearImpulse(new Vector2(-4, 0), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(-Constants.DASH_FORCE, 0), b2body.getWorldCenter(), true);
             if (isStateActive(PSTATE.ON_GROUND)) groundDash = true;
         } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            b2body.applyLinearImpulse(new Vector2(0, 4), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(0, Constants.DASH_FORCE), b2body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            b2body.applyLinearImpulse(new Vector2(0, -4), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(0, -Constants.DASH_FORCE), b2body.getWorldCenter(), true);
         } else if (isStateActive(PSTATE.FACING_RIGHT)) {
-            b2body.applyLinearImpulse(new Vector2(4, 0), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(Constants.DASH_FORCE, 0), b2body.getWorldCenter(), true);
             if (isStateActive(PSTATE.ON_GROUND)) groundDash = true;
         } else {
-            b2body.applyLinearImpulse(new Vector2(-4, 0), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(-Constants.DASH_FORCE, 0), b2body.getWorldCenter(), true);
             if (isStateActive(PSTATE.ON_GROUND)) groundDash = true;
         }
 
@@ -256,12 +264,14 @@ public class Player extends Entity implements Subscriber {
             return;
         }
         b2body.applyLinearImpulse(new Vector2((float) (Math.pow(b2body.getLinearVelocity().x, 3) * Math.pow(b2body.getLinearVelocity().y, 2)), 0), b2body.getWorldCenter(), true);
-        world.setGravity(new Vector2(0, (float) -Math.pow(b2body.getLinearVelocity().y, 3)));
+        float invertG = (float) Math.pow(b2body.getLinearVelocity().y, 2) * 1.5f;
+        world.setGravity(new Vector2(0, invertG > 15 ? 15 : invertG));
         timer.start(0.5f, NFLAG.UPLIFT, this);
     }
 
     public void grab() {
         if (isStateActive(PSTATE.STUNNED)) return;
+        b2body.setLinearDamping(0);
         removePlayerState(PSTATE.GLIDE_CONSUMED);
         addPlayerState(PSTATE.WALL_GRABBED);
         world.setGravity(new Vector2(0, 0));
@@ -270,8 +280,8 @@ public class Player extends Entity implements Subscriber {
 
     public void letGo() {
         removePlayerState(PSTATE.WALL_GRABBED);
-        world.setGravity(new Vector2(0, -Constants.G));
-        b2body.applyLinearImpulse(new Vector2(0, -0.8f), b2body.getWorldCenter(), true);
+        world.setGravity(new Vector2(0, -Constants.G_ENHANCED));
+        b2body.setLinearVelocity(new Vector2(0,0));
     }
 
     @Override
@@ -294,12 +304,13 @@ public class Player extends Entity implements Subscriber {
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = MSTATE.LEFT;
                 break;
             case UPLIFT:
-                if (!isStateActive(PSTATE.ON_GROUND) && isStateActive(PSTATE.GLIDING)) world.setGravity(new Vector2(0, -3));
+                if (!isStateActive(PSTATE.ON_GROUND) && isStateActive(PSTATE.GLIDING)) world.setGravity(new Vector2(0, -Constants.G_GLIDING));
                 else if (isStateActive(PSTATE.ON_GROUND)) land();
                 else world.setGravity(new Vector2(0, -Constants.G));
                 break;
             case ADASH:
-                world.setGravity(new Vector2(0, -Constants.G));
+                if (!isStateActive(PSTATE.ON_GROUND)) world.setGravity(new Vector2(0, -Constants.G_ENHANCED));
+                else world.setGravity(new Vector2(0, -Constants.G));
                 removePlayerState(PSTATE.DASHING);
                 if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = MSTATE.RIGHT;
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = MSTATE.LEFT;

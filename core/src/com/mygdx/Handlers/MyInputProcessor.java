@@ -3,7 +3,6 @@ package com.mygdx.Handlers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.Objects.Player;
 import com.mygdx.Tools.Constants;
@@ -59,10 +58,9 @@ public class MyInputProcessor implements InputProcessor {
 
         switch (keycode) {
             case Input.Keys.SPACE:
-                if (player.isStateActive(PSTATE.GLIDE_CONSUMED)) {
-                    world.setGravity(new Vector2(0, -Constants.G));
-                    player.removePlayerState(PSTATE.GLIDING);
-                }
+                if (player.isStateActive(PSTATE.ON_GROUND) || player.isStateActive(PSTATE.DASHING)) break;
+                player.fall();
+                if (player.isStateActive(PSTATE.GLIDE_CONSUMED)) player.removePlayerState(PSTATE.GLIDING);
                 break;
             case Input.Keys.D:
                 if (Gdx.input.isKeyPressed(Input.Keys.A) && !player.isStateActive(PSTATE.WALL_GRABBED)) player.setMovementState(Constants.MSTATE.LEFT);

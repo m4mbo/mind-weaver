@@ -10,8 +10,8 @@ public class MyContactListener implements ContactListener {
 
     private Fixture fa;
     private Fixture fb;
-    private Player player;
-    private GameScreen screen;
+    private final Player player;
+    private final GameScreen screen;
 
     public MyContactListener(Player player, GameScreen screen) {
         this.player = player;
