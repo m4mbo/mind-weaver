@@ -7,8 +7,8 @@ public class Constants {
     public static final float MAX_SPEED_Y = 5f;
     public static final float G = 11;
     public static final float G_ENHANCED = 13;
-    public static final float G_GLIDING = 0;
-    public static final float DASH_FORCE = 5;
+    public static final float G_GLIDING = 4;
+    public static final float DASH_FORCE = 3.9f;
     // Movement state Flag
     public enum MSTATE {
         UP, DOWN, LEFT, RIGHT,

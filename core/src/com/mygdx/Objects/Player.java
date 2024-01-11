@@ -166,7 +166,7 @@ public class Player extends Entity implements Subscriber {
     }
 
     public void jump() {
-        b2body.applyLinearImpulse(new Vector2(0, 4.6f), b2body.getWorldCenter(), true);
+        b2body.applyLinearImpulse(new Vector2(0, 4.2f), b2body.getWorldCenter(), true);
     }
 
     public void fall() {
@@ -217,7 +217,7 @@ public class Player extends Entity implements Subscriber {
         addPlayerState(PSTATE.DASH_CONSUMED);
 
         // Cancel out the world's gravity and previous velocity
-        b2body.setLinearDamping(2);
+        b2body.setLinearDamping(0);
         world.setGravity(new Vector2(0, 0));
         b2body.setLinearVelocity(0, 0);
 
@@ -279,7 +279,9 @@ public class Player extends Entity implements Subscriber {
 
     public void letGo() {
         removePlayerState(PSTATE.WALL_GRABBED);
+        movementState = MSTATE.PREV;
         world.setGravity(new Vector2(0, -Constants.G_ENHANCED));
+        b2body.applyLinearImpulse(new Vector2(0, -0.5f), b2body.getWorldCenter(), true);
     }
 
     @Override
