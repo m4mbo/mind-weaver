@@ -100,6 +100,8 @@ public class Player extends Entity implements Subscriber {
     @Override
     public void update(float delta) {
 
+        // Capping y velocity
+        if (b2body.getLinearVelocity().y < -Constants.MAX_SPEED_Y) b2body.setLinearVelocity(new Vector2(b2body.getLinearVelocity().x, -Constants.MAX_SPEED_Y));
         if (isFalling()) b2body.setLinearDamping(0);
 
         if (currAState != prevAState) {
@@ -169,19 +171,16 @@ public class Player extends Entity implements Subscriber {
 
     public void fall() {
         world.setGravity(new Vector2(0, -Constants.G_ENHANCED));
-        if (!isFalling()) b2body.setLinearDamping(6);   // If not falling, set linear damping to regulate height
+        if (!isFalling()) b2body.setLinearDamping(12);   // If not falling, set linear damping to regulate height
     }
 
     public void wallJump() {
-
         if (isStateActive(PSTATE.WALL_GRABBED)) letGo();
-
         if (wallState == -1) {
-            b2body.applyLinearImpulse(new Vector2(20, 20f), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(2, 3), b2body.getWorldCenter(), true);
         } else {
-            b2body.applyLinearImpulse(new Vector2(-6, 8f), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(-2, 3), b2body.getWorldCenter(), true);
         }
-
         addPlayerState(PSTATE.STUNNED);
         timer.start(0.2f, NFLAG.STUN, this);
     }
@@ -189,21 +188,21 @@ public class Player extends Entity implements Subscriber {
     public void moveRight() {
         //Initial acceleration
         if (b2body.getLinearVelocity().x == 0) b2body.applyLinearImpulse(new Vector2(0.5f, 0), b2body.getWorldCenter(), true);
-        else b2body.setLinearVelocity(Constants.MAX_SPEED, b2body.getLinearVelocity().y);
+        else b2body.setLinearVelocity(Constants.MAX_SPEED_X, b2body.getLinearVelocity().y);
     }
 
     public void moveLeft() {
         //Initial acceleration
         if (b2body.getLinearVelocity().x == 0) b2body.applyLinearImpulse(new Vector2(-0.5f, 0), b2body.getWorldCenter(), true);
-        else b2body.setLinearVelocity(-Constants.MAX_SPEED, b2body.getLinearVelocity().y);
+        else b2body.setLinearVelocity(-Constants.MAX_SPEED_X, b2body.getLinearVelocity().y);
     }
 
     public void moveUp() {
-        b2body.setLinearVelocity(0, Constants.MAX_SPEED / 1.5f);
+        b2body.setLinearVelocity(0, Constants.MAX_SPEED_X / 1.5f);
     }
 
     public void moveDown() {
-        b2body.setLinearVelocity(0, -Constants.MAX_SPEED);
+        b2body.setLinearVelocity(0, -Constants.MAX_SPEED_X);
     }
 
     public void attack() {
@@ -264,7 +263,7 @@ public class Player extends Entity implements Subscriber {
             return;
         }
         b2body.applyLinearImpulse(new Vector2((float) (Math.pow(b2body.getLinearVelocity().x, 3) * Math.pow(b2body.getLinearVelocity().y, 2)), 0), b2body.getWorldCenter(), true);
-        float invertG = (float) Math.pow(b2body.getLinearVelocity().y, 2) * 1.5f;
+        float invertG = (float) Math.pow(b2body.getLinearVelocity().y, 2);
         world.setGravity(new Vector2(0, invertG > 15 ? 15 : invertG));
         timer.start(0.5f, NFLAG.UPLIFT, this);
     }
@@ -281,7 +280,6 @@ public class Player extends Entity implements Subscriber {
     public void letGo() {
         removePlayerState(PSTATE.WALL_GRABBED);
         world.setGravity(new Vector2(0, -Constants.G_ENHANCED));
-        b2body.setLinearVelocity(new Vector2(0,0));
     }
 
     @Override
@@ -306,7 +304,7 @@ public class Player extends Entity implements Subscriber {
             case UPLIFT:
                 if (!isStateActive(PSTATE.ON_GROUND) && isStateActive(PSTATE.GLIDING)) world.setGravity(new Vector2(0, -Constants.G_GLIDING));
                 else if (isStateActive(PSTATE.ON_GROUND)) land();
-                else world.setGravity(new Vector2(0, -Constants.G));
+                else world.setGravity(new Vector2(0, -Constants.G_ENHANCED));
                 break;
             case ADASH:
                 if (!isStateActive(PSTATE.ON_GROUND)) world.setGravity(new Vector2(0, -Constants.G_ENHANCED));

@@ -58,7 +58,7 @@ public class MyInputProcessor implements InputProcessor {
 
         switch (keycode) {
             case Input.Keys.SPACE:
-                if (player.isStateActive(PSTATE.ON_GROUND) || player.isStateActive(PSTATE.DASHING)) break;
+                if (player.isStateActive(PSTATE.ON_GROUND) || player.isStateActive(PSTATE.DASHING) || player.isStateActive(PSTATE.STUNNED)) break;
                 player.fall();
                 if (player.isStateActive(PSTATE.GLIDE_CONSUMED)) player.removePlayerState(PSTATE.GLIDING);
                 break;

@@ -3,10 +3,11 @@ package com.mygdx.Tools;
 public class Constants {
     public static final int TILE_SIZE = 16;
     public static final float PPM = 100;
-    public static final float MAX_SPEED = 1.6F;
-    public static final float G = 13;
-    public static final float G_ENHANCED = 15;
-    public static final float G_GLIDING = 7;
+    public static final float MAX_SPEED_X = 1.6f;
+    public static final float MAX_SPEED_Y = 5f;
+    public static final float G = 11;
+    public static final float G_ENHANCED = 13;
+    public static final float G_GLIDING = 0;
     public static final float DASH_FORCE = 5;
     // Movement state Flag
     public enum MSTATE {
