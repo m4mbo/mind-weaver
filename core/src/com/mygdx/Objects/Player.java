@@ -263,7 +263,7 @@ public class Player extends Entity implements Subscriber {
             return;
         }
         b2body.applyLinearImpulse(new Vector2((float) (Math.pow(b2body.getLinearVelocity().x, 3) * Math.pow(b2body.getLinearVelocity().y, 2)), 0), b2body.getWorldCenter(), true);
-        float invertG = (float) Math.pow(b2body.getLinearVelocity().y, 2);
+        float invertG = b2body.getLinearVelocity().y * -3;
         world.setGravity(new Vector2(0, invertG > 15 ? 15 : invertG));
         timer.start(0.5f, NFLAG.UPLIFT, this);
     }
