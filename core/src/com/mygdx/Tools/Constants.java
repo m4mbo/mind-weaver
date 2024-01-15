@@ -18,7 +18,7 @@ public class Constants {
     }
     // Player state flag
     public enum PSTATE {
-        DASHING, STUNNED, WALL_GRABBED, ON_GROUND, GLIDING, GLIDE_CONSUMED, DASH_CONSUMED
+        DASHING, STUNNED, WALL_GRABBED, ON_GROUND, GLIDING, GLIDE_CONSUMED, DASH_CONSUMED, LANDING
     }
     // Animation state flag
     public enum ASTATE {
@@ -29,7 +29,8 @@ public class Constants {
         STUN, UPLIFT,
         ADASH, // Air dash
         GDASH, // Ground dash
-        DASH_COOLDOWN
+        DASH_COOLDOWN,
+        LAND
     }
 
     // Bits for collision masking

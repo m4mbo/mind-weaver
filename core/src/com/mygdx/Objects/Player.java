@@ -121,12 +121,12 @@ public class Player extends Entity implements Subscriber {
 
         switch (movementState) {
             case LEFT:
-                if (isStateActive(PSTATE.ON_GROUND)) currAState = ASTATE.RUN;
+                if (isStateActive(PSTATE.ON_GROUND) && !isStateActive(PSTATE.LANDING)) currAState = ASTATE.RUN;
                 facingRight = false;
                 moveLeft();
                 break;
             case RIGHT:
-                if (isStateActive(PSTATE.ON_GROUND)) currAState = ASTATE.RUN;
+                if (isStateActive(PSTATE.ON_GROUND) && !isStateActive(PSTATE.LANDING)) currAState = ASTATE.RUN;
                 facingRight = true;
                 moveRight();
                 break;
@@ -141,7 +141,7 @@ public class Player extends Entity implements Subscriber {
                 break;
             case HSTILL:
                 b2body.setLinearVelocity(0, b2body.getLinearVelocity().y);
-                if (!isStateActive(PSTATE.ON_GROUND)) break;
+                if (!isStateActive(PSTATE.ON_GROUND) || isStateActive(PSTATE.LANDING)) break;
                 else currAState = ASTATE.IDLE;
                 break;
             case FSTILL:
@@ -165,7 +165,7 @@ public class Player extends Entity implements Subscriber {
                 setAnimation(TextureRegion.split(resourceManager.getTexture("player_fall"), 32, 32)[0], 1/5f, true);
                 break;
             case LAND:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("player_land"), 32, 32)[0], 1/5f, false);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("player_land"), 32, 32)[0], 1/14f, false);
                 break;
         }
     }
@@ -174,6 +174,9 @@ public class Player extends Entity implements Subscriber {
         addPlayerState(PSTATE.ON_GROUND);
         removePlayerState(PSTATE.GLIDE_CONSUMED);
         removePlayerState(PSTATE.DASH_CONSUMED);
+        addPlayerState(PSTATE.LANDING);
+        currAState = ASTATE.LAND;
+        timer.start(0.2f, NFLAG.LAND, this);
         world.setGravity(new Vector2(0, -Constants.G));
         b2body.setLinearDamping(0);
     }
@@ -337,6 +340,9 @@ public class Player extends Entity implements Subscriber {
                 break;
             case DASH_COOLDOWN:
                 removePlayerState(PSTATE.DASH_CONSUMED);
+                break;
+            case LAND:
+                removePlayerState(PSTATE.LANDING);
                 break;
         }
     }
