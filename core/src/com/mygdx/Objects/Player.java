@@ -10,8 +10,6 @@ import com.mygdx.Handlers.MyTimer;
 import com.mygdx.Interfaces.Subscriber;
 import com.mygdx.Tools.Constants.*;
 import com.mygdx.Tools.Constants;
-import com.sun.tools.javac.code.Attribute;
-
 import java.util.EnumSet;
 
 public class Player extends Entity implements Subscriber {
@@ -39,18 +37,19 @@ public class Player extends Entity implements Subscriber {
         // Initializing states
         playerStates = EnumSet.noneOf(PSTATE.class);
         addPlayerState(PSTATE.ON_GROUND);
-        currAState = ASTATE.RIDLE;
-        prevAState = ASTATE.RIDLE;
+        currAState = ASTATE.IDLE;
+        prevAState = ASTATE.IDLE;
         movementState = MSTATE.HSTILL;
 
         // Loading all textures
-        resourceManager.loadTexture("player_rrun.png", "player_rr");
-        resourceManager.loadTexture("player_lrun.png", "player_lr");
-        resourceManager.loadTexture("player_ridle.png", "player_ri");
-        resourceManager.loadTexture("player_lidle.png", "player_li");
+        resourceManager.loadTexture("player_run.png", "player_run");
+        resourceManager.loadTexture("player_idle.png", "player_idle");
+        resourceManager.loadTexture("player_jump.png", "player_jump");
+        resourceManager.loadTexture("player_land.png", "player_land");
+        resourceManager.loadTexture("player_fall.png", "player_fall");
 
         // Initializing sprite
-        setAnimation(TextureRegion.split(resourceManager.getTexture("player_ri"), 32, 32)[0], 1/5f);
+        setAnimation(TextureRegion.split(resourceManager.getTexture("player_idle"), 32, 32)[0], 1/5f, false);
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, y / Constants.PPM);
@@ -104,7 +103,12 @@ public class Player extends Entity implements Subscriber {
 
         // Capping y velocity
         if (b2body.getLinearVelocity().y < -Constants.MAX_SPEED_Y) b2body.setLinearVelocity(new Vector2(b2body.getLinearVelocity().x, -Constants.MAX_SPEED_Y));
-        if (isFalling()) b2body.setLinearDamping(0);
+        if (isFalling()) {
+            currAState = ASTATE.FALL;
+            b2body.setLinearDamping(0);
+        } else if (!isStateActive(PSTATE.ON_GROUND)) {
+            currAState = ASTATE.JUMP;
+        }
 
         if (currAState != prevAState) {
             handleAnimation();
@@ -117,13 +121,13 @@ public class Player extends Entity implements Subscriber {
 
         switch (movementState) {
             case LEFT:
-                if (isStateActive(PSTATE.ON_GROUND)) currAState = ASTATE.LRUN;
-                removePlayerState(PSTATE.FACING_RIGHT);
+                if (isStateActive(PSTATE.ON_GROUND)) currAState = ASTATE.RUN;
+                facingRight = false;
                 moveLeft();
                 break;
             case RIGHT:
-                if (isStateActive(PSTATE.ON_GROUND)) currAState = ASTATE.RRUN;
-                addPlayerState(PSTATE.FACING_RIGHT);
+                if (isStateActive(PSTATE.ON_GROUND)) currAState = ASTATE.RUN;
+                facingRight = true;
                 moveRight();
                 break;
             case UP:
@@ -138,8 +142,7 @@ public class Player extends Entity implements Subscriber {
             case HSTILL:
                 b2body.setLinearVelocity(0, b2body.getLinearVelocity().y);
                 if (!isStateActive(PSTATE.ON_GROUND)) break;
-                else if (!isStateActive(PSTATE.FACING_RIGHT)) currAState = ASTATE.LIDLE;
-                else currAState = ASTATE.RIDLE;
+                else currAState = ASTATE.IDLE;
                 break;
             case FSTILL:
                 b2body.setLinearVelocity(0, 0);
@@ -149,17 +152,20 @@ public class Player extends Entity implements Subscriber {
 
     public void handleAnimation() {
         switch (currAState) {
-            case LRUN:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("player_lr"), 32, 32)[0], 1/14f);
+            case RUN:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("player_run"), 32, 32)[0], 1/14f, false);
                 break;
-            case RRUN:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("player_rr"), 32, 32)[0], 1/14f);
+            case IDLE:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("player_idle"), 32, 32)[0], 1/5f, false);
                 break;
-            case LIDLE:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("player_li"), 32, 32)[0], 1/5f);
+            case JUMP:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("player_jump"), 32, 32)[0], 1/17f, true);
                 break;
-            case RIDLE:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("player_ri"), 32, 32)[0], 1/5f);
+            case FALL:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("player_fall"), 32, 32)[0], 1/5f, true);
+                break;
+            case LAND:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("player_land"), 32, 32)[0], 1/5f, false);
                 break;
         }
     }
@@ -249,7 +255,7 @@ public class Player extends Entity implements Subscriber {
             b2body.applyLinearImpulse(new Vector2(0, Constants.DASH_FORCE), b2body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             b2body.applyLinearImpulse(new Vector2(0, -Constants.DASH_FORCE), b2body.getWorldCenter(), true);
-        } else if (isStateActive(PSTATE.FACING_RIGHT)) {
+        } else if (facingRight) {
             b2body.applyLinearImpulse(new Vector2(Constants.DASH_FORCE, 0), b2body.getWorldCenter(), true);
             if (isStateActive(PSTATE.ON_GROUND)) groundDash = true;
         } else {

@@ -11,20 +11,22 @@ public class Animation {
     private float delay;
     private int currentFrame;
     private int timesPlayed;
+    private boolean loopLastFrame;
 
     public Animation() {}
 
     public Animation(TextureRegion[] frames) {
-        this(frames, 1/12f);
+        this(frames, 1/12f, false);
     }
 
-    public Animation(TextureRegion[] frames, float delay) {
-        setFrames(frames, delay);
+    public Animation(TextureRegion[] frames, float delay, boolean loopLastFrame) {
+        setFrames(frames, delay, loopLastFrame);
     }
 
-    public void setFrames(TextureRegion[] frames, float delay) {
+    public void setFrames(TextureRegion[] frames, float delay, boolean loopLastFrame) {
         this.frames = frames;
         this.delay = delay;
+        this.loopLastFrame = loopLastFrame;
         time = 0;
         currentFrame = 0;
         timesPlayed = 0;
@@ -43,7 +45,8 @@ public class Animation {
         currentFrame++;
 
         if (currentFrame == frames.length) {
-            currentFrame = 0;
+            if (loopLastFrame) currentFrame--;
+            else currentFrame = 0;
             timesPlayed++;
         }
     }

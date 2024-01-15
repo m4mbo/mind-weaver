@@ -18,11 +18,11 @@ public class Constants {
     }
     // Player state flag
     public enum PSTATE {
-        DASHING, STUNNED, WALL_GRABBED, ON_GROUND, GLIDING, GLIDE_CONSUMED, DASH_CONSUMED, FACING_RIGHT
+        DASHING, STUNNED, WALL_GRABBED, ON_GROUND, GLIDING, GLIDE_CONSUMED, DASH_CONSUMED
     }
     // Animation state flag
     public enum ASTATE {
-        RRUN, LRUN, JUMP, RIDLE, LIDLE
+        RUN, JUMP, IDLE, FALL, LAND
     }
     // Notification Flag
     public enum NFLAG {
