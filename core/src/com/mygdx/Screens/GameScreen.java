@@ -26,30 +26,25 @@ import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameScreen implements Screen {
-    private String stage;
-    private MyTimer timer;
-    private Glissoar game;
-    private static AtomicInteger eidAllocator;
-    private OrthographicCamera gameCam;
-    private Viewport gamePort;
-    private TmxMapLoader maploader;
-    private TiledMap map;
-    private OrthogonalTiledMapRenderer renderer;
-    private World world;    // World holding all the physical objects
-    private Box2DDebugRenderer b2dr;
-    private Player player;
-    private LinkedList<Entity> deadEntities;
-    private MyInputProcessor inputProcessor;
+    private final MyTimer timer;
+    private final Glissoar game;
+    private final OrthographicCamera gameCam;
+    private final Viewport gamePort;
+    private final OrthogonalTiledMapRenderer renderer;
+    private final World world;    // World holding all the physical objects
+    private final Box2DDebugRenderer b2dr;
+    private final Player player;
+    private final LinkedList<Entity> deadEntities;
+    private final MyInputProcessor inputProcessor;
     public GameScreen(Glissoar game, String stage, MyResourceManager resourceManager) {
-        this.stage = stage;
         this.game = game;
-        eidAllocator = new AtomicInteger();
+        AtomicInteger eidAllocator = new AtomicInteger();
         timer = new MyTimer();
         Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());      // Full-screen
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(Constants.TILE_SIZE * 35 / Constants.PPM, Constants.TILE_SIZE * 19 / Constants.PPM, gameCam);
-        maploader = new TmxMapLoader();
-        map = maploader.load("test_upgrade.tmx");
+        TmxMapLoader maploader = new TmxMapLoader();
+        TiledMap map = maploader.load("test_upgrade.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
         world = new World(new Vector2(0, -Constants.G), true);

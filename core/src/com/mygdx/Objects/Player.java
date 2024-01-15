@@ -39,16 +39,18 @@ public class Player extends Entity implements Subscriber {
         // Initializing states
         playerStates = EnumSet.noneOf(PSTATE.class);
         addPlayerState(PSTATE.ON_GROUND);
-        currAState = ASTATE.RSTAND;
-        prevAState = ASTATE.LSTAND;
+        currAState = ASTATE.RIDLE;
+        prevAState = ASTATE.RIDLE;
         movementState = MSTATE.HSTILL;
 
         // Loading all textures
-        resourceManager.loadTexture("bunny_right_run.png", "bunny_rr");
-        resourceManager.loadTexture("bunny_left_run.png", "bunny_lr");
+        resourceManager.loadTexture("player_rrun.png", "player_rr");
+        resourceManager.loadTexture("player_lrun.png", "player_lr");
+        resourceManager.loadTexture("player_ridle.png", "player_ri");
+        resourceManager.loadTexture("player_lidle.png", "player_li");
 
         // Initializing sprite
-        setAnimation(TextureRegion.split(resourceManager.getTexture("bunny_rr"), 32, 32)[0], 1/12f);
+        setAnimation(TextureRegion.split(resourceManager.getTexture("player_ri"), 32, 32)[0], 1/5f);
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, y / Constants.PPM);
@@ -135,6 +137,9 @@ public class Player extends Entity implements Subscriber {
                 break;
             case HSTILL:
                 b2body.setLinearVelocity(0, b2body.getLinearVelocity().y);
+                if (!isStateActive(PSTATE.ON_GROUND)) break;
+                else if (!isStateActive(PSTATE.FACING_RIGHT)) currAState = ASTATE.LIDLE;
+                else currAState = ASTATE.RIDLE;
                 break;
             case FSTILL:
                 b2body.setLinearVelocity(0, 0);
@@ -145,14 +150,16 @@ public class Player extends Entity implements Subscriber {
     public void handleAnimation() {
         switch (currAState) {
             case LRUN:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("bunny_lr"), 32, 32)[0], 1/12f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("player_lr"), 32, 32)[0], 1/14f);
                 break;
             case RRUN:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("bunny_rr"), 32, 32)[0], 1/12f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("player_rr"), 32, 32)[0], 1/14f);
                 break;
-            case LSTAND:
+            case LIDLE:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("player_li"), 32, 32)[0], 1/5f);
                 break;
-            case RSTAND:
+            case RIDLE:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("player_ri"), 32, 32)[0], 1/5f);
                 break;
         }
     }
