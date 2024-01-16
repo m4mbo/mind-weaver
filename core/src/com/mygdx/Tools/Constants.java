@@ -22,7 +22,7 @@ public class Constants {
     }
     // Animation state flag
     public enum ASTATE {
-        RUN, JUMP, IDLE, FALL, LAND
+        RUN, JUMP, IDLE, FALL, LAND, WALLGRAB, CLIMB, SLIDE_DOWN
     }
     // Notification Flag
     public enum NFLAG {

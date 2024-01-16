@@ -47,6 +47,9 @@ public class Player extends Entity implements Subscriber {
         resourceManager.loadTexture("player_jump.png", "player_jump");
         resourceManager.loadTexture("player_land.png", "player_land");
         resourceManager.loadTexture("player_fall.png", "player_fall");
+        resourceManager.loadTexture("player_wallgrabidle.png", "player_wallgrab");
+        resourceManager.loadTexture("player_slidedown.png", "player_slidedown");
+        resourceManager.loadTexture("player_climb.png", "player_climb");
 
         // Initializing sprite
         setAnimation(TextureRegion.split(resourceManager.getTexture("player_idle"), 32, 32)[0], 1/5f, false, 1.25f);
@@ -104,19 +107,16 @@ public class Player extends Entity implements Subscriber {
 
         // Capping y velocity
         if (b2body.getLinearVelocity().y < -Constants.MAX_SPEED_Y) b2body.setLinearVelocity(new Vector2(b2body.getLinearVelocity().x, -Constants.MAX_SPEED_Y));
-        if (isFalling()) {
+
+        // Animation priority
+        if (isStateActive(PSTATE.WALL_GRABBED)) {
+            currAState = ASTATE.WALLGRAB;
+        } else if (isFalling()) {
             currAState = ASTATE.FALL;
             b2body.setLinearDamping(0);
         } else if (!isStateActive(PSTATE.ON_GROUND)) {
             currAState = ASTATE.JUMP;
         }
-
-        if (currAState != prevAState) {
-            handleAnimation();
-            prevAState = currAState;
-        }
-        // Update the animation
-        animation.update(delta);
 
         if (isStateActive(PSTATE.STUNNED) || isStateActive(PSTATE.DASHING)) movementState = MSTATE.PREV;
 
@@ -132,9 +132,11 @@ public class Player extends Entity implements Subscriber {
                 moveRight();
                 break;
             case UP:
+                currAState = ASTATE.CLIMB;
                 moveUp();
                 break;
             case DOWN:
+                currAState = ASTATE.SLIDE_DOWN;
                 moveDown();
                 break;
             case PREV:
@@ -142,13 +144,20 @@ public class Player extends Entity implements Subscriber {
                 break;
             case HSTILL:
                 b2body.setLinearVelocity(0, b2body.getLinearVelocity().y);
-                if (!isStateActive(PSTATE.ON_GROUND) || isStateActive(PSTATE.LANDING)) break;
+                if (!isStateActive(PSTATE.ON_GROUND) || isStateActive(PSTATE.LANDING) || isStateActive(PSTATE.WALL_GRABBED)) break;
                 else currAState = ASTATE.IDLE;
                 break;
             case FSTILL:
                 b2body.setLinearVelocity(0, 0);
                 break;
         }
+
+        if (currAState != prevAState) {
+            handleAnimation();
+            prevAState = currAState;
+        }
+        // Update the animation
+        animation.update(delta);
     }
 
     public void handleAnimation() {
@@ -167,6 +176,15 @@ public class Player extends Entity implements Subscriber {
                 break;
             case LAND:
                 setAnimation(TextureRegion.split(resourceManager.getTexture("player_land"), 32, 32)[0], 1/14f, false, 1.25f);
+                break;
+            case WALLGRAB:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("player_wallgrab"), 32, 32)[0], 1/5f, false, 1.25f);
+                break;
+            case SLIDE_DOWN:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("player_slidedown"), 32, 32)[0], 1/9f, false, 1.25f);
+                break;
+            case CLIMB:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("player_climb"), 32, 32)[0], 1/4f, false, 1.25f);
                 break;
         }
     }

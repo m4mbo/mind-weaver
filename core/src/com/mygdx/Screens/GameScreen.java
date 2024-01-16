@@ -21,7 +21,6 @@ import com.mygdx.Objects.Entity;
 import com.mygdx.Objects.Player;
 import com.mygdx.Tools.B2WorldCreator;
 import com.mygdx.Tools.Constants;
-
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -36,22 +35,28 @@ public class GameScreen implements Screen {
     private final Player player;
     private final LinkedList<Entity> deadEntities;
     private final MyInputProcessor inputProcessor;
-    public GameScreen(Glissoar game, String stage, MyResourceManager resourceManager) {
+    public GameScreen(Glissoar game, String stage, MyResourceManager resourceManager, MyInputProcessor inputProcessor) {
+
         this.game = game;
+        this.inputProcessor = inputProcessor;
+
+        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());      // Full-screen
+
         AtomicInteger eidAllocator = new AtomicInteger();
         timer = new MyTimer();
-        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());      // Full-screen
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(Constants.TILE_SIZE * 35 / Constants.PPM, Constants.TILE_SIZE * 19 / Constants.PPM, gameCam);
-        TmxMapLoader maploader = new TmxMapLoader();
-        TiledMap map = maploader.load("test_upgrade.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
+        TmxMapLoader mapLoader = new TmxMapLoader();
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
+
+        TiledMap map = mapLoader.load("test_upgrade.tmx");
+        renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
+
         world = new World(new Vector2(0, -Constants.G), true);
         player = new Player(200, 100, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3);
         deadEntities = new LinkedList<>();
-        inputProcessor = new MyInputProcessor(player, world);
-        Gdx.input.setInputProcessor(inputProcessor);
+
+        inputProcessor.setGameVariables(player, world);
         world.setContactListener(new MyContactListener(player, this));
         b2dr = new Box2DDebugRenderer();
         new B2WorldCreator(world, map);     //Creating world
@@ -82,7 +87,7 @@ public class GameScreen implements Screen {
         renderer.render();
         player.render(game.batch);
 
-        b2dr.render(world, gameCam.combined);
+        //b2dr.render(world, gameCam.combined);
         game.batch.setProjectionMatrix(gameCam.combined);
 
         game.batch.begin();

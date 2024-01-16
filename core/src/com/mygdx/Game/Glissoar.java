@@ -1,5 +1,7 @@
 package com.mygdx.Game;
 
+import com.badlogic.gdx.Gdx;
+import com.mygdx.Handlers.MyInputProcessor;
 import com.mygdx.Handlers.MyResourceManager;
 import com.mygdx.Screens.*;
 import com.badlogic.gdx.Game;
@@ -12,7 +14,9 @@ public class Glissoar extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		resourceManager = new MyResourceManager();
-		setScreen(new GameScreen(this, "Everlush", resourceManager));
+		MyInputProcessor inputProcessor = new MyInputProcessor(this);
+		Gdx.input.setInputProcessor(inputProcessor);
+		setScreen(new GameScreen(this, "Everlush", resourceManager, inputProcessor));
 	}
 
 	@Override
