@@ -11,16 +11,19 @@ public abstract class B2Sprite {
     protected float width;
     protected float height;
     protected boolean facingRight;
+    private float resize;
 
     public B2Sprite() {
         animation = new Animation();
         facingRight = true;
+        resize = 1;
     }
 
-    public void setAnimation(TextureRegion[] region, float delay, boolean loopLastFrame) {
+    public void setAnimation(TextureRegion[] region, float delay, boolean loopLastFrame, float resize) {
         animation.setFrames(region, delay, loopLastFrame);
-        width = region[0].getRegionWidth();
-        height = region[0].getRegionWidth();
+        width = region[0].getRegionWidth() * resize;
+        height = region[0].getRegionWidth() * resize;
+        this.resize = resize;
     }
 
     public void handleAnimation() { }
@@ -31,7 +34,7 @@ public abstract class B2Sprite {
 
     public void render(SpriteBatch batch) {
         batch.begin();
-        batch.draw(animation.getFrame(), facingRight ? b2body.getPosition().x - (width / Constants.PPM) / 2 : b2body.getPosition().x + (width / Constants.PPM) / 2 , b2body.getPosition().y - (height / Constants.PPM) / 2, (facingRight ? width : -width) / Constants.PPM, height / Constants.PPM);
+        batch.draw(animation.getFrame(), facingRight ? b2body.getPosition().x - ((width / resize) / Constants.PPM) / 2 : b2body.getPosition().x + ((width / resize) / Constants.PPM) / 2 , b2body.getPosition().y - ((height / resize) / Constants.PPM) / 2, (facingRight ? width : -width) / Constants.PPM, height / Constants.PPM);
         batch.end();
     }
 }
