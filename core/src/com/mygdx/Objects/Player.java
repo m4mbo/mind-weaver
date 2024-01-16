@@ -10,8 +10,6 @@ import com.mygdx.Handlers.MyTimer;
 import com.mygdx.Interfaces.Subscriber;
 import com.mygdx.Tools.Constants.*;
 import com.mygdx.Tools.Constants;
-import com.sun.tools.javac.code.Attribute;
-
 import java.util.EnumSet;
 
 public class Player extends Entity implements Subscriber {
@@ -39,16 +37,19 @@ public class Player extends Entity implements Subscriber {
         // Initializing states
         playerStates = EnumSet.noneOf(PSTATE.class);
         addPlayerState(PSTATE.ON_GROUND);
-        currAState = ASTATE.RSTAND;
-        prevAState = ASTATE.LSTAND;
+        currAState = ASTATE.IDLE;
+        prevAState = ASTATE.IDLE;
         movementState = MSTATE.HSTILL;
 
         // Loading all textures
-        resourceManager.loadTexture("bunny_right_run.png", "bunny_rr");
-        resourceManager.loadTexture("bunny_left_run.png", "bunny_lr");
+        resourceManager.loadTexture("player_run.png", "player_run");
+        resourceManager.loadTexture("player_idle.png", "player_idle");
+        resourceManager.loadTexture("player_jump.png", "player_jump");
+        resourceManager.loadTexture("player_land.png", "player_land");
+        resourceManager.loadTexture("player_fall.png", "player_fall");
 
         // Initializing sprite
-        setAnimation(TextureRegion.split(resourceManager.getTexture("bunny_rr"), 32, 32)[0], 1/12f);
+        setAnimation(TextureRegion.split(resourceManager.getTexture("player_idle"), 32, 32)[0], 1/5f, false, 1.25f);
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, y / Constants.PPM);
@@ -60,35 +61,36 @@ public class Player extends Entity implements Subscriber {
         PolygonShape polygonShape = new PolygonShape();
 
         //Create body fixture
-        circleShape.setRadius(16 / Constants.PPM);
+        polygonShape.setAsBox(8 / Constants.PPM, 15 / Constants.PPM, new Vector2(0, 0), 0);
         fdef.friction = 0;  // No friction allows for players sliding next to walls
-        fdef.shape = circleShape;
+        fdef.shape = polygonShape;
         fdef.filter.maskBits = Constants.BIT_GROUND;
         b2body.createFixture(fdef).setUserData("player");
 
         //Create player hitbox
-        circleShape.setRadius(15f / Constants.PPM);
-        fdef.shape = circleShape;
+        polygonShape.setAsBox(6 / Constants.PPM, 13 / Constants.PPM, new Vector2(0, 0), 0);
+        fdef.friction = 0;  // No friction allows for players sliding next to walls
+        fdef.shape = polygonShape;
         fdef.filter.maskBits = Constants.BIT_HAZARD;
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData("player_hb");
 
         //Create right sensor
-        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(16 / Constants.PPM, 0), 0);
+        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(8 / Constants.PPM, 0), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
         fdef.filter.maskBits = Constants.BIT_GROUND;
         b2body.createFixture(fdef).setUserData("rightSensor");
 
         //Create left sensor
-        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(-16 / Constants.PPM, 0), 0);
+        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(-8 / Constants.PPM, 0), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
         fdef.filter.maskBits = Constants.BIT_GROUND;
         b2body.createFixture(fdef).setUserData("leftSensor");
 
         //Create bottom sensor
-        polygonShape.setAsBox(3 / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -16 / Constants.PPM), 0);
+        polygonShape.setAsBox(3 / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -15 / Constants.PPM), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
         fdef.filter.maskBits = Constants.BIT_GROUND;
@@ -102,7 +104,12 @@ public class Player extends Entity implements Subscriber {
 
         // Capping y velocity
         if (b2body.getLinearVelocity().y < -Constants.MAX_SPEED_Y) b2body.setLinearVelocity(new Vector2(b2body.getLinearVelocity().x, -Constants.MAX_SPEED_Y));
-        if (isFalling()) b2body.setLinearDamping(0);
+        if (isFalling()) {
+            currAState = ASTATE.FALL;
+            b2body.setLinearDamping(0);
+        } else if (!isStateActive(PSTATE.ON_GROUND)) {
+            currAState = ASTATE.JUMP;
+        }
 
         if (currAState != prevAState) {
             handleAnimation();
@@ -115,13 +122,13 @@ public class Player extends Entity implements Subscriber {
 
         switch (movementState) {
             case LEFT:
-                if (isStateActive(PSTATE.ON_GROUND)) currAState = ASTATE.LRUN;
-                removePlayerState(PSTATE.FACING_RIGHT);
+                if (isStateActive(PSTATE.ON_GROUND) && !isStateActive(PSTATE.LANDING)) currAState = ASTATE.RUN;
+                facingRight = false;
                 moveLeft();
                 break;
             case RIGHT:
-                if (isStateActive(PSTATE.ON_GROUND)) currAState = ASTATE.RRUN;
-                addPlayerState(PSTATE.FACING_RIGHT);
+                if (isStateActive(PSTATE.ON_GROUND) && !isStateActive(PSTATE.LANDING)) currAState = ASTATE.RUN;
+                facingRight = true;
                 moveRight();
                 break;
             case UP:
@@ -135,6 +142,8 @@ public class Player extends Entity implements Subscriber {
                 break;
             case HSTILL:
                 b2body.setLinearVelocity(0, b2body.getLinearVelocity().y);
+                if (!isStateActive(PSTATE.ON_GROUND) || isStateActive(PSTATE.LANDING)) break;
+                else currAState = ASTATE.IDLE;
                 break;
             case FSTILL:
                 b2body.setLinearVelocity(0, 0);
@@ -144,15 +153,20 @@ public class Player extends Entity implements Subscriber {
 
     public void handleAnimation() {
         switch (currAState) {
-            case LRUN:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("bunny_lr"), 32, 32)[0], 1/12f);
+            case RUN:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("player_run"), 32, 32)[0], 1/14f, false, 1.25f);
                 break;
-            case RRUN:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("bunny_rr"), 32, 32)[0], 1/12f);
+            case IDLE:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("player_idle"), 32, 32)[0], 1/5f, false, 1.25f);
                 break;
-            case LSTAND:
+            case JUMP:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("player_jump"), 32, 32)[0], 1/17f, true, 1.25f);
                 break;
-            case RSTAND:
+            case FALL:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("player_fall"), 32, 32)[0], 1/5f, true, 1.25f);
+                break;
+            case LAND:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("player_land"), 32, 32)[0], 1/14f, false, 1.25f);
                 break;
         }
     }
@@ -161,6 +175,9 @@ public class Player extends Entity implements Subscriber {
         addPlayerState(PSTATE.ON_GROUND);
         removePlayerState(PSTATE.GLIDE_CONSUMED);
         removePlayerState(PSTATE.DASH_CONSUMED);
+        addPlayerState(PSTATE.LANDING);
+        currAState = ASTATE.LAND;
+        timer.start(0.2f, NFLAG.LAND, this);
         world.setGravity(new Vector2(0, -Constants.G));
         b2body.setLinearDamping(0);
     }
@@ -242,7 +259,7 @@ public class Player extends Entity implements Subscriber {
             b2body.applyLinearImpulse(new Vector2(0, Constants.DASH_FORCE), b2body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             b2body.applyLinearImpulse(new Vector2(0, -Constants.DASH_FORCE), b2body.getWorldCenter(), true);
-        } else if (isStateActive(PSTATE.FACING_RIGHT)) {
+        } else if (facingRight) {
             b2body.applyLinearImpulse(new Vector2(Constants.DASH_FORCE, 0), b2body.getWorldCenter(), true);
             if (isStateActive(PSTATE.ON_GROUND)) groundDash = true;
         } else {
@@ -263,7 +280,7 @@ public class Player extends Entity implements Subscriber {
             return;
         }
         b2body.applyLinearImpulse(new Vector2((float) (Math.pow(b2body.getLinearVelocity().x, 3) * Math.pow(b2body.getLinearVelocity().y, 2)), 0), b2body.getWorldCenter(), true);
-        float invertG = (float) Math.pow(b2body.getLinearVelocity().y, 2);
+        float invertG = b2body.getLinearVelocity().y * -3;
         world.setGravity(new Vector2(0, invertG > 15 ? 15 : invertG));
         timer.start(0.5f, NFLAG.UPLIFT, this);
     }
@@ -324,6 +341,9 @@ public class Player extends Entity implements Subscriber {
                 break;
             case DASH_COOLDOWN:
                 removePlayerState(PSTATE.DASH_CONSUMED);
+                break;
+            case LAND:
+                removePlayerState(PSTATE.LANDING);
                 break;
         }
     }
