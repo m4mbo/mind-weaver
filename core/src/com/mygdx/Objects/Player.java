@@ -201,6 +201,7 @@ public class Player extends Entity implements Subscriber {
         removePlayerState(PSTATE.GLIDE_CONSUMED);
         removePlayerState(PSTATE.DASH_CONSUMED);
         addPlayerState(PSTATE.LANDING);
+        removePlayerState(PSTATE.GLIDING);
         currAState = ASTATE.LAND;
         timer.start(0.2f, NFLAG.LAND, this);
         world.setGravity(new Vector2(0, -Constants.G));
