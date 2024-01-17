@@ -35,10 +35,12 @@ public class GameScreen implements Screen {
     private final Player player;
     private final LinkedList<Entity> deadEntities;
     private final MyInputProcessor inputProcessor;
+    private Vector2 camNewPos;
     public GameScreen(Glissoar game, String stage, MyResourceManager resourceManager, MyInputProcessor inputProcessor) {
 
         this.game = game;
         this.inputProcessor = inputProcessor;
+        camNewPos = null;
 
         Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());      // Full-screen
 
@@ -69,6 +71,7 @@ public class GameScreen implements Screen {
         player.update(delta);
         world.step(1/60f, 6, 2);
         handleDeadEntities();    // Handling dead entities after world step to avoid errors
+        if (camNewPos != null) camStep();
         gameCam.update();
         timer.update(delta);
         inputProcessor.update();
@@ -87,11 +90,31 @@ public class GameScreen implements Screen {
         renderer.render();
         player.render(game.batch);
 
-        //b2dr.render(world, gameCam.combined);
+        b2dr.render(world, gameCam.combined);
         game.batch.setProjectionMatrix(gameCam.combined);
 
         game.batch.begin();
         game.batch.end();
+    }
+
+    public void repositionCamera(Vector2 position) {
+        camNewPos = position;
+    }
+
+    public void camStep() {
+        if (comparePosition(gameCam.position.x, camNewPos.x) && comparePosition(gameCam.position.y, camNewPos.y)) {
+            gameCam.position.set(camNewPos.x, camNewPos.y, 0);
+            camNewPos = null;
+            return;
+        }
+        if (comparePosition(gameCam.position.x, camNewPos.x)) gameCam.translate(0, (gameCam.position.y < camNewPos.y ? 8 : -8) / Constants.PPM, 0);
+        else if (comparePosition(gameCam.position.y, camNewPos.y)) gameCam.translate((gameCam.position.x < camNewPos.x ? 8 : -8) / Constants.PPM, 0, 0);
+        else gameCam.translate((gameCam.position.x < camNewPos.x ? 8 : -8) / Constants.PPM, (gameCam.position.y < camNewPos.y ? 8 : -8) / Constants.PPM, 0);
+    }
+
+    public boolean comparePosition(float pos1, float pos2) {
+        // Comparing position with slight offset
+        return (pos1 <= (pos2 + (1 / Constants.PPM))) && (pos1 >= (pos2 - (1 / Constants.PPM)));
     }
 
     @Override

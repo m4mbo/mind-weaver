@@ -36,4 +36,5 @@ public class Constants {
     // Bits for collision masking
     public static final short BIT_GROUND = 2;   // Includes ground and walls (because sometimes the ground can be a wall)
     public static final short BIT_HAZARD = 4;
+    public static final short BIT_CAMERA = 8;
 }

@@ -32,6 +32,8 @@ public class MyContactListener implements ContactListener {
             if (player.getMovementState() == MSTATE.PREV) player.setMovementState(MSTATE.HSTILL);
         } else if (fa.getUserData().equals("player_hb") || fb.getUserData().equals("player_hb")) {
             screen.addDeadEntity(player);
+        } else if (fa.getUserData().equals("camera_section") || fb.getUserData().equals("camera_section")) {
+            screen.repositionCamera(fa.getUserData().equals("camera_section") ? fa.getBody().getPosition() : fb.getBody().getPosition());
         }
     }
 
