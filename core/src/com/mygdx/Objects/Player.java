@@ -50,6 +50,7 @@ public class Player extends Entity implements Subscriber {
         resourceManager.loadTexture("player_wallgrabidle.png", "player_wallgrab");
         resourceManager.loadTexture("player_slidedown.png", "player_slidedown");
         resourceManager.loadTexture("player_climb.png", "player_climb");
+        resourceManager.loadTexture("player_glide.png", "player_glide");
 
         // Initializing sprite
         setAnimation(TextureRegion.split(resourceManager.getTexture("player_idle"), 32, 32)[0], 1/5f, false, 1.25f);
@@ -106,11 +107,14 @@ public class Player extends Entity implements Subscriber {
     public void update(float delta) {
 
         // Capping y velocity
-        if (b2body.getLinearVelocity().y < -Constants.MAX_SPEED_Y) b2body.setLinearVelocity(new Vector2(b2body.getLinearVelocity().x, -Constants.MAX_SPEED_Y));
+        if (b2body.getLinearVelocity().y < -Constants.MAX_SPEED_Y)
+            b2body.setLinearVelocity(new Vector2(b2body.getLinearVelocity().x, -Constants.MAX_SPEED_Y));
 
         // Animation priority
         if (isStateActive(PSTATE.WALL_GRABBED)) {
             currAState = ASTATE.WALLGRAB;
+        } else if (isStateActive(PSTATE.GLIDING)) {
+            currAState = ASTATE.GLIDE;
         } else if (isFalling()) {
             currAState = ASTATE.FALL;
             b2body.setLinearDamping(0);
@@ -185,6 +189,9 @@ public class Player extends Entity implements Subscriber {
                 break;
             case CLIMB:
                 setAnimation(TextureRegion.split(resourceManager.getTexture("player_climb"), 32, 32)[0], 1/4f, false, 1.25f);
+                break;
+            case GLIDE:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("player_glide"), 32, 32)[0], 1/9f, true, 1.25f);
                 break;
         }
     }
