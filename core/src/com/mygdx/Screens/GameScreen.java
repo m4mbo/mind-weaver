@@ -51,7 +51,12 @@ public class GameScreen implements Screen {
         TmxMapLoader mapLoader = new TmxMapLoader();
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
-        TiledMap map = mapLoader.load("everlush.tmx");
+        // Creating tiled map
+        TiledMap map = null;
+        if (stage.equals("everlush")) map = mapLoader.load("everlush.tmx");
+        else if (stage.equals("verdant_hollow")) map = mapLoader.load("verdant_hollow.tmx");
+        else map = mapLoader.load("grim_factory.tmx");
+
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
 
         world = new World(new Vector2(0, -Constants.G), true);
