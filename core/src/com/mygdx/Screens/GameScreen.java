@@ -47,15 +47,15 @@ public class GameScreen implements Screen {
         AtomicInteger eidAllocator = new AtomicInteger();
         timer = new MyTimer();
         gameCam = new OrthographicCamera();
-        gamePort = new FitViewport(Constants.TILE_SIZE * 35 / Constants.PPM, Constants.TILE_SIZE * 19 / Constants.PPM, gameCam);
+        gamePort = new FitViewport(Constants.TILE_SIZE * 40 / Constants.PPM, Constants.TILE_SIZE * 23 / Constants.PPM, gameCam);
         TmxMapLoader mapLoader = new TmxMapLoader();
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
-        TiledMap map = mapLoader.load("test_upgrade.tmx");
+        TiledMap map = mapLoader.load("everlush.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
 
         world = new World(new Vector2(0, -Constants.G), true);
-        player = new Player(200, 100, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3);
+        player = new Player(100, 200, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3);
         deadEntities = new LinkedList<>();
 
         inputProcessor.setGameVariables(player, world);
@@ -90,7 +90,7 @@ public class GameScreen implements Screen {
         renderer.render();
         player.render(game.batch);
 
-        b2dr.render(world, gameCam.combined);
+        //b2dr.render(world, gameCam.combined);
         game.batch.setProjectionMatrix(gameCam.combined);
 
         game.batch.begin();
