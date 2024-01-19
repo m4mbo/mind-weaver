@@ -49,7 +49,7 @@ public class GameScreen implements Screen {
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(Constants.TILE_SIZE * 40 / Constants.PPM, Constants.TILE_SIZE * 23 / Constants.PPM, gameCam);
         TmxMapLoader mapLoader = new TmxMapLoader();
-        gameCam.position.set(8, 77, 0);
+        gameCam.position.set(2, 77, 0);
 
         // Creating tiled map
         TiledMap map = null;
