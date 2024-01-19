@@ -49,7 +49,7 @@ public class GameScreen implements Screen {
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(Constants.TILE_SIZE * 40 / Constants.PPM, Constants.TILE_SIZE * 23 / Constants.PPM, gameCam);
         TmxMapLoader mapLoader = new TmxMapLoader();
-        gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
+        gameCam.position.set(8, 77, 0);
 
         // Creating tiled map
         TiledMap map = null;
@@ -60,7 +60,7 @@ public class GameScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
 
         world = new World(new Vector2(0, -Constants.G), true);
-        player = new Player(100, 200, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3);
+        player = new Player(100, 8000, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3);
         deadEntities = new LinkedList<>();
 
         inputProcessor.setGameVariables(player, world);
@@ -78,6 +78,7 @@ public class GameScreen implements Screen {
         handleDeadEntities();    // Handling dead entities after world step to avoid errors
         if (camNewPos != null) camStep();
         gameCam.update();
+        //gameCam.position.set(player.b2body.getPosition().x, player.b2body.getPosition().y, 0);
         timer.update(delta);
         inputProcessor.update();
     }
@@ -119,7 +120,7 @@ public class GameScreen implements Screen {
 
     public boolean comparePosition(float pos1, float pos2) {
         // Comparing position with slight offset
-        return (pos1 <= (pos2 + (1 / Constants.PPM))) && (pos1 >= (pos2 - (1 / Constants.PPM)));
+        return (pos1 <= (pos2 + (8 / Constants.PPM))) && (pos1 >= (pos2 - (8 / Constants.PPM)));
     }
 
     @Override

@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.Tools.Constants;
 
 public abstract class B2Sprite {
-    protected Body b2body;
+    public Body b2body;
     protected Animation animation;
     protected float width;
     protected float height;

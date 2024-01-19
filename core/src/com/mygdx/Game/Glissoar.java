@@ -16,7 +16,7 @@ public class Glissoar extends Game {
 		resourceManager = new MyResourceManager();
 		MyInputProcessor inputProcessor = new MyInputProcessor(this);
 		Gdx.input.setInputProcessor(inputProcessor);
-		setScreen(new GameScreen(this, "Everlush", resourceManager, inputProcessor));
+		setScreen(new GameScreen(this, "everlush", resourceManager, inputProcessor));
 	}
 
 	@Override

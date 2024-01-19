@@ -72,7 +72,7 @@ public class Player extends Entity implements Subscriber {
         b2body.createFixture(fdef).setUserData("player");
 
         //Create player hitbox
-        polygonShape.setAsBox(6 / Constants.PPM, 13 / Constants.PPM, new Vector2(0, 0), 0);
+        polygonShape.setAsBox(9 / Constants.PPM, 16 / Constants.PPM, new Vector2(0, 0), 0);
         fdef.friction = 0;  // No friction allows for players sliding next to walls
         fdef.shape = polygonShape;
         fdef.filter.maskBits = Constants.BIT_HAZARD;
