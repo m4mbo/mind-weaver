@@ -12,10 +12,12 @@ public class MyContactListener implements ContactListener {
     private Fixture fb;
     private final Player player;
     private final GameScreen screen;
+    private final EntityHandler entityHandler;
 
-    public MyContactListener(Player player, GameScreen screen) {
+    public MyContactListener(Player player, GameScreen screen, EntityHandler entityHandler) {
         this.player = player;
         this.screen = screen;
+        this.entityHandler = entityHandler;
     }
 
     @Override
@@ -31,7 +33,7 @@ public class MyContactListener implements ContactListener {
             player.land();
             if (player.getMovementState() == MSTATE.PREV) player.setMovementState(MSTATE.HSTILL);
         } else if (fa.getUserData().equals("player_hb") || fb.getUserData().equals("player_hb")) {
-            screen.addDeadEntity(player);
+            entityHandler.addEntityOperation(player, "die");
         } else if (fa.getUserData().equals("camera_section") || fb.getUserData().equals("camera_section")) {
             screen.repositionCamera(fa.getUserData().equals("camera_section") ? fa.getBody().getPosition() : fb.getBody().getPosition());
         }
@@ -43,6 +45,13 @@ public class MyContactListener implements ContactListener {
         if (handleFixtures(contact)) return;
 
         if (fa.getUserData().equals("leftSensor") || fb.getUserData().equals("leftSensor") || fa.getUserData().equals("rightSensor") || fb.getUserData().equals("rightSensor")) {
+            if (player.isStateActive(PSTATE.WALL_GRABBED)) {
+                if (player.getMovementState() == MSTATE.UP) {
+                    entityHandler.addEntityOperation(player, "wallclimb");
+                } else {
+                    player.letGo();
+                }
+            }
             player.setWallState(0);
         } else if (fa.getUserData().equals("bottomSensor") || fb.getUserData().equals("bottomSensor")) {
             player.removePlayerState(PSTATE.ON_GROUND);

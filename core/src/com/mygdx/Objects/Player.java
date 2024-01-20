@@ -65,36 +65,45 @@ public class Player extends Entity implements Subscriber {
         PolygonShape polygonShape = new PolygonShape();
 
         //Create body fixture
-        polygonShape.setAsBox(8 / Constants.PPM, 15 / Constants.PPM, new Vector2(0, 0), 0);
+        circleShape.setRadius(8 / Constants.PPM);
+        circleShape.setPosition(new Vector2(0, -8 / Constants.PPM));
         fdef.friction = 0;  // No friction allows for players sliding next to walls
-        fdef.shape = polygonShape;
+        fdef.shape = circleShape;
         fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_CAMERA;
         b2body.createFixture(fdef).setUserData("player");
 
+        circleShape.setRadius(8 / Constants.PPM);
+        circleShape.setPosition(new Vector2(0, 8 / Constants.PPM));
+        fdef.friction = 0;  // No friction allows for players sliding next to walls
+        fdef.shape = circleShape;
+        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_CAMERA;
+        b2body.createFixture(fdef).setUserData("player");
+
+
+
         //Create player hitbox
         polygonShape.setAsBox(9 / Constants.PPM, 16 / Constants.PPM, new Vector2(0, 0), 0);
-        fdef.friction = 0;  // No friction allows for players sliding next to walls
         fdef.shape = polygonShape;
         fdef.filter.maskBits = Constants.BIT_HAZARD;
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData("player_hb");
 
         //Create right sensor
-        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(8 / Constants.PPM, 0), 0);
+        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(8.2f / Constants.PPM, 0), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
         fdef.filter.maskBits = Constants.BIT_GROUND;
         b2body.createFixture(fdef).setUserData("rightSensor");
 
         //Create left sensor
-        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(-8 / Constants.PPM, 0), 0);
+        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(-8.2f / Constants.PPM, 0), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
         fdef.filter.maskBits = Constants.BIT_GROUND;
         b2body.createFixture(fdef).setUserData("leftSensor");
 
         //Create bottom sensor
-        polygonShape.setAsBox(3 / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -15 / Constants.PPM), 0);
+        polygonShape.setAsBox(6 / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -17 / Constants.PPM), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
         fdef.filter.maskBits = Constants.BIT_GROUND;
@@ -298,7 +307,7 @@ public class Player extends Entity implements Subscriber {
     }
 
     public void glide() {
-        if (isStateActive(PSTATE.GLIDE_CONSUMED)) return;
+        if (isStateActive(PSTATE.GLIDE_CONSUMED) || isStateActive(PSTATE.STUNNED)) return;
         b2body.setLinearDamping(0);
         addPlayerState(PSTATE.GLIDE_CONSUMED);
         addPlayerState(PSTATE.GLIDING);
@@ -306,7 +315,9 @@ public class Player extends Entity implements Subscriber {
             timer.start(0, NFLAG.UPLIFT, this);
             return;
         }
-        b2body.applyLinearImpulse(new Vector2((float) (Math.pow(b2body.getLinearVelocity().x, 3) * Math.pow(b2body.getLinearVelocity().y, 2)), 0), b2body.getWorldCenter(), true);
+        float xImp = (float) (Math.pow(b2body.getLinearVelocity().x, 3) * Math.pow(b2body.getLinearVelocity().y, 2));
+        if (xImp > 0) b2body.applyLinearImpulse(new Vector2(Math.min(xImp, 0.5f), 0), b2body.getWorldCenter(), true);
+        else b2body.applyLinearImpulse(new Vector2(Math.max(xImp, -0.5f), 0), b2body.getWorldCenter(), true);
         float invertG = b2body.getLinearVelocity().y * -3;
         world.setGravity(new Vector2(0, invertG > 15 ? 15 : invertG));
         timer.start(0.5f, NFLAG.UPLIFT, this);
@@ -326,6 +337,15 @@ public class Player extends Entity implements Subscriber {
         movementState = MSTATE.PREV;
         world.setGravity(new Vector2(0, -Constants.G_ENHANCED));
         b2body.applyLinearImpulse(new Vector2(0, -0.5f), b2body.getWorldCenter(), true);
+    }
+
+    public void wallClimb() {
+        if (facingRight) {
+            b2body.setTransform(new Vector2(b2body.getPosition().x + 8 / Constants.PPM, b2body.getPosition().y + 14 / Constants.PPM), 0);
+        } else {
+            b2body.setTransform(new Vector2(b2body.getPosition().x - 8 / Constants.PPM, b2body.getPosition().y + 14 / Constants.PPM), 0);
+        }
+        letGo();
     }
 
     @Override

@@ -13,10 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.Game.Glissoar;
-import com.mygdx.Handlers.MyContactListener;
-import com.mygdx.Handlers.MyInputProcessor;
-import com.mygdx.Handlers.MyResourceManager;
-import com.mygdx.Handlers.MyTimer;
+import com.mygdx.Handlers.*;
 import com.mygdx.Objects.Entity;
 import com.mygdx.Objects.Player;
 import com.mygdx.Tools.B2WorldCreator;
@@ -33,8 +30,8 @@ public class GameScreen implements Screen {
     private final World world;    // World holding all the physical objects
     private final Box2DDebugRenderer b2dr;
     private final Player player;
-    private final LinkedList<Entity> deadEntities;
     private final MyInputProcessor inputProcessor;
+    private final EntityHandler entityHandler;
     private Vector2 camNewPos;
     public GameScreen(Glissoar game, String stage, MyResourceManager resourceManager, MyInputProcessor inputProcessor) {
 
@@ -46,6 +43,7 @@ public class GameScreen implements Screen {
 
         AtomicInteger eidAllocator = new AtomicInteger();
         timer = new MyTimer();
+        entityHandler = new EntityHandler();
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(Constants.TILE_SIZE * 40 / Constants.PPM, Constants.TILE_SIZE * 23 / Constants.PPM, gameCam);
         TmxMapLoader mapLoader = new TmxMapLoader();
@@ -61,10 +59,9 @@ public class GameScreen implements Screen {
 
         world = new World(new Vector2(0, -Constants.G), true);
         player = new Player(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3);
-        deadEntities = new LinkedList<>();
 
         inputProcessor.setGameVariables(player, world);
-        world.setContactListener(new MyContactListener(player, this));
+        world.setContactListener(new MyContactListener(player, this, entityHandler));
         b2dr = new Box2DDebugRenderer();
         new B2WorldCreator(world, map);     //Creating world
     }
@@ -75,7 +72,7 @@ public class GameScreen implements Screen {
     public void update(float delta) {
         player.update(delta);
         world.step(1/60f, 6, 2);
-        handleDeadEntities();    // Handling dead entities after world step to avoid errors
+        entityHandler.handleEntities();
         if (camNewPos != null) camStep();
         gameCam.update();
         //gameCam.position.set(player.b2body.getPosition().x, player.b2body.getPosition().y, 0);
@@ -113,14 +110,14 @@ public class GameScreen implements Screen {
             camNewPos = null;
             return;
         }
-        if (comparePosition(gameCam.position.x, camNewPos.x)) gameCam.translate(0, (gameCam.position.y < camNewPos.y ? 16 : -16) / Constants.PPM, 0);
-        else if (comparePosition(gameCam.position.y, camNewPos.y)) gameCam.translate((gameCam.position.x < camNewPos.x ? 16 : -16) / Constants.PPM, 0, 0);
-        else gameCam.translate((gameCam.position.x < camNewPos.x ? 8 : -8) / Constants.PPM, (gameCam.position.y < camNewPos.y ? 16 : -16) / Constants.PPM, 0);
+        if (comparePosition(gameCam.position.x, camNewPos.x)) gameCam.translate(0, (gameCam.position.y < camNewPos.y ? 24 : -24) / Constants.PPM, 0);
+        else if (comparePosition(gameCam.position.y, camNewPos.y)) gameCam.translate((gameCam.position.x < camNewPos.x ? 24 : -24) / Constants.PPM, 0, 0);
+        else gameCam.translate((gameCam.position.x < camNewPos.x ? 8 : -8) / Constants.PPM, (gameCam.position.y < camNewPos.y ? 24 : -24) / Constants.PPM, 0);
     }
 
     public boolean comparePosition(float pos1, float pos2) {
         // Comparing position with slight offset
-        return (pos1 <= (pos2 + (16 / Constants.PPM))) && (pos1 >= (pos2 - (16 / Constants.PPM)));
+        return (pos1 <= (pos2 + (24 / Constants.PPM))) && (pos1 >= (pos2 - (24 / Constants.PPM)));
     }
 
     @Override
@@ -140,12 +137,4 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() { }
 
-    public void addDeadEntity(Entity entity) { deadEntities.add(entity); }
-
-    public void handleDeadEntities() {
-        for (Entity entity : deadEntities) {
-            entity.die();
-        }
-        deadEntities.clear();
-    }
 }

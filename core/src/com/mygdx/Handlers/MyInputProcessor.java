@@ -127,10 +127,12 @@ public class MyInputProcessor implements InputProcessor {
                 break;
             case Input.Keys.D:
                 if (Gdx.input.isKeyPressed(Input.Keys.A) && !player.isStateActive(PSTATE.WALL_GRABBED)) player.setMovementState(Constants.MSTATE.LEFT);
+                else if (player.isStateActive(PSTATE.GLIDING)) player.setMovementState(MSTATE.PREV);
                 else player.setMovementState(Constants.MSTATE.HSTILL);
                 break;
             case Input.Keys.A:
                 if (Gdx.input.isKeyPressed(Input.Keys.D) && !player.isStateActive(PSTATE.WALL_GRABBED)) player.setMovementState(Constants.MSTATE.RIGHT);
+                else if (player.isStateActive(PSTATE.GLIDING)) player.setMovementState(MSTATE.PREV);
                 else player.setMovementState(Constants.MSTATE.HSTILL);
                 break;
             case Input.Keys.J:
