@@ -60,7 +60,7 @@ public class GameScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
 
         world = new World(new Vector2(0, -Constants.G), true);
-        player = new Player(100, 8000, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3);
+        player = new Player(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3);
         deadEntities = new LinkedList<>();
 
         inputProcessor.setGameVariables(player, world);
@@ -113,14 +113,14 @@ public class GameScreen implements Screen {
             camNewPos = null;
             return;
         }
-        if (comparePosition(gameCam.position.x, camNewPos.x)) gameCam.translate(0, (gameCam.position.y < camNewPos.y ? 8 : -8) / Constants.PPM, 0);
-        else if (comparePosition(gameCam.position.y, camNewPos.y)) gameCam.translate((gameCam.position.x < camNewPos.x ? 8 : -8) / Constants.PPM, 0, 0);
-        else gameCam.translate((gameCam.position.x < camNewPos.x ? 8 : -8) / Constants.PPM, (gameCam.position.y < camNewPos.y ? 8 : -8) / Constants.PPM, 0);
+        if (comparePosition(gameCam.position.x, camNewPos.x)) gameCam.translate(0, (gameCam.position.y < camNewPos.y ? 16 : -16) / Constants.PPM, 0);
+        else if (comparePosition(gameCam.position.y, camNewPos.y)) gameCam.translate((gameCam.position.x < camNewPos.x ? 16 : -16) / Constants.PPM, 0, 0);
+        else gameCam.translate((gameCam.position.x < camNewPos.x ? 8 : -8) / Constants.PPM, (gameCam.position.y < camNewPos.y ? 16 : -16) / Constants.PPM, 0);
     }
 
     public boolean comparePosition(float pos1, float pos2) {
         // Comparing position with slight offset
-        return (pos1 <= (pos2 + (8 / Constants.PPM))) && (pos1 >= (pos2 - (8 / Constants.PPM)));
+        return (pos1 <= (pos2 + (16 / Constants.PPM))) && (pos1 >= (pos2 - (16 / Constants.PPM)));
     }
 
     @Override

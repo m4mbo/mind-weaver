@@ -299,6 +299,7 @@ public class Player extends Entity implements Subscriber {
 
     public void glide() {
         if (isStateActive(PSTATE.GLIDE_CONSUMED)) return;
+        b2body.setLinearDamping(0);
         addPlayerState(PSTATE.GLIDE_CONSUMED);
         addPlayerState(PSTATE.GLIDING);
         if (movementState == MSTATE.HSTILL) {
