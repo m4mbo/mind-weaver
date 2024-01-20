@@ -69,14 +69,14 @@ public class Player extends Entity implements Subscriber {
         circleShape.setPosition(new Vector2(0, -8 / Constants.PPM));
         fdef.friction = 0;  // No friction allows for players sliding next to walls
         fdef.shape = circleShape;
-        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_CAMERA;
+        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_CAMERA | Constants.BIT_CHECKPOINT;
         b2body.createFixture(fdef).setUserData("player");
 
         circleShape.setRadius(8 / Constants.PPM);
         circleShape.setPosition(new Vector2(0, 8 / Constants.PPM));
         fdef.friction = 0;  // No friction allows for players sliding next to walls
         fdef.shape = circleShape;
-        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_CAMERA;
+        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_CAMERA | Constants.BIT_CHECKPOINT;
         b2body.createFixture(fdef).setUserData("player");
 
 
