@@ -75,7 +75,6 @@ public class GameScreen implements Screen {
         entityHandler.handleEntities();
         if (camNewPos != null) camStep();
         gameCam.update();
-        //gameCam.position.set(player.b2body.getPosition().x, player.b2body.getPosition().y, 0);
         timer.update(delta);
         inputProcessor.update();
     }
@@ -93,7 +92,7 @@ public class GameScreen implements Screen {
         renderer.render();
         player.render(game.batch);
 
-        //b2dr.render(world, gameCam.combined);
+        b2dr.render(world, gameCam.combined);
         game.batch.setProjectionMatrix(gameCam.combined);
 
         game.batch.begin();

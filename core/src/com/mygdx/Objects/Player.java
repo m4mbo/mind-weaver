@@ -14,7 +14,6 @@ import java.util.EnumSet;
 
 public class Player extends Entity implements Subscriber {
     private final MyTimer timer;
-    private final MyResourceManager resourceManager;
     private final World world;
     private int wallState;  // -1 for left, 1 for right, 0 for none
     private int lives;
@@ -26,10 +25,9 @@ public class Player extends Entity implements Subscriber {
 
     public Player(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, int lives) {
 
-        super(id);
+        super(id, myResourceManager);
         this.timer = timer;
         this.world = world;
-        this.resourceManager = myResourceManager;
         this.lives = lives;
 
         currCheckPoint = new Vector2(x / Constants.PPM, y / Constants.PPM);
