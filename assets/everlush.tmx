@@ -18,7 +18,7 @@
   <object id="44" x="1327.33" y="494.667" width="639.333" height="188.667"/>
   <object id="78" x="1326.39" y="715.909" width="532.666" height="366.667"/>
   <object id="79" x="1040.83" y="562" width="216.394" height="124"/>
-  <object id="124" x="622.743" y="727.818" width="626.333" height="366.667"/>
+  <object id="124" x="622.715" y="727.779" width="626.333" height="366.667"/>
  </objectgroup>
  <objectgroup id="4" name="spikes">
   <object id="7" x="128.273" y="7883" width="94.9091" height="4.90909"/>
@@ -91,7 +91,9 @@
   <object id="85" x="576.167" y="64.6667" width="14.6667" height="46.3333"/>
   <object id="86" x="542.333" y="51.1667" width="34.3334" height="13.6666"/>
   <object id="87" x="1103.98" y="641.009" width="15.7656" height="95.1478"/>
-  <object id="89" x="1120.77" y="993.835" width="62.8262" height="14.1478"/>
+  <object id="89" x="1120.68" y="993.828" width="62.9194" height="14.155">
+   <polygon points="0,0 62.9194,0 62.9194,14.155 0,14.155"/>
+  </object>
   <object id="91" x="1183.86" y="1009.29" width="47.9171" height="13.4205"/>
   <object id="92" x="1232.04" y="1025.47" width="31.7353" height="13.4205"/>
   <object id="94" x="1168.78" y="512.009" width="63.2656" height="14.8978"/>
@@ -121,7 +123,9 @@
   <object id="119" x="991.784" y="770.259" width="32.4327" height="14.1478"/>
   <object id="120" x="1024.12" y="753.926" width="80.0994" height="14.1478"/>
   <object id="131" x="848" y="1025.64" width="255.856" height="14.1478"/>
-  <object id="132" x="1104.09" y="993.847" width="16.5364" height="31.591"/>
+  <object id="132" x="1104.09" y="993.825" width="16.5475" height="31.6132">
+   <polygon points="0,0 16.5475,0 16.5475,31.6132 0,31.6132"/>
+  </object>
   <object id="133" x="831.368" y="945.295" width="16.5364" height="79.9546"/>
  </objectgroup>
  <objectgroup id="7" name="checkpoints">

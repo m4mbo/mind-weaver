@@ -56,7 +56,7 @@ public class MyContactListener implements ContactListener {
             }
             player.setWallState(0);
         } else if (fa.getUserData().equals("bottomSensor") || fb.getUserData().equals("bottomSensor")) {
-            player.removePlayerState(PSTATE.ON_GROUND);
+            if (player.isInAir()) player.removePlayerState(PSTATE.ON_GROUND);
         }
     }
 
@@ -64,10 +64,7 @@ public class MyContactListener implements ContactListener {
         fa = contact.getFixtureA();
         fb = contact.getFixtureB();
 
-        if (fa == null || fb == null) {
-            return true;
-        }
-        return false;
+        return fa == null || fb == null;
     }
 
     @Override

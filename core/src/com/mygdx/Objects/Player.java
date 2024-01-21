@@ -317,8 +317,8 @@ public class Player extends Entity implements Subscriber {
         if (xImp > 0) b2body.applyLinearImpulse(new Vector2(Math.min(xImp, 0.5f), 0), b2body.getWorldCenter(), true);
         else b2body.applyLinearImpulse(new Vector2(Math.max(xImp, -0.5f), 0), b2body.getWorldCenter(), true);
         float invertG = b2body.getLinearVelocity().y * -3;
+        timer.start( -b2body.getLinearVelocity().y * 0.1f, NFLAG.UPLIFT, this);
         world.setGravity(new Vector2(0, invertG > 15 ? 15 : invertG));
-        timer.start(0.5f, NFLAG.UPLIFT, this);
     }
 
     public void grab() {
@@ -394,6 +394,7 @@ public class Player extends Entity implements Subscriber {
     }
 
     public boolean isFalling() { return b2body.getLinearVelocity().y < 0; }
+    public boolean isInAir() {return b2body.getLinearVelocity().y != 0; }
 
     public void setWallState(int wallState) { this.wallState = wallState; }
 
