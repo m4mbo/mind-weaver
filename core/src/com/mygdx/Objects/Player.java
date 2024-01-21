@@ -210,7 +210,7 @@ public class Player extends Entity implements Subscriber {
         addPlayerState(PSTATE.LANDING);
         removePlayerState(PSTATE.GLIDING);
         currAState = ASTATE.LAND;
-        timer.start(0.2f, NFLAG.LAND, this);
+        timer.start(0.2f, "land", this);
         world.setGravity(new Vector2(0, -Constants.G));
         b2body.setLinearDamping(0);
     }
@@ -232,7 +232,7 @@ public class Player extends Entity implements Subscriber {
             b2body.applyLinearImpulse(new Vector2(-2, 3), b2body.getWorldCenter(), true);
         }
         addPlayerState(PSTATE.STUNNED);
-        timer.start(0.2f, NFLAG.STUN, this);
+        timer.start(0.2f, "stun", this);
     }
 
     public void moveRight() {
@@ -300,8 +300,8 @@ public class Player extends Entity implements Subscriber {
             if (isStateActive(PSTATE.ON_GROUND)) groundDash = true;
         }
 
-        if (groundDash) timer.start(0.2f, NFLAG.GDASH, this);
-        else timer.start(0.2f, NFLAG.ADASH, this);
+        if (groundDash) timer.start(0.2f, "ground_dash", this);
+        else timer.start(0.2f, "air_dash", this);
     }
 
     public void glide() {
@@ -310,14 +310,14 @@ public class Player extends Entity implements Subscriber {
         addPlayerState(PSTATE.GLIDE_CONSUMED);
         addPlayerState(PSTATE.GLIDING);
         if (movementState == MSTATE.HSTILL) {
-            timer.start(0, NFLAG.UPLIFT, this);
+            timer.start(0, "uplift", this);
             return;
         }
         float xImp = (float) (Math.pow(b2body.getLinearVelocity().x, 3) * Math.pow(b2body.getLinearVelocity().y, 2));
         if (xImp > 0) b2body.applyLinearImpulse(new Vector2(Math.min(xImp, 0.5f), 0), b2body.getWorldCenter(), true);
         else b2body.applyLinearImpulse(new Vector2(Math.max(xImp, -0.5f), 0), b2body.getWorldCenter(), true);
         float invertG = b2body.getLinearVelocity().y * -3;
-        timer.start( -b2body.getLinearVelocity().y * 0.1f, NFLAG.UPLIFT, this);
+        timer.start( -b2body.getLinearVelocity().y * 0.1f, "uplift", this);
         world.setGravity(new Vector2(0, invertG > 15 ? 15 : invertG));
     }
 
@@ -358,36 +358,37 @@ public class Player extends Entity implements Subscriber {
     }
 
     @Override
-    public void notify(NFLAG flag) {
-        switch (flag){
-            case STUN:
+    public void notify(String flag) {
+        switch (flag) {
+            case "stun":
                 removePlayerState(PSTATE.STUNNED);
                 if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = MSTATE.RIGHT;
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = MSTATE.LEFT;
                 break;
-            case UPLIFT:
-                if (!isStateActive(PSTATE.ON_GROUND) && isStateActive(PSTATE.GLIDING)) world.setGravity(new Vector2(0, -Constants.G_GLIDING));
+            case "uplift":
+                if (!isStateActive(PSTATE.ON_GROUND) && isStateActive(PSTATE.GLIDING))
+                    world.setGravity(new Vector2(0, -Constants.G_GLIDING));
                 else if (isStateActive(PSTATE.ON_GROUND)) land();
                 else world.setGravity(new Vector2(0, -Constants.G_ENHANCED));
                 break;
-            case ADASH:
+            case "air_dash":
                 if (!isStateActive(PSTATE.ON_GROUND)) world.setGravity(new Vector2(0, -Constants.G_ENHANCED));
                 else world.setGravity(new Vector2(0, -Constants.G));
                 removePlayerState(PSTATE.DASHING);
                 if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = MSTATE.RIGHT;
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = MSTATE.LEFT;
                 break;
-            case GDASH:
+            case "ground_dash":
                 world.setGravity(new Vector2(0, -Constants.G));
                 removePlayerState(PSTATE.DASHING);
-                timer.start(1, NFLAG.DASH_COOLDOWN, this);
+                timer.start(1, "dash_cooldown", this);
                 if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = MSTATE.RIGHT;
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = MSTATE.LEFT;
                 break;
-            case DASH_COOLDOWN:
+            case "dash_cooldown":
                 removePlayerState(PSTATE.DASH_CONSUMED);
                 break;
-            case LAND:
+            case "land":
                 removePlayerState(PSTATE.LANDING);
                 break;
         }

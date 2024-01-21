@@ -5,10 +5,16 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.Handlers.MyResourceManager;
+import com.mygdx.Handlers.MyTimer;
+import com.mygdx.Objects.Enemies.SideCrawler;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class B2WorldCreator {
 
-    public B2WorldCreator(World world, TiledMap map) {
+    public B2WorldCreator(World world, TiledMap map, MyResourceManager resourceManager, MyTimer timer, AtomicInteger eidAllocator) {
+
         BodyDef bdef  = new BodyDef();
         PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
@@ -62,6 +68,12 @@ public class B2WorldCreator {
             fdef.isSensor = true;
             fdef.filter.categoryBits = Constants.BIT_CHECKPOINT;
             body.createFixture(fdef).setUserData("checkpoint");
+        }
+
+        // Create side_crawlers
+        for (RectangleMapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = object.getRectangle();
+            new SideCrawler((int) rect.getX(), (int) rect.getY(), world, eidAllocator.getAndIncrement(), resourceManager, timer);
         }
     }
 

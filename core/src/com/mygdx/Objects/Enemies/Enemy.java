@@ -2,7 +2,6 @@ package com.mygdx.Objects.Enemies;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.Handlers.MyResourceManager;
-import com.mygdx.Handlers.MyTimer;
 import com.mygdx.Objects.Entity;
 
 public abstract class Enemy extends Entity {

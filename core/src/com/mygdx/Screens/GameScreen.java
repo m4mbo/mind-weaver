@@ -63,7 +63,7 @@ public class GameScreen implements Screen {
         inputProcessor.setGameVariables(player, world);
         world.setContactListener(new MyContactListener(player, this, entityHandler));
         b2dr = new Box2DDebugRenderer();
-        new B2WorldCreator(world, map);     //Creating world
+        new B2WorldCreator(world, map, resourceManager, timer, eidAllocator);     //Creating world
     }
 
     @Override

@@ -42,16 +42,16 @@ public class MyTimer implements Publisher {
         timersToAdd.clear();
     }
 
-    public void start(float seconds, NFLAG flag, Subscriber subscriber) {
+    public void start(float seconds, String flag, Subscriber subscriber) {
         timersToAdd.add(new TIMER_MD(0f, seconds, flag, subscriber));
     }
     
     private static class TIMER_MD {
         private float time;
         private final float goal;
-        private final Constants.NFLAG flag;
+        private final String flag;
         private final Subscriber subscriber;
-        public TIMER_MD(float time, float goal, NFLAG flag, Subscriber subscriber) {
+        public TIMER_MD(float time, float goal, String flag, Subscriber subscriber) {
             this.time = time;
             this.goal = goal;
             this.flag = flag;
@@ -71,14 +71,14 @@ public class MyTimer implements Publisher {
     }
 
     @Override
-    public void notifyAllSubscribers(NFLAG flag) {
+    public void notifyAllSubscribers(String flag) {
         for (Subscriber subscriber : subscribers) {
             subscriber.notify();
         }
     }
 
     @Override
-    public void notifySubscriber(NFLAG flag, Subscriber subscriber) {
+    public void notifySubscriber(String flag, Subscriber subscriber) {
         subscriber.notify(flag);
     }
 }
