@@ -22,7 +22,7 @@ public class Constants {
     }
     // Animation state flag
     public enum ASTATE {
-        RUN, JUMP, IDLE, FALL, LAND
+        RUN, JUMP, IDLE, FALL, LAND, WALLGRAB, CLIMB, SLIDE_DOWN, GLIDE
     }
     // Notification Flag
     public enum NFLAG {
@@ -36,4 +36,6 @@ public class Constants {
     // Bits for collision masking
     public static final short BIT_GROUND = 2;   // Includes ground and walls (because sometimes the ground can be a wall)
     public static final short BIT_HAZARD = 4;
+    public static final short BIT_CAMERA = 8;
+    public static final short BIT_CHECKPOINT = 16;
 }

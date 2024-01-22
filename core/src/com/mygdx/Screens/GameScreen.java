@@ -13,15 +13,11 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.Game.Glissoar;
-import com.mygdx.Handlers.MyContactListener;
-import com.mygdx.Handlers.MyInputProcessor;
-import com.mygdx.Handlers.MyResourceManager;
-import com.mygdx.Handlers.MyTimer;
+import com.mygdx.Handlers.*;
 import com.mygdx.Objects.Entity;
 import com.mygdx.Objects.Player;
 import com.mygdx.Tools.B2WorldCreator;
 import com.mygdx.Tools.Constants;
-
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -34,27 +30,40 @@ public class GameScreen implements Screen {
     private final World world;    // World holding all the physical objects
     private final Box2DDebugRenderer b2dr;
     private final Player player;
-    private final LinkedList<Entity> deadEntities;
     private final MyInputProcessor inputProcessor;
-    public GameScreen(Glissoar game, String stage, MyResourceManager resourceManager) {
+    private final EntityHandler entityHandler;
+    private Vector2 camNewPos;
+    public GameScreen(Glissoar game, String stage, MyResourceManager resourceManager, MyInputProcessor inputProcessor) {
+
         this.game = game;
+        this.inputProcessor = inputProcessor;
+        camNewPos = null;
+
+        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());      // Full-screen
+
         AtomicInteger eidAllocator = new AtomicInteger();
         timer = new MyTimer();
-        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());      // Full-screen
+        entityHandler = new EntityHandler();
         gameCam = new OrthographicCamera();
-        gamePort = new FitViewport(Constants.TILE_SIZE * 35 / Constants.PPM, Constants.TILE_SIZE * 19 / Constants.PPM, gameCam);
-        TmxMapLoader maploader = new TmxMapLoader();
-        TiledMap map = maploader.load("test_upgrade.tmx");
+        gamePort = new FitViewport(Constants.TILE_SIZE * 40 / Constants.PPM, Constants.TILE_SIZE * 23 / Constants.PPM, gameCam);
+        TmxMapLoader mapLoader = new TmxMapLoader();
+        gameCam.position.set(2, 77, 0);
+
+        // Creating tiled map
+        TiledMap map = null;
+        if (stage.equals("everlush")) map = mapLoader.load("everlush.tmx");
+        else if (stage.equals("verdant_hollow")) map = mapLoader.load("verdant_hollow.tmx");
+        else map = mapLoader.load("grim_factory.tmx");
+
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
-        gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
+
         world = new World(new Vector2(0, -Constants.G), true);
-        player = new Player(200, 100, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3);
-        deadEntities = new LinkedList<>();
-        inputProcessor = new MyInputProcessor(player, world);
-        Gdx.input.setInputProcessor(inputProcessor);
-        world.setContactListener(new MyContactListener(player, this));
+        player = new Player(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3);
+
+        inputProcessor.setGameVariables(player, world);
+        world.setContactListener(new MyContactListener(player, this, entityHandler));
         b2dr = new Box2DDebugRenderer();
-        new B2WorldCreator(world, map);     //Creating world
+        new B2WorldCreator(world, map, resourceManager, timer, eidAllocator);     //Creating world
     }
 
     @Override
@@ -63,7 +72,8 @@ public class GameScreen implements Screen {
     public void update(float delta) {
         player.update(delta);
         world.step(1/60f, 6, 2);
-        handleDeadEntities();    // Handling dead entities after world step to avoid errors
+        entityHandler.handleEntities();
+        if (camNewPos != null) camStep();
         gameCam.update();
         timer.update(delta);
         inputProcessor.update();
@@ -89,6 +99,26 @@ public class GameScreen implements Screen {
         game.batch.end();
     }
 
+    public void repositionCamera(Vector2 position) {
+        camNewPos = position;
+    }
+
+    public void camStep() {
+        if (comparePosition(gameCam.position.x, camNewPos.x) && comparePosition(gameCam.position.y, camNewPos.y)) {
+            gameCam.position.set(camNewPos.x, camNewPos.y, 0);
+            camNewPos = null;
+            return;
+        }
+        if (comparePosition(gameCam.position.x, camNewPos.x)) gameCam.translate(0, (gameCam.position.y < camNewPos.y ? 24 : -24) / Constants.PPM, 0);
+        else if (comparePosition(gameCam.position.y, camNewPos.y)) gameCam.translate((gameCam.position.x < camNewPos.x ? 24 : -24) / Constants.PPM, 0, 0);
+        else gameCam.translate((gameCam.position.x < camNewPos.x ? 8 : -8) / Constants.PPM, (gameCam.position.y < camNewPos.y ? 24 : -24) / Constants.PPM, 0);
+    }
+
+    public boolean comparePosition(float pos1, float pos2) {
+        // Comparing position with slight offset
+        return (pos1 <= (pos2 + (24 / Constants.PPM))) && (pos1 >= (pos2 - (24 / Constants.PPM)));
+    }
+
     @Override
     public void resize(int width, int height) {
         gamePort.update(width, height);
@@ -106,12 +136,4 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() { }
 
-    public void addDeadEntity(Entity entity) { deadEntities.add(entity); }
-
-    public void handleDeadEntities() {
-        for (Entity entity : deadEntities) {
-            entity.die();
-        }
-        deadEntities.clear();
-    }
 }

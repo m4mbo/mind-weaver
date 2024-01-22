@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.Game.Glissoar;
 import com.mygdx.Objects.Player;
+import com.mygdx.Screens.GameScreen;
 import com.mygdx.Tools.Constants;
 import com.mygdx.Tools.Constants.*;
 
@@ -12,13 +14,76 @@ public class MyInputProcessor implements InputProcessor {
 
     private Player player;
     private World world;
-    public MyInputProcessor(Player player, World world) {
+    private final Glissoar game;
+    public MyInputProcessor(Glissoar game) {
+        this.game = game;
+    }
+
+    // Function called only by the game screen
+    public void setGameVariables(Player player, World world) {
         this.player = player;
         this.world = world;
     }
     @Override
     public boolean keyDown (int keycode) {
+        if (player == null || world == null) return false;
+        if (game.getScreen() instanceof GameScreen) return keyDownGameScreen(keycode);
+        return false;
+    }
 
+    @Override
+    public boolean keyUp (int keycode) {
+        if (player == null || world == null) return false;
+        if (game.getScreen() instanceof GameScreen) return keyUpGameScreen(keycode);
+        return false;
+    }
+
+    /*
+     * Input polling for a smoother experience
+     * Only for the grab
+     */
+    public void update() {
+        if (Gdx.input.isKeyPressed(Input.Keys.J)) {
+            if (player.getWallState() != 0) player.grab();
+        }
+    }
+
+    @Override
+    public boolean keyTyped (char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown (int x, int y, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp (int x, int y, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchCancelled(int i, int i1, int i2, int i3) {
+        return false;
+    }
+    @Override
+    public boolean touchDragged (int x, int y, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved (int x, int y) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled (float amountX, float amountY) {
+        return false;
+    }
+
+    // Helper function to simply keyDown implementation
+    public boolean keyDownGameScreen(int keycode) {
         switch (keycode) {
             case Input.Keys.SPACE:
                 if (player.isStateActive(PSTATE.ON_GROUND) && !player.isStateActive(PSTATE.WALL_GRABBED)) {
@@ -45,7 +110,7 @@ public class MyInputProcessor implements InputProcessor {
                 if (player.isStateActive(PSTATE.WALL_GRABBED)) player.setMovementState(Constants.MSTATE.DOWN);
                 break;
             case Input.Keys.CAPS_LOCK:
-                if (!player.isStateActive(PSTATE.DASH_CONSUMED)) player.dash();
+                //if (!player.isStateActive(PSTATE.DASH_CONSUMED)) player.dash();
                 break;
             default:
                 break;
@@ -53,9 +118,7 @@ public class MyInputProcessor implements InputProcessor {
         return false;
     }
 
-    @Override
-    public boolean keyUp (int keycode) {
-
+    public boolean keyUpGameScreen(int keycode) {
         switch (keycode) {
             case Input.Keys.SPACE:
                 if (player.isStateActive(PSTATE.ON_GROUND) || player.isStateActive(PSTATE.DASHING) || player.isStateActive(PSTATE.STUNNED)) break;
@@ -64,10 +127,12 @@ public class MyInputProcessor implements InputProcessor {
                 break;
             case Input.Keys.D:
                 if (Gdx.input.isKeyPressed(Input.Keys.A) && !player.isStateActive(PSTATE.WALL_GRABBED)) player.setMovementState(Constants.MSTATE.LEFT);
+                else if (player.isStateActive(PSTATE.GLIDING)) player.setMovementState(MSTATE.PREV);
                 else player.setMovementState(Constants.MSTATE.HSTILL);
                 break;
             case Input.Keys.A:
                 if (Gdx.input.isKeyPressed(Input.Keys.D) && !player.isStateActive(PSTATE.WALL_GRABBED)) player.setMovementState(Constants.MSTATE.RIGHT);
+                else if (player.isStateActive(PSTATE.GLIDING)) player.setMovementState(MSTATE.PREV);
                 else player.setMovementState(Constants.MSTATE.HSTILL);
                 break;
             case Input.Keys.J:
@@ -91,44 +156,6 @@ public class MyInputProcessor implements InputProcessor {
         }
         return false;
     }
-
-    // Input polling for a smoother experience
-    public void update() {
-        if (Gdx.input.isKeyPressed(Input.Keys.J)) {
-            if (player.getWallState() != 0) player.grab();
-        }
-    }
-
-    @Override
-    public boolean keyTyped (char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown (int x, int y, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp (int x, int y, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchCancelled(int i, int i1, int i2, int i3) {
-        return false;
-    }
-
-    public boolean touchDragged (int x, int y, int pointer) {
-        return false;
-    }
-
-    public boolean mouseMoved (int x, int y) {
-        return false;
-    }
-
-    public boolean scrolled (float amountX, float amountY) {
-        return false;
-    }
 }
+
 
