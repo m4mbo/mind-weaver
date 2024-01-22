@@ -1,13 +1,11 @@
 package com.mygdx.Tools;
 
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Handlers.MyResourceManager;
 import com.mygdx.Handlers.MyTimer;
-import com.mygdx.Objects.Enemies.SideCrawler;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -70,11 +68,6 @@ public class B2WorldCreator {
             body.createFixture(fdef).setUserData("checkpoint");
         }
 
-        // Create side_crawlers
-        for (RectangleMapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = object.getRectangle();
-            new SideCrawler((int) rect.getX(), (int) rect.getY(), world, eidAllocator.getAndIncrement(), resourceManager, timer);
-        }
     }
 
 }

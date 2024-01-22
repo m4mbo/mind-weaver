@@ -1,21 +1,20 @@
 package com.mygdx.Handlers;
 
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.Objects.Player;
+import com.mygdx.Objects.Mage;
 import com.mygdx.Screens.GameScreen;
-import com.mygdx.Tools.Constants;
 import com.mygdx.Tools.Constants.*;
 
 public class MyContactListener implements ContactListener {
 
     private Fixture fa;
     private Fixture fb;
-    private final Player player;
     private final GameScreen screen;
     private final EntityHandler entityHandler;
+    private final PlayerController playerController;
 
-    public MyContactListener(Player player, GameScreen screen, EntityHandler entityHandler) {
-        this.player = player;
+    public MyContactListener(PlayerController playerController, GameScreen screen, EntityHandler entityHandler) {
+        this.playerController = playerController;
         this.screen = screen;
         this.entityHandler = entityHandler;
     }
@@ -26,18 +25,18 @@ public class MyContactListener implements ContactListener {
         if (handleFixtures(contact)) return;
 
         if (fa.getUserData().equals("leftSensor") || fb.getUserData().equals("leftSensor")) {
-            player.setWallState(-1);
+            playerController.getCharacter().setWallState(-1);
         } else if (fa.getUserData().equals("rightSensor") || fb.getUserData().equals("rightSensor")) {
-            player.setWallState(1);
+            playerController.getCharacter().setWallState(1);
         } else if (fa.getUserData().equals("bottomSensor") || fb.getUserData().equals("bottomSensor")) {
-            player.land();
-            if (player.getMovementState() == MSTATE.PREV) player.setMovementState(MSTATE.HSTILL);
+            playerController.getCharacter().land();
+            if (playerController.getCharacter().getMovementState() == MSTATE.PREV) playerController.getCharacter().setMovementState(MSTATE.HSTILL);
         } else if (fa.getUserData().equals("player_hb") || fb.getUserData().equals("player_hb")) {
-            entityHandler.addEntityOperation(player, "die");
+            entityHandler.addEntityOperation(playerController.getCharacter(), "die");
         } else if (fa.getUserData().equals("camera_section") || fb.getUserData().equals("camera_section")) {
             screen.repositionCamera(fa.getUserData().equals("camera_section") ? fa.getBody().getPosition() : fb.getBody().getPosition());
         } else if (fa.getUserData().equals("checkpoint") || fb.getUserData().equals("checkpoint")) {
-            player.setCheckPoint(fa.getUserData().equals("checkpoint") ? fa.getBody().getPosition() : fb.getBody().getPosition());
+            ((Mage) playerController.getCharacter()).setCheckPoint(fa.getUserData().equals("checkpoint") ? fa.getBody().getPosition() : fb.getBody().getPosition());
         }
     }
 
@@ -47,16 +46,9 @@ public class MyContactListener implements ContactListener {
         if (handleFixtures(contact)) return;
 
         if (fa.getUserData().equals("leftSensor") || fb.getUserData().equals("leftSensor") || fa.getUserData().equals("rightSensor") || fb.getUserData().equals("rightSensor")) {
-            if (player.isStateActive(PSTATE.WALL_GRABBED)) {
-                if (player.getMovementState() == MSTATE.UP) {
-                    entityHandler.addEntityOperation(player, "wallclimb");
-                } else {
-                    player.letGo();
-                }
-            }
-            player.setWallState(0);
+            playerController.getCharacter().setWallState(0);
         } else if (fa.getUserData().equals("bottomSensor") || fb.getUserData().equals("bottomSensor")) {
-            if (player.isInAir()) player.removePlayerState(PSTATE.ON_GROUND);
+            if (playerController.getCharacter().isInAir()) playerController.getCharacter().removePlayerState(PSTATE.ON_GROUND);
         }
     }
 

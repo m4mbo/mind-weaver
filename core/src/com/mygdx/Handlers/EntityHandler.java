@@ -1,8 +1,6 @@
 package com.mygdx.Handlers;
 
 import com.mygdx.Objects.Entity;
-import com.mygdx.Objects.Player;
-import sun.tools.jconsole.inspector.XOperations;
 
 import java.util.LinkedList;
 
@@ -23,8 +21,8 @@ public class EntityHandler {
         for (EntityOp entityOp : entityOps) {
             if (entityOp.operation.equals("die")) {
                 entityOp.entity.die();
-            } else if (entityOp.operation.equals("wallclimb")) {
-                ((Player) entityOp.entity).wallClimb();
+            } else if (entityOp.operation.equals("teleport")) {
+
             }
         }
         entityOps.clear();

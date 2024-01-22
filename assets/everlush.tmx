@@ -12,7 +12,7 @@
   </data>
  </layer>
  <objectgroup id="6" name="camera">
-  <object id="13" x="18" y="49.3333" width="639.333" height="366.667"/>
+  <object id="13" x="19.3333" y="70.6666" width="639.333" height="366.667"/>
   <object id="28" x="704.667" y="48.6665" width="626.333" height="366.667"/>
   <object id="43" x="1372.33" y="75.6665" width="639.333" height="366.667"/>
   <object id="44" x="1327.33" y="494.667" width="639.333" height="188.667"/>

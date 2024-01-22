@@ -14,11 +14,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.Game.Glissoar;
 import com.mygdx.Handlers.*;
-import com.mygdx.Objects.Entity;
-import com.mygdx.Objects.Player;
+import com.mygdx.Objects.Mage;
+import com.mygdx.Objects.PlayableCharacter;
 import com.mygdx.Tools.B2WorldCreator;
 import com.mygdx.Tools.Constants;
-import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameScreen implements Screen {
@@ -29,9 +28,9 @@ public class GameScreen implements Screen {
     private final OrthogonalTiledMapRenderer renderer;
     private final World world;    // World holding all the physical objects
     private final Box2DDebugRenderer b2dr;
-    private final Player player;
     private final MyInputProcessor inputProcessor;
     private final EntityHandler entityHandler;
+    private final PlayerController playerController;
     private Vector2 camNewPos;
     public GameScreen(Glissoar game, String stage, MyResourceManager resourceManager, MyInputProcessor inputProcessor) {
 
@@ -41,27 +40,26 @@ public class GameScreen implements Screen {
 
         Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());      // Full-screen
 
-        AtomicInteger eidAllocator = new AtomicInteger();
-        timer = new MyTimer();
-        entityHandler = new EntityHandler();
-        gameCam = new OrthographicCamera();
-        gamePort = new FitViewport(Constants.TILE_SIZE * 40 / Constants.PPM, Constants.TILE_SIZE * 23 / Constants.PPM, gameCam);
-        TmxMapLoader mapLoader = new TmxMapLoader();
-        gameCam.position.set(2, 77, 0);
-
         // Creating tiled map
+        TmxMapLoader mapLoader = new TmxMapLoader();
         TiledMap map = null;
         if (stage.equals("everlush")) map = mapLoader.load("everlush.tmx");
         else if (stage.equals("verdant_hollow")) map = mapLoader.load("verdant_hollow.tmx");
         else map = mapLoader.load("grim_factory.tmx");
 
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
-
         world = new World(new Vector2(0, -Constants.G), true);
-        player = new Player(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3);
+        gameCam = new OrthographicCamera();
+        gamePort = new FitViewport(Constants.TILE_SIZE * 30 / Constants.PPM, Constants.TILE_SIZE * 17 / Constants.PPM, gameCam);
+        gameCam.position.set(2, 77, 0);
 
-        inputProcessor.setGameVariables(player, world);
-        world.setContactListener(new MyContactListener(player, this, entityHandler));
+        AtomicInteger eidAllocator = new AtomicInteger();
+        timer = new MyTimer();
+        entityHandler = new EntityHandler();
+        playerController = new PlayerController(new Mage(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3));
+
+        inputProcessor.setGameVariables(playerController, world);
+        world.setContactListener(new MyContactListener(playerController, this, entityHandler));
         b2dr = new Box2DDebugRenderer();
         new B2WorldCreator(world, map, resourceManager, timer, eidAllocator);     //Creating world
     }
@@ -70,7 +68,7 @@ public class GameScreen implements Screen {
     public void show() {  }
 
     public void update(float delta) {
-        player.update(delta);
+        playerController.update(delta);
         world.step(1/60f, 6, 2);
         entityHandler.handleEntities();
         if (camNewPos != null) camStep();
@@ -90,7 +88,7 @@ public class GameScreen implements Screen {
 
         renderer.setView(gameCam);
         renderer.render();
-        player.render(game.batch);
+        playerController.render(game.batch);
 
         b2dr.render(world, gameCam.combined);
         game.batch.setProjectionMatrix(gameCam.combined);

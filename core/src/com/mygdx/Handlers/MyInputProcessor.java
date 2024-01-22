@@ -5,14 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.Game.Glissoar;
-import com.mygdx.Objects.Player;
 import com.mygdx.Screens.GameScreen;
 import com.mygdx.Tools.Constants;
 import com.mygdx.Tools.Constants.*;
 
 public class MyInputProcessor implements InputProcessor {
 
-    private Player player;
+    private PlayerController playerController;
     private World world;
     private final Glissoar game;
     public MyInputProcessor(Glissoar game) {
@@ -20,33 +19,29 @@ public class MyInputProcessor implements InputProcessor {
     }
 
     // Function called only by the game screen
-    public void setGameVariables(Player player, World world) {
-        this.player = player;
+    public void setGameVariables(PlayerController playerController, World world) {
+        this.playerController = playerController;
         this.world = world;
     }
+
     @Override
     public boolean keyDown (int keycode) {
-        if (player == null || world == null) return false;
+        if (playerController.getCharacter() == null || world == null) return false;
         if (game.getScreen() instanceof GameScreen) return keyDownGameScreen(keycode);
         return false;
     }
 
     @Override
     public boolean keyUp (int keycode) {
-        if (player == null || world == null) return false;
+        if (playerController.getCharacter() == null || world == null) return false;
         if (game.getScreen() instanceof GameScreen) return keyUpGameScreen(keycode);
         return false;
     }
 
     /*
      * Input polling for a smoother experience
-     * Only for the grab
      */
-    public void update() {
-        if (Gdx.input.isKeyPressed(Input.Keys.J)) {
-            if (player.getWallState() != 0) player.grab();
-        }
-    }
+    public void update() { }
 
     @Override
     public boolean keyTyped (char character) {
@@ -86,31 +81,21 @@ public class MyInputProcessor implements InputProcessor {
     public boolean keyDownGameScreen(int keycode) {
         switch (keycode) {
             case Input.Keys.SPACE:
-                if (player.isStateActive(PSTATE.ON_GROUND) && !player.isStateActive(PSTATE.WALL_GRABBED)) {
-                    player.jump();
+                if (playerController.getCharacter().isStateActive(PSTATE.ON_GROUND)) {
+                    playerController.getCharacter().jump();
                     break;
                 }
-                if (player.getWallState() != 0) {
-                    player.setMovementState(Constants.MSTATE.PREV);
-                    player.wallJump();
+                if (playerController.getCharacter().getWallState() != 0) {
+                    playerController.getCharacter().setMovementState(Constants.MSTATE.PREV);
+                    playerController.getCharacter().wallJump();
                     break;
                 }
-                if (player.isFalling()) player.glide();
                 break;
             case Input.Keys.D:
-                if (!player.isStateActive(PSTATE.WALL_GRABBED)) player.setMovementState(Constants.MSTATE.RIGHT);
+                playerController.getCharacter().setMovementState(Constants.MSTATE.RIGHT);
                 break;
             case Input.Keys.A:
-                if (!player.isStateActive(PSTATE.WALL_GRABBED)) player.setMovementState(Constants.MSTATE.LEFT);
-                break;
-            case Input.Keys.W:
-                if (player.isStateActive(PSTATE.WALL_GRABBED)) player.setMovementState(Constants.MSTATE.UP);
-                break;
-            case Input.Keys.S:
-                if (player.isStateActive(PSTATE.WALL_GRABBED)) player.setMovementState(Constants.MSTATE.DOWN);
-                break;
-            case Input.Keys.CAPS_LOCK:
-                //if (!player.isStateActive(PSTATE.DASH_CONSUMED)) player.dash();
+                playerController.getCharacter().setMovementState(Constants.MSTATE.LEFT);
                 break;
             default:
                 break;
@@ -121,35 +106,16 @@ public class MyInputProcessor implements InputProcessor {
     public boolean keyUpGameScreen(int keycode) {
         switch (keycode) {
             case Input.Keys.SPACE:
-                if (player.isStateActive(PSTATE.ON_GROUND) || player.isStateActive(PSTATE.DASHING) || player.isStateActive(PSTATE.STUNNED)) break;
-                player.fall();
-                if (player.isStateActive(PSTATE.GLIDE_CONSUMED)) player.removePlayerState(PSTATE.GLIDING);
+                if (playerController.getCharacter().isStateActive(PSTATE.ON_GROUND) || playerController.getCharacter().isStateActive(PSTATE.STUNNED)) break;
+                playerController.getCharacter().fall();
                 break;
             case Input.Keys.D:
-                if (Gdx.input.isKeyPressed(Input.Keys.A) && !player.isStateActive(PSTATE.WALL_GRABBED)) player.setMovementState(Constants.MSTATE.LEFT);
-                else if (player.isStateActive(PSTATE.GLIDING)) player.setMovementState(MSTATE.PREV);
-                else player.setMovementState(Constants.MSTATE.HSTILL);
+                if (Gdx.input.isKeyPressed(Input.Keys.A)) playerController.getCharacter().setMovementState(Constants.MSTATE.LEFT);
+                else playerController.getCharacter().setMovementState(Constants.MSTATE.HSTILL);
                 break;
             case Input.Keys.A:
-                if (Gdx.input.isKeyPressed(Input.Keys.D) && !player.isStateActive(PSTATE.WALL_GRABBED)) player.setMovementState(Constants.MSTATE.RIGHT);
-                else if (player.isStateActive(PSTATE.GLIDING)) player.setMovementState(MSTATE.PREV);
-                else player.setMovementState(Constants.MSTATE.HSTILL);
-                break;
-            case Input.Keys.J:
-                if (!player.isStateActive(PSTATE.WALL_GRABBED)) break;
-                if (Gdx.input.isKeyPressed(Input.Keys.D)) player.setMovementState(Constants.MSTATE.RIGHT);
-                if (Gdx.input.isKeyPressed(Input.Keys.A)) player.setMovementState(Constants.MSTATE.LEFT);
-                player.letGo();
-                break;
-            case Input.Keys.W:
-                if (!player.isStateActive(PSTATE.WALL_GRABBED)) break;
-                if (Gdx.input.isKeyPressed(Input.Keys.S)) player.setMovementState(Constants.MSTATE.DOWN);
-                else player.setMovementState(Constants.MSTATE.FSTILL);
-                break;
-            case Input.Keys.S:
-                if (!player.isStateActive(PSTATE.WALL_GRABBED)) break;
-                if (Gdx.input.isKeyPressed(Input.Keys.W)) player.setMovementState(Constants.MSTATE.UP);
-                else player.setMovementState(Constants.MSTATE.FSTILL);
+                if (Gdx.input.isKeyPressed(Input.Keys.D)) playerController.getCharacter().setMovementState(Constants.MSTATE.RIGHT);
+                else playerController.getCharacter().setMovementState(Constants.MSTATE.HSTILL);
                 break;
             default:
                 break;
