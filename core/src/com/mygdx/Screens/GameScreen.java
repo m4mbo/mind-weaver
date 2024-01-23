@@ -71,7 +71,7 @@ public class GameScreen implements Screen {
         playerController.update(delta);
         world.step(1/60f, 6, 2);
         entityHandler.handleEntities();
-        if (camNewPos != null) camStep();
+        gameCam.position.set(playerController.getCharacter().getPosition().x, playerController.getCharacter().getPosition().y + 40 / Constants.PPM, 0);
         gameCam.update();
         timer.update(delta);
         inputProcessor.update();
@@ -95,26 +95,6 @@ public class GameScreen implements Screen {
 
         game.batch.begin();
         game.batch.end();
-    }
-
-    public void repositionCamera(Vector2 position) {
-        camNewPos = position;
-    }
-
-    public void camStep() {
-        if (comparePosition(gameCam.position.x, camNewPos.x) && comparePosition(gameCam.position.y, camNewPos.y)) {
-            gameCam.position.set(camNewPos.x, camNewPos.y, 0);
-            camNewPos = null;
-            return;
-        }
-        if (comparePosition(gameCam.position.x, camNewPos.x)) gameCam.translate(0, (gameCam.position.y < camNewPos.y ? 24 : -24) / Constants.PPM, 0);
-        else if (comparePosition(gameCam.position.y, camNewPos.y)) gameCam.translate((gameCam.position.x < camNewPos.x ? 24 : -24) / Constants.PPM, 0, 0);
-        else gameCam.translate((gameCam.position.x < camNewPos.x ? 8 : -8) / Constants.PPM, (gameCam.position.y < camNewPos.y ? 24 : -24) / Constants.PPM, 0);
-    }
-
-    public boolean comparePosition(float pos1, float pos2) {
-        // Comparing position with slight offset
-        return (pos1 <= (pos2 + (24 / Constants.PPM))) && (pos1 >= (pos2 - (24 / Constants.PPM)));
     }
 
     @Override

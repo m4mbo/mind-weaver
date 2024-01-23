@@ -36,19 +36,11 @@ public class Mage extends PlayableCharacter {
         PolygonShape polygonShape = new PolygonShape();
 
         //Create body fixture
-        circleShape.setRadius(8 / Constants.PPM);
-        circleShape.setPosition(new Vector2(0, -8 / Constants.PPM));
-        fdef.friction = 0;  // No friction allows for players sliding next to walls
-        fdef.shape = circleShape;
-        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_CAMERA | Constants.BIT_CHECKPOINT;
-        b2body.createFixture(fdef).setUserData("player");
-
-        circleShape.setRadius(8 / Constants.PPM);
-        circleShape.setPosition(new Vector2(0, 8 / Constants.PPM));
-        fdef.friction = 0;  // No friction allows for players sliding next to walls
-        fdef.shape = circleShape;
-        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_CAMERA | Constants.BIT_CHECKPOINT;
-        b2body.createFixture(fdef).setUserData("player");
+        polygonShape.setAsBox(8 / Constants.PPM, 15 / Constants.PPM, new Vector2(0, 0), 0);
+        fdef.shape = polygonShape;
+        fdef.filter.categoryBits = Constants.BIT_CHARACTER;
+        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_CHECKPOINT;
+        b2body.createFixture(fdef).setUserData("mage");
 
         //Create player hitbox
         polygonShape.setAsBox(9 / Constants.PPM, 16 / Constants.PPM, new Vector2(0, 0), 0);
@@ -56,6 +48,13 @@ public class Mage extends PlayableCharacter {
         fdef.filter.maskBits = Constants.BIT_HAZARD;
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData("player_hb");
+
+        //Create mage range of vision
+        circleShape.setRadius(140 / Constants.PPM);
+        fdef.shape = circleShape;
+        fdef.isSensor = true;
+        fdef.filter.maskBits = Constants.BIT_CHARACTER;
+        b2body.createFixture(fdef).setUserData("vision");
 
         //Create right sensor
         polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(8.2f / Constants.PPM, 0), 0);
@@ -165,7 +164,7 @@ public class Mage extends PlayableCharacter {
     @Override
     public void die() {
         lives--;
-        if (lives == 0) return;     // Handle later
+        //if (lives == 0) return;     // Handle later
         respawn();
     }
 

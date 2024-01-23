@@ -1,5 +1,6 @@
 package com.mygdx.Objects;
 
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.Handlers.MyResourceManager;
 import com.mygdx.Sprites.B2Sprite;
 
@@ -18,4 +19,6 @@ public abstract class Entity extends B2Sprite {
     }
 
     public void die() {}
+
+    public Vector2 getPosition() { return b2body.getPosition(); }
 }

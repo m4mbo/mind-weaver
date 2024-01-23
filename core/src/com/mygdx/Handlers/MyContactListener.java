@@ -33,8 +33,6 @@ public class MyContactListener implements ContactListener {
             if (playerController.getCharacter().getMovementState() == MSTATE.PREV) playerController.getCharacter().setMovementState(MSTATE.HSTILL);
         } else if (fa.getUserData().equals("player_hb") || fb.getUserData().equals("player_hb")) {
             entityHandler.addEntityOperation(playerController.getCharacter(), "die");
-        } else if (fa.getUserData().equals("camera_section") || fb.getUserData().equals("camera_section")) {
-            screen.repositionCamera(fa.getUserData().equals("camera_section") ? fa.getBody().getPosition() : fb.getBody().getPosition());
         } else if (fa.getUserData().equals("checkpoint") || fb.getUserData().equals("checkpoint")) {
             ((Mage) playerController.getCharacter()).setCheckPoint(fa.getUserData().equals("checkpoint") ? fa.getBody().getPosition() : fb.getBody().getPosition());
         }

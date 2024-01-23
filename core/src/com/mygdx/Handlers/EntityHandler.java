@@ -4,7 +4,7 @@ import com.mygdx.Objects.Entity;
 
 import java.util.LinkedList;
 
-// Class to handle risky operation outside of world step
+// Class to handle risky operations outside of world step
 public class EntityHandler {
 
     LinkedList<EntityOp> entityOps;
