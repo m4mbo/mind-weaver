@@ -1,4 +1,4 @@
-package com.mygdx.Handlers;
+package com.mygdx.Interaction;
 
 import com.badlogic.gdx.Gdx;
 import com.mygdx.Interfaces.Publisher;

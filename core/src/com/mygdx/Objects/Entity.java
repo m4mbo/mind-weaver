@@ -1,7 +1,7 @@
 package com.mygdx.Objects;
 
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.Handlers.MyResourceManager;
+import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Sprites.B2Sprite;
 
 // Every entity has a sprite attached to it

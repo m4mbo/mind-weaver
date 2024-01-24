@@ -28,4 +28,5 @@ public class Constants {
     public static final short BIT_HAZARD = 4;
     public static final short BIT_CHECKPOINT = 8;
     public static final short BIT_GOBLIN = 16;
+    public static final short BIT_MAGE = 16;
 }

@@ -2,8 +2,8 @@ package com.mygdx.Objects;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.Handlers.MyResourceManager;
-import com.mygdx.Handlers.MyTimer;
+import com.mygdx.Tools.MyResourceManager;
+import com.mygdx.Interaction.MyTimer;
 import com.mygdx.Interfaces.Subscriber;
 import com.mygdx.Tools.Constants;
 import java.util.EnumSet;

@@ -5,8 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.Handlers.MyResourceManager;
-import com.mygdx.Handlers.MyTimer;
+import com.mygdx.Tools.MyResourceManager;
+import com.mygdx.Interaction.MyTimer;
 import com.mygdx.Tools.Constants;
 
 public class BaseGoblin extends PlayableCharacter{
@@ -32,7 +32,7 @@ public class BaseGoblin extends PlayableCharacter{
         polygonShape.setAsBox(8 / Constants.PPM, 15 / Constants.PPM, new Vector2(0, 0), 0);
         fdef.shape = polygonShape;
         fdef.filter.categoryBits = Constants.BIT_GOBLIN;
-        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_CHECKPOINT;
+        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_MAGE;
         b2body.createFixture(fdef).setUserData(id);
 
         fdef = new FixtureDef();
