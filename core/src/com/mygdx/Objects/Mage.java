@@ -38,6 +38,7 @@ public class Mage extends PlayableCharacter {
         //Create body fixture
         polygonShape.setAsBox(8 / Constants.PPM, 15 / Constants.PPM, new Vector2(0, 0), 0);
         fdef.shape = polygonShape;
+        fdef.friction = 0;
         fdef.filter.categoryBits = Constants.BIT_MAGE;
         fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_CHECKPOINT | Constants.BIT_GOBLIN;
         b2body.createFixture(fdef).setUserData(id);

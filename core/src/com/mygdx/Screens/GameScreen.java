@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -18,8 +19,10 @@ import com.mygdx.Interaction.MyContactListener;
 import com.mygdx.Interaction.MyInputProcessor;
 import com.mygdx.Interaction.MyTimer;
 import com.mygdx.Objects.BaseGoblin;
+import com.mygdx.Objects.Entity;
 import com.mygdx.Objects.Mage;
 import com.mygdx.Handlers.B2WorldHandler;
+import com.mygdx.Objects.PlayableCharacter;
 import com.mygdx.Tools.Constants;
 import com.mygdx.Tools.MyResourceManager;
 
@@ -96,8 +99,21 @@ public class GameScreen implements Screen {
         b2dr.render(world, gameCam.combined);
         game.batch.setProjectionMatrix(gameCam.combined);
 
+
         game.batch.begin();
         game.batch.end();
+
+        PlayableCharacter player = (PlayableCharacter) entityHandler.getEntity(0);
+
+        if (player.target != null) {
+            ShapeRenderer sr = new ShapeRenderer();
+            sr.setProjectionMatrix(gameCam.combined);
+            sr.begin(ShapeRenderer.ShapeType.Line);
+            sr.setColor(1, 0, 0, 1); // Red line
+            sr.line(player.target.getPosition().x, player.target.getPosition().y, player.getB2body().getPosition().x, player.getB2body().getPosition().y);
+            sr.end();
+        }
+
     }
 
     @Override

@@ -31,6 +31,7 @@ public class BaseGoblin extends PlayableCharacter{
         //Create body fixture
         polygonShape.setAsBox(8 / Constants.PPM, 15 / Constants.PPM, new Vector2(0, 0), 0);
         fdef.shape = polygonShape;
+        fdef.friction = 0;
         fdef.filter.categoryBits = Constants.BIT_GOBLIN;
         fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_MAGE;
         b2body.createFixture(fdef).setUserData(id);
@@ -84,7 +85,6 @@ public class BaseGoblin extends PlayableCharacter{
     }
 
     public void update(float delta) {
-
         // Capping y velocity
         if (b2body.getLinearVelocity().y < -Constants.MAX_SPEED_Y)
             b2body.setLinearVelocity(new Vector2(b2body.getLinearVelocity().x, -Constants.MAX_SPEED_Y));

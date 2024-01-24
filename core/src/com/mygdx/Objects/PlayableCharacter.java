@@ -16,7 +16,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     protected Constants.ASTATE currAState;     // Current animation state
     protected Constants.ASTATE prevAState;     // Previous animation state
     protected final EnumSet<Constants.PSTATE> playerStates;       // Set of player states
-    protected PlayableCharacter target;
+    public PlayableCharacter target;
 
     public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager) {
 
@@ -101,12 +101,10 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
 
     public void sendSignal() {
         final Vector2 targetPos = target.getPosition();
+
         RayCastCallback callback = new RayCastCallback() {
             @Override
             public float reportRayFixture(Fixture fixture, Vector2 vector2, Vector2 vector21, float v) {
-
-                System.out.println(fixture.getUserData());
-
                 if (fixture.getUserData().equals("ground") || fixture.getUserData().equals("hazard")) {
                     return 0;
                 }
@@ -116,7 +114,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
                 return -1;
             }
         };
-        world.rayCast(callback, targetPos, b2body.getPosition());
+        world.rayCast(callback, b2body.getPosition() , targetPos);
     }
 
     public void establishConnection() {
