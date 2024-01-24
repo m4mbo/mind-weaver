@@ -2,20 +2,17 @@ package com.mygdx.Handlers;
 
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Objects.Mage;
-import com.mygdx.Screens.GameScreen;
 import com.mygdx.Tools.Constants.*;
 
 public class MyContactListener implements ContactListener {
 
     private Fixture fa;
     private Fixture fb;
-    private final GameScreen screen;
     private final EntityHandler entityHandler;
     private final PlayerController playerController;
 
-    public MyContactListener(PlayerController playerController, GameScreen screen, EntityHandler entityHandler) {
+    public MyContactListener(PlayerController playerController, EntityHandler entityHandler) {
         this.playerController = playerController;
-        this.screen = screen;
         this.entityHandler = entityHandler;
     }
 
@@ -35,6 +32,8 @@ public class MyContactListener implements ContactListener {
             entityHandler.addEntityOperation(playerController.getCharacter(), "die");
         } else if (fa.getUserData().equals("checkpoint") || fb.getUserData().equals("checkpoint")) {
             ((Mage) playerController.getCharacter()).setCheckPoint(fa.getUserData().equals("checkpoint") ? fa.getBody().getPosition() : fb.getBody().getPosition());
+        } else if (fa.getUserData().equals("vision") || fb.getUserData().equals("vision")) {
+            System.out.println("here");
         }
     }
 

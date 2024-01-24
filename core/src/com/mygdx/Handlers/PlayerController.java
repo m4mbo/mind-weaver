@@ -20,6 +20,8 @@ public class PlayerController {
         return currCharacter;
     }
 
+    public void addCharacter(PlayableCharacter character) { characters.add(character); }
+
     public void setCharacter(PlayableCharacter character) {
         this.currCharacter = character;
     }

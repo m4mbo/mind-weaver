@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.Game.Glissoar;
 import com.mygdx.Handlers.*;
+import com.mygdx.Objects.BaseGoblin;
 import com.mygdx.Objects.Mage;
 import com.mygdx.Objects.PlayableCharacter;
 import com.mygdx.Tools.B2WorldCreator;
@@ -31,12 +32,11 @@ public class GameScreen implements Screen {
     private final MyInputProcessor inputProcessor;
     private final EntityHandler entityHandler;
     private final PlayerController playerController;
-    private Vector2 camNewPos;
+
     public GameScreen(Glissoar game, String stage, MyResourceManager resourceManager, MyInputProcessor inputProcessor) {
 
         this.game = game;
         this.inputProcessor = inputProcessor;
-        camNewPos = null;
 
         Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());      // Full-screen
 
@@ -57,9 +57,10 @@ public class GameScreen implements Screen {
         timer = new MyTimer();
         entityHandler = new EntityHandler();
         playerController = new PlayerController(new Mage(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3));
+        playerController.addCharacter(new BaseGoblin(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager));
 
         inputProcessor.setGameVariables(playerController, world);
-        world.setContactListener(new MyContactListener(playerController, this, entityHandler));
+        world.setContactListener(new MyContactListener(playerController, entityHandler));
         b2dr = new Box2DDebugRenderer();
         new B2WorldCreator(world, map, resourceManager, timer, eidAllocator);     //Creating world
     }

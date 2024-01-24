@@ -9,22 +9,15 @@ import com.mygdx.Handlers.MyResourceManager;
 import com.mygdx.Handlers.MyTimer;
 import com.mygdx.Tools.Constants;
 
-public class Mage extends PlayableCharacter {
+public class BaseGoblin extends PlayableCharacter{
 
-    private Vector2 currCheckPoint;
-    private int lives;
-
-    public Mage(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, int lives) {
+    public BaseGoblin(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager) {
         super(world, id, timer, myResourceManager);
-
-        this.lives = lives;
-
-        currCheckPoint = new Vector2(x / Constants.PPM, y / Constants.PPM);
 
         loadSprites();
 
         // Initializing sprite
-        setAnimation(TextureRegion.split(resourceManager.getTexture("player_idle"), 32, 32)[0], 1/5f, false, 1.25f);
+        setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_idle"), 32, 32)[0], 1/5f, false, 1.25f);
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, y / Constants.PPM);
@@ -38,15 +31,18 @@ public class Mage extends PlayableCharacter {
         //Create body fixture
         polygonShape.setAsBox(8 / Constants.PPM, 15 / Constants.PPM, new Vector2(0, 0), 0);
         fdef.shape = polygonShape;
+        fdef.filter.categoryBits = Constants.BIT_GOBLIN;
         fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_CHECKPOINT;
-        b2body.createFixture(fdef).setUserData("mage");
+        b2body.createFixture(fdef).setUserData(id);
+
+        fdef = new FixtureDef();
 
         //Create player hitbox
         polygonShape.setAsBox(9 / Constants.PPM, 16 / Constants.PPM, new Vector2(0, 0), 0);
         fdef.shape = polygonShape;
         fdef.filter.maskBits = Constants.BIT_HAZARD;
         fdef.isSensor = true;
-        b2body.createFixture(fdef).setUserData("player_hb");
+        b2body.createFixture(fdef).setUserData("goblin_hb");
 
         //Create mage range of vision
         circleShape.setRadius(140 / Constants.PPM);
@@ -80,11 +76,11 @@ public class Mage extends PlayableCharacter {
     @Override
     public void loadSprites() {
         // Loading all textures
-        resourceManager.loadTexture("player_run.png", "player_run");
-        resourceManager.loadTexture("player_idle.png", "player_idle");
-        resourceManager.loadTexture("player_jump.png", "player_jump");
-        resourceManager.loadTexture("player_land.png", "player_land");
-        resourceManager.loadTexture("player_fall.png", "player_fall");
+        resourceManager.loadTexture("player_run.png", "goblin_run");
+        resourceManager.loadTexture("player_idle.png", "goblin_idle");
+        resourceManager.loadTexture("player_jump.png", "goblin_jump");
+        resourceManager.loadTexture("player_land.png", "goblin_land");
+        resourceManager.loadTexture("player_fall.png", "goblin_fall");
     }
 
     public void update(float delta) {
@@ -139,33 +135,25 @@ public class Mage extends PlayableCharacter {
     public void handleAnimation() {
         switch (currAState) {
             case RUN:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("player_run"), 32, 32)[0], 1/14f, false, 1.25f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_run"), 32, 32)[0], 1/14f, false, 1.25f);
                 break;
             case IDLE:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("player_idle"), 32, 32)[0], 1/5f, false, 1.25f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_idle"), 32, 32)[0], 1/5f, false, 1.25f);
                 break;
             case JUMP:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("player_jump"), 32, 32)[0], 1/17f, true, 1.25f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_jump"), 32, 32)[0], 1/17f, true, 1.25f);
                 break;
             case FALL:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("player_fall"), 32, 32)[0], 1/5f, true, 1.25f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_fall"), 32, 32)[0], 1/5f, true, 1.25f);
                 break;
             case LAND:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("player_land"), 32, 32)[0], 1/14f, false, 1.25f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_land"), 32, 32)[0], 1/14f, false, 1.25f);
                 break;
         }
     }
 
-    public void respawn() {
-        b2body.setTransform(currCheckPoint, b2body.getAngle());
-    }
-
     @Override
-    public void die() {
-        lives--;
-        //if (lives == 0) return;     // Handle later
-        respawn();
-    }
+    public void die() { }
 
     public void notify(String flag) {
         switch (flag) {
@@ -179,6 +167,4 @@ public class Mage extends PlayableCharacter {
                 break;
         }
     }
-
-    public void setCheckPoint(Vector2 position) { currCheckPoint = position; }
 }
