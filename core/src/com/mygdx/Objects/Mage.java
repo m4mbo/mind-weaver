@@ -40,7 +40,7 @@ public class Mage extends PlayableCharacter {
         fdef.shape = polygonShape;
         fdef.filter.categoryBits = Constants.BIT_MAGE;
         fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_CHECKPOINT | Constants.BIT_GOBLIN;
-        b2body.createFixture(fdef).setUserData("mage");
+        b2body.createFixture(fdef).setUserData(id);
 
         //Create player hitbox
         polygonShape.setAsBox(9 / Constants.PPM, 16 / Constants.PPM, new Vector2(0, 0), 0);
@@ -74,7 +74,7 @@ public class Mage extends PlayableCharacter {
         polygonShape.setAsBox(6 / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -17 / Constants.PPM), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
-        fdef.filter.maskBits = Constants.BIT_GROUND;
+        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_GOBLIN;
         b2body.createFixture(fdef).setUserData("bottomSensor");
     }
 
@@ -101,6 +101,8 @@ public class Mage extends PlayableCharacter {
         } else if (!isStateActive(Constants.PSTATE.ON_GROUND)) {
             currAState = Constants.ASTATE.JUMP;
         }
+
+        if (target != null) sendSignal();
 
         if (isStateActive(Constants.PSTATE.STUNNED)) movementState = Constants.MSTATE.PREV;
 

@@ -6,7 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.Game.Glissoar;
 import com.mygdx.Handlers.EntityHandler;
-import com.mygdx.Handlers.PlayerController;
+import com.mygdx.Objects.PlayableCharacter;
 import com.mygdx.Screens.GameScreen;
 import com.mygdx.Tools.Constants;
 import com.mygdx.Tools.Constants.*;
@@ -81,23 +81,25 @@ public class MyInputProcessor implements InputProcessor {
 
     // Helper function to simply keyDown implementation
     public boolean keyDownGameScreen(int keycode) {
+
+        PlayableCharacter character = entityHandler.getCurrCharacter();
         switch (keycode) {
             case Input.Keys.SPACE:
-                if (entityHandler.getCurrCharacter().isStateActive(PSTATE.ON_GROUND)) {
-                    entityHandler.getCurrCharacter().jump();
+                if (character.isStateActive(PSTATE.ON_GROUND)) {
+                    character.jump();
                     break;
                 }
-                if (entityHandler.getCurrCharacter().getWallState() != 0) {
-                    entityHandler.getCurrCharacter().setMovementState(Constants.MSTATE.PREV);
-                    entityHandler.getCurrCharacter().wallJump();
+                if (character.getWallState() != 0) {
+                    character.setMovementState(Constants.MSTATE.PREV);
+                    character.wallJump();
                     break;
                 }
                 break;
             case Input.Keys.D:
-                entityHandler.getCurrCharacter().setMovementState(Constants.MSTATE.RIGHT);
+                character.setMovementState(Constants.MSTATE.RIGHT);
                 break;
             case Input.Keys.A:
-                entityHandler.getCurrCharacter().setMovementState(Constants.MSTATE.LEFT);
+                character.setMovementState(Constants.MSTATE.LEFT);
                 break;
             default:
                 break;
@@ -106,18 +108,19 @@ public class MyInputProcessor implements InputProcessor {
     }
 
     public boolean keyUpGameScreen(int keycode) {
+        PlayableCharacter character = entityHandler.getCurrCharacter();
         switch (keycode) {
             case Input.Keys.SPACE:
-                if (entityHandler.getCurrCharacter().isStateActive(PSTATE.ON_GROUND) || entityHandler.getCurrCharacter().isStateActive(PSTATE.STUNNED)) break;
-                entityHandler.getCurrCharacter().fall();
+                if (character.isStateActive(PSTATE.ON_GROUND) || character.isStateActive(PSTATE.STUNNED)) break;
+                character.fall();
                 break;
             case Input.Keys.D:
-                if (Gdx.input.isKeyPressed(Input.Keys.A)) entityHandler.getCurrCharacter().setMovementState(Constants.MSTATE.LEFT);
-                else entityHandler.getCurrCharacter().setMovementState(Constants.MSTATE.HSTILL);
+                if (Gdx.input.isKeyPressed(Input.Keys.A)) character.setMovementState(Constants.MSTATE.LEFT);
+                else character.setMovementState(Constants.MSTATE.HSTILL);
                 break;
             case Input.Keys.A:
-                if (Gdx.input.isKeyPressed(Input.Keys.D)) entityHandler.getCurrCharacter().setMovementState(Constants.MSTATE.RIGHT);
-                else entityHandler.getCurrCharacter().setMovementState(Constants.MSTATE.HSTILL);
+                if (Gdx.input.isKeyPressed(Input.Keys.D)) character.setMovementState(Constants.MSTATE.RIGHT);
+                else character.setMovementState(Constants.MSTATE.HSTILL);
                 break;
             default:
                 break;

@@ -19,6 +19,4 @@ public abstract class Entity extends B2Sprite {
     }
 
     public void die() {}
-
-    public Vector2 getPosition() { return b2body.getPosition(); }
 }

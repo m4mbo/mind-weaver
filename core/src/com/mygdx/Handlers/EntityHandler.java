@@ -1,9 +1,9 @@
 package com.mygdx.Handlers;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.Objects.Entity;
 import com.mygdx.Objects.PlayableCharacter;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -26,6 +26,15 @@ public class EntityHandler {
 
     public Entity getEntity(int id) {
         return entities.get(id);
+    }
+    
+    public Entity getEntity(Body b2body) {
+        for (Entity entity : entities.values()) {
+            if (entity.getB2body().equals(b2body)) {
+                return entity;
+            }
+        }        
+        return null;
     }
 
     public void addEntityOperation(Entity entity, String operation) {

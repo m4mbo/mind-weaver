@@ -19,7 +19,7 @@ import com.mygdx.Interaction.MyInputProcessor;
 import com.mygdx.Interaction.MyTimer;
 import com.mygdx.Objects.BaseGoblin;
 import com.mygdx.Objects.Mage;
-import com.mygdx.Tools.B2WorldCreator;
+import com.mygdx.Handlers.B2WorldHandler;
 import com.mygdx.Tools.Constants;
 import com.mygdx.Tools.MyResourceManager;
 
@@ -64,7 +64,7 @@ public class GameScreen implements Screen {
         inputProcessor.setGameVariables(entityHandler, world);
         world.setContactListener(new MyContactListener(entityHandler));
         b2dr = new Box2DDebugRenderer();
-        new B2WorldCreator(world, map, resourceManager, timer, eidAllocator);     //Creating world
+        new B2WorldHandler(world, map, resourceManager, timer, eidAllocator);     //Creating world
     }
 
     @Override

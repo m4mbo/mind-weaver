@@ -2,6 +2,7 @@ package com.mygdx.Sprites;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.Tools.Constants;
 
@@ -37,4 +38,8 @@ public abstract class B2Sprite {
         batch.draw(animation.getFrame(), facingRight ? b2body.getPosition().x - ((width / resize) / Constants.PPM) / 2 : b2body.getPosition().x + ((width / resize) / Constants.PPM) / 2 , b2body.getPosition().y - ((height / resize) / Constants.PPM) / 2, (facingRight ? width : -width) / Constants.PPM, height / Constants.PPM);
         batch.end();
     }
+
+    public Vector2 getPosition() { return b2body.getPosition(); }
+
+    public Body getB2body() { return b2body; }
 }

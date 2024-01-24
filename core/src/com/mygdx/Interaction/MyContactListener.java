@@ -34,8 +34,10 @@ public class MyContactListener implements ContactListener {
             entityHandler.addEntityOperation(character, "die");
         } else if (fa.getUserData().equals("checkpoint") || fb.getUserData().equals("checkpoint")) {
             ((Mage) character).setCheckPoint(fa.getUserData().equals("checkpoint") ? fa.getBody().getPosition() : fb.getBody().getPosition());
-        } else if (fa.getUserData().equals("vision") || fb.getUserData().equals("vision")) {
-            System.out.println("here");
+        } else if (fa.getUserData().equals("vision")) {
+            ((PlayableCharacter) entityHandler.getEntity(fa.getBody())).setTarget((PlayableCharacter) entityHandler.getEntity((Integer) fb.getUserData()));
+        } else if (fb.getUserData().equals("vision")) {
+            ((PlayableCharacter) entityHandler.getEntity(fb.getBody())).setTarget((PlayableCharacter) entityHandler.getEntity((Integer) fa.getUserData()));
         }
     }
 
@@ -50,6 +52,10 @@ public class MyContactListener implements ContactListener {
             character.setWallState(0);
         } else if (fa.getUserData().equals("bottomSensor") || fb.getUserData().equals("bottomSensor")) {
             if (character.isInAir()) character.removePlayerState(PSTATE.ON_GROUND);
+        } else if (fa.getUserData().equals("vision")) {
+            ((PlayableCharacter) entityHandler.getEntity(fa.getBody())).removeTarget();
+        } else if (fb.getUserData().equals("vision")) {
+            ((PlayableCharacter) entityHandler.getEntity(fb.getBody())).removeTarget();
         }
     }
 
