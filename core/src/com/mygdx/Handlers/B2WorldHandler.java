@@ -28,7 +28,7 @@ public class B2WorldHandler {
             shape.setAsBox((rect.getWidth() / 2) / Constants.PPM, (rect.getHeight() / 2) / Constants.PPM);
             fdef.shape = shape;
             fdef.filter.categoryBits = Constants.BIT_GROUND;
-            body.createFixture(fdef).setUserData("floor");
+            body.createFixture(fdef).setUserData("ground");
         }
 
         // Create spikes

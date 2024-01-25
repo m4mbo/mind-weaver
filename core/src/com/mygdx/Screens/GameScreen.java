@@ -103,17 +103,6 @@ public class GameScreen implements Screen {
         game.batch.begin();
         game.batch.end();
 
-        PlayableCharacter player = (PlayableCharacter) entityHandler.getEntity(0);
-
-        if (player.target != null) {
-            ShapeRenderer sr = new ShapeRenderer();
-            sr.setProjectionMatrix(gameCam.combined);
-            sr.begin(ShapeRenderer.ShapeType.Line);
-            sr.setColor(1, 0, 0, 1); // Red line
-            sr.line(player.target.getPosition().x, player.target.getPosition().y, player.getB2body().getPosition().x, player.getB2body().getPosition().y);
-            sr.end();
-        }
-
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Interaction.MyTimer;
 import com.mygdx.Interfaces.Subscriber;
 import com.mygdx.Tools.Constants;
+import com.mygdx.Tools.ShapeDrawer;
 import java.util.EnumSet;
 
 public abstract class PlayableCharacter extends Entity implements Subscriber {
@@ -16,7 +17,9 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     protected Constants.ASTATE currAState;     // Current animation state
     protected Constants.ASTATE prevAState;     // Previous animation state
     protected final EnumSet<Constants.PSTATE> playerStates;       // Set of player states
-    public PlayableCharacter target;
+    protected PlayableCharacter target;
+    private boolean collision;
+    private ShapeDrawer shapeDrawer;
 
     public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager) {
 
@@ -31,6 +34,10 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         currAState = Constants.ASTATE.IDLE;
         prevAState = Constants.ASTATE.IDLE;
         movementState = Constants.MSTATE.HSTILL;
+
+        shapeDrawer = new ShapeDrawer();
+
+        collision = false;
 
         wallState = 0;
     }
@@ -101,23 +108,29 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
 
     public void sendSignal() {
         final Vector2 targetPos = target.getPosition();
-
         RayCastCallback callback = new RayCastCallback() {
             @Override
             public float reportRayFixture(Fixture fixture, Vector2 vector2, Vector2 vector21, float v) {
                 if (fixture.getUserData().equals("ground") || fixture.getUserData().equals("hazard")) {
+                    PlayableCharacter.this.collision = true;
                     return 0;
                 }
                 if (fixture.getUserData() instanceof Integer) {
                     if ((Integer) fixture.getUserData() == target.getID()) establishConnection();
                 }
-                return -1;
+                return 1;
             }
         };
         world.rayCast(callback, b2body.getPosition() , targetPos);
+        if (!collision) {
+            establishConnection();
+        } else {
+            collision = false;
+        }
     }
 
     public void establishConnection() {
         System.out.println("Connection established");
+        shapeDrawer.addLine();
     }
 }
