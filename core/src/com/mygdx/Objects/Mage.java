@@ -8,14 +8,15 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Interaction.MyTimer;
 import com.mygdx.Tools.Constants;
+import com.mygdx.Tools.ShapeDrawer;
 
 public class Mage extends PlayableCharacter {
 
     private Vector2 currCheckPoint;
     private int lives;
 
-    public Mage(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, int lives) {
-        super(world, id, timer, myResourceManager);
+    public Mage(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, int lives, ShapeDrawer shapeDrawer) {
+        super(world, id, timer, myResourceManager, shapeDrawer);
 
         this.lives = lives;
 

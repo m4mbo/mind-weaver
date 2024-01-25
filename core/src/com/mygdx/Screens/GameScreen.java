@@ -25,6 +25,7 @@ import com.mygdx.Handlers.B2WorldHandler;
 import com.mygdx.Objects.PlayableCharacter;
 import com.mygdx.Tools.Constants;
 import com.mygdx.Tools.MyResourceManager;
+import com.mygdx.Tools.ShapeDrawer;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -38,6 +39,7 @@ public class GameScreen implements Screen {
     private final Box2DDebugRenderer b2dr;
     private final MyInputProcessor inputProcessor;
     private final EntityHandler entityHandler;
+    private final ShapeDrawer shapeDrawer;
 
     public GameScreen(Glissoar game, String stage, MyResourceManager resourceManager, MyInputProcessor inputProcessor) {
 
@@ -60,9 +62,10 @@ public class GameScreen implements Screen {
         gameCam.position.set(2, 77, 0);
 
         AtomicInteger eidAllocator = new AtomicInteger();
+        shapeDrawer = new ShapeDrawer(gameCam);
         timer = new MyTimer();
-        entityHandler = new EntityHandler(new Mage(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3));
-        entityHandler.addEntity(new BaseGoblin(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager));
+        entityHandler = new EntityHandler(new Mage(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3, shapeDrawer));
+        entityHandler.addEntity(new BaseGoblin(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, shapeDrawer));
 
         inputProcessor.setGameVariables(entityHandler, world);
         world.setContactListener(new MyContactListener(entityHandler));
@@ -99,9 +102,10 @@ public class GameScreen implements Screen {
         b2dr.render(world, gameCam.combined);
         game.batch.setProjectionMatrix(gameCam.combined);
 
-
         game.batch.begin();
         game.batch.end();
+
+        shapeDrawer.render(game.batch);
 
     }
 

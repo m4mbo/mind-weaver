@@ -21,7 +21,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     private boolean collision;
     private ShapeDrawer shapeDrawer;
 
-    public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager) {
+    public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager, ShapeDrawer shapeDrawer) {
 
         super(id, myResourceManager);
         this.timer = timer;
@@ -35,7 +35,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         prevAState = Constants.ASTATE.IDLE;
         movementState = Constants.MSTATE.HSTILL;
 
-        shapeDrawer = new ShapeDrawer();
+        this.shapeDrawer = shapeDrawer;
 
         collision = false;
 
@@ -131,6 +131,6 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
 
     public void establishConnection() {
         System.out.println("Connection established");
-        shapeDrawer.addLine();
+        shapeDrawer.drawLine(target.getPosition(), b2body.getPosition(), 2);
     }
 }

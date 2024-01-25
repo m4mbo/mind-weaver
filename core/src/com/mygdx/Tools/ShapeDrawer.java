@@ -1,5 +1,6 @@
 package com.mygdx.Tools;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -9,16 +10,19 @@ public class ShapeDrawer {
 
     private ShapeRenderer sr;
     private LinkedList<Shape> shapes;
+    private OrthographicCamera gameCam;
 
-    public ShapeDrawer() {
+    public ShapeDrawer(OrthographicCamera gameCam) {
         shapes = new LinkedList<>();
         sr = new ShapeRenderer();
+        this.gameCam = gameCam;
     }
 
     public void render(SpriteBatch batch) {
         for (Shape shape : shapes) {
             shape.render(batch);
         }
+        shapes.clear();
     }
 
     public void drawLine(Vector2 start, Vector2 end, float width) {
@@ -41,7 +45,11 @@ public class ShapeDrawer {
 
         @Override
         public void render(SpriteBatch batch) {
-            sr.begin();
+            sr.setProjectionMatrix(gameCam.combined);
+            sr.begin(ShapeRenderer.ShapeType.Line);
+            sr.line(start, end);
+            sr.setColor(1, 0, 0, 1);
+            sr.end();
         }
     }
 

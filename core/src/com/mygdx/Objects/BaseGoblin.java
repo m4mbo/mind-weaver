@@ -8,11 +8,12 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Interaction.MyTimer;
 import com.mygdx.Tools.Constants;
+import com.mygdx.Tools.ShapeDrawer;
 
 public class BaseGoblin extends PlayableCharacter{
 
-    public BaseGoblin(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager) {
-        super(world, id, timer, myResourceManager);
+    public BaseGoblin(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, ShapeDrawer shapeDrawer) {
+        super(world, id, timer, myResourceManager, shapeDrawer);
 
         loadSprites();
 
