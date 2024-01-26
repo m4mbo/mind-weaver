@@ -1,9 +1,9 @@
-package com.mygdx.Interaction;
+package com.mygdx.Logic;
 
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Handlers.EntityHandler;
-import com.mygdx.Objects.Mage;
-import com.mygdx.Objects.PlayableCharacter;
+import com.mygdx.RoleCast.Mage;
+import com.mygdx.RoleCast.PlayableCharacter;
 import com.mygdx.Tools.Constants.*;
 
 public class MyContactListener implements ContactListener {

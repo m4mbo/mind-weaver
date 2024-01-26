@@ -1,10 +1,8 @@
-package com.mygdx.Interaction;
+package com.mygdx.Logic;
 
-import com.badlogic.gdx.Gdx;
 import com.mygdx.Interfaces.Publisher;
 import com.mygdx.Interfaces.Subscriber;
-import com.mygdx.Tools.Constants;
-import com.mygdx.Tools.Constants.*;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 

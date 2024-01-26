@@ -4,7 +4,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.Interaction.MyTimer;
+import com.mygdx.Logic.MyTimer;
 import com.mygdx.Tools.Constants;
 import com.mygdx.Tools.MyResourceManager;
 

@@ -1,4 +1,4 @@
-package com.mygdx.Interaction;
+package com.mygdx.Logic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -6,7 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.Game.Glissoar;
 import com.mygdx.Handlers.EntityHandler;
-import com.mygdx.Objects.PlayableCharacter;
+import com.mygdx.RoleCast.PlayableCharacter;
 import com.mygdx.Screens.GameScreen;
 import com.mygdx.Tools.Constants;
 import com.mygdx.Tools.Constants.*;

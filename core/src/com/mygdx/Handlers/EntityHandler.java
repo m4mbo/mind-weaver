@@ -2,8 +2,8 @@ package com.mygdx.Handlers;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.mygdx.Objects.Entity;
-import com.mygdx.Objects.PlayableCharacter;
+import com.mygdx.RoleCast.Entity;
+import com.mygdx.RoleCast.PlayableCharacter;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Stack;

@@ -1,6 +1,5 @@
-package com.mygdx.Objects;
+package com.mygdx.RoleCast;
 
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Sprites.B2Sprite;
 
