@@ -1,6 +1,6 @@
-package com.mygdx.Objects;
+package com.mygdx.RoleCast;
 
-import com.mygdx.Handlers.MyResourceManager;
+import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Sprites.B2Sprite;
 
 // Every entity has a sprite attached to it

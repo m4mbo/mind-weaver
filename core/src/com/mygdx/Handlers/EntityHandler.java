@@ -1,18 +1,44 @@
 package com.mygdx.Handlers;
 
-import com.mygdx.Objects.Entity;
-import com.mygdx.Objects.Player;
-import sun.tools.jconsole.inspector.XOperations;
-
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.mygdx.RoleCast.Entity;
+import com.mygdx.RoleCast.PlayableCharacter;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Stack;
 
-// Class to handle risky operation outside of world step
+// Class to handle risky operations outside world step and map entities to their id
 public class EntityHandler {
+    private HashMap<Integer, Entity> entities;
+    private LinkedList<EntityOp> entityOps;
+    private Stack<CharacterPair> characterChain;    // Chain of current and prev characters
 
-    LinkedList<EntityOp> entityOps;
+    public EntityHandler () {}
 
-    public EntityHandler () {
+    public void initializeHandler(PlayableCharacter currCharacter) {
         entityOps = new LinkedList<>();
+        entities = new HashMap<>();
+        characterChain = new Stack<>();
+        characterChain.add(new CharacterPair(currCharacter, null));     // Mage will have the previous character as null
+        addEntity(currCharacter);
+    }
+
+    public void addEntity(Entity entity) {
+        entities.put(entity.getID(), entity);
+    }
+
+    public Entity getEntity(int id) {
+        return entities.get(id);
+    }
+    
+    public Entity getEntity(Body b2body) {
+        for (Entity entity : entities.values()) {
+            if (entity.getB2body().equals(b2body)) {
+                return entity;
+            }
+        }        
+        return null;
     }
 
     public void addEntityOperation(Entity entity, String operation) {
@@ -23,11 +49,36 @@ public class EntityHandler {
         for (EntityOp entityOp : entityOps) {
             if (entityOp.operation.equals("die")) {
                 entityOp.entity.die();
-            } else if (entityOp.operation.equals("wallclimb")) {
-                ((Player) entityOp.entity).wallClimb();
+            } else if (entityOp.operation.equals("teleport")) {
+
             }
         }
         entityOps.clear();
+    }
+
+    public boolean characterRollback() {
+        if (characterChain.peek().prevCharacter == null) return false;
+        characterChain.pop();
+        return true;
+    }
+    public void setCurrCharacter(PlayableCharacter currCharacter) {
+        characterChain.add(new CharacterPair(currCharacter, characterChain.peek().currCharacter));
+    }
+
+    public PlayableCharacter getCurrCharacter() {
+        return characterChain.peek().currCharacter;
+    }
+
+    public void update(float delta) {
+        for (Entity entity : entities.values()) {
+            entity.update(delta);
+        }
+    }
+
+    public void render(SpriteBatch batch) {
+        for (Entity entity : entities.values()) {
+            entity.render(batch);
+        }
     }
 
     private static class EntityOp {
@@ -39,4 +90,13 @@ public class EntityHandler {
         }
     }
 
+    private class CharacterPair {
+        PlayableCharacter currCharacter;
+        PlayableCharacter prevCharacter;
+
+        public CharacterPair(PlayableCharacter currCharacter, PlayableCharacter prevCharacter) {
+            this.currCharacter = currCharacter;
+            this.prevCharacter = prevCharacter;
+        }
+    }
 }

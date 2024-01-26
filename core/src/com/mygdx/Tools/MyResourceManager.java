@@ -1,4 +1,4 @@
-package com.mygdx.Handlers;
+package com.mygdx.Tools;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -9,8 +9,8 @@ import java.util.HashMap;
 public class MyResourceManager {
 
     // Hash map for efficient texture and sound lookup
-    private HashMap<String, Texture> textures;
-    private HashMap<String, Sound> sounds;
+    private final HashMap<String, Texture> textures;
+    private final HashMap<String, Sound> sounds;
 
     public MyResourceManager() {
         textures = new HashMap<>();
