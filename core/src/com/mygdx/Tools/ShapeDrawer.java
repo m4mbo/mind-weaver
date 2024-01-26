@@ -48,7 +48,7 @@ public class ShapeDrawer {
             sr.setProjectionMatrix(gameCam.combined);
             sr.begin(ShapeRenderer.ShapeType.Line);
             sr.line(start, end);
-            sr.setColor(1, 0, 0, 1);
+            sr.setColor(90/255f, 34/255f, 139/255f, 1);
             sr.end();
         }
     }
