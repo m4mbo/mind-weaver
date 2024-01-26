@@ -84,53 +84,6 @@ public class BaseGoblin extends PlayableCharacter{
         resourceManager.loadTexture("player_fall.png", "goblin_fall");
     }
 
-    public void update(float delta) {
-        // Capping y velocity
-        if (b2body.getLinearVelocity().y < -Constants.MAX_SPEED_Y)
-            b2body.setLinearVelocity(new Vector2(b2body.getLinearVelocity().x, -Constants.MAX_SPEED_Y));
-
-        // Animation priority
-        if (isFalling()) {
-            currAState = Constants.ASTATE.FALL;
-            b2body.setLinearDamping(0);
-        } else if (!isStateActive(Constants.PSTATE.ON_GROUND)) {
-            currAState = Constants.ASTATE.JUMP;
-        }
-
-        if (isStateActive(Constants.PSTATE.STUNNED)) movementState = Constants.MSTATE.PREV;
-
-        switch (movementState) {
-            case LEFT:
-                if (isStateActive(Constants.PSTATE.ON_GROUND) && !isStateActive(Constants.PSTATE.LANDING)) currAState = Constants.ASTATE.RUN;
-                facingRight = false;
-                moveLeft();
-                break;
-            case RIGHT:
-                if (isStateActive(Constants.PSTATE.ON_GROUND) && !isStateActive(Constants.PSTATE.LANDING)) currAState = Constants.ASTATE.RUN;
-                facingRight = true;
-                moveRight();
-                break;
-            case PREV:
-                b2body.setLinearVelocity(b2body.getLinearVelocity().x, b2body.getLinearVelocity().y);
-                break;
-            case HSTILL:
-                b2body.setLinearVelocity(0, b2body.getLinearVelocity().y);
-                if (!isStateActive(Constants.PSTATE.ON_GROUND) || isStateActive(Constants.PSTATE.LANDING)) break;
-                else currAState = Constants.ASTATE.IDLE;
-                break;
-            case FSTILL:
-                b2body.setLinearVelocity(0, 0);
-                break;
-        }
-
-        if (currAState != prevAState) {
-            handleAnimation();
-            prevAState = currAState;
-        }
-        // Update the animation
-        animation.update(delta);
-    }
-
     @Override
     public void handleAnimation() {
         switch (currAState) {

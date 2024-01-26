@@ -49,6 +49,56 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
 
     public void loadSprites() {}
 
+    public void update(float delta) {
+
+        // Capping y velocity
+        if (b2body.getLinearVelocity().y < -Constants.MAX_SPEED_Y)
+            b2body.setLinearVelocity(new Vector2(b2body.getLinearVelocity().x, -Constants.MAX_SPEED_Y));
+
+        // Animation priority
+        if (isFalling()) {
+            currAState = Constants.ASTATE.FALL;
+            b2body.setLinearDamping(0);
+        } else if (!isStateActive(Constants.PSTATE.ON_GROUND)) {
+            currAState = Constants.ASTATE.JUMP;
+        }
+
+        if (target != null) sendSignal();
+
+        if (isStateActive(Constants.PSTATE.STUNNED)) movementState = Constants.MSTATE.PREV;
+
+        switch (movementState) {
+            case LEFT:
+                if (isStateActive(Constants.PSTATE.ON_GROUND) && !isStateActive(Constants.PSTATE.LANDING)) currAState = Constants.ASTATE.RUN;
+                facingRight = false;
+                moveLeft();
+                break;
+            case RIGHT:
+                if (isStateActive(Constants.PSTATE.ON_GROUND) && !isStateActive(Constants.PSTATE.LANDING)) currAState = Constants.ASTATE.RUN;
+                facingRight = true;
+                moveRight();
+                break;
+            case PREV:
+                b2body.setLinearVelocity(b2body.getLinearVelocity().x, b2body.getLinearVelocity().y);
+                break;
+            case HSTILL:
+                b2body.setLinearVelocity(0, b2body.getLinearVelocity().y);
+                if (!isStateActive(Constants.PSTATE.ON_GROUND) || isStateActive(Constants.PSTATE.LANDING)) break;
+                else currAState = Constants.ASTATE.IDLE;
+                break;
+            case FSTILL:
+                b2body.setLinearVelocity(0, 0);
+                break;
+        }
+
+        if (currAState != prevAState) {
+            handleAnimation();
+            prevAState = currAState;
+        }
+        // Update the animation
+        animation.update(delta);
+    }
+
     public void land() {
         addPlayerState(Constants.PSTATE.ON_GROUND);
         addPlayerState(Constants.PSTATE.LANDING);
@@ -119,7 +169,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
 
     public void establishConnection() {
         addPlayerState(Constants.PSTATE.EOT);
-        shapeDrawer.drawLine(target.getPosition(), b2body.getPosition(), 2);
+        shapeDrawer.drawSineWave(target.getPosition(), b2body.getPosition(), 0.1f, 0.2f, 2 / Constants.PPM, 2 / Constants.PPM, 2 / Constants.PPM);
     }
 
     @Override

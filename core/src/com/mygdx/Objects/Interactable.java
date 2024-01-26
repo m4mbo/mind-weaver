@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 public abstract class Interactable extends B2Sprite {
 
-    private LinkedList<Reactable> reactables;   
+    private LinkedList<Reactable> reactables;
 
     public Interactable() {
         reactables = new LinkedList<>();
