@@ -1,7 +1,10 @@
 package com.mygdx.Objects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.Handlers.EntityHandler;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Interaction.MyTimer;
 import com.mygdx.Interfaces.Subscriber;
@@ -18,15 +21,17 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     protected Constants.ASTATE prevAState;     // Previous animation state
     protected final EnumSet<Constants.PSTATE> playerStates;       // Set of player states
     protected PlayableCharacter target;
-    private boolean collision;
-    private ShapeDrawer shapeDrawer;
+    private boolean collision;      // Helper boolean variable for rayCasting
+    private final ShapeDrawer shapeDrawer;
+    private final EntityHandler entityHandler;
 
-    public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager, ShapeDrawer shapeDrawer) {
+    public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager, ShapeDrawer shapeDrawer, EntityHandler entityHandler) {
 
         super(id, myResourceManager);
         this.timer = timer;
         this.world = world;
         this.target = null;
+        this.entityHandler = entityHandler;
 
         // Initializing states
         playerStates = EnumSet.noneOf(Constants.PSTATE.class);
@@ -84,9 +89,62 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         else b2body.setLinearVelocity(-Constants.MAX_SPEED_X, b2body.getLinearVelocity().y);
     }
 
-    public boolean isFalling() { return b2body.getLinearVelocity().y < 0; }
+    public void removeTarget() {
+        removePlayerState(Constants.PSTATE.EOT);
+        target = null;
+    }
 
-    public boolean isInAir() { return b2body.getLinearVelocity().y != 0; }
+    public void sendSignal() {
+        final Vector2 targetPos = target.getPosition();
+        RayCastCallback callback = new RayCastCallback() {
+            @Override
+            public float reportRayFixture(Fixture fixture, Vector2 vector2, Vector2 vector21, float v) {
+                if (fixture.getUserData().equals("ground") || fixture.getUserData().equals("hazard")) {
+                    PlayableCharacter.this.collision = true;
+                    return 0;
+                }
+                return 1;
+            }
+        };
+        world.rayCast(callback, b2body.getPosition() , targetPos);
+        if (!collision) {
+            establishConnection();
+        } else {
+            removePlayerState(Constants.PSTATE.EOT);
+            if (entityHandler.characterRollback()) target.looseControl();
+
+            collision = false;
+        }
+    }
+
+    public void establishConnection() {
+        addPlayerState(Constants.PSTATE.EOT);
+        shapeDrawer.drawLine(target.getPosition(), b2body.getPosition(), 2);
+    }
+
+    @Override
+    public void notify(String flag) {
+        switch (flag) {
+            case "stun":
+                removePlayerState(Constants.PSTATE.STUNNED);
+                if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = Constants.MSTATE.RIGHT;
+                if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = Constants.MSTATE.LEFT;
+                break;
+            case "land":
+                removePlayerState(Constants.PSTATE.LANDING);
+                break;
+            case "stop":
+                movementState = Constants.MSTATE.HSTILL;
+                break;
+        }
+    }
+
+    public void looseControl() {
+        movementState = Constants.MSTATE.PREV;
+        timer.start(0.4f, "stop", this);
+    }
+
+    public boolean isFalling() { return b2body.getLinearVelocity().y < 0; }
 
     public void setWallState(int wallState) { this.wallState = wallState; }
 
@@ -104,33 +162,5 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
 
     public void setTarget(PlayableCharacter character) { target = character; }
 
-    public void removeTarget() { target = null; }
-
-    public void sendSignal() {
-        final Vector2 targetPos = target.getPosition();
-        RayCastCallback callback = new RayCastCallback() {
-            @Override
-            public float reportRayFixture(Fixture fixture, Vector2 vector2, Vector2 vector21, float v) {
-                if (fixture.getUserData().equals("ground") || fixture.getUserData().equals("hazard")) {
-                    PlayableCharacter.this.collision = true;
-                    return 0;
-                }
-                if (fixture.getUserData() instanceof Integer) {
-                    if ((Integer) fixture.getUserData() == target.getID()) establishConnection();
-                }
-                return 1;
-            }
-        };
-        world.rayCast(callback, b2body.getPosition() , targetPos);
-        if (!collision) {
-            establishConnection();
-        } else {
-            collision = false;
-        }
-    }
-
-    public void establishConnection() {
-        System.out.println("Connection established");
-        shapeDrawer.drawLine(target.getPosition(), b2body.getPosition(), 2);
-    }
+    public PlayableCharacter getTarget() { return target; }
 }

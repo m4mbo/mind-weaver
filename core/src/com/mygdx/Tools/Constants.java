@@ -16,7 +16,8 @@ public class Constants {
     }
     // Player state flag
     public enum PSTATE {
-        STUNNED, ON_GROUND, LANDING
+        STUNNED, ON_GROUND, LANDING,
+        EOT // Eyes on target
     }
     // Animation state flag
     public enum ASTATE {

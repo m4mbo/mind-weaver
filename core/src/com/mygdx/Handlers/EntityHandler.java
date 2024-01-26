@@ -6,17 +6,21 @@ import com.mygdx.Objects.Entity;
 import com.mygdx.Objects.PlayableCharacter;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Stack;
 
 // Class to handle risky operations outside world step and map entities to their id
 public class EntityHandler {
     private HashMap<Integer, Entity> entities;
     private LinkedList<EntityOp> entityOps;
-    private PlayableCharacter currCharacter;
+    private Stack<CharacterPair> characterChain;    // Chain of current and prev characters
 
-    public EntityHandler (PlayableCharacter currCharacter) {
+    public EntityHandler () {}
+
+    public void initializeHandler(PlayableCharacter currCharacter) {
         entityOps = new LinkedList<>();
         entities = new HashMap<>();
-        this.currCharacter = currCharacter;
+        characterChain = new Stack<>();
+        characterChain.add(new CharacterPair(currCharacter, null));     // Mage will have the previous character as null
         addEntity(currCharacter);
     }
 
@@ -52,21 +56,17 @@ public class EntityHandler {
         entityOps.clear();
     }
 
-    private void setCurrCharacter(PlayableCharacter character) {
-        currCharacter = character;
+    public boolean characterRollback() {
+        if (characterChain.peek().prevCharacter == null) return false;
+        characterChain.pop();
+        return true;
+    }
+    public void setCurrCharacter(PlayableCharacter currCharacter) {
+        characterChain.add(new CharacterPair(currCharacter, characterChain.peek().currCharacter));
     }
 
     public PlayableCharacter getCurrCharacter() {
-        return currCharacter;
-    }
-
-    private static class EntityOp {
-        public Entity entity;
-        public String operation;
-        public EntityOp(Entity entity, String op) {
-            this.entity = entity;
-            this.operation = op;
-        }
+        return characterChain.peek().currCharacter;
     }
 
     public void update(float delta) {
@@ -81,4 +81,22 @@ public class EntityHandler {
         }
     }
 
+    private static class EntityOp {
+        public Entity entity;
+        public String operation;
+        public EntityOp(Entity entity, String op) {
+            this.entity = entity;
+            this.operation = op;
+        }
+    }
+
+    private class CharacterPair {
+        PlayableCharacter currCharacter;
+        PlayableCharacter prevCharacter;
+
+        public CharacterPair(PlayableCharacter currCharacter, PlayableCharacter prevCharacter) {
+            this.currCharacter = currCharacter;
+            this.prevCharacter = prevCharacter;
+        }
+    }
 }

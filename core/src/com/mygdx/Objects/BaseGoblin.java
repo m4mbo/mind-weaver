@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.Handlers.EntityHandler;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Interaction.MyTimer;
 import com.mygdx.Tools.Constants;
@@ -12,8 +13,8 @@ import com.mygdx.Tools.ShapeDrawer;
 
 public class BaseGoblin extends PlayableCharacter{
 
-    public BaseGoblin(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, ShapeDrawer shapeDrawer) {
-        super(world, id, timer, myResourceManager, shapeDrawer);
+    public BaseGoblin(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, ShapeDrawer shapeDrawer, EntityHandler entityHandler) {
+        super(world, id, timer, myResourceManager, shapeDrawer, entityHandler);
 
         loadSprites();
 
@@ -34,7 +35,7 @@ public class BaseGoblin extends PlayableCharacter{
         fdef.shape = polygonShape;
         fdef.friction = 0;
         fdef.filter.categoryBits = Constants.BIT_GOBLIN;
-        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_MAGE;
+        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_MAGE | Constants.BIT_GOBLIN;
         b2body.createFixture(fdef).setUserData(id);
 
         fdef = new FixtureDef();
@@ -68,7 +69,7 @@ public class BaseGoblin extends PlayableCharacter{
         b2body.createFixture(fdef).setUserData("leftSensor");
 
         //Create bottom sensor
-        polygonShape.setAsBox(6 / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -17 / Constants.PPM), 0);
+        polygonShape.setAsBox(6.6f / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -17 / Constants.PPM), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
         fdef.filter.maskBits = Constants.BIT_GROUND;
@@ -155,17 +156,4 @@ public class BaseGoblin extends PlayableCharacter{
 
     @Override
     public void die() { }
-
-    public void notify(String flag) {
-        switch (flag) {
-            case "stun":
-                removePlayerState(Constants.PSTATE.STUNNED);
-                if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = Constants.MSTATE.RIGHT;
-                if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = Constants.MSTATE.LEFT;
-                break;
-            case "land":
-                removePlayerState(Constants.PSTATE.LANDING);
-                break;
-        }
-    }
 }

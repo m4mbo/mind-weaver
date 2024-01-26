@@ -101,6 +101,10 @@ public class MyInputProcessor implements InputProcessor {
             case Input.Keys.A:
                 character.setMovementState(Constants.MSTATE.LEFT);
                 break;
+            case Input.Keys.SHIFT_LEFT:
+                if (character.isStateActive(PSTATE.EOT)) entityHandler.setCurrCharacter(character.getTarget());
+                else entityHandler.characterRollback();
+                character.looseControl();
             default:
                 break;
         }
