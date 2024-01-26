@@ -76,15 +76,22 @@ public class ShapeDrawer {
 
         @Override
         public void render(SpriteBatch batch) {
-            while (start.x <= end.x) {
+            while (!comparePoints(start.x, end.x)) {
                 sr.setProjectionMatrix(gameCam.combined);
-                sr.begin(ShapeRenderer.ShapeType.Filled);
-                sr.circle(start.x, sineTerm.evaluate(start.x) + start.y, pointRad);
+                sr.begin(ShapeRenderer.ShapeType.Point);
+                sr.point(start.x, sineTerm.evaluate(start.x) + start.y, 0);
                 sr.setColor(90/255f, 34/255f, 139/255f, 1);
                 sr.end();
-                start.x += stepSize;
+                if (start.x > end.x) start.x -= stepSize;
+                else start.x += stepSize;
                 start.y = slope * start.x;
             }
+
+            System.out.println("here");
+        }
+
+        public boolean comparePoints(float point1, float point2) {
+            return point1 <= point2 + stepSize && point1 >= point2 - stepSize;
         }
     }
 

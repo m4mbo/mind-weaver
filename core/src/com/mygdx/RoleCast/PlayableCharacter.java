@@ -169,7 +169,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
 
     public void establishConnection() {
         addPlayerState(Constants.PSTATE.EOT);
-        shapeDrawer.drawSineWave(target.getPosition(), b2body.getPosition(), 0.1f, 0.2f, 2 / Constants.PPM, 2 / Constants.PPM, 2 / Constants.PPM);
+        shapeDrawer.drawSineWave(target.getPosition(), b2body.getPosition(), 0.001f, 0.2f, 2 / Constants.PPM, 2 / Constants.PPM, 2 / Constants.PPM);
     }
 
     @Override
