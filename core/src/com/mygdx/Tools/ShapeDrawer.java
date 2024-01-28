@@ -2,20 +2,21 @@ package com.mygdx.Tools;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.Handlers.ShaderHandler;
+
 import java.util.LinkedList;
 
 public class ShapeDrawer {
-
-    private ShapeRenderer sr;
     private LinkedList<Shape> shapes;
-    private OrthographicCamera gameCam;
-
-    public ShapeDrawer(OrthographicCamera gameCam) {
+    private ShaderHandler shaderHandler;
+    private SpriteBatch batch;
+    public ShapeDrawer(ShaderHandler shaderHandler, SpriteBatch batch) {
         shapes = new LinkedList<>();
-        sr = new ShapeRenderer();
-        this.gameCam = gameCam;
+        this.batch = batch;
+        this.shaderHandler = shaderHandler;
     }
 
     public void render(SpriteBatch batch) {
@@ -25,11 +26,9 @@ public class ShapeDrawer {
         shapes.clear();
     }
 
-    public void drawLine(Vector2 start, Vector2 end, float width) {
-        shapes.add(new Line(start, end, width));
+    public void drawLine(Vector2 start, Vector2 end, float width, float height) {
+        shapes.add(new Line(start, end, width, height));
     }
-
-    public void drawSineWave(Vector2 start, Vector2 end, float stepSize, float pointRad, float wavelength, float amplitude, float phaseDifference) { shapes.add(new SineWave(start, end, stepSize, pointRad, wavelength, amplitude, phaseDifference)); }
 
     private interface Shape {
         void render(SpriteBatch batch);
@@ -39,7 +38,8 @@ public class ShapeDrawer {
         Vector2 start;
         Vector2 end;
         float width;
-        public Line(Vector2 start, Vector2 end, float width) {
+        float height;
+        public Line(Vector2 start, Vector2 end, float width, float height) {
             this.start = start;
             this.end = end;
             this.width = width;
@@ -47,68 +47,8 @@ public class ShapeDrawer {
 
         @Override
         public void render(SpriteBatch batch) {
-            sr.setProjectionMatrix(gameCam.combined);
-            sr.begin(ShapeRenderer.ShapeType.Line);
-            sr.line(start, end);
-            sr.setColor(90/255f, 34/255f, 139/255f, 1);
-            sr.end();
+            batch.begin();
+            batch.end();
         }
     }
-
-    private class SineWave implements Shape {
-        Vector2 start;
-        Vector2 end;
-        float pointRad;
-        float stepSize;
-        float slope;
-        SineTerm sineTerm;
-
-        public SineWave(Vector2 start, Vector2 end, float stepSize, float pointRad, float wavelength, float amplitude, float phaseDifference) {
-            this.start = start;
-            this.end = end;
-            this.pointRad = pointRad;
-            this.stepSize = stepSize;
-
-            slope = (end.y - start.y) / (end.x - start.x);
-
-            sineTerm = new SineTerm(wavelength, amplitude, phaseDifference);
-        }
-
-        @Override
-        public void render(SpriteBatch batch) {
-            while (!comparePoints(start.x, end.x)) {
-                sr.setProjectionMatrix(gameCam.combined);
-                sr.begin(ShapeRenderer.ShapeType.Point);
-                sr.point(start.x, sineTerm.evaluate(start.x) + start.y, 0);
-                sr.setColor(90/255f, 34/255f, 139/255f, 1);
-                sr.end();
-                if (start.x > end.x) start.x -= stepSize;
-                else start.x += stepSize;
-                start.y = slope * start.x;
-            }
-
-            System.out.println("here");
-        }
-
-        public boolean comparePoints(float point1, float point2) {
-            return point1 <= point2 + stepSize && point1 >= point2 - stepSize;
-        }
-    }
-
-    private class SineTerm {
-        private final float amplitude;
-        private final float waveLength;
-        private final float phaseDifference;
-
-        public SineTerm(float amplitude, float waveLength, float phaseDifference) {
-            this.amplitude = amplitude;
-            this.waveLength = waveLength;
-            this.phaseDifference = phaseDifference;
-        }
-
-        public float evaluate(float x) {
-            return amplitude * (float) Math.sin(2 * Math.PI * x / waveLength + phaseDifference);
-        }
-    }
-
 }

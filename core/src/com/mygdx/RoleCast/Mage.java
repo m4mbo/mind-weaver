@@ -83,7 +83,7 @@ public class Mage extends PlayableCharacter {
     public void loadSprites() {
         // Loading all textures
         resourceManager.loadTexture("player_run.png", "player_run");
-        resourceManager.loadTexture("mage_idle.png", "mage_idle");
+        resourceManager.loadTexture("Mage/mage_idle.png", "mage_idle");
         resourceManager.loadTexture("player_jump.png", "player_jump");
         resourceManager.loadTexture("player_land.png", "player_land");
         resourceManager.loadTexture("player_fall.png", "player_fall");

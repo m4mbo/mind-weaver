@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -37,7 +38,7 @@ public class GameScreen implements Screen {
     private final MyInputProcessor inputProcessor;
     private final EntityHandler entityHandler;
     private final ShapeDrawer shapeDrawer;
-
+    private final ShaderHandler shaderHandler;
     public GameScreen(Glissoar game, String stage, MyResourceManager resourceManager, MyInputProcessor inputProcessor) {
 
         this.game = game;
@@ -48,7 +49,7 @@ public class GameScreen implements Screen {
         // Creating tiled map
         TmxMapLoader mapLoader = new TmxMapLoader();
         TiledMap map = null;
-        if (stage.equals("everlush")) map = mapLoader.load("everlush.tmx");
+        if (stage.equals("everlush")) map = mapLoader.load("Tilemaps/everlush.tmx");
         else if (stage.equals("verdant_hollow")) map = mapLoader.load("verdant_hollow.tmx");
         else map = mapLoader.load("grim_factory.tmx");
 
@@ -59,9 +60,12 @@ public class GameScreen implements Screen {
         gameCam.position.set(2, 77, 0);
 
         AtomicInteger eidAllocator = new AtomicInteger();
-        shapeDrawer = new ShapeDrawer(gameCam);
+        shaderHandler = new ShaderHandler();
+        shapeDrawer = new ShapeDrawer(shaderHandler, game.batch);
         timer = new MyTimer();
         entityHandler = new EntityHandler();
+
+
         entityHandler.initializeHandler(new Mage(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3, shapeDrawer, entityHandler));
         entityHandler.addEntity(new BaseGoblin(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, shapeDrawer, entityHandler));
 
@@ -75,13 +79,17 @@ public class GameScreen implements Screen {
     public void show() {  }
 
     public void update(float delta) {
+        shaderHandler.update(delta);
         entityHandler.update(delta);
-        world.step(1/60f, 6, 2);
-        entityHandler.handleEntities();
-        gameCam.position.set(entityHandler.getCurrCharacter().getPosition().x, entityHandler.getCurrCharacter().getPosition().y + 40 / Constants.PPM, 0);
-        gameCam.update();
         timer.update(delta);
         inputProcessor.update();
+
+        world.step(1/60f, 6, 2);
+
+        entityHandler.handleEntities();
+
+        gameCam.position.set(entityHandler.getCurrCharacter().getPosition().x, entityHandler.getCurrCharacter().getPosition().y + 40 / Constants.PPM, 0);
+        gameCam.update();
     }
 
     @Override
