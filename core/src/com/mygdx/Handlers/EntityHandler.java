@@ -2,6 +2,7 @@ package com.mygdx.Handlers;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.mygdx.Helpers.DirectedGraph;
 import com.mygdx.RoleCast.Entity;
 import com.mygdx.RoleCast.PlayableCharacter;
 import java.util.HashMap;
@@ -12,15 +13,17 @@ import java.util.Stack;
 public class EntityHandler {
     private HashMap<Integer, Entity> entities;
     private LinkedList<EntityOp> entityOps;
-    private Stack<CharacterPair> characterChain;    // Chain of current and prev characters
+    private Stack<CharacterPair> controlChain;    // Chain of current and prev characters
+    private ROVHandler univEyesight;
 
     public EntityHandler () {}
 
     public void initializeHandler(PlayableCharacter currCharacter) {
         entityOps = new LinkedList<>();
         entities = new HashMap<>();
-        characterChain = new Stack<>();
-        characterChain.add(new CharacterPair(currCharacter, null));     // Mage will have the previous character as null
+        controlChain = new Stack<>();
+        univEyesight = new ROVHandler(currCharacter);
+        controlChain.add(new CharacterPair(currCharacter, null));     // Mage will have the previous character as null
         addEntity(currCharacter);
     }
 
@@ -57,16 +60,21 @@ public class EntityHandler {
     }
 
     public boolean characterRollback() {
-        if (characterChain.peek().prevCharacter == null) return false;
-        characterChain.pop();
+        if (controlChain.peek().prevCharacter == null) return false;
+        controlChain.pop();
         return true;
     }
+
     public void setCurrCharacter(PlayableCharacter currCharacter) {
-        characterChain.add(new CharacterPair(currCharacter, characterChain.peek().currCharacter));
+        controlChain.add(new CharacterPair(currCharacter, controlChain.peek().currCharacter));
+    }
+
+    public ROVHandler getUnivEyesight() {
+        return univEyesight;
     }
 
     public PlayableCharacter getCurrCharacter() {
-        return characterChain.peek().currCharacter;
+        return controlChain.peek().currCharacter;
     }
 
     public void update(float delta) {

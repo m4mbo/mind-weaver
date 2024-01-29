@@ -1,7 +1,7 @@
 package com.mygdx.Game;
 
 import com.badlogic.gdx.Gdx;
-import com.mygdx.Logic.MyInputProcessor;
+import com.mygdx.Listeners.MyInputProcessor;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Screens.*;
 import com.badlogic.gdx.Game;

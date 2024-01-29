@@ -1,4 +1,4 @@
-package com.mygdx.Logic;
+package com.mygdx.Listeners;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -8,8 +8,8 @@ import com.mygdx.Game.Glissoar;
 import com.mygdx.Handlers.EntityHandler;
 import com.mygdx.RoleCast.PlayableCharacter;
 import com.mygdx.Screens.GameScreen;
-import com.mygdx.Tools.Constants;
-import com.mygdx.Tools.Constants.*;
+import com.mygdx.Helpers.Constants;
+import com.mygdx.Helpers.Constants.*;
 
 public class MyInputProcessor implements InputProcessor {
 

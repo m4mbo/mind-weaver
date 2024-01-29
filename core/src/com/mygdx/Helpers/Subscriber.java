@@ -1,6 +1,4 @@
-package com.mygdx.Interfaces;
-
-import com.mygdx.Tools.Constants;
+package com.mygdx.Helpers;
 
 public interface Subscriber {
     public void notify(String flag);

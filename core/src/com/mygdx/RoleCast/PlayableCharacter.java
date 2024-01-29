@@ -6,9 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Handlers.EntityHandler;
 import com.mygdx.Tools.MyResourceManager;
-import com.mygdx.Logic.MyTimer;
-import com.mygdx.Interfaces.Subscriber;
-import com.mygdx.Tools.Constants;
+import com.mygdx.Tools.MyTimer;
+import com.mygdx.Helpers.Subscriber;
+import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.ShapeDrawer;
 import java.util.EnumSet;
 
@@ -109,7 +109,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     }
 
     public void jump() {
-        b2body.applyLinearImpulse(new Vector2(0, 4.2f), b2body.getWorldCenter(), true);
+        b2body.applyLinearImpulse(new Vector2(0, 3f), b2body.getWorldCenter(), true);
     }
 
     public void fall() {
@@ -169,7 +169,23 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
 
     public void establishConnection() {
         addPlayerState(Constants.PSTATE.EOT);
-        shapeDrawer.drawLine(target.getPosition(), b2body.getPosition(), 1 / Constants.PPM, 1 / Constants.PPM);
+
+        float targetX = target.getPosition().x;
+        float targetY = target.getPosition().y;
+        float playerX = b2body.getPosition().x;
+        float playerY = b2body.getPosition().y;
+
+        targetY += 2 / Constants.PPM;
+        playerY += 2 / Constants.PPM;
+
+        if (playerX < targetX) {
+            targetX -= 8 / Constants.PPM;
+            playerX += 8 / Constants.PPM;
+        } else {
+            targetX += 8 / Constants.PPM;
+            playerX -= 8 / Constants.PPM;
+        }
+        shapeDrawer.drawWave(new Vector2(targetX, targetY) , new Vector2(playerX, playerY), 3 / Constants.PPM);
     }
 
     @Override

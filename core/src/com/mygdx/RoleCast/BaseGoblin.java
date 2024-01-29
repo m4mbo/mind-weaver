@@ -5,8 +5,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Handlers.EntityHandler;
 import com.mygdx.Tools.MyResourceManager;
-import com.mygdx.Logic.MyTimer;
-import com.mygdx.Tools.Constants;
+import com.mygdx.Tools.MyTimer;
+import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.ShapeDrawer;
 
 public class BaseGoblin extends PlayableCharacter{
@@ -17,7 +17,7 @@ public class BaseGoblin extends PlayableCharacter{
         loadSprites();
 
         // Initializing sprite
-        setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_idle"), 32, 32)[0], 1/5f, false, 1.25f);
+        setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_idle"), 20, 14)[0], 1/5f, false, 1f);
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, y / Constants.PPM);
@@ -29,7 +29,7 @@ public class BaseGoblin extends PlayableCharacter{
         PolygonShape polygonShape = new PolygonShape();
 
         //Create body fixture
-        polygonShape.setAsBox(8 / Constants.PPM, 15 / Constants.PPM, new Vector2(0, 0), 0);
+        polygonShape.setAsBox(8 / Constants.PPM, 6 / Constants.PPM, new Vector2(0, 0), 0);
         fdef.shape = polygonShape;
         fdef.friction = 0;
         fdef.filter.categoryBits = Constants.BIT_GOBLIN;
@@ -39,7 +39,7 @@ public class BaseGoblin extends PlayableCharacter{
         fdef = new FixtureDef();
 
         //Create player hitbox
-        polygonShape.setAsBox(9 / Constants.PPM, 16 / Constants.PPM, new Vector2(0, 0), 0);
+        polygonShape.setAsBox(9 / Constants.PPM, 7 / Constants.PPM, new Vector2(0, 0), 0);
         fdef.shape = polygonShape;
         fdef.filter.maskBits = Constants.BIT_HAZARD;
         fdef.isSensor = true;
@@ -67,40 +67,40 @@ public class BaseGoblin extends PlayableCharacter{
         b2body.createFixture(fdef).setUserData("leftSensor");
 
         //Create bottom sensor
-        polygonShape.setAsBox(6.6f / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -17 / Constants.PPM), 0);
+        polygonShape.setAsBox(6.6f / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -6 / Constants.PPM), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
-        fdef.filter.maskBits = Constants.BIT_GROUND;
+        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_GOBLIN | Constants.BIT_MAGE;
         b2body.createFixture(fdef).setUserData("bottomSensor");
     }
 
     @Override
     public void loadSprites() {
         // Loading all textures
-        resourceManager.loadTexture("player_run.png", "goblin_run");
-        resourceManager.loadTexture("player_idle.png", "goblin_idle");
-        resourceManager.loadTexture("player_jump.png", "goblin_jump");
-        resourceManager.loadTexture("player_land.png", "goblin_land");
-        resourceManager.loadTexture("player_fall.png", "goblin_fall");
+        resourceManager.loadTexture("Mage/mage_run.png", "goblin_run");
+        resourceManager.loadTexture("Goblins/basegoblin_idle.png", "goblin_idle");
+        resourceManager.loadTexture("Mage/mage_jump.png", "goblin_jump");
+        resourceManager.loadTexture("Mage/mage_land.png", "goblin_land");
+        resourceManager.loadTexture("Mage/mage_fall.png", "goblin_fall");
     }
 
     @Override
     public void handleAnimation() {
         switch (currAState) {
             case RUN:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_run"), 32, 32)[0], 1/14f, false, 1.25f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_run"), 20, 20)[0], 1/14f, false, 1f);
                 break;
             case IDLE:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_idle"), 32, 32)[0], 1/5f, false, 1.25f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_idle"), 20, 14)[0], 1/5f, false, 1f);
                 break;
             case JUMP:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_jump"), 32, 32)[0], 1/17f, true, 1.25f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_jump"), 20, 20)[0], 1/17f, true, 1f);
                 break;
             case FALL:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_fall"), 32, 32)[0], 1/5f, true, 1.25f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_fall"), 20, 20)[0], 1/5f, true, 1f);
                 break;
             case LAND:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_land"), 32, 32)[0], 1/14f, false, 1.25f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_land"), 20, 20)[0], 1/14f, false, 1f);
                 break;
         }
     }

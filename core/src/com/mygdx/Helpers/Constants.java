@@ -1,9 +1,9 @@
-package com.mygdx.Tools;
+package com.mygdx.Helpers;
 
 public class Constants {
     public static final int TILE_SIZE = 10;
     public static final float PPM = 100;
-    public static final float MAX_SPEED_X = 1.6f;
+    public static final float MAX_SPEED_X = 1.2f;
     public static final float MAX_SPEED_Y = 5f;
     public static final float G = 11;
     public static final float G_ENHANCED = 13;

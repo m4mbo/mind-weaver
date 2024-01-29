@@ -1,7 +1,7 @@
-package com.mygdx.Logic;
+package com.mygdx.Tools;
 
-import com.mygdx.Interfaces.Publisher;
-import com.mygdx.Interfaces.Subscriber;
+import com.mygdx.Helpers.Publisher;
+import com.mygdx.Helpers.Subscriber;
 
 import java.util.Iterator;
 import java.util.LinkedList;

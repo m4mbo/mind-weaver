@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -15,13 +14,13 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.Game.Glissoar;
 import com.mygdx.Handlers.*;
-import com.mygdx.Logic.MyContactListener;
-import com.mygdx.Logic.MyInputProcessor;
-import com.mygdx.Logic.MyTimer;
+import com.mygdx.Listeners.MyContactListener;
+import com.mygdx.Listeners.MyInputProcessor;
+import com.mygdx.Tools.MyTimer;
 import com.mygdx.RoleCast.BaseGoblin;
 import com.mygdx.RoleCast.Mage;
 import com.mygdx.Handlers.B2WorldHandler;
-import com.mygdx.Tools.Constants;
+import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Tools.ShapeDrawer;
 
@@ -68,6 +67,7 @@ public class GameScreen implements Screen {
 
         entityHandler.initializeHandler(new Mage(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3, shapeDrawer, entityHandler));
         entityHandler.addEntity(new BaseGoblin(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, shapeDrawer, entityHandler));
+        entityHandler.addEntity(new BaseGoblin(200, 7800, world, eidAllocator.getAndIncrement(), timer, resourceManager, shapeDrawer, entityHandler));
 
         inputProcessor.setGameVariables(entityHandler, world);
         world.setContactListener(new MyContactListener(entityHandler));
@@ -88,7 +88,7 @@ public class GameScreen implements Screen {
 
         entityHandler.handleEntities();
 
-        gameCam.position.set(entityHandler.getCurrCharacter().getPosition().x, entityHandler.getCurrCharacter().getPosition().y + 40 / Constants.PPM, 0);
+        gameCam.position.set(entityHandler.getCurrCharacter().getPosition().x, entityHandler.getCurrCharacter().getPosition().y + 20 / Constants.PPM, 0);
         gameCam.update();
     }
 
@@ -105,11 +105,8 @@ public class GameScreen implements Screen {
         renderer.render();
         entityHandler.render(game.batch);
 
-        b2dr.render(world, gameCam.combined);
+        //b2dr.render(world, gameCam.combined);
         game.batch.setProjectionMatrix(gameCam.combined);
-
-        game.batch.begin();
-        game.batch.end();
 
         shapeDrawer.render(game.batch);
 

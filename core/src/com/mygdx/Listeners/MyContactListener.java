@@ -1,10 +1,11 @@
-package com.mygdx.Logic;
+package com.mygdx.Listeners;
 
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Handlers.EntityHandler;
+import com.mygdx.Helpers.DirectedGraph;
 import com.mygdx.RoleCast.Mage;
 import com.mygdx.RoleCast.PlayableCharacter;
-import com.mygdx.Tools.Constants.*;
+import com.mygdx.Helpers.Constants.*;
 
 public class MyContactListener implements ContactListener {
 
@@ -12,8 +13,10 @@ public class MyContactListener implements ContactListener {
     private Fixture fb;
     private final EntityHandler entityHandler;
 
+
     public MyContactListener(EntityHandler entityHandler) {
         this.entityHandler = entityHandler;
+        targetAssociation = new DirectedGraph(entityHandler.getCurrCharacter());
     }
 
     @Override
@@ -40,9 +43,12 @@ public class MyContactListener implements ContactListener {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("checkpoint") ? fb.getBody() : fa.getBody());
             ((Mage) character).setCheckPoint(fa.getUserData().equals("checkpoint") ? fb.getBody().getPosition() : fa.getBody().getPosition());
         } else if (fa.getUserData().equals("vision") || fb.getUserData().equals("vision")) {
-            ((PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("vision") ? fa.getBody() : fb.getBody()))
-                    .setTarget((PlayableCharacter) entityHandler.getEntity((Integer) (fa.getUserData().equals("vision") ? fb : fa).getUserData()));
-        }
+            PlayableCharacter source = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("vision") ? fa.getBody() : fb.getBody());
+            PlayableCharacter target = (PlayableCharacter) entityHandler.getEntity((Integer) (fa.getUserData().equals("vision") ? fb : fa).getUserData());
+            if ( entityHandler.getUnivEyesight().getNextNeighbour(source) == null) source.setTarget(target);
+            entityHandler.getUnivEyesight().addNeighbour(source, target);
+            System.out.println("add");
+            entityHandler.getUnivEyesight().printROV();        }
     }
 
     @Override
@@ -61,16 +67,21 @@ public class MyContactListener implements ContactListener {
         } else if (fa.getUserData().equals("bottomSensor") || fb.getUserData().equals("bottomSensor")) {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("bottomSensor") ? fa.getBody() : fb.getBody());
             character.removePlayerState(PSTATE.ON_GROUND);
-        } else if (fa.getUserData().equals("vision")) {
-            ((PlayableCharacter) entityHandler.getEntity(fa.getBody())).removeTarget();
+        } else if (fa.getUserData().equals("vision") || fb.getUserData().equals("vision")) {
+            PlayableCharacter source = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("vision") ? fa.getBody() : fb.getBody());
+            PlayableCharacter target = (PlayableCharacter) entityHandler.getEntity((Integer) (fa.getUserData().equals("vision") ? fb : fa).getUserData());
+            entityHandler.getUnivEyesight().removeNeighbour(target);
+            System.out.println("remove");
+            entityHandler.getUnivEyesight().printROV();
+            source.removeTarget();
             character = entityHandler.getCurrCharacter();
-            entityHandler.characterRollback();
-            character.looseControl();
-        } else if (fb.getUserData().equals("vision")) {
-            ((PlayableCharacter) entityHandler.getEntity(fb.getBody())).removeTarget();
-            character = entityHandler.getCurrCharacter();
-            entityHandler.characterRollback();
-            character.looseControl();
+            if (entityHandler.characterRollback()) {
+                character.looseControl();
+            }
+            PlayableCharacter possible = (PlayableCharacter) entityHandler.getUnivEyesight().getNextNeighbour(source);
+            if (possible != null) {
+                source.setTarget(possible);
+            }
         }
     }
 

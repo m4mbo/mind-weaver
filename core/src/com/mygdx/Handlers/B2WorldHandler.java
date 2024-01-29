@@ -4,8 +4,8 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.Logic.MyTimer;
-import com.mygdx.Tools.Constants;
+import com.mygdx.Tools.MyTimer;
+import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MyResourceManager;
 
 import java.util.concurrent.atomic.AtomicInteger;
