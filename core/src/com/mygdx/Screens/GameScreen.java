@@ -36,6 +36,8 @@ public class GameScreen implements Screen {
     private final Box2DDebugRenderer b2dr;
     private final MyInputProcessor inputProcessor;
     private final EntityHandler entityHandler;
+    private final VisionHandler visionHandler;
+    private final ControlHandler controlHandler;
     private final ShapeDrawer shapeDrawer;
     private final ShaderHandler shaderHandler;
     public GameScreen(Glissoar game, String stage, MyResourceManager resourceManager, MyInputProcessor inputProcessor) {
@@ -62,15 +64,18 @@ public class GameScreen implements Screen {
         shaderHandler = new ShaderHandler();
         shapeDrawer = new ShapeDrawer(shaderHandler, game.batch);
         timer = new MyTimer();
+
+        Mage mage = new Mage(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3);
         entityHandler = new EntityHandler();
+        controlHandler = new ControlHandler(mage);
+        visionHandler =  new VisionHandler(mage, world, shapeDrawer);
 
+        entityHandler.initializeHandler(mage);
+        entityHandler.addEntity(new BaseGoblin(100, 7800, world, eidAllocator.getAndIncrement(), timer, resourceManager));
+        entityHandler.addEntity(new BaseGoblin(300, 7800, world, eidAllocator.getAndIncrement(), timer, resourceManager));
 
-        entityHandler.initializeHandler(new Mage(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3, shapeDrawer, entityHandler));
-        entityHandler.addEntity(new BaseGoblin(100, 7800, world, eidAllocator.getAndIncrement(), timer, resourceManager, shapeDrawer, entityHandler));
-        entityHandler.addEntity(new BaseGoblin(300, 7800, world, eidAllocator.getAndIncrement(), timer, resourceManager, shapeDrawer, entityHandler));
-
-        inputProcessor.setGameVariables(entityHandler, world);
-        world.setContactListener(new MyContactListener(entityHandler));
+        inputProcessor.setGameVariables(entityHandler, world, controlHandler);
+        world.setContactListener(new MyContactListener(entityHandler, visionHandler, controlHandler));
         b2dr = new Box2DDebugRenderer();
         new B2WorldHandler(world, map, resourceManager, timer, eidAllocator);     //Creating world
     }
@@ -79,8 +84,10 @@ public class GameScreen implements Screen {
     public void show() {  }
 
     public void update(float delta) {
+
         shaderHandler.update(delta);
         entityHandler.update(delta);
+        visionHandler.update(delta);
         timer.update(delta);
         inputProcessor.update();
 
@@ -88,7 +95,7 @@ public class GameScreen implements Screen {
 
         entityHandler.handleEntities();
 
-        gameCam.position.set(entityHandler.getCurrCharacter().getPosition().x, entityHandler.getCurrCharacter().getPosition().y + 20 / Constants.PPM, 0);
+        gameCam.position.set(controlHandler.getCurrCharacter().getPosition().x, controlHandler.getCurrCharacter().getPosition().y + 20 / Constants.PPM, 0);
         gameCam.update();
     }
 

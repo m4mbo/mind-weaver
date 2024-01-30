@@ -1,6 +1,8 @@
 package com.mygdx.Helpers;
 
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 public class DirectedGraph {
 
@@ -11,11 +13,17 @@ public class DirectedGraph {
     }
 
     public void addNode(Object sourceData, Object newData) {
+        if (sourceData.equals(newData)) return;
         GraphNode sourceNode = findNode(sourceData);
         if (sourceNode == null) {
-            throw new IllegalArgumentException("Source node not found in the graph.");
+            sourceNode = findNode(newData);
+            GraphNode newNode = findNode(sourceData);
+            if (newNode == null) newNode = new GraphNode(sourceData);
+            sourceNode.addNeighbour(newNode);
+            return;
         }
-        GraphNode newNode = new GraphNode(newData);
+        GraphNode newNode = findNode(newData);
+        if (newNode == null) newNode = new GraphNode(newData);
         sourceNode.addNeighbour(newNode);
     }
 
@@ -48,27 +56,25 @@ public class DirectedGraph {
         return null;
     }
 
-    public Object getNextNeighbour(Object data) {
+    public LinkedList<Object> getNeighbours(Object data) {
         GraphNode node = findNode(data);
         if (node == null || node.neighbours.isEmpty()) return null;
-        return node.neighbours.getFirst().data;
-    }
-
-    public Object getNextNeighbour(Object sourceData, Object maskData) {
-        GraphNode node = findNode(sourceData);
-        if (node == null || node.neighbours.isEmpty()) return null;
-        for (GraphNode neighbour : node.neighbours) {
-            if (!neighbour.data.equals(maskData)) return neighbour.data;
+        LinkedList<Object> neighbours = new LinkedList<>();
+        for (GraphNode n : node.neighbours) {
+            neighbours.add(n.data);
         }
-        return null;
+        return neighbours;
     }
 
     public void printGraph() {
-        printGraphRecursive(head);
+        Set<GraphNode> visited = new HashSet<>();
+        printGraphRecursive(head, visited);
     }
 
-    private void printGraphRecursive(GraphNode current) {
-        if (current == null) return;
+    private void printGraphRecursive(GraphNode current, Set<GraphNode> visited) {
+        if (current == null || visited.contains(current)) return;
+
+        visited.add(current);
 
         System.out.print("Node " + current.data + " -> Neighbours: ");
         for (GraphNode neighbour : current.neighbours) {
@@ -77,7 +83,7 @@ public class DirectedGraph {
         System.out.println();
 
         for (GraphNode neighbour : current.neighbours) {
-            printGraphRecursive(neighbour);
+            printGraphRecursive(neighbour, visited);
         }
     }
 

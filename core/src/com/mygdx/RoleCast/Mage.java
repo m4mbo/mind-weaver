@@ -14,8 +14,8 @@ public class Mage extends PlayableCharacter {
     private Vector2 currCheckPoint;
     private int lives;
 
-    public Mage(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, int lives, ShapeDrawer shapeDrawer, EntityHandler entityHandler) {
-        super(world, id, timer, myResourceManager, shapeDrawer, entityHandler);
+    public Mage(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, int lives) {
+        super(world, id, timer, myResourceManager);
 
         this.lives = lives;
 
@@ -54,6 +54,7 @@ public class Mage extends PlayableCharacter {
         circleShape.setRadius(140 / Constants.PPM);
         fdef.shape = circleShape;
         fdef.isSensor = true;
+        fdef.filter.categoryBits = Constants.BIT_ROV;
         fdef.filter.maskBits = Constants.BIT_GOBLIN;
         b2body.createFixture(fdef).setUserData("vision");
 

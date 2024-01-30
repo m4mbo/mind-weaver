@@ -2,7 +2,8 @@ package com.mygdx.Listeners;
 
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Handlers.EntityHandler;
-import com.mygdx.Helpers.DirectedGraph;
+import com.mygdx.Handlers.ControlHandler;
+import com.mygdx.Handlers.VisionHandler;
 import com.mygdx.RoleCast.Mage;
 import com.mygdx.RoleCast.PlayableCharacter;
 import com.mygdx.Helpers.Constants.*;
@@ -12,9 +13,13 @@ public class MyContactListener implements ContactListener {
     private Fixture fa;
     private Fixture fb;
     private final EntityHandler entityHandler;
+    private final VisionHandler visionHandler;
+    private final ControlHandler controlHandler;
 
-    public MyContactListener(EntityHandler entityHandler) {
+    public MyContactListener(EntityHandler entityHandler, VisionHandler visionHandler, ControlHandler controlHandler) {
         this.entityHandler = entityHandler;
+        this.visionHandler = visionHandler;
+        this.controlHandler = controlHandler;
     }
 
     @Override
@@ -45,10 +50,11 @@ public class MyContactListener implements ContactListener {
             PlayableCharacter source = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("vision") ? fa.getBody() : fb.getBody());
             PlayableCharacter target = (PlayableCharacter) entityHandler.getEntity((Integer) (fa.getUserData().equals("vision") ? fb : fa).getUserData());
 
-            if ( entityHandler.getUnivEyesight().getNextNeighbour(source) == null) source.setTarget(target);
-            entityHandler.getUnivEyesight().addNeighbour(source, target);
-            System.out.println("add");
-            entityHandler.getUnivEyesight().printROV();        }
+            if (visionHandler.getNextNeighbour(source) == null) source.setTarget(target);
+            visionHandler.addNeighbour(source, target);
+//            System.out.println("add");
+//            entityHandler.getUnivEyesight().printROV();
+        }
     }
 
     @Override
@@ -72,13 +78,13 @@ public class MyContactListener implements ContactListener {
             PlayableCharacter source = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("vision") ? fa.getBody() : fb.getBody());
             PlayableCharacter target = (PlayableCharacter) entityHandler.getEntity((Integer) (fa.getUserData().equals("vision") ? fb : fa).getUserData());
 
-            entityHandler.getUnivEyesight().removeNeighbour(target);
-            System.out.println("remove");
-            entityHandler.getUnivEyesight().printROV();
+            visionHandler.removeNeighbour(target);
+//            System.out.println("remove");
+//            entityHandler.getUnivEyesight().printROV();
             source.removeTarget();
-            character = entityHandler.getCurrCharacter();
-            if (entityHandler.characterRollback()) character.looseControl();
-            PlayableCharacter possible = entityHandler.getUnivEyesight().getNextNeighbour(source);
+            character = controlHandler.getCurrCharacter();
+            if (controlHandler.characterRollback()) character.looseControl();
+            PlayableCharacter possible = visionHandler.getNextNeighbour(source);
             if (possible != null) source.setTarget(possible);
 
         }

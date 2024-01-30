@@ -11,8 +11,8 @@ import com.mygdx.Tools.ShapeDrawer;
 
 public class BaseGoblin extends PlayableCharacter{
 
-    public BaseGoblin(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, ShapeDrawer shapeDrawer, EntityHandler entityHandler) {
-        super(world, id, timer, myResourceManager, shapeDrawer, entityHandler);
+    public BaseGoblin(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager) {
+        super(world, id, timer, myResourceManager);
 
         loadSprites();
 
@@ -33,7 +33,7 @@ public class BaseGoblin extends PlayableCharacter{
         fdef.shape = polygonShape;
         fdef.friction = 0;
         fdef.filter.categoryBits = Constants.BIT_GOBLIN;
-        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_MAGE | Constants.BIT_GOBLIN;
+        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_MAGE | Constants.BIT_GOBLIN | Constants.BIT_ROV;
         b2body.createFixture(fdef).setUserData(id);
 
         fdef = new FixtureDef();
@@ -49,6 +49,7 @@ public class BaseGoblin extends PlayableCharacter{
         circleShape.setRadius(140 / Constants.PPM);
         fdef.shape = circleShape;
         fdef.isSensor = true;
+        fdef.filter.categoryBits = Constants.BIT_ROV;
         fdef.filter.maskBits = Constants.BIT_GOBLIN;
         b2body.createFixture(fdef).setUserData("vision");
 

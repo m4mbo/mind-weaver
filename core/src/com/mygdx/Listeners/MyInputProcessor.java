@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.Game.Glissoar;
+import com.mygdx.Handlers.ControlHandler;
 import com.mygdx.Handlers.EntityHandler;
 import com.mygdx.RoleCast.PlayableCharacter;
 import com.mygdx.Screens.GameScreen;
@@ -14,6 +15,7 @@ import com.mygdx.Helpers.Constants.*;
 public class MyInputProcessor implements InputProcessor {
 
     private EntityHandler entityHandler;
+    private ControlHandler controlHandler;
     private World world;
     private final Glissoar game;
     public MyInputProcessor(Glissoar game) {
@@ -21,21 +23,22 @@ public class MyInputProcessor implements InputProcessor {
     }
 
     // Function called only by the game screen
-    public void setGameVariables(EntityHandler entityHandler, World world) {
+    public void setGameVariables(EntityHandler entityHandler, World world, ControlHandler controlHandler) {
         this.entityHandler = entityHandler;
         this.world = world;
+        this.controlHandler = controlHandler;
     }
 
     @Override
     public boolean keyDown (int keycode) {
-        if (entityHandler.getCurrCharacter() == null || world == null) return false;
+        if (controlHandler.getCurrCharacter() == null || world == null) return false;
         if (game.getScreen() instanceof GameScreen) return keyDownGameScreen(keycode);
         return false;
     }
 
     @Override
     public boolean keyUp (int keycode) {
-        if (entityHandler.getCurrCharacter() == null || world == null) return false;
+        if (controlHandler.getCurrCharacter() == null || world == null) return false;
         if (game.getScreen() instanceof GameScreen) return keyUpGameScreen(keycode);
         return false;
     }
@@ -82,7 +85,7 @@ public class MyInputProcessor implements InputProcessor {
     // Helper function to simply keyDown implementation
     public boolean keyDownGameScreen(int keycode) {
 
-        PlayableCharacter character = entityHandler.getCurrCharacter();
+        PlayableCharacter character = controlHandler.getCurrCharacter();
         switch (keycode) {
             case Input.Keys.SPACE:
                 if (character.isStateActive(PSTATE.ON_GROUND)) {
@@ -102,8 +105,8 @@ public class MyInputProcessor implements InputProcessor {
                 character.setMovementState(Constants.MSTATE.LEFT);
                 break;
             case Input.Keys.SHIFT_LEFT:
-                if (character.isStateActive(PSTATE.EOT)) entityHandler.setCurrCharacter(character.getTarget());
-                else entityHandler.characterRollback();
+                if (character.isStateActive(PSTATE.EOT)) controlHandler.setCurrCharacter(character.getTarget());
+                else controlHandler.characterRollback();
                 character.looseControl();
             default:
                 break;
@@ -112,7 +115,7 @@ public class MyInputProcessor implements InputProcessor {
     }
 
     public boolean keyUpGameScreen(int keycode) {
-        PlayableCharacter character = entityHandler.getCurrCharacter();
+        PlayableCharacter character = controlHandler.getCurrCharacter();
         switch (keycode) {
             case Input.Keys.SPACE:
                 if (character.isStateActive(PSTATE.ON_GROUND) || character.isStateActive(PSTATE.STUNNED)) break;

@@ -21,17 +21,13 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     protected Constants.ASTATE prevAState;     // Previous animation state
     protected final EnumSet<Constants.PSTATE> playerStates;       // Set of player states
     protected PlayableCharacter target;
-    private boolean collision;      // Helper boolean variable for rayCasting
-    private final ShapeDrawer shapeDrawer;
-    private final EntityHandler entityHandler;
 
-    public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager, ShapeDrawer shapeDrawer, EntityHandler entityHandler) {
+    public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager) {
 
         super(id, myResourceManager);
         this.timer = timer;
         this.world = world;
         this.target = null;
-        this.entityHandler = entityHandler;
 
         // Initializing states
         playerStates = EnumSet.noneOf(Constants.PSTATE.class);
@@ -39,10 +35,6 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         currAState = Constants.ASTATE.IDLE;
         prevAState = Constants.ASTATE.IDLE;
         movementState = Constants.MSTATE.HSTILL;
-
-        this.shapeDrawer = shapeDrawer;
-
-        collision = false;
 
         wallState = 0;
     }
@@ -62,8 +54,6 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         } else if (!isStateActive(Constants.PSTATE.ON_GROUND)) {
             currAState = Constants.ASTATE.JUMP;
         }
-
-        if (target != null) sendSignal();
 
         if (isStateActive(Constants.PSTATE.STUNNED)) movementState = Constants.MSTATE.PREV;
 
@@ -142,54 +132,6 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     public void removeTarget() {
         removePlayerState(Constants.PSTATE.EOT);
         target = null;
-    }
-
-    public void sendSignal() {
-        final Vector2 targetPos = target.getPosition();
-        RayCastCallback callback = new RayCastCallback() {
-            @Override
-            public float reportRayFixture(Fixture fixture, Vector2 vector2, Vector2 vector21, float v) {
-                if (fixture.getUserData().equals("ground") || fixture.getUserData().equals("hazard")) {
-                    PlayableCharacter.this.collision = true;
-                    return 0;
-                }
-                return 1;
-            }
-        };
-        world.rayCast(callback, b2body.getPosition() , targetPos);
-        if (!collision) {
-            establishConnection();
-        } else {
-            removePlayerState(Constants.PSTATE.EOT);
-            if (entityHandler.characterRollback()) target.looseControl();
-            else {
-                if (entityHandler.getUnivEyesight().getNextNeighbour(this, target) != null) {
-                    target = entityHandler.getUnivEyesight().getNextNeighbour(this, target);
-                }
-            }
-            collision = false;
-        }
-    }
-
-    public void establishConnection() {
-        addPlayerState(Constants.PSTATE.EOT);
-
-        float targetX = target.getPosition().x;
-        float targetY = target.getPosition().y;
-        float playerX = b2body.getPosition().x;
-        float playerY = b2body.getPosition().y;
-
-        targetY += 2 / Constants.PPM;
-        playerY += 2 / Constants.PPM;
-
-        if (playerX < targetX) {
-            targetX -= 8 / Constants.PPM;
-            playerX += 8 / Constants.PPM;
-        } else {
-            targetX += 8 / Constants.PPM;
-            playerX -= 8 / Constants.PPM;
-        }
-        shapeDrawer.drawWave(new Vector2(targetX, targetY) , new Vector2(playerX, playerY), 3 / Constants.PPM);
     }
 
     @Override
