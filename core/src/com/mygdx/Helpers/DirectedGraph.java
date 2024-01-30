@@ -54,6 +54,15 @@ public class DirectedGraph {
         return node.neighbours.getFirst().data;
     }
 
+    public Object getNextNeighbour(Object sourceData, Object maskData) {
+        GraphNode node = findNode(sourceData);
+        if (node == null || node.neighbours.isEmpty()) return null;
+        for (GraphNode neighbour : node.neighbours) {
+            if (!neighbour.data.equals(maskData)) return neighbour.data;
+        }
+        return null;
+    }
+
     public void printGraph() {
         printGraphRecursive(head);
     }

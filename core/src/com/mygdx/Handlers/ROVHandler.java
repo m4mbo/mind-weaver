@@ -16,6 +16,10 @@ public class ROVHandler {
         return (PlayableCharacter) targetAssociation.getNextNeighbour(character);
     }
 
+    public PlayableCharacter getNextNeighbour(PlayableCharacter character, PlayableCharacter mask) {
+        return (PlayableCharacter) targetAssociation.getNextNeighbour(character, mask);
+    }
+
     public void addNeighbour(PlayableCharacter source, PlayableCharacter target) {
         targetAssociation.addNode(source, target);
     }

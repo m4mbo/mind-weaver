@@ -162,7 +162,11 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         } else {
             removePlayerState(Constants.PSTATE.EOT);
             if (entityHandler.characterRollback()) target.looseControl();
-
+            else {
+                if (entityHandler.getUnivEyesight().getNextNeighbour(this, target) != null) {
+                    target = entityHandler.getUnivEyesight().getNextNeighbour(this, target);
+                }
+            }
             collision = false;
         }
     }
