@@ -5,52 +5,69 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.Helpers.Constants;
-import com.mygdx.Helpers.DirectedGraph;
+import com.mygdx.RoleCast.Entity;
 import com.mygdx.RoleCast.PlayableCharacter;
+import com.mygdx.RoleCast.Mage;
 import com.mygdx.Tools.ShapeDrawer;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 public class VisionHandler {
     private boolean collision;
-    private DirectedGraph targetAssociation;
-    private World world;
-    private ShapeDrawer shapeDrawer;
+    private final HashMap<PlayableCharacter, LinkedList<PlayableCharacter>> targetMap;
+    private final EntityHandler entityHandler;
+    private final World world;
+    private final ShapeDrawer shapeDrawer;
 
-    public VisionHandler(PlayableCharacter character, World world, ShapeDrawer shapeDrawer) {
+    public VisionHandler(World world, ShapeDrawer shapeDrawer, EntityHandler entityHandler) {
         collision = true;
-        targetAssociation = new DirectedGraph(character);
         this.world = world;
+        this.targetMap = new HashMap<>();
+        this.entityHandler = entityHandler;
+        this.shapeDrawer = shapeDrawer;
+        for (Entity entity : entityHandler.getEntities()) {
+            if (entity instanceof PlayableCharacter) {
+                targetMap.put((PlayableCharacter) entity, new LinkedList<PlayableCharacter>());
+            }
+        }
     }
 
-    public PlayableCharacter getNextNeighbour(PlayableCharacter character) {
-        return (PlayableCharacter) targetAssociation.getNextNeighbour(character);
+    public void addTarget(PlayableCharacter source, PlayableCharacter target) {
+        targetMap.get(source).add(target);
     }
 
-    public PlayableCharacter getNextNeighbour(PlayableCharacter character, PlayableCharacter mask) {
-        return (PlayableCharacter) targetAssociation.getNextNeighbour(character, mask);
-    }
-
-    public void addNeighbour(PlayableCharacter source, PlayableCharacter target) {
-        targetAssociation.addNode(source, target);
-    }
-
-    public void removeNeighbour(PlayableCharacter target) {
-        targetAssociation.removeNode(target);
-    }
-
-    public void printROV() {
-        targetAssociation.printGraph();
+    public void removeTarget(PlayableCharacter source, PlayableCharacter target) {
+        targetMap.get(source).remove(target);
     }
 
     public void update(float delta) {
-
+        for (Map.Entry<PlayableCharacter, LinkedList<PlayableCharacter>> entry : targetMap.entrySet()) {
+            if (!entry.getValue().isEmpty()) {
+                attemptConnection(entry.getKey());
+            }
+        }
     }
 
     public void attemptConnection(PlayableCharacter source) {
-        boolean success = sendSignal(source);
+        LinkedList<PlayableCharacter> targets = targetMap.get(source);
+        for (PlayableCharacter target : targets) {
+            if (sendSignal(source, target)) {
+                if (source instanceof Mage || entityHandler.eyesOnMe(source) || entityHandler.eyesOnMe(target)) {
+                    source.setBullseye(target);
+                    if (target.getBullseye() == null || !target.getBullseye().equals(source)) {
+                        establishConnection(source, target);
+                        return;
+                    }
+                }
+            } else {
+                if (source.getBullseye() != null && source.getBullseye().equals(target)) source.setBullseye(null);
+            }
+        }
     }
 
-    public boolean sendSignal(PlayableCharacter source) {
-        final Vector2 targetPos = source.getTarget().getPosition();
+    public boolean sendSignal(PlayableCharacter source, PlayableCharacter target) {
+        final Vector2 targetPos = target.getPosition();
         RayCastCallback callback = new RayCastCallback() {
             @Override
             public float reportRayFixture(Fixture fixture, Vector2 vector2, Vector2 vector21, float v) {
@@ -63,24 +80,17 @@ public class VisionHandler {
         };
         world.rayCast(callback, source.getPosition() , targetPos);
         if (!collision) {
-            establishConnection(source);
+            return true;
         } else {
-            source.removePlayerState(Constants.PSTATE.EOT);
-            if (false) source.getTarget().looseControl();
-            else {
-                if (targetAssociation.getNextNeighbour(source, source.getTarget()) != null) {
-                    source.setTarget((PlayableCharacter) targetAssociation.getNextNeighbour(source, source.getTarget()));
-                }
-            }
             collision = false;
+            return false;
         }
     }
 
-    public void establishConnection(PlayableCharacter source) {
-        source.addPlayerState(Constants.PSTATE.EOT);
+    public void establishConnection(PlayableCharacter source, PlayableCharacter target) {
 
-        float targetX = source.getTarget().getPosition().x;
-        float targetY = source.getTarget().getPosition().y;
+        float targetX = target.getPosition().x;
+        float targetY = target.getPosition().y;
         float playerX = source.getPosition().x;
         float playerY = source.getPosition().y;
 

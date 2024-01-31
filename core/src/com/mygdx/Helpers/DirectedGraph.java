@@ -2,6 +2,7 @@ package com.mygdx.Helpers;
 
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public class DirectedGraph {
@@ -14,30 +15,25 @@ public class DirectedGraph {
 
     public void addNode(Object sourceData, Object newData) {
         if (sourceData.equals(newData)) return;
+
         GraphNode sourceNode = findNode(sourceData);
-        if (sourceNode == null) {
-            sourceNode = findNode(newData);
-            GraphNode newNode = findNode(sourceData);
-            if (newNode == null) newNode = new GraphNode(sourceData);
-            sourceNode.addNeighbour(newNode);
-            return;
-        }
+        if (sourceNode == null) return;
+
         GraphNode newNode = findNode(newData);
-        if (newNode == null) newNode = new GraphNode(newData);
-        sourceNode.addNeighbour(newNode);
+        if (newNode == null) {
+            newNode = new GraphNode(newData);
+            sourceNode.addNeighbour(newNode);
+        } else if (!sourceNode.hasNeighbour(newNode) && !newNode.hasNeighbour(sourceNode)) {
+            sourceNode.addNeighbour(newNode);
+        }
     }
 
-    public void removeNode(Object data) {
-        GraphNode nodeToRemove = findNode(data);
-        if (nodeToRemove == null) {
-            throw new IllegalArgumentException("Node not found in the graph.");
-        }
+    public void removeNode(Object source, Object data) {
+        GraphNode sourceNode = findNode(source);
+        GraphNode targetNode = findNode(data);
+        if (sourceNode == null || targetNode == null) return;
         // Remove the node from its neighbors
-        for (GraphNode node : head.neighbours) {
-            node.neighbours.remove(nodeToRemove);
-        }
-        // Remove the node from the graph
-        head.neighbours.remove(nodeToRemove);
+        if (sourceNode.hasNeighbour(targetNode)) sourceNode.neighbours.remove(targetNode);
     }
 
     private GraphNode findNode(Object data) {
@@ -64,6 +60,18 @@ public class DirectedGraph {
             neighbours.add(n.data);
         }
         return neighbours;
+    }
+
+    public LinkedList<Object> getNodesWithNeighbours() {
+        LinkedList<Object> nodesWithNeighbours = new LinkedList<>();
+        getNodesWithNeighboursRecursive(head, nodesWithNeighbours);
+        return nodesWithNeighbours;
+    }
+
+    private void getNodesWithNeighboursRecursive(GraphNode current, LinkedList<Object> result) {
+        if (current == null) return;
+        if (!current.neighbours.isEmpty()) result.add(current.data);
+        for (GraphNode neighbour : current.neighbours) getNodesWithNeighboursRecursive(neighbour, result);
     }
 
     public void printGraph() {
@@ -95,6 +103,8 @@ public class DirectedGraph {
             this.data = data;
             neighbours = new LinkedList<>();
         }
+
+        public boolean hasNeighbour(GraphNode node) { return neighbours.contains(node); }
 
         public void addNeighbour(GraphNode node) {
             neighbours.add(node);

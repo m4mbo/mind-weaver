@@ -1,39 +1,42 @@
 package com.mygdx.Handlers;
 
 import com.mygdx.RoleCast.PlayableCharacter;
+import com.mygdx.RoleCast.Mage;
 
-import java.util.Stack;
+import java.util.*;
 
 public class ControlHandler {
+    private final List<PlayableCharacter> controlChain;
+    private int currentIndex;
+    private PlayableCharacter currCharacter;
 
-    private Stack<CharacterPair> controlChain;    // Chain of current and prev characters
-
-    public ControlHandler(PlayableCharacter currCharacter) {
-        controlChain = new Stack<>();
-        controlChain.push(new CharacterPair(currCharacter, null));
+    public ControlHandler() {
+        controlChain = new ArrayList<>();
+        currentIndex = 0;
     }
 
-    public boolean characterRollback() {
-        if (controlChain.peek().prevCharacter == null) return false;
-        controlChain.pop();
-        return true;
+    public void initialize(PlayableCharacter currCharacter) {
+        this.currCharacter = currCharacter;
+        controlChain.add(currCharacter);
     }
 
-    public void setCurrCharacter(PlayableCharacter currCharacter) {
-        controlChain.push(new CharacterPair(currCharacter, controlChain.peek().currCharacter));
+    public boolean cycleCharacter() {
+        if (currentIndex >= controlChain.size()) currentIndex--;
+        currCharacter = controlChain.get(currentIndex);
+        currentIndex = (currentIndex + 1) % controlChain.size();
+        return !(currCharacter instanceof Mage);
+    }
+
+    public void addCharacterControl(PlayableCharacter character) {
+        if (controlChain.contains(character)) return;
+        controlChain.add(character);
+    }
+
+    public void removeCharacterControl(PlayableCharacter character) {
+        controlChain.remove(character);
     }
 
     public PlayableCharacter getCurrCharacter() {
-        return controlChain.peek().currCharacter;
-    }
-
-    private class CharacterPair {
-        PlayableCharacter currCharacter;
-        PlayableCharacter prevCharacter;
-
-        public CharacterPair(PlayableCharacter currCharacter, PlayableCharacter prevCharacter) {
-            this.currCharacter = currCharacter;
-            this.prevCharacter = prevCharacter;
-        }
+        return currCharacter;
     }
 }

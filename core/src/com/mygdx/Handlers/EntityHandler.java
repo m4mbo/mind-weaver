@@ -14,7 +14,7 @@ public class EntityHandler {
 
     public EntityHandler () {}
 
-    public void initializeHandler(PlayableCharacter currCharacter) {
+    public void initialize(PlayableCharacter currCharacter) {
         entityOps = new LinkedList<>();
         entities = new HashMap<>();
         addEntity(currCharacter);
@@ -62,6 +62,20 @@ public class EntityHandler {
         for (Entity entity : entities.values()) {
             entity.render(batch);
         }
+    }
+
+    public boolean eyesOnMe(PlayableCharacter character) {
+        for (Entity entity : entities.values()) {
+            if (entity instanceof PlayableCharacter) {
+                PlayableCharacter bullsEye = ((PlayableCharacter) entity).getBullseye();
+                if (bullsEye != null && bullsEye.equals(character)) return true;
+            }
+        }
+        return false;
+    }
+
+    public LinkedList<Entity> getEntities() {
+        return new LinkedList<>(entities.values());
     }
 
     private static class EntityOp {

@@ -65,14 +65,18 @@ public class GameScreen implements Screen {
         shapeDrawer = new ShapeDrawer(shaderHandler, game.batch);
         timer = new MyTimer();
 
-        Mage mage = new Mage(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3);
+        controlHandler = new ControlHandler();
         entityHandler = new EntityHandler();
-        controlHandler = new ControlHandler(mage);
-        visionHandler =  new VisionHandler(mage, world, shapeDrawer);
 
-        entityHandler.initializeHandler(mage);
-        entityHandler.addEntity(new BaseGoblin(100, 7800, world, eidAllocator.getAndIncrement(), timer, resourceManager));
-        entityHandler.addEntity(new BaseGoblin(300, 7800, world, eidAllocator.getAndIncrement(), timer, resourceManager));
+        Mage mage = new Mage(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3, controlHandler);
+
+        entityHandler.initialize(mage);
+        controlHandler.initialize(mage);
+
+        entityHandler.addEntity(new BaseGoblin(100, 7800, world, eidAllocator.getAndIncrement(), timer, resourceManager, controlHandler));
+        entityHandler.addEntity(new BaseGoblin(300, 7800, world, eidAllocator.getAndIncrement(), timer, resourceManager, controlHandler));
+
+        visionHandler =  new VisionHandler(world, shapeDrawer, entityHandler);
 
         inputProcessor.setGameVariables(entityHandler, world, controlHandler);
         world.setContactListener(new MyContactListener(entityHandler, visionHandler, controlHandler));

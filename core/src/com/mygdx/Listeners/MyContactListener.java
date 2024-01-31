@@ -50,10 +50,7 @@ public class MyContactListener implements ContactListener {
             PlayableCharacter source = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("vision") ? fa.getBody() : fb.getBody());
             PlayableCharacter target = (PlayableCharacter) entityHandler.getEntity((Integer) (fa.getUserData().equals("vision") ? fb : fa).getUserData());
 
-            if (visionHandler.getNextNeighbour(source) == null) source.setTarget(target);
-            visionHandler.addNeighbour(source, target);
-//            System.out.println("add");
-//            entityHandler.getUnivEyesight().printROV();
+            visionHandler.addTarget(source, target);
         }
     }
 
@@ -78,15 +75,11 @@ public class MyContactListener implements ContactListener {
             PlayableCharacter source = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("vision") ? fa.getBody() : fb.getBody());
             PlayableCharacter target = (PlayableCharacter) entityHandler.getEntity((Integer) (fa.getUserData().equals("vision") ? fb : fa).getUserData());
 
-            visionHandler.removeNeighbour(target);
-//            System.out.println("remove");
-//            entityHandler.getUnivEyesight().printROV();
-            source.removeTarget();
+            visionHandler.removeTarget(source, target);
+            source.setBullseye(null);
             character = controlHandler.getCurrCharacter();
-            if (controlHandler.characterRollback()) character.looseControl();
-            PlayableCharacter possible = visionHandler.getNextNeighbour(source);
-            if (possible != null) source.setTarget(possible);
-
+            if (!(character instanceof Mage)) character.looseControl();
+            controlHandler.cycleCharacter();
         }
     }
 

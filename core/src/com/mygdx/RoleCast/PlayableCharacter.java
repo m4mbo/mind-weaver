@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.Handlers.ControlHandler;
 import com.mygdx.Handlers.EntityHandler;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Tools.MyTimer;
@@ -20,14 +21,16 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     protected Constants.ASTATE currAState;     // Current animation state
     protected Constants.ASTATE prevAState;     // Previous animation state
     protected final EnumSet<Constants.PSTATE> playerStates;       // Set of player states
-    protected PlayableCharacter target;
+    protected PlayableCharacter bullseye;
+    protected ControlHandler controlHandler;
 
-    public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager) {
+    public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager, ControlHandler controlHandler) {
 
         super(id, myResourceManager);
         this.timer = timer;
         this.world = world;
-        this.target = null;
+        this.bullseye = null;
+        this.controlHandler = controlHandler;
 
         // Initializing states
         playerStates = EnumSet.noneOf(Constants.PSTATE.class);
@@ -129,11 +132,6 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         else b2body.setLinearVelocity(-Constants.MAX_SPEED_X, b2body.getLinearVelocity().y);
     }
 
-    public void removeTarget() {
-        removePlayerState(Constants.PSTATE.EOT);
-        target = null;
-    }
-
     @Override
     public void notify(String flag) {
         switch (flag) {
@@ -172,7 +170,11 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
 
     public boolean isStateActive(Constants.PSTATE state) { return playerStates.contains(state); }
 
-    public void setTarget(PlayableCharacter character) { target = character; }
+    public void setBullseye(PlayableCharacter character) {
+        if (character == null) controlHandler.removeCharacterControl(bullseye);
+        else controlHandler.addCharacterControl(character);
+        bullseye = character;
+    }
 
-    public PlayableCharacter getTarget() { return target; }
+    public PlayableCharacter getBullseye() { return bullseye; }
 }
