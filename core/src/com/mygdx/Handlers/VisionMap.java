@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.Helpers.AdjacencyList;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.RoleCast.Entity;
 import com.mygdx.RoleCast.PlayableCharacter;
@@ -13,53 +14,59 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class VisionHandler {
+public class VisionMap {
     private boolean collision;
-    private final HashMap<PlayableCharacter, LinkedList<PlayableCharacter>> targetMap;
-    private final EntityHandler entityHandler;
+    private final AdjacencyList<PlayableCharacter> targetMap;
+    private EntityHandler entityHandler;
     private final World world;
     private final ShapeDrawer shapeDrawer;
+    private PlayableCharacter mage;
 
-    public VisionHandler(World world, ShapeDrawer shapeDrawer, EntityHandler entityHandler) {
+    public VisionMap(World world, ShapeDrawer shapeDrawer) {
         collision = true;
         this.world = world;
-        this.targetMap = new HashMap<>();
-        this.entityHandler = entityHandler;
         this.shapeDrawer = shapeDrawer;
+        this.targetMap = new AdjacencyList<>();
+    }
+
+    public void initialize(EntityHandler entityHandler) {
+        this.entityHandler = entityHandler;
+        this.mage = (PlayableCharacter) entityHandler.getEntity(0);
         for (Entity entity : entityHandler.getEntities()) {
             if (entity instanceof PlayableCharacter) {
-                targetMap.put((PlayableCharacter) entity, new LinkedList<PlayableCharacter>());
+                targetMap.addVertex((PlayableCharacter) entity);
             }
         }
     }
 
-    public void addTarget(PlayableCharacter source, PlayableCharacter target) {
-        targetMap.get(source).add(target);
-    }
+    public void addTarget(PlayableCharacter source, PlayableCharacter target) { targetMap.addEdge(source, target); }
 
     public void removeTarget(PlayableCharacter source, PlayableCharacter target) {
-        targetMap.get(source).remove(target);
+        targetMap.removeEdge(source, target);
     }
 
     public void update(float delta) {
-        for (Map.Entry<PlayableCharacter, LinkedList<PlayableCharacter>> entry : targetMap.entrySet()) {
-            if (!entry.getValue().isEmpty()) {
-                attemptConnection(entry.getKey());
-            }
+        for (PlayableCharacter character : targetMap.getVerticesWithNeighbours()) {
+            attemptConnection(character);
         }
     }
 
     public void attemptConnection(PlayableCharacter source) {
-        LinkedList<PlayableCharacter> targets = targetMap.get(source);
+        LinkedList<PlayableCharacter> targets = targetMap.getNeighbours(source);
         for (PlayableCharacter target : targets) {
             if (sendSignal(source, target)) {
-                if (source instanceof Mage || entityHandler.eyesOnMe(source) || entityHandler.eyesOnMe(target)) {
-                    source.setBullseye(target);
-                    establishConnection(source, target);
-                    return;
+                if (source instanceof Mage || traceable(mage, source) || traceable(mage, target)) {
+                    if (target.getBullseye() == null || !target.getBullseye().equals(source)){
+                        source.setBullseye(target);
+                        establishConnection(source, target);
+                        return;
+                    }
                 }
             } else {
-                if (source.getBullseye() != null && source.getBullseye().equals(target)) source.setBullseye(null);
+                if (source.getBullseye() != null && source.getBullseye().equals(target)) {
+                    target.looseControl();
+                    source.setBullseye(null);
+                }
             }
         }
     }
@@ -103,6 +110,24 @@ public class VisionHandler {
             playerX -= 8 / Constants.PPM;
         }
         shapeDrawer.drawWave(new Vector2(targetX, targetY) , new Vector2(playerX, playerY), 3 / Constants.PPM);
+    }
+
+    public PlayableCharacter eyesOnMe(PlayableCharacter character) {
+        if (entityHandler == null) return null;
+        for (Entity entity :  entityHandler.getEntities()) {
+            if (entity instanceof PlayableCharacter) {
+                if (((PlayableCharacter) entity).getBullseye() != null && ((PlayableCharacter) entity).getBullseye().equals(character)) return (PlayableCharacter) entity;
+            }
+        }
+        return null;
+    }
+
+    public boolean traceable(PlayableCharacter current, PlayableCharacter destination) {
+        while(current != null) {
+            if (current.equals(destination)) return true;
+            current = current.getBullseye();
+        }
+        return false;
     }
 
 }

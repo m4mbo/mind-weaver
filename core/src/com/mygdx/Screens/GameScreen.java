@@ -36,7 +36,7 @@ public class GameScreen implements Screen {
     private final Box2DDebugRenderer b2dr;
     private final MyInputProcessor inputProcessor;
     private final EntityHandler entityHandler;
-    private final VisionHandler visionHandler;
+    private final VisionMap visionMap;
     private final CharacterCycle characterCycle;
     private final ShapeDrawer shapeDrawer;
     private final ShaderHandler shaderHandler;
@@ -65,21 +65,21 @@ public class GameScreen implements Screen {
         shapeDrawer = new ShapeDrawer(shaderHandler, game.batch);
         timer = new MyTimer();
 
-        characterCycle = new CharacterCycle();
         entityHandler = new EntityHandler();
+        visionMap =  new VisionMap(world, shapeDrawer);
+        characterCycle = new CharacterCycle(visionMap);
 
-        Mage mage = new Mage(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3, characterCycle);
-
+        Mage mage = new Mage(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3, characterCycle, visionMap);
         entityHandler.initialize(mage);
         characterCycle.initialize(mage);
 
-        entityHandler.addEntity(new BaseGoblin(100, 7800, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle));
-        entityHandler.addEntity(new BaseGoblin(300, 7800, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle));
+        entityHandler.addEntity(new BaseGoblin(100, 7800, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap));
+        entityHandler.addEntity(new BaseGoblin(300, 7800, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap));
 
-        visionHandler =  new VisionHandler(world, shapeDrawer, entityHandler);
-
+        visionMap.initialize(entityHandler);
         inputProcessor.setGameVariables(entityHandler, world, characterCycle);
-        world.setContactListener(new MyContactListener(entityHandler, visionHandler, characterCycle));
+
+        world.setContactListener(new MyContactListener(entityHandler, visionMap, characterCycle));
         b2dr = new Box2DDebugRenderer();
         new B2WorldHandler(world, map, resourceManager, timer, eidAllocator);     //Creating world
     }
@@ -91,7 +91,7 @@ public class GameScreen implements Screen {
 
         shaderHandler.update(delta);
         entityHandler.update(delta);
-        visionHandler.update(delta);
+        visionMap.update(delta);
         timer.update(delta);
         inputProcessor.update();
 

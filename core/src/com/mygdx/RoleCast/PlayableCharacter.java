@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Handlers.CharacterCycle;
+import com.mygdx.Handlers.VisionMap;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.Helpers.Subscriber;
@@ -22,14 +23,17 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     protected final EnumSet<Constants.PSTATE> playerStates;       // Set of player states
     protected PlayableCharacter bullseye;
     protected CharacterCycle characterCycle;
+    protected VisionMap visionMap;
+    protected int floorContacts; // Number of contacts with the floor to avoid anomalies
 
-    public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle) {
+    public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle, VisionMap visionMap) {
 
         super(id, myResourceManager);
         this.timer = timer;
         this.world = world;
         this.bullseye = null;
         this.characterCycle = characterCycle;
+        this.visionMap = visionMap;
 
         // Initializing states
         playerStates = EnumSet.noneOf(Constants.PSTATE.class);
@@ -39,6 +43,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         movementState = Constants.MSTATE.HSTILL;
 
         wallState = 0;
+        floorContacts = 0;
     }
 
     public void loadSprites() {}
@@ -170,10 +175,27 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     public boolean isStateActive(Constants.PSTATE state) { return playerStates.contains(state); }
 
     public void setBullseye(PlayableCharacter character) {
-        if (character == null) characterCycle.removeCharacter(bullseye);
-        else characterCycle.addCharacter(character);
+        if (character == null) {
+            characterCycle.removeCharacter(bullseye);
+            characterCycle.resetCurrIndex();
+        } else {
+            characterCycle.addCharacter(character);
+            if (!character.equals(bullseye)) characterCycle.removeCharacter(bullseye);
+        }
         bullseye = character;
     }
 
     public PlayableCharacter getBullseye() { return bullseye; }
+
+    public void increaseFloorContact() {
+        if (floorContacts == 0) land();
+        floorContacts++;
+    }
+
+    public void decreaseFloorContact() {
+        floorContacts--;
+        if (floorContacts == 0) {
+            removePlayerState(Constants.PSTATE.ON_GROUND);
+        }
+    }
 }

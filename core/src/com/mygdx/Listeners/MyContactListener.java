@@ -3,7 +3,7 @@ package com.mygdx.Listeners;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Handlers.EntityHandler;
 import com.mygdx.Handlers.CharacterCycle;
-import com.mygdx.Handlers.VisionHandler;
+import com.mygdx.Handlers.VisionMap;
 import com.mygdx.RoleCast.Mage;
 import com.mygdx.RoleCast.PlayableCharacter;
 import com.mygdx.Helpers.Constants.*;
@@ -13,12 +13,12 @@ public class MyContactListener implements ContactListener {
     private Fixture fa;
     private Fixture fb;
     private final EntityHandler entityHandler;
-    private final VisionHandler visionHandler;
+    private final VisionMap visionMap;
     private final CharacterCycle characterCycle;
 
-    public MyContactListener(EntityHandler entityHandler, VisionHandler visionHandler, CharacterCycle characterCycle) {
+    public MyContactListener(EntityHandler entityHandler, VisionMap visionMap, CharacterCycle characterCycle) {
         this.entityHandler = entityHandler;
-        this.visionHandler = visionHandler;
+        this.visionMap = visionMap;
         this.characterCycle = characterCycle;
     }
 
@@ -37,7 +37,7 @@ public class MyContactListener implements ContactListener {
             character.setWallState(1);
         } else if (fa.getUserData().equals("bottomSensor") || fb.getUserData().equals("bottomSensor")) {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("bottomSensor") ? fa.getBody() : fb.getBody());
-            character.land();
+            character.increaseFloorContact();
             if (character.getMovementState() == MSTATE.PREV) character.setMovementState(MSTATE.HSTILL);
         } else if (fa.getUserData().equals("player_hb") || fb.getUserData().equals("player_hb")) {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("player_hb") ? fa.getBody() : fb.getBody());
@@ -50,7 +50,7 @@ public class MyContactListener implements ContactListener {
             PlayableCharacter source = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("vision") ? fa.getBody() : fb.getBody());
             PlayableCharacter target = (PlayableCharacter) entityHandler.getEntity((Integer) (fa.getUserData().equals("vision") ? fb : fa).getUserData());
 
-            visionHandler.addTarget(source, target);
+            visionMap.addTarget(source, target);
         }
     }
 
@@ -69,20 +69,19 @@ public class MyContactListener implements ContactListener {
             character.setWallState(0);
         } else if (fa.getUserData().equals("bottomSensor") || fb.getUserData().equals("bottomSensor")) {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("bottomSensor") ? fa.getBody() : fb.getBody());
-            character.removePlayerState(PSTATE.ON_GROUND);
+            character.decreaseFloorContact();
         } else if (fa.getUserData().equals("vision") || fb.getUserData().equals("vision")) {
 
             PlayableCharacter source = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("vision") ? fa.getBody() : fb.getBody());
             PlayableCharacter target = (PlayableCharacter) entityHandler.getEntity((Integer) (fa.getUserData().equals("vision") ? fb : fa).getUserData());
 
-            visionHandler.removeTarget(source, target);
-            source.setBullseye(null);
+            visionMap.removeTarget(source, target);
+            if (source.getBullseye() != null && source.getBullseye().equals(target)) source.setBullseye(null);
             character = characterCycle.getCurrentCharacter();
             if (!(character instanceof Mage)) {
-                System.out.println("here");
                 character.looseControl();
             }
-            characterCycle.cycleNext();
+            characterCycle.resetCurrIndex();
         }
     }
 

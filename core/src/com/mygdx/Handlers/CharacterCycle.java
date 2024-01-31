@@ -6,9 +6,11 @@ import java.util.*;
 public class CharacterCycle {
     private final List<PlayableCharacter> characters;
     private int currentIndex;
+    private final VisionMap visionMap;
 
-    public CharacterCycle() {
+    public CharacterCycle(VisionMap visionMap) {
         characters = new ArrayList<>();
+        this.visionMap = visionMap;
         currentIndex = -1;
     }
 
@@ -22,6 +24,9 @@ public class CharacterCycle {
         if (currentIndex == -1) {
             currentIndex = 0; // If the cycle was empty, set the current index to 0
         }
+        if (character.getBullseye() != null) addCharacter(character.getBullseye());
+        PlayableCharacter possible = visionMap.eyesOnMe(character);
+        if (possible != null) addCharacter(possible);
     }
 
     public void removeCharacter(PlayableCharacter character) {
@@ -41,9 +46,14 @@ public class CharacterCycle {
     }
 
     public void cycleNext() {
+        System.out.println(characters);
         if (!characters.isEmpty()) {
             currentIndex = (currentIndex + 1) % characters.size();
         }
+    }
+
+    public void resetCurrIndex() {
+        currentIndex = 0;
     }
 
 }

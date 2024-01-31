@@ -1,33 +1,48 @@
 package com.mygdx.Helpers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.mygdx.RoleCast.PlayableCharacter;
 
-public class AdjacencyList {
-    private final Map<Object, List<Object>> adjacencyList;
+import java.util.*;
+
+public class AdjacencyList<E> {
+    private final Map<E, List<E>> adjacencyList;
 
     public AdjacencyList() {
         adjacencyList = new HashMap<>();
     }
 
     // Add a vertex to the graph
-    public void addVertex(Object vertex) {
-        adjacencyList.put(vertex, new ArrayList<>());
+    public void addVertex(E vertex) {
+        adjacencyList.put(vertex, new ArrayList<E>());
     }
 
     // Add an edge between two vertices
-    public void addEdge(Object source, Object destination) {
+    public void addEdge(E source, E destination) {
         adjacencyList.get(source).add(destination);
-        adjacencyList.get(destination).add(source);
     }
 
-    // Print the adjacency list
+    public void removeEdge(E source, E destination) {
+        adjacencyList.get(source).remove(destination);
+    }
+
+    public LinkedList<E> getVerticesWithNeighbours() {
+        LinkedList<E> vertices = new LinkedList<>();
+        for (Map.Entry<E, List<E>> entry : adjacencyList.entrySet()) {
+            if (!entry.getValue().isEmpty()) {
+                vertices.add(entry.getKey());
+            }
+        }
+        return vertices;
+    }
+
+    public LinkedList<E> getNeighbours(E source) {
+        return new LinkedList<E>(adjacencyList.get(source));
+    }
+
     public void printAdjacencyList() {
-        for (Map.Entry<Object, List<Object>> entry : adjacencyList.entrySet()) {
+        for (Map.Entry<E, List<E>> entry : adjacencyList.entrySet()) {
             Object vertex = entry.getKey();
-            List<Object> neighbors = entry.getValue();
+            List<E> neighbors = entry.getValue();
 
             System.out.print("Vertex " + vertex + " is connected to: ");
             for (Object neighbor : neighbors) {

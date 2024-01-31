@@ -64,16 +64,6 @@ public class EntityHandler {
         }
     }
 
-    public boolean eyesOnMe(PlayableCharacter character) {
-        for (Entity entity : entities.values()) {
-            if (entity instanceof PlayableCharacter) {
-                PlayableCharacter bullsEye = ((PlayableCharacter) entity).getBullseye();
-                if (bullsEye != null && bullsEye.equals(character)) return true;
-            }
-        }
-        return false;
-    }
-
     public LinkedList<Entity> getEntities() {
         return new LinkedList<>(entities.values());
     }
