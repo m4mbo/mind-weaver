@@ -55,10 +55,8 @@ public class VisionHandler {
             if (sendSignal(source, target)) {
                 if (source instanceof Mage || entityHandler.eyesOnMe(source) || entityHandler.eyesOnMe(target)) {
                     source.setBullseye(target);
-                    if (target.getBullseye() == null || !target.getBullseye().equals(source)) {
-                        establishConnection(source, target);
-                        return;
-                    }
+                    establishConnection(source, target);
+                    return;
                 }
             } else {
                 if (source.getBullseye() != null && source.getBullseye().equals(target)) source.setBullseye(null);

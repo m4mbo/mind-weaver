@@ -2,7 +2,7 @@ package com.mygdx.Listeners;
 
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Handlers.EntityHandler;
-import com.mygdx.Handlers.ControlHandler;
+import com.mygdx.Handlers.CharacterCycle;
 import com.mygdx.Handlers.VisionHandler;
 import com.mygdx.RoleCast.Mage;
 import com.mygdx.RoleCast.PlayableCharacter;
@@ -14,12 +14,12 @@ public class MyContactListener implements ContactListener {
     private Fixture fb;
     private final EntityHandler entityHandler;
     private final VisionHandler visionHandler;
-    private final ControlHandler controlHandler;
+    private final CharacterCycle characterCycle;
 
-    public MyContactListener(EntityHandler entityHandler, VisionHandler visionHandler, ControlHandler controlHandler) {
+    public MyContactListener(EntityHandler entityHandler, VisionHandler visionHandler, CharacterCycle characterCycle) {
         this.entityHandler = entityHandler;
         this.visionHandler = visionHandler;
-        this.controlHandler = controlHandler;
+        this.characterCycle = characterCycle;
     }
 
     @Override
@@ -77,9 +77,12 @@ public class MyContactListener implements ContactListener {
 
             visionHandler.removeTarget(source, target);
             source.setBullseye(null);
-            character = controlHandler.getCurrCharacter();
-            if (!(character instanceof Mage)) character.looseControl();
-            controlHandler.cycleCharacter();
+            character = characterCycle.getCurrentCharacter();
+            if (!(character instanceof Mage)) {
+                System.out.println("here");
+                character.looseControl();
+            }
+            characterCycle.cycleNext();
         }
     }
 

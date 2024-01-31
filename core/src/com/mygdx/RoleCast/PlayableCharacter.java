@@ -4,13 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.Handlers.ControlHandler;
-import com.mygdx.Handlers.EntityHandler;
+import com.mygdx.Handlers.CharacterCycle;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.Helpers.Subscriber;
 import com.mygdx.Helpers.Constants;
-import com.mygdx.Tools.ShapeDrawer;
+
 import java.util.EnumSet;
 
 public abstract class PlayableCharacter extends Entity implements Subscriber {
@@ -22,15 +21,15 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     protected Constants.ASTATE prevAState;     // Previous animation state
     protected final EnumSet<Constants.PSTATE> playerStates;       // Set of player states
     protected PlayableCharacter bullseye;
-    protected ControlHandler controlHandler;
+    protected CharacterCycle characterCycle;
 
-    public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager, ControlHandler controlHandler) {
+    public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle) {
 
         super(id, myResourceManager);
         this.timer = timer;
         this.world = world;
         this.bullseye = null;
-        this.controlHandler = controlHandler;
+        this.characterCycle = characterCycle;
 
         // Initializing states
         playerStates = EnumSet.noneOf(Constants.PSTATE.class);
@@ -171,8 +170,8 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     public boolean isStateActive(Constants.PSTATE state) { return playerStates.contains(state); }
 
     public void setBullseye(PlayableCharacter character) {
-        if (character == null) controlHandler.removeCharacterControl(bullseye);
-        else controlHandler.addCharacterControl(character);
+        if (character == null) characterCycle.removeCharacter(bullseye);
+        else characterCycle.addCharacter(character);
         bullseye = character;
     }
 
