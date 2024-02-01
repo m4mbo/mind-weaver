@@ -16,6 +16,8 @@ import com.mygdx.Game.MindWeaver;
 import com.mygdx.Handlers.*;
 import com.mygdx.Listeners.MyContactListener;
 import com.mygdx.Listeners.GameInputProcessor;
+import com.mygdx.Objects.Door;
+import com.mygdx.Objects.PressurePlate;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.RoleCast.BaseGoblin;
 import com.mygdx.RoleCast.Mage;
@@ -36,6 +38,7 @@ public class GameScreen implements Screen {
     private final Box2DDebugRenderer b2dr;
     private final GameInputProcessor inputProcessor;
     private final EntityHandler entityHandler;
+    private final ObjectHandler objectHandler;
     private final VisionMap visionMap;
     private final CharacterCycle characterCycle;
     private final ShapeDrawer shapeDrawer;
@@ -65,12 +68,18 @@ public class GameScreen implements Screen {
         shapeDrawer = new ShapeDrawer(shaderHandler, game.batch);
         timer = new MyTimer();
 
+        objectHandler = new ObjectHandler();
+        Door door = new Door(world, resourceManager, 330, 7642);
+        objectHandler.addObject(door);
+        PressurePlate pressurePlate = new PressurePlate(world, resourceManager, 250, 7647, 2);
+        pressurePlate.addReactable(door);
+        objectHandler.addObject(pressurePlate);
         entityHandler = new EntityHandler();
         visionMap =  new VisionMap(world, shapeDrawer);
         characterCycle = new CharacterCycle(visionMap);
 
         Mage mage = new Mage(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3, characterCycle, visionMap);
-        entityHandler.initialize(mage);
+        entityHandler.addEntity(mage);
         characterCycle.initialize(mage);
 
         entityHandler.addEntity(new BaseGoblin(100, 7800, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap));
@@ -94,19 +103,20 @@ public class GameScreen implements Screen {
         visionMap.update(delta);
         timer.update(delta);
         inputProcessor.update();
+        objectHandler.update(delta);
 
         world.step(1/60f, 6, 2);
 
         entityHandler.handleEntities();
-
-        gameCam.position.set(characterCycle.getCurrentCharacter().getPosition().x, characterCycle.getCurrentCharacter().getPosition().y + 20 / Constants.PPM, 0);
-        gameCam.update();
     }
 
     @Override
     public void render(float delta) {
 
         update(delta);
+
+        gameCam.position.set(characterCycle.getCurrentCharacter().getPosition().x, characterCycle.getCurrentCharacter().getPosition().y + 20 / Constants.PPM, 0);
+        gameCam.update();
 
         // Clearing the screen
         Gdx.gl.glClearColor( 0, 0, 0, 1 );
@@ -115,11 +125,14 @@ public class GameScreen implements Screen {
         renderer.setView(gameCam);
         renderer.render();
         entityHandler.render(game.batch);
+        objectHandler.render(game.batch);
 
-        b2dr.render(world, gameCam.combined);
+        //b2dr.render(world, gameCam.combined);
         game.batch.setProjectionMatrix(gameCam.combined);
 
         shapeDrawer.render(game.batch);
+
+
 
     }
 

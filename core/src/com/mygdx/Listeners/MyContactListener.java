@@ -77,11 +77,12 @@ public class MyContactListener implements ContactListener {
 
             visionMap.removeTarget(source, target);
             if (source.getBullseye() != null && source.getBullseye().equals(target)) source.setBullseye(null);
+
             character = characterCycle.getCurrentCharacter();
             if (!(character instanceof Mage)) {
                 character.looseControl();
             }
-            characterCycle.resetCurrIndex();
+
         }
     }
 

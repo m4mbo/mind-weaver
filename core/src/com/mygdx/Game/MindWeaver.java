@@ -24,8 +24,32 @@ public class MindWeaver extends Game {
 		inputMultiplexer.addProcessor(gameInputProcessor);
 		inputMultiplexer.addProcessor(startInputProcessor);
 
+		loadSprites();
+
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		setScreen(new GameScreen(this, "everlush", resourceManager, gameInputProcessor));
+	}
+
+	public void loadSprites() {
+		// Mage
+		resourceManager.loadTexture("Mage/mage_run.png", "mage_run");
+		resourceManager.loadTexture("Mage/mage_idle.png", "mage_idle");
+		resourceManager.loadTexture("Mage/mage_jump.png", "mage_jump");
+		resourceManager.loadTexture("Mage/mage_land.png", "mage_land");
+		resourceManager.loadTexture("Mage/mage_fall.png", "mage_fall");
+
+		// BaseGoblin
+		resourceManager.loadTexture("Goblins/basegoblin_run.png", "goblin_run");
+		resourceManager.loadTexture("Goblins/basegoblin_idle.png", "goblin_idle");
+		resourceManager.loadTexture("Goblins/basegoblin_jump.png", "goblin_jump");
+		resourceManager.loadTexture("Goblins/basegoblin_land.png", "goblin_land");
+		resourceManager.loadTexture("Goblins/basegoblin_fall.png", "goblin_fall");
+
+		// Objects
+		resourceManager.loadTexture("Objects/pressureplate_up.png", "pressureplate_up");
+		resourceManager.loadTexture("Objects/pressureplate_down.png", "pressureplate_down");
+		resourceManager.loadTexture("Objects/door_closed.png", "door_closed");
+		resourceManager.loadTexture("Objects/door_open.png", "door_open");
 	}
 
 	@Override

@@ -14,8 +14,6 @@ public class BaseGoblin extends PlayableCharacter{
     public BaseGoblin(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle, VisionMap visionMap) {
         super(world, id, timer, myResourceManager, characterCycle, visionMap);
 
-        loadSprites();
-
         // Initializing sprite
         setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_idle"), 20, 14)[0], 1/5f, false, 1f);
 
@@ -74,16 +72,6 @@ public class BaseGoblin extends PlayableCharacter{
         fdef.filter.categoryBits = Constants.BIT_FEET;
         fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_GOBLIN | Constants.BIT_MAGE;
         b2body.createFixture(fdef).setUserData("bottomSensor");
-    }
-
-    @Override
-    public void loadSprites() {
-        // Loading all textures
-        resourceManager.loadTexture("Goblins/basegoblin_run.png", "goblin_run");
-        resourceManager.loadTexture("Goblins/basegoblin_idle.png", "goblin_idle");
-        resourceManager.loadTexture("Goblins/basegoblin_jump.png", "goblin_jump");
-        resourceManager.loadTexture("Goblins/basegoblin_land.png", "goblin_land");
-        resourceManager.loadTexture("Goblins/basegoblin_fall.png", "goblin_fall");
     }
 
     @Override

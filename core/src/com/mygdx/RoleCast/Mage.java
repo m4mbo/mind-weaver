@@ -21,8 +21,6 @@ public class Mage extends PlayableCharacter {
 
         currCheckPoint = new Vector2(x / Constants.PPM, y / Constants.PPM);
 
-        loadSprites();
-
         // Initializing sprite
         setAnimation(TextureRegion.split(resourceManager.getTexture("mage_idle"), 20, 20)[0], 1/5f, false, 1);
 
@@ -80,16 +78,6 @@ public class Mage extends PlayableCharacter {
         fdef.filter.categoryBits = Constants.BIT_FEET;
         fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_GOBLIN;
         b2body.createFixture(fdef).setUserData("bottomSensor");
-    }
-
-    @Override
-    public void loadSprites() {
-        // Loading all textures
-        resourceManager.loadTexture("Mage/mage_run.png", "mage_run");
-        resourceManager.loadTexture("Mage/mage_idle.png", "mage_idle");
-        resourceManager.loadTexture("Mage/mage_jump.png", "mage_jump");
-        resourceManager.loadTexture("Mage/mage_land.png", "mage_land");
-        resourceManager.loadTexture("Mage/mage_fall.png", "mage_fall");
     }
 
     @Override

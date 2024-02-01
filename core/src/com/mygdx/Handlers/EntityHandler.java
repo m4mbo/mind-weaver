@@ -12,12 +12,9 @@ public class EntityHandler {
     private HashMap<Integer, Entity> entities;
     private LinkedList<EntityOp> entityOps;
 
-    public EntityHandler () {}
-
-    public void initialize(PlayableCharacter currCharacter) {
+    public EntityHandler () {
         entityOps = new LinkedList<>();
         entities = new HashMap<>();
-        addEntity(currCharacter);
     }
 
     public void addEntity(Entity entity) {

@@ -46,8 +46,6 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         floorContacts = 0;
     }
 
-    public void loadSprites() {}
-
     public void update(float delta) {
 
         // Capping y velocity
