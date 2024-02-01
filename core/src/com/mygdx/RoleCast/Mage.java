@@ -28,6 +28,7 @@ public class Mage extends PlayableCharacter {
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, y / Constants.PPM);
+        bdef.fixedRotation = true;
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
@@ -40,7 +41,7 @@ public class Mage extends PlayableCharacter {
         fdef.shape = polygonShape;
         fdef.friction = 0;
         fdef.filter.categoryBits = Constants.BIT_MAGE;
-        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_CHECKPOINT | Constants.BIT_GOBLIN;
+        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_CHECKPOINT | Constants.BIT_GOBLIN | Constants.BIT_FEET;
         b2body.createFixture(fdef).setUserData(id);
 
         //Create player hitbox
@@ -76,6 +77,7 @@ public class Mage extends PlayableCharacter {
         polygonShape.setAsBox(6.6f / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -8 / Constants.PPM), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
+        fdef.filter.categoryBits = Constants.BIT_FEET;
         fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_GOBLIN;
         b2body.createFixture(fdef).setUserData("bottomSensor");
     }

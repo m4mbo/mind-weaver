@@ -33,7 +33,7 @@ public class BaseGoblin extends PlayableCharacter{
         fdef.shape = polygonShape;
         fdef.friction = 0;
         fdef.filter.categoryBits = Constants.BIT_GOBLIN;
-        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_MAGE | Constants.BIT_GOBLIN | Constants.BIT_ROV;
+        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_MAGE | Constants.BIT_GOBLIN | Constants.BIT_ROV | Constants.BIT_FEET;
         b2body.createFixture(fdef).setUserData(id);
 
         fdef = new FixtureDef();
@@ -71,6 +71,7 @@ public class BaseGoblin extends PlayableCharacter{
         polygonShape.setAsBox(6.6f / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -6 / Constants.PPM), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
+        fdef.filter.categoryBits = Constants.BIT_FEET;
         fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_GOBLIN | Constants.BIT_MAGE;
         b2body.createFixture(fdef).setUserData("bottomSensor");
     }

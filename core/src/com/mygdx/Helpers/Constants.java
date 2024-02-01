@@ -30,4 +30,6 @@ public class Constants {
     public static final short BIT_GOBLIN = 16;
     public static final short BIT_MAGE = 32;
     public static final short BIT_ROV = 64;
+    public static final short BIT_SUPPORT = 128;
+    public static final short BIT_FEET = 256;
 }

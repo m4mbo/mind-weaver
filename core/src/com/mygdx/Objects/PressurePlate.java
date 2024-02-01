@@ -16,9 +16,10 @@ public class PressurePlate extends Interactable {
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, (y + 2) / Constants.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
+        bdef.fixedRotation = true;
         b2body = world.createBody(bdef);
 
-        bdef.position.set(x / Constants.PPM, (y - 9) / Constants.PPM);
+        bdef.position.set(x / Constants.PPM, (y - 12) / Constants.PPM);
         bdef.type = BodyDef.BodyType.StaticBody;
         b2body2 = world.createBody(bdef);
 
@@ -34,16 +35,19 @@ public class PressurePlate extends Interactable {
         fdef.friction = 0;
         fdef.density = 1 / ((8 / Constants.PPM) * (0.2f / Constants.PPM));
         fdef.filter.categoryBits = Constants.BIT_GROUND;
+        fdef.filter.maskBits = Constants.BIT_SUPPORT | Constants.BIT_FEET | Constants.BIT_MAGE | Constants.BIT_GOBLIN;
         b2body.createFixture(fdef).setUserData("plate");
 
         polygonShape.setAsBox(0.2f / Constants.PPM, 12 / Constants.PPM, new Vector2(-10f / Constants.PPM, 10 / Constants.PPM), 0);
         fdef.shape = polygonShape;
-        fdef.filter.categoryBits = Constants.BIT_MAGE;
+        fdef.filter.categoryBits = Constants.BIT_SUPPORT;
+        fdef.filter.maskBits = Constants.BIT_GROUND;
         b2body2.createFixture(fdef).setUserData("support");
 
         polygonShape.setAsBox(0.1f / Constants.PPM, 12 / Constants.PPM, new Vector2(10f / Constants.PPM, 10 / Constants.PPM), 0);
         fdef.shape = polygonShape;
-        fdef.filter.categoryBits = Constants.BIT_MAGE;
+        fdef.filter.categoryBits = Constants.BIT_SUPPORT;
+        fdef.filter.maskBits = Constants.BIT_GROUND;
         b2body2.createFixture(fdef).setUserData("support");
 
         polygonShape.setAsBox(8 / Constants.PPM, 0.2f / Constants.PPM, new Vector2(0, 0), 0);
@@ -55,11 +59,11 @@ public class PressurePlate extends Interactable {
         djd.bodyA = b2body;
         djd.bodyB = b2body2;
 
-        djd.length = b2body.getPosition().y - b2body2.getPosition().y;
+        djd.length = 0.1f;
         djd.collideConnected = true;
 
         djd.frequencyHz = 3f;
-        djd.dampingRatio = 0.000005f / Constants.PPM;
+        djd.dampingRatio = 10f / Constants.PPM;
 
         world.createJoint(djd);
     }
