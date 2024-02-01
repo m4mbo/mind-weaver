@@ -27,7 +27,6 @@ public class PressurePlate extends Interactable {
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape polygonShape = new PolygonShape();
-        CircleShape circleShape = new CircleShape();
 
         //Create body fixture
         polygonShape.setAsBox(8 / Constants.PPM, 1f / Constants.PPM, new Vector2(0,0), 0);

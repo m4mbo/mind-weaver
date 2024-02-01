@@ -9,7 +9,6 @@ public abstract class Reactable extends B2Sprite {
 
     protected World world;
     protected Body b2body;
-    protected Fixture fixture;
 
     public Reactable(World world) {
         this.world = world;
