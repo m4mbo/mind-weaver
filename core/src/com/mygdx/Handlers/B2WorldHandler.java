@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.Objects.PressurePlate;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MyResourceManager;
@@ -55,6 +56,8 @@ public class B2WorldHandler {
             fdef.filter.categoryBits = Constants.BIT_CHECKPOINT;
             body.createFixture(fdef).setUserData("checkpoint");
         }
+
+        new PressurePlate(world, 250, 7620, 4);
 
     }
 

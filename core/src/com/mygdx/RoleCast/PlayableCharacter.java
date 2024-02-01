@@ -175,14 +175,11 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     public boolean isStateActive(Constants.PSTATE state) { return playerStates.contains(state); }
 
     public void setBullseye(PlayableCharacter character) {
-        if (character == null) {
-            characterCycle.removeCharacter(bullseye);
-            characterCycle.resetCurrIndex();
-        } else {
-            characterCycle.addCharacter(character);
-            if (!character.equals(bullseye)) characterCycle.removeCharacter(bullseye);
-        }
         bullseye = character;
+        characterCycle.updateCycle();
+        if (character == null) {
+            characterCycle.resetCurrIndex();
+        }
     }
 
     public PlayableCharacter getBullseye() { return bullseye; }

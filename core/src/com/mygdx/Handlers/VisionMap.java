@@ -10,9 +10,8 @@ import com.mygdx.RoleCast.Entity;
 import com.mygdx.RoleCast.PlayableCharacter;
 import com.mygdx.RoleCast.Mage;
 import com.mygdx.Tools.ShapeDrawer;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+
+import java.util.*;
 
 public class VisionMap {
     private boolean collision;
@@ -57,7 +56,7 @@ public class VisionMap {
             if (sendSignal(source, target)) {
                 if (source instanceof Mage || traceable(mage, source) || traceable(mage, target)) {
                     if (target.getBullseye() == null || !target.getBullseye().equals(source)){
-                        source.setBullseye(target);
+                        if (source.getBullseye() == null || !source.getBullseye().equals(target)) source.setBullseye(target);
                         establishConnection(source, target);
                         return;
                     }
@@ -112,14 +111,17 @@ public class VisionMap {
         shapeDrawer.drawWave(new Vector2(targetX, targetY) , new Vector2(playerX, playerY), 3 / Constants.PPM);
     }
 
-    public PlayableCharacter eyesOnMe(PlayableCharacter character) {
+    public LinkedList<PlayableCharacter> getObservers(PlayableCharacter character) {
         if (entityHandler == null) return null;
+        LinkedList<PlayableCharacter> observers = new LinkedList<>();
         for (Entity entity :  entityHandler.getEntities()) {
             if (entity instanceof PlayableCharacter) {
-                if (((PlayableCharacter) entity).getBullseye() != null && ((PlayableCharacter) entity).getBullseye().equals(character)) return (PlayableCharacter) entity;
+                if (((PlayableCharacter) entity).getBullseye() != null && ((PlayableCharacter) entity).getBullseye().equals(character)){
+                    observers.add((PlayableCharacter) entity);
+                }
             }
         }
-        return null;
+        return observers;
     }
 
     public boolean traceable(PlayableCharacter current, PlayableCharacter destination) {
@@ -130,4 +132,23 @@ public class VisionMap {
         return false;
     }
 
+    public List<PlayableCharacter> getBullseyeStream() {
+        PlayableCharacter current = mage;
+        ArrayList<PlayableCharacter> stream = new ArrayList<>();
+        while(current != null) {
+            stream.add(current);
+            PlayableCharacter temp = current.getBullseye();
+            if (temp == null) {
+                for (PlayableCharacter observer : getObservers(current)) {
+                    if (!stream.contains(observer)) {
+                        temp = observer;
+                    }
+                }
+            } else {
+                if (stream.contains(temp)) temp = null;
+            }
+            current = temp;
+        }
+        return stream;
+    }
 }

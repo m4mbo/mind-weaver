@@ -78,30 +78,30 @@ public class BaseGoblin extends PlayableCharacter{
     @Override
     public void loadSprites() {
         // Loading all textures
-        resourceManager.loadTexture("Mage/mage_run.png", "goblin_run");
+        resourceManager.loadTexture("Goblins/basegoblin_run.png", "goblin_run");
         resourceManager.loadTexture("Goblins/basegoblin_idle.png", "goblin_idle");
-        resourceManager.loadTexture("Mage/mage_jump.png", "goblin_jump");
-        resourceManager.loadTexture("Mage/mage_land.png", "goblin_land");
-        resourceManager.loadTexture("Mage/mage_fall.png", "goblin_fall");
+        resourceManager.loadTexture("Goblins/basegoblin_jump.png", "goblin_jump");
+        resourceManager.loadTexture("Goblins/basegoblin_land.png", "goblin_land");
+        resourceManager.loadTexture("Goblins/basegoblin_fall.png", "goblin_fall");
     }
 
     @Override
     public void handleAnimation() {
         switch (currAState) {
             case RUN:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_run"), 20, 20)[0], 1/14f, false, 1f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_run"), 20, 14)[0], 1/14f, false, 1f);
                 break;
             case IDLE:
                 setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_idle"), 20, 14)[0], 1/5f, false, 1f);
                 break;
             case JUMP:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_jump"), 20, 20)[0], 1/17f, true, 1f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_jump"), 20, 14)[0], 1/17f, true, 1f);
                 break;
             case FALL:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_fall"), 20, 20)[0], 1/5f, true, 1f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_fall"), 20, 14)[0], 1/5f, true, 1f);
                 break;
             case LAND:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_land"), 20, 20)[0], 1/14f, false, 1f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_land"), 20, 14)[0], 1/14f, false, 1f);
                 break;
         }
     }

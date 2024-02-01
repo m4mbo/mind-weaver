@@ -4,49 +4,30 @@ import com.mygdx.RoleCast.PlayableCharacter;
 import java.util.*;
 
 public class CharacterCycle {
-    private final List<PlayableCharacter> characters;
+    private List<PlayableCharacter> characters;
     private int currentIndex;
     private final VisionMap visionMap;
 
     public CharacterCycle(VisionMap visionMap) {
         characters = new ArrayList<>();
         this.visionMap = visionMap;
-        currentIndex = -1;
+        currentIndex = 0;
     }
 
-    public void initialize(PlayableCharacter currCharacter) {
-        addCharacter(currCharacter);
-    }
+    public void initialize(PlayableCharacter currCharacter) { characters.add(currCharacter); }
 
-    public void addCharacter(PlayableCharacter character) {
-        if (characters.contains(character)) return;
-        characters.add(character);
-        if (currentIndex == -1) {
-            currentIndex = 0; // If the cycle was empty, set the current index to 0
-        }
-        if (character.getBullseye() != null) addCharacter(character.getBullseye());
-        PlayableCharacter possible = visionMap.eyesOnMe(character);
-        if (possible != null) addCharacter(possible);
-    }
-
-    public void removeCharacter(PlayableCharacter character) {
-        characters.remove(character);
-        if (characters.isEmpty()) {
-            currentIndex = -1; // If the cycle is empty after removal, set the current index to -1
-        } else {
-            currentIndex = currentIndex % characters.size(); // Adjust the current index after removal
+    public void updateCycle() {
+        characters = visionMap.getBullseyeStream();
+        if (characters.size() >= currentIndex) {
+            currentIndex = currentIndex % characters.size(); // Adjust the current index after updating
         }
     }
 
     public PlayableCharacter getCurrentCharacter() {
-        if (currentIndex == -1) {
-            return null; // Return null if the cycle is empty
-        }
         return characters.get(currentIndex);
     }
 
     public void cycleNext() {
-        System.out.println(characters);
         if (!characters.isEmpty()) {
             currentIndex = (currentIndex + 1) % characters.size();
         }
