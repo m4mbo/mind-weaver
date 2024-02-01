@@ -59,10 +59,10 @@ public class PressurePlate extends Interactable {
         djd.bodyA = b2body;
         djd.bodyB = b2body2;
 
-        djd.length = 0.1f;
+        djd.length = 0.2f;
         djd.collideConnected = true;
 
-        djd.frequencyHz = 3f;
+        djd.frequencyHz = 2f;
         djd.dampingRatio = 10f / Constants.PPM;
 
         world.createJoint(djd);
