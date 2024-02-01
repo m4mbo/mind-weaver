@@ -4,44 +4,82 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.Game.Glissoar;
+import com.mygdx.Game.MindWeaver;
 import com.mygdx.Handlers.CharacterCycle;
-import com.mygdx.Handlers.EntityHandler;
-import com.mygdx.RoleCast.Mage;
 import com.mygdx.RoleCast.PlayableCharacter;
 import com.mygdx.Screens.GameScreen;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Helpers.Constants.*;
 
-public class MyInputProcessor implements InputProcessor {
+public class GameInputProcessor implements InputProcessor {
 
-    private EntityHandler entityHandler;
     private CharacterCycle characterCycle;
-    private World world;
-    private final Glissoar game;
-    public MyInputProcessor(Glissoar game) {
+    private final MindWeaver game;
+    public GameInputProcessor(MindWeaver game) {
         this.game = game;
     }
 
     // Function called only by the game screen
-    public void setGameVariables(EntityHandler entityHandler, World world, CharacterCycle characterCycle) {
-        this.entityHandler = entityHandler;
-        this.world = world;
+    public void setGameVariables(CharacterCycle characterCycle) {
         this.characterCycle = characterCycle;
     }
 
     @Override
     public boolean keyDown (int keycode) {
-        if (characterCycle.getCurrentCharacter() == null || world == null) return false;
-        if (game.getScreen() instanceof GameScreen) return keyDownGameScreen(keycode);
-        return false;
+
+        if (!(game.getScreen() instanceof GameScreen)) return false;
+
+        PlayableCharacter character = characterCycle.getCurrentCharacter();
+        switch (keycode) {
+            case Input.Keys.SPACE:
+                if (character.isStateActive(PSTATE.ON_GROUND)) {
+                    character.jump();
+                    break;
+                }
+                if (character.getWallState() != 0) {
+                    character.setMovementState(Constants.MSTATE.PREV);
+                    character.wallJump();
+                    break;
+                }
+                break;
+            case Input.Keys.D:
+                character.setMovementState(Constants.MSTATE.RIGHT);
+                break;
+            case Input.Keys.A:
+                character.setMovementState(Constants.MSTATE.LEFT);
+                break;
+            case Input.Keys.SHIFT_LEFT:
+                characterCycle.cycleNext();
+                character.looseControl();
+            default:
+                break;
+        }
+        return true;
     }
 
     @Override
     public boolean keyUp (int keycode) {
-        if (characterCycle.getCurrentCharacter() == null || world == null) return false;
-        if (game.getScreen() instanceof GameScreen) return keyUpGameScreen(keycode);
-        return false;
+
+        if (!(game.getScreen() instanceof GameScreen)) return false;
+
+        PlayableCharacter character = characterCycle.getCurrentCharacter();
+        switch (keycode) {
+            case Input.Keys.SPACE:
+                if (character.isStateActive(PSTATE.ON_GROUND) || character.isStateActive(PSTATE.STUNNED)) break;
+                character.fall();
+                break;
+            case Input.Keys.D:
+                if (Gdx.input.isKeyPressed(Input.Keys.A)) character.setMovementState(Constants.MSTATE.LEFT);
+                else character.setMovementState(Constants.MSTATE.HSTILL);
+                break;
+            case Input.Keys.A:
+                if (Gdx.input.isKeyPressed(Input.Keys.D)) character.setMovementState(Constants.MSTATE.RIGHT);
+                else character.setMovementState(Constants.MSTATE.HSTILL);
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     /*
@@ -83,57 +121,6 @@ public class MyInputProcessor implements InputProcessor {
         return false;
     }
 
-    // Helper function to simply keyDown implementation
-    public boolean keyDownGameScreen(int keycode) {
-
-        PlayableCharacter character = characterCycle.getCurrentCharacter();
-        switch (keycode) {
-            case Input.Keys.SPACE:
-                if (character.isStateActive(PSTATE.ON_GROUND)) {
-                    character.jump();
-                    break;
-                }
-                if (character.getWallState() != 0) {
-                    character.setMovementState(Constants.MSTATE.PREV);
-                    character.wallJump();
-                    break;
-                }
-                break;
-            case Input.Keys.D:
-                character.setMovementState(Constants.MSTATE.RIGHT);
-                break;
-            case Input.Keys.A:
-                character.setMovementState(Constants.MSTATE.LEFT);
-                break;
-            case Input.Keys.SHIFT_LEFT:
-                characterCycle.cycleNext();
-                character.looseControl();
-            default:
-                break;
-        }
-        return false;
-    }
-
-    public boolean keyUpGameScreen(int keycode) {
-        PlayableCharacter character = characterCycle.getCurrentCharacter();
-        switch (keycode) {
-            case Input.Keys.SPACE:
-                if (character.isStateActive(PSTATE.ON_GROUND) || character.isStateActive(PSTATE.STUNNED)) break;
-                character.fall();
-                break;
-            case Input.Keys.D:
-                if (Gdx.input.isKeyPressed(Input.Keys.A)) character.setMovementState(Constants.MSTATE.LEFT);
-                else character.setMovementState(Constants.MSTATE.HSTILL);
-                break;
-            case Input.Keys.A:
-                if (Gdx.input.isKeyPressed(Input.Keys.D)) character.setMovementState(Constants.MSTATE.RIGHT);
-                else character.setMovementState(Constants.MSTATE.HSTILL);
-                break;
-            default:
-                break;
-        }
-        return false;
-    }
 }
 
 

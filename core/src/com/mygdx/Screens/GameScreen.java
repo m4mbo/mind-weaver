@@ -12,10 +12,10 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.Game.Glissoar;
+import com.mygdx.Game.MindWeaver;
 import com.mygdx.Handlers.*;
 import com.mygdx.Listeners.MyContactListener;
-import com.mygdx.Listeners.MyInputProcessor;
+import com.mygdx.Listeners.GameInputProcessor;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.RoleCast.BaseGoblin;
 import com.mygdx.RoleCast.Mage;
@@ -28,19 +28,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameScreen implements Screen {
     private final MyTimer timer;
-    private final Glissoar game;
+    private final MindWeaver game;
     private final OrthographicCamera gameCam;
     private final Viewport gamePort;
     private final OrthogonalTiledMapRenderer renderer;
     private final World world;    // World holding all the physical objects
     private final Box2DDebugRenderer b2dr;
-    private final MyInputProcessor inputProcessor;
+    private final GameInputProcessor inputProcessor;
     private final EntityHandler entityHandler;
     private final VisionMap visionMap;
     private final CharacterCycle characterCycle;
     private final ShapeDrawer shapeDrawer;
     private final ShaderHandler shaderHandler;
-    public GameScreen(Glissoar game, String stage, MyResourceManager resourceManager, MyInputProcessor inputProcessor) {
+    public GameScreen(MindWeaver game, String stage, MyResourceManager resourceManager, GameInputProcessor inputProcessor) {
 
         this.game = game;
         this.inputProcessor = inputProcessor;
@@ -77,7 +77,7 @@ public class GameScreen implements Screen {
         entityHandler.addEntity(new BaseGoblin(300, 7800, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap));
 
         visionMap.initialize(entityHandler);
-        inputProcessor.setGameVariables(entityHandler, world, characterCycle);
+        inputProcessor.setGameVariables(characterCycle);
 
         world.setContactListener(new MyContactListener(entityHandler, visionMap, characterCycle));
         b2dr = new Box2DDebugRenderer();
