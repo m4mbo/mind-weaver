@@ -71,7 +71,7 @@ public class GameScreen implements Screen {
         objectHandler = new ObjectHandler();
         Door door = new Door(world, resourceManager, 330, 7642);
         objectHandler.addObject(door);
-        PressurePlate pressurePlate = new PressurePlate(world, resourceManager, 250, 7647, 2);
+        PressurePlate pressurePlate = new PressurePlate(world, resourceManager, 250, 7649.5f, 2);
         pressurePlate.addReactable(door);
         objectHandler.addObject(pressurePlate);
         entityHandler = new EntityHandler();
