@@ -55,8 +55,8 @@ public class Door extends Reactable {
     }
 
     public void handleAnimation() {
-        if (currAState == Constants.ASTATE.OPEN) setAnimation(TextureRegion.split(resourceManager.getTexture("door_open"), 17, 34)[0], 1/10f, true, 1f);
-        else setAnimation(TextureRegion.split(resourceManager.getTexture("door_closed"), 17, 34)[0], 1/10f, true, 1f);
+        if (currAState == Constants.ASTATE.OPEN) setAnimation(TextureRegion.split(resourceManager.getTexture("door_open"), 17, 34)[0], 1/10f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
+        else setAnimation(TextureRegion.split(resourceManager.getTexture("door_closed"), 17, 34)[0], 1/10f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
     }
 
     public void step() {

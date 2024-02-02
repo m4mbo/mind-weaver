@@ -20,8 +20,15 @@ public abstract class B2Sprite {
         resize = 1;
     }
 
+    public void setAnimation(TextureRegion[] region, float delay, boolean loopLastFrame, float resize, int currFrame) {
+        animation.setFrames(region, delay, loopLastFrame, currFrame);
+        width = region[0].getRegionWidth() * resize;
+        height = region[0].getRegionHeight() * resize;
+        this.resize = resize;
+    }
+
     public void setAnimation(TextureRegion[] region, float delay, boolean loopLastFrame, float resize) {
-        animation.setFrames(region, delay, loopLastFrame);
+        animation.setFrames(region, delay, loopLastFrame, 0);
         width = region[0].getRegionWidth() * resize;
         height = region[0].getRegionHeight() * resize;
         this.resize = resize;

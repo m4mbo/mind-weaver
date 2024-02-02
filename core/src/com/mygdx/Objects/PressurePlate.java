@@ -12,13 +12,22 @@ public class PressurePlate extends Interactable {
     private Body b2body2;
     private DistanceJoint distanceJoint;
     private float threshold;
-    private int iterations;
+    private int pressedIterations;
+    private int closedIterations;
+    private boolean isPressed;
+    private float currHeight;
+    private float height;
+    private PolygonShape polygonShape;
+    private FixtureDef fdef;
 
     public PressurePlate(World world, MyResourceManager resourceManager, float x, float y, int strength) {
 
         super(world, resourceManager);
 
-        iterations = 0;
+        pressedIterations = 0;
+        closedIterations = 0;
+        height = 3;
+        currHeight = height;
 
         // Creating two bodies for spring joint
         BodyDef bdef = new BodyDef();
@@ -33,12 +42,13 @@ public class PressurePlate extends Interactable {
 
         // Creating the fixtures
 
-        FixtureDef fdef = new FixtureDef();
-        PolygonShape polygonShape = new PolygonShape();
+        fdef = new FixtureDef();
+        polygonShape = new PolygonShape();
 
         //Create body fixture
-        polygonShape.setAsBox(8 / Constants.PPM, 1f / Constants.PPM, new Vector2(0,0), 0);
+        polygonShape.setAsBox(8 / Constants.PPM, height / Constants.PPM, new Vector2(0,0), 0);
         fdef.shape = polygonShape;
+        fdef.density = 0;
         fdef.friction = 0;
         fdef.filter.categoryBits = Constants.BIT_GROUND;
         fdef.filter.maskBits = Constants.BIT_SUPPORT | Constants.BIT_FEET | Constants.BIT_MAGE | Constants.BIT_GOBLIN;
@@ -81,20 +91,33 @@ public class PressurePlate extends Interactable {
         currAState = Constants.ASTATE.CLOSED;
         prevAState = Constants.ASTATE.CLOSED;
 
-        setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_up"), 17, 7)[0], 1/10f, true, 1f);
+        setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_up"), 17, 7)[0], 1/10f, true, 1f, animation.getCurrentFrame());
+
+        // Assigning values for later use
+        fdef.density = 0;
+        fdef.friction = 0;
+        fdef.filter.categoryBits = Constants.BIT_GROUND;
+        fdef.filter.maskBits = Constants.BIT_SUPPORT | Constants.BIT_FEET | Constants.BIT_MAGE | Constants.BIT_GOBLIN;
     }
 
     public void update(float delta) {
 
-        if (distanceJoint.getReactionForce(delta).y < threshold) iterations++;
-        else currAState = Constants.ASTATE.CLOSED;
+        if (distanceJoint.getReactionForce(delta).y < threshold) pressedIterations++;
+        else { closedIterations++; }
 
-        if (iterations >= 30) {
-            iterations = 0;
+        if (pressedIterations >= 20) {
+            pressedIterations = 0;
             currAState = Constants.ASTATE.OPEN;
+            isPressed = true;
         }
 
+        if (closedIterations >= 20) {
+            closedIterations = 0;
+            currAState = Constants.ASTATE.CLOSED;
+            isPressed = false;
+        }
 
+        step();
 
         if (currAState != prevAState) {
             handleAnimation();
@@ -106,8 +129,26 @@ public class PressurePlate extends Interactable {
 
     public void handleAnimation() {
         interact();
-        if (currAState == Constants.ASTATE.OPEN) setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_down"), 17, 7)[0], 1/19f, true, 1f);
-        else setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_up"), 17, 7)[0], 1/10f, true, 1f);
+        if (currAState == Constants.ASTATE.OPEN) setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_down"), 17, 7)[0], 1/19f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
+        else setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_up"), 17, 7)[0], 1/10f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
+    }
+
+    public void step() {
+
+        if (currHeight <= 60f / Constants.PPM && isPressed) return;
+        else if (currHeight >= height && !isPressed) return;
+
+        if (isPressed) currHeight -= 20 / Constants.PPM;
+        else currHeight += 20 / Constants.PPM;
+
+        // Destroying current fixture
+        Fixture fixture = b2body.getFixtureList().get(0);
+        b2body.destroyFixture(fixture);
+
+        // Creating new fixture based on current height
+        polygonShape.setAsBox(8 / Constants.PPM, currHeight / Constants.PPM, new Vector2(0, (currHeight - height) / Constants.PPM), 0);
+        fdef.shape = polygonShape;
+        b2body.createFixture(fdef).setUserData("plate");
     }
 
 }

@@ -19,15 +19,15 @@ public class Animation {
     }
 
     public Animation(TextureRegion[] frames, float delay, boolean loopLastFrame) {
-        setFrames(frames, delay, loopLastFrame);
+        setFrames(frames, delay, loopLastFrame, 0);
     }
 
-    public void setFrames(TextureRegion[] frames, float delay, boolean loopLastFrame) {
+    public void setFrames(TextureRegion[] frames, float delay, boolean loopLastFrame, int currentFrame) {
         this.frames = frames;
         this.delay = delay;
         this.loopLastFrame = loopLastFrame;
+        this.currentFrame = currentFrame;
         time = 0;
-        currentFrame = 0;
         timesPlayed = 0;
     }
 
@@ -51,6 +51,8 @@ public class Animation {
     }
 
     public TextureRegion getFrame() { return frames[currentFrame]; }
+    public int getCurrentFrame() { return currentFrame; }
+    public int getFrameNumber() { return frames.length; }
     public int getTimesPlayed() { return timesPlayed; }
 
 }

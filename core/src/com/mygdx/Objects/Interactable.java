@@ -9,7 +9,7 @@ import java.util.LinkedList;
 
 public abstract class Interactable extends B2Sprite {
 
-    private LinkedList<Reactable> reactables;
+    protected LinkedList<Reactable> reactables;
     protected World world;
     protected MyResourceManager resourceManager;
     protected Constants.ASTATE currAState;     // Current animation state

@@ -25,6 +25,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     protected CharacterCycle characterCycle;
     protected VisionMap visionMap;
     protected int floorContacts; // Number of contacts with the floor to avoid anomalies
+    private int airIterations;
 
     public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle, VisionMap visionMap) {
 
@@ -44,6 +45,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
 
         wallState = 0;
         floorContacts = 0;
+        airIterations = 0;
     }
 
     public void update(float delta) {
@@ -53,11 +55,19 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
             b2body.setLinearVelocity(new Vector2(b2body.getLinearVelocity().x, -Constants.MAX_SPEED_Y));
 
         // Animation priority
-        if (isFalling()) {
-            currAState = Constants.ASTATE.FALL;
-            b2body.setLinearDamping(0);
-        } else if (!isStateActive(Constants.PSTATE.ON_GROUND)) {
-            currAState = Constants.ASTATE.JUMP;
+        if (!isStateActive(Constants.PSTATE.ON_GROUND)) {
+            airIterations++;
+        } else {
+            airIterations = 0;
+        }
+
+        if (airIterations >= 5) {
+            if (isFalling()) {
+                currAState = Constants.ASTATE.FALL;
+                b2body.setLinearDamping(0);
+            } else {
+                currAState = Constants.ASTATE.JUMP;
+            }
         }
 
         if (isStateActive(Constants.PSTATE.STUNNED)) movementState = Constants.MSTATE.PREV;
@@ -97,7 +107,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     public void land() {
         addPlayerState(Constants.PSTATE.ON_GROUND);
         addPlayerState(Constants.PSTATE.LANDING);
-        currAState = Constants.ASTATE.LAND;
+        if (airIterations >= 5) currAState = Constants.ASTATE.LAND;
         timer.start(0.2f, "land", this);
         world.setGravity(new Vector2(0, -Constants.G));
         b2body.setLinearDamping(0);
@@ -175,9 +185,6 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     public void setBullseye(PlayableCharacter character) {
         bullseye = character;
         characterCycle.updateCycle();
-        if (character == null) {
-            characterCycle.resetCurrIndex();
-        }
     }
 
     public PlayableCharacter getBullseye() { return bullseye; }

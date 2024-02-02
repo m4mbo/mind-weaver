@@ -132,6 +132,15 @@ public class VisionMap {
         return false;
     }
 
+    public boolean traceable(PlayableCharacter destination) {
+        PlayableCharacter current = mage;
+        while(current != null) {
+            if (current.equals(destination)) return true;
+            current = current.getBullseye();
+        }
+        return false;
+    }
+
     public List<PlayableCharacter> getBullseyeStream() {
         PlayableCharacter current = mage;
         ArrayList<PlayableCharacter> stream = new ArrayList<>();
