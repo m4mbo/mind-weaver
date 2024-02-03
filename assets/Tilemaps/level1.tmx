@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="200" height="200" tilewidth="14" tileheight="14" infinite="0" nextlayerid="4" nextobjectid="6">
+ <tileset firstgid="1" source="dungeon.tsx"/>
+ <layer id="1" name="background" width="200" height="200">
+  <data encoding="base64" compression="zlib">
+   eJzt1zsKgDAQQME0Kb3/dW0VsuInS2KYAcEqWOwjbikAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADj1NEfAJOojafXubCKnm1knAejZMyyPlhFxhzrg1W05ri1lzzZVfTBKnr2kbHrw2zu9vH2foE/0wfE/F9B7Mv9oA842w7v+oCYPuCaNgAAACC2A3y/AlI=
+  </data>
+ </layer>
+ <layer id="2" name="graphics" width="200" height="200">
+  <data encoding="base64" compression="zlib">
+   eJzt2D1LA1EQBdAFUdDCKvitfdTKxo9O/f//ySkimCXjziNq3so5cCEbNjPNuyzZYQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+J/2dxzomX5ATj8gpx+Q0w/I6Qfk9ANyf90F/WBOdtkN/aB3lbN9Ejks5qw4Uz+Yg8oZPorcRu4i9xPz9ooz9YM5qPZjk+vR9U1kMaw/Tz53ZLugZ9v042rDd8vGXdCzbfrxE7ugZy39uCzMO44cfMnULuhZSz9eI2+R99GMh8jF6vP4//njxC7oWaUf58P6M+G7nK5+8xx5KcyGnrW8i63mqeFe6Nlv9KMl0DP9gJx+QE4/IKcfkPsAp5UQew==
+  </data>
+ </layer>
+ <objectgroup id="3" name="ground">
+  <object id="1" x="140.182" y="2702.18" width="139.667" height="12.1515"/>
+  <object id="2" x="280.091" y="2674.19" width="13.7702" height="27.7234"/>
+  <object id="3" x="293.859" y="2674.18" width="42.0497" height="13.4545"/>
+  <object id="4" x="126.182" y="2618.36" width="13.9091" height="83.7273"/>
+  <object id="5" x="280.063" y="2632.06" width="55.7727" height="13.875"/>
+ </objectgroup>
+</map>

@@ -27,7 +27,7 @@ public class MindWeaver extends Game {
 		loadSprites();
 
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		setScreen(new GameScreen(this, "everlush", resourceManager, gameInputProcessor));
+		setScreen(new GameScreen(this, 1, resourceManager, gameInputProcessor));
 	}
 
 	public void loadSprites() {

@@ -91,7 +91,7 @@ public class PressurePlate extends Interactable {
         currAState = Constants.ASTATE.CLOSED;
         prevAState = Constants.ASTATE.CLOSED;
 
-        setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_up"), 17, 7)[0], 1/10f, true, 1f, animation.getCurrentFrame());
+        setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_up"), 14, 5)[0], 1/10f, true, 1f, animation.getCurrentFrame());
 
         // Assigning values for later use
         fdef.density = 0;
@@ -129,8 +129,8 @@ public class PressurePlate extends Interactable {
 
     public void handleAnimation() {
         interact();
-        if (currAState == Constants.ASTATE.OPEN) setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_down"), 17, 7)[0], 1/19f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
-        else setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_up"), 17, 7)[0], 1/10f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
+        if (currAState == Constants.ASTATE.OPEN) setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_down"), 14, 5)[0], 1/19f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
+        else setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_up"), 14, 5)[0], 1/10f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
     }
 
     public void step() {

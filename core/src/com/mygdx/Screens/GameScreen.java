@@ -43,19 +43,27 @@ public class GameScreen implements Screen {
     private final CharacterCycle characterCycle;
     private final ShapeDrawer shapeDrawer;
     private final ShaderHandler shaderHandler;
-    public GameScreen(MindWeaver game, String stage, MyResourceManager resourceManager, GameInputProcessor inputProcessor) {
+    public GameScreen(MindWeaver game, int level, MyResourceManager resourceManager, GameInputProcessor inputProcessor) {
 
         this.game = game;
         this.inputProcessor = inputProcessor;
 
         Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());      // Full-screen
 
-        // Creating tiled map
+        // Creating tile map
         TmxMapLoader mapLoader = new TmxMapLoader();
         TiledMap map = null;
-        if (stage.equals("everlush")) map = mapLoader.load("Tilemaps/everlush.tmx");
-        else if (stage.equals("verdant_hollow")) map = mapLoader.load("verdant_hollow.tmx");
-        else map = mapLoader.load("grim_factory.tmx");
+
+        switch (level) {
+            case 1:
+                map = mapLoader.load("Tilemaps/level1.tmx");
+                break;
+            case 2:
+                map = mapLoader.load("Tilemaps/level2.tmx");
+                break;
+            default:
+                break;
+        }
 
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
         world = new World(new Vector2(0, -Constants.G), true);
@@ -69,21 +77,21 @@ public class GameScreen implements Screen {
         timer = new MyTimer();
 
         objectHandler = new ObjectHandler();
-        Door door = new Door(world, resourceManager, 330, 7642);
+        Door door = new Door(world, resourceManager, 330, 138);
         objectHandler.addObject(door);
-        PressurePlate pressurePlate = new PressurePlate(world, resourceManager, 250, 7649.5f, 2);
+        PressurePlate pressurePlate = new PressurePlate(world, resourceManager, 200, 131, 1);
         pressurePlate.addReactable(door);
         objectHandler.addObject(pressurePlate);
         entityHandler = new EntityHandler();
         visionMap =  new VisionMap(world, shapeDrawer);
         characterCycle = new CharacterCycle(visionMap);
 
-        Mage mage = new Mage(100, 7900, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3, characterCycle, visionMap);
+        Mage mage = new Mage(250, 200, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3, characterCycle, visionMap);
         entityHandler.addEntity(mage);
         characterCycle.initialize(mage);
 
-        entityHandler.addEntity(new BaseGoblin(100, 7800, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap));
-        entityHandler.addEntity(new BaseGoblin(300, 7800, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap));
+        entityHandler.addEntity(new BaseGoblin(180, 150, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap));
+        entityHandler.addEntity(new BaseGoblin(350, 150, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap));
 
         visionMap.initialize(entityHandler);
         inputProcessor.setGameVariables(characterCycle);

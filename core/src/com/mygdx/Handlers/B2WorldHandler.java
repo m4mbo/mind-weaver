@@ -22,7 +22,7 @@ public class B2WorldHandler {
         Body body;
 
         // Create ground
-        for (RectangleMapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
+        for (RectangleMapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = object.getRectangle();
             bdef.type = BodyDef.BodyType.StaticBody;
             bdef.position.set((rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getHeight() / 2) / Constants.PPM);
@@ -33,30 +33,30 @@ public class B2WorldHandler {
             body.createFixture(fdef).setUserData("ground");
         }
 
-        // Create spikes
-        for (RectangleMapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = object.getRectangle();
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getHeight() / 2) / Constants.PPM);
-            body = world.createBody(bdef);
-            shape.setAsBox((rect.getWidth() / 2) / Constants.PPM, (rect.getHeight() / 2) / Constants.PPM);
-            fdef.shape = shape;
-            fdef.filter.categoryBits = Constants.BIT_HAZARD;
-            body.createFixture(fdef).setUserData("hazard");
-        }
-
-        // Create checkpoints
-        for (RectangleMapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = object.getRectangle();
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getHeight() / 2) / Constants.PPM);
-            body = world.createBody(bdef);
-            shape.setAsBox((rect.getWidth() / 2) / Constants.PPM, (rect.getHeight() / 2) / Constants.PPM);
-            fdef.shape = shape;
-            fdef.isSensor = true;
-            fdef.filter.categoryBits = Constants.BIT_CHECKPOINT;
-            body.createFixture(fdef).setUserData("checkpoint");
-        }
+//        // Create spikes
+//        for (RectangleMapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)) {
+//            Rectangle rect = object.getRectangle();
+//            bdef.type = BodyDef.BodyType.StaticBody;
+//            bdef.position.set((rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getHeight() / 2) / Constants.PPM);
+//            body = world.createBody(bdef);
+//            shape.setAsBox((rect.getWidth() / 2) / Constants.PPM, (rect.getHeight() / 2) / Constants.PPM);
+//            fdef.shape = shape;
+//            fdef.filter.categoryBits = Constants.BIT_HAZARD;
+//            body.createFixture(fdef).setUserData("hazard");
+//        }
+//
+//        // Create checkpoints
+//        for (RectangleMapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {
+//            Rectangle rect = object.getRectangle();
+//            bdef.type = BodyDef.BodyType.StaticBody;
+//            bdef.position.set((rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getHeight() / 2) / Constants.PPM);
+//            body = world.createBody(bdef);
+//            shape.setAsBox((rect.getWidth() / 2) / Constants.PPM, (rect.getHeight() / 2) / Constants.PPM);
+//            fdef.shape = shape;
+//            fdef.isSensor = true;
+//            fdef.filter.categoryBits = Constants.BIT_CHECKPOINT;
+//            body.createFixture(fdef).setUserData("checkpoint");
+//        }
 
     }
 }
