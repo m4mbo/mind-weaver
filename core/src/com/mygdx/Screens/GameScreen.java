@@ -115,8 +115,6 @@ public class GameScreen implements Screen {
 
         world.step(1/60f, 6, 2);
 
-        gameCam.position.set(characterCycle.getCurrentCharacter().getPosition().x, characterCycle.getCurrentCharacter().getPosition().y + 20 / Constants.PPM, 0);
-
         entityHandler.handleEntities();
     }
 
@@ -125,21 +123,23 @@ public class GameScreen implements Screen {
 
         update(delta);
 
+        game.batch.setProjectionMatrix(gameCam.combined);
+
         // Clearing the screen
         Gdx.gl.glClearColor( 0, 0, 0, 1 );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT);
 
-        game.batch.setProjectionMatrix(gameCam.combined);
-
         renderer.setView(gameCam);
         renderer.render();
+
         entityHandler.render(game.batch);
         objectHandler.render(game.batch);
         shapeDrawer.render(game.batch);
 
-        gameCam.update();
-
         //b2dr.render(world, gameCam.combined);
+
+        gameCam.position.set(characterCycle.getCurrentCharacter().getPosition().x, characterCycle.getCurrentCharacter().getPosition().y + 20 / Constants.PPM, 0);
+        gameCam.update();
     }
 
     @Override

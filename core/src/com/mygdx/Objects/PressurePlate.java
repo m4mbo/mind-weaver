@@ -46,7 +46,7 @@ public class PressurePlate extends Interactable {
         polygonShape = new PolygonShape();
 
         //Create body fixture
-        polygonShape.setAsBox(8 / Constants.PPM, height / Constants.PPM, new Vector2(0,0), 0);
+        polygonShape.setAsBox(7 / Constants.PPM, height / Constants.PPM, new Vector2(0,0), 0);
         fdef.shape = polygonShape;
         fdef.density = 0;
         fdef.friction = 0;
@@ -54,13 +54,13 @@ public class PressurePlate extends Interactable {
         fdef.filter.maskBits = Constants.BIT_SUPPORT | Constants.BIT_FEET | Constants.BIT_MAGE | Constants.BIT_GOBLIN;
         b2body.createFixture(fdef).setUserData("plate");
 
-        polygonShape.setAsBox(0.2f / Constants.PPM, 20 / Constants.PPM, new Vector2(-10f / Constants.PPM, -20 / Constants.PPM), 0);
+        polygonShape.setAsBox(0.2f / Constants.PPM, 20 / Constants.PPM, new Vector2(-9f / Constants.PPM, -20 / Constants.PPM), 0);
         fdef.shape = polygonShape;
         fdef.filter.categoryBits = Constants.BIT_SUPPORT;
         fdef.filter.maskBits = Constants.BIT_GROUND;
         b2body2.createFixture(fdef).setUserData("support");
 
-        polygonShape.setAsBox(0.1f / Constants.PPM, 20 / Constants.PPM, new Vector2(10f / Constants.PPM, -20 / Constants.PPM), 0);
+        polygonShape.setAsBox(0.1f / Constants.PPM, 20 / Constants.PPM, new Vector2(9f / Constants.PPM, -20 / Constants.PPM), 0);
         fdef.shape = polygonShape;
         fdef.filter.categoryBits = Constants.BIT_SUPPORT;
         fdef.filter.maskBits = Constants.BIT_GROUND;
@@ -91,7 +91,7 @@ public class PressurePlate extends Interactable {
         currAState = Constants.ASTATE.CLOSED;
         prevAState = Constants.ASTATE.CLOSED;
 
-        setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_up"), 14, 5)[0], 1/10f, true, 1f, animation.getCurrentFrame());
+        setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_up"), 14, 5)[0], 1/14f, true, 1f, animation.getCurrentFrame());
 
         // Assigning values for later use
         fdef.density = 0;
@@ -105,14 +105,16 @@ public class PressurePlate extends Interactable {
         if (distanceJoint.getReactionForce(delta).y < threshold) pressedIterations++;
         else { closedIterations++; }
 
-        if (pressedIterations >= 20) {
+        if (pressedIterations >= 10) {
             pressedIterations = 0;
+            closedIterations = 0;
             currAState = Constants.ASTATE.OPEN;
             isPressed = true;
         }
 
-        if (closedIterations >= 20) {
+        if (closedIterations >= 10) {
             closedIterations = 0;
+            pressedIterations = 0;
             currAState = Constants.ASTATE.CLOSED;
             isPressed = false;
         }
@@ -129,8 +131,8 @@ public class PressurePlate extends Interactable {
 
     public void handleAnimation() {
         interact();
-        if (currAState == Constants.ASTATE.OPEN) setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_down"), 14, 5)[0], 1/19f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
-        else setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_up"), 14, 5)[0], 1/10f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
+        if (currAState == Constants.ASTATE.OPEN) setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_down"), 14, 5)[0], 1/14f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
+        else setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_up"), 14, 5)[0], 1/14f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
     }
 
     public void step() {
