@@ -77,9 +77,13 @@ public class ArmourGoblin extends PlayableCharacter {
         fdef.filter.categoryBits = Constants.BIT_FEET;
         fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_GOBLIN | Constants.BIT_MAGE;
         b2body.createFixture(fdef).setUserData("bottomSensor");
-        
-        // Setting radius for later
+
+        // Settings for later
         circleShape.setRadius(2);
+        fdef.shape = circleShape;
+        fdef.isSensor = true;
+        fdef.filter.categoryBits = Constants.BIT_HAZARD;
+        fdef.filter.maskBits = Constants.BIT_GOBLIN | Constants.BIT_MAGE;
     }
 
     @Override
@@ -124,7 +128,7 @@ public class ArmourGoblin extends PlayableCharacter {
 
     public void attack() {
         timer.start(0.2f, "attack", this);
-
+        b2body.createFixture(fdef).setUserData("attack_box");
     }
 
     @Override
