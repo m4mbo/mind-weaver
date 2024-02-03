@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.mygdx.Tools.Constants;
+import com.mygdx.Helpers.Constants;
 
 public abstract class B2Sprite {
     protected Body b2body;
@@ -20,10 +20,17 @@ public abstract class B2Sprite {
         resize = 1;
     }
 
-    public void setAnimation(TextureRegion[] region, float delay, boolean loopLastFrame, float resize) {
-        animation.setFrames(region, delay, loopLastFrame);
+    public void setAnimation(TextureRegion[] region, float delay, boolean loopLastFrame, float resize, int currFrame) {
+        animation.setFrames(region, delay, loopLastFrame, currFrame);
         width = region[0].getRegionWidth() * resize;
-        height = region[0].getRegionWidth() * resize;
+        height = region[0].getRegionHeight() * resize;
+        this.resize = resize;
+    }
+
+    public void setAnimation(TextureRegion[] region, float delay, boolean loopLastFrame, float resize) {
+        animation.setFrames(region, delay, loopLastFrame, 0);
+        width = region[0].getRegionWidth() * resize;
+        height = region[0].getRegionHeight() * resize;
         this.resize = resize;
     }
 

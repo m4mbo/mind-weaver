@@ -3,31 +3,30 @@ package com.mygdx.RoleCast;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.Handlers.EntityHandler;
+import com.mygdx.Handlers.CharacterCycle;
+import com.mygdx.Handlers.VisionMap;
 import com.mygdx.Tools.MyResourceManager;
-import com.mygdx.Logic.MyTimer;
-import com.mygdx.Tools.Constants;
-import com.mygdx.Tools.ShapeDrawer;
+import com.mygdx.Tools.MyTimer;
+import com.mygdx.Helpers.Constants;
 
 public class Mage extends PlayableCharacter {
 
     private Vector2 currCheckPoint;
     private int lives;
 
-    public Mage(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, int lives, ShapeDrawer shapeDrawer, EntityHandler entityHandler) {
-        super(world, id, timer, myResourceManager, shapeDrawer, entityHandler);
+    public Mage(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, int lives, CharacterCycle characterCycle, VisionMap visionMap) {
+        super(world, id, timer, myResourceManager, characterCycle, visionMap);
 
         this.lives = lives;
 
         currCheckPoint = new Vector2(x / Constants.PPM, y / Constants.PPM);
-
-        loadSprites();
 
         // Initializing sprite
         setAnimation(TextureRegion.split(resourceManager.getTexture("mage_idle"), 20, 20)[0], 1/5f, false, 1);
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, y / Constants.PPM);
+        bdef.fixedRotation = true;
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
@@ -36,15 +35,15 @@ public class Mage extends PlayableCharacter {
         PolygonShape polygonShape = new PolygonShape();
 
         //Create body fixture
-        polygonShape.setAsBox(8 / Constants.PPM, 15 / Constants.PPM, new Vector2(0, 0), 0);
+        polygonShape.setAsBox(8 / Constants.PPM, 8 / Constants.PPM, new Vector2(0, 0), 0);
         fdef.shape = polygonShape;
         fdef.friction = 0;
         fdef.filter.categoryBits = Constants.BIT_MAGE;
-        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_CHECKPOINT | Constants.BIT_GOBLIN;
+        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_CHECKPOINT | Constants.BIT_GOBLIN | Constants.BIT_FEET;
         b2body.createFixture(fdef).setUserData(id);
 
         //Create player hitbox
-        polygonShape.setAsBox(9 / Constants.PPM, 16 / Constants.PPM, new Vector2(0, 0), 0);
+        polygonShape.setAsBox(9 / Constants.PPM, 9 / Constants.PPM, new Vector2(0, 0), 0);
         fdef.shape = polygonShape;
         fdef.filter.maskBits = Constants.BIT_HAZARD;
         fdef.isSensor = true;
@@ -54,6 +53,7 @@ public class Mage extends PlayableCharacter {
         circleShape.setRadius(140 / Constants.PPM);
         fdef.shape = circleShape;
         fdef.isSensor = true;
+        fdef.filter.categoryBits = Constants.BIT_ROV;
         fdef.filter.maskBits = Constants.BIT_GOBLIN;
         b2body.createFixture(fdef).setUserData("vision");
 
@@ -72,90 +72,31 @@ public class Mage extends PlayableCharacter {
         b2body.createFixture(fdef).setUserData("leftSensor");
 
         //Create bottom sensor
-        polygonShape.setAsBox(6.6f / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -17 / Constants.PPM), 0);
+        polygonShape.setAsBox(6.6f / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -8 / Constants.PPM), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
+        fdef.filter.categoryBits = Constants.BIT_FEET;
         fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_GOBLIN;
         b2body.createFixture(fdef).setUserData("bottomSensor");
-    }
-
-    @Override
-    public void loadSprites() {
-        // Loading all textures
-        resourceManager.loadTexture("player_run.png", "player_run");
-        resourceManager.loadTexture("mage_idle.png", "mage_idle");
-        resourceManager.loadTexture("player_jump.png", "player_jump");
-        resourceManager.loadTexture("player_land.png", "player_land");
-        resourceManager.loadTexture("player_fall.png", "player_fall");
-    }
-
-    public void update(float delta) {
-
-        // Capping y velocity
-        if (b2body.getLinearVelocity().y < -Constants.MAX_SPEED_Y)
-            b2body.setLinearVelocity(new Vector2(b2body.getLinearVelocity().x, -Constants.MAX_SPEED_Y));
-
-        // Animation priority
-        if (isFalling()) {
-            currAState = Constants.ASTATE.FALL;
-            b2body.setLinearDamping(0);
-        } else if (!isStateActive(Constants.PSTATE.ON_GROUND)) {
-            currAState = Constants.ASTATE.JUMP;
-        }
-
-        if (target != null) sendSignal();
-
-        if (isStateActive(Constants.PSTATE.STUNNED)) movementState = Constants.MSTATE.PREV;
-
-        switch (movementState) {
-            case LEFT:
-                if (isStateActive(Constants.PSTATE.ON_GROUND) && !isStateActive(Constants.PSTATE.LANDING)) currAState = Constants.ASTATE.RUN;
-                facingRight = false;
-                moveLeft();
-                break;
-            case RIGHT:
-                if (isStateActive(Constants.PSTATE.ON_GROUND) && !isStateActive(Constants.PSTATE.LANDING)) currAState = Constants.ASTATE.RUN;
-                facingRight = true;
-                moveRight();
-                break;
-            case PREV:
-                b2body.setLinearVelocity(b2body.getLinearVelocity().x, b2body.getLinearVelocity().y);
-                break;
-            case HSTILL:
-                b2body.setLinearVelocity(0, b2body.getLinearVelocity().y);
-                if (!isStateActive(Constants.PSTATE.ON_GROUND) || isStateActive(Constants.PSTATE.LANDING)) break;
-                else currAState = Constants.ASTATE.IDLE;
-                break;
-            case FSTILL:
-                b2body.setLinearVelocity(0, 0);
-                break;
-        }
-
-        if (currAState != prevAState) {
-            handleAnimation();
-            prevAState = currAState;
-        }
-        // Update the animation
-        animation.update(delta);
     }
 
     @Override
     public void handleAnimation() {
         switch (currAState) {
             case RUN:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("player_run"), 32, 32)[0], 1/14f, false, 1.25f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("mage_run"), 20, 20)[0], 1/10f, false, 1f);
                 break;
             case IDLE:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("mage_idle"), 20, 20)[0], 1/5f, false, 1);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("mage_idle"), 20, 20)[0], 1/5f, false, 1f);
                 break;
             case JUMP:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("player_jump"), 32, 32)[0], 1/17f, true, 1.25f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("mage_jump"), 20, 20)[0], 1/17f, true, 1f);
                 break;
             case FALL:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("player_fall"), 32, 32)[0], 1/5f, true, 1.25f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("mage_fall"), 20, 20)[0], 1/14f, true, 1f);
                 break;
             case LAND:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("player_land"), 32, 32)[0], 1/14f, false, 1.25f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("mage_land"), 20, 20)[0], 1/5f, false, 1f);
                 break;
         }
     }

@@ -4,12 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.Handlers.EntityHandler;
+import com.mygdx.Handlers.CharacterCycle;
+import com.mygdx.Handlers.VisionMap;
 import com.mygdx.Tools.MyResourceManager;
-import com.mygdx.Logic.MyTimer;
-import com.mygdx.Interfaces.Subscriber;
-import com.mygdx.Tools.Constants;
-import com.mygdx.Tools.ShapeDrawer;
+import com.mygdx.Tools.MyTimer;
+import com.mygdx.Helpers.Subscriber;
+import com.mygdx.Helpers.Constants;
+
 import java.util.EnumSet;
 
 public abstract class PlayableCharacter extends Entity implements Subscriber {
@@ -20,18 +21,20 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     protected Constants.ASTATE currAState;     // Current animation state
     protected Constants.ASTATE prevAState;     // Previous animation state
     protected final EnumSet<Constants.PSTATE> playerStates;       // Set of player states
-    protected PlayableCharacter target;
-    private boolean collision;      // Helper boolean variable for rayCasting
-    private final ShapeDrawer shapeDrawer;
-    private final EntityHandler entityHandler;
+    protected PlayableCharacter bullseye;
+    protected CharacterCycle characterCycle;
+    protected VisionMap visionMap;
+    protected int floorContacts; // Number of contacts with the floor to avoid anomalies
+    private int airIterations;
 
-    public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager, ShapeDrawer shapeDrawer, EntityHandler entityHandler) {
+    public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle, VisionMap visionMap) {
 
         super(id, myResourceManager);
         this.timer = timer;
         this.world = world;
-        this.target = null;
-        this.entityHandler = entityHandler;
+        this.bullseye = null;
+        this.characterCycle = characterCycle;
+        this.visionMap = visionMap;
 
         // Initializing states
         playerStates = EnumSet.noneOf(Constants.PSTATE.class);
@@ -40,26 +43,78 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         prevAState = Constants.ASTATE.IDLE;
         movementState = Constants.MSTATE.HSTILL;
 
-        this.shapeDrawer = shapeDrawer;
-
-        collision = false;
-
         wallState = 0;
+        floorContacts = 0;
+        airIterations = 0;
     }
 
-    public void loadSprites() {}
+    public void update(float delta) {
+
+        // Capping y velocity
+        if (b2body.getLinearVelocity().y < -Constants.MAX_SPEED_Y)
+            b2body.setLinearVelocity(new Vector2(b2body.getLinearVelocity().x, -Constants.MAX_SPEED_Y));
+
+        // Animation priority
+        if (!isStateActive(Constants.PSTATE.ON_GROUND)) {
+            airIterations++;
+        } else {
+            airIterations = 0;
+        }
+
+        if (airIterations >= 5) {
+            if (isFalling()) {
+                currAState = Constants.ASTATE.FALL;
+                b2body.setLinearDamping(0);
+            } else {
+                currAState = Constants.ASTATE.JUMP;
+            }
+        }
+
+        if (isStateActive(Constants.PSTATE.STUNNED)) movementState = Constants.MSTATE.PREV;
+
+        switch (movementState) {
+            case LEFT:
+                if (isStateActive(Constants.PSTATE.ON_GROUND) && !isStateActive(Constants.PSTATE.LANDING)) currAState = Constants.ASTATE.RUN;
+                facingRight = false;
+                moveLeft();
+                break;
+            case RIGHT:
+                if (isStateActive(Constants.PSTATE.ON_GROUND) && !isStateActive(Constants.PSTATE.LANDING)) currAState = Constants.ASTATE.RUN;
+                facingRight = true;
+                moveRight();
+                break;
+            case PREV:
+                b2body.setLinearVelocity(b2body.getLinearVelocity().x, b2body.getLinearVelocity().y);
+                break;
+            case HSTILL:
+                b2body.setLinearVelocity(0, b2body.getLinearVelocity().y);
+                if (!isStateActive(Constants.PSTATE.ON_GROUND) || isStateActive(Constants.PSTATE.LANDING)) break;
+                else currAState = Constants.ASTATE.IDLE;
+                break;
+            case FSTILL:
+                b2body.setLinearVelocity(0, 0);
+                break;
+        }
+
+        if (currAState != prevAState) {
+            handleAnimation();
+            prevAState = currAState;
+        }
+        // Update the animation
+        animation.update(delta);
+    }
 
     public void land() {
         addPlayerState(Constants.PSTATE.ON_GROUND);
         addPlayerState(Constants.PSTATE.LANDING);
-        currAState = Constants.ASTATE.LAND;
+        if (airIterations >= 5) currAState = Constants.ASTATE.LAND;
         timer.start(0.2f, "land", this);
         world.setGravity(new Vector2(0, -Constants.G));
         b2body.setLinearDamping(0);
     }
 
     public void jump() {
-        b2body.applyLinearImpulse(new Vector2(0, 4.2f), b2body.getWorldCenter(), true);
+        b2body.applyLinearImpulse(new Vector2(0, 3f), b2body.getWorldCenter(), true);
     }
 
     public void fall() {
@@ -87,39 +142,6 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         //Initial acceleration
         if (b2body.getLinearVelocity().x == 0) b2body.applyLinearImpulse(new Vector2(-0.5f, 0), b2body.getWorldCenter(), true);
         else b2body.setLinearVelocity(-Constants.MAX_SPEED_X, b2body.getLinearVelocity().y);
-    }
-
-    public void removeTarget() {
-        removePlayerState(Constants.PSTATE.EOT);
-        target = null;
-    }
-
-    public void sendSignal() {
-        final Vector2 targetPos = target.getPosition();
-        RayCastCallback callback = new RayCastCallback() {
-            @Override
-            public float reportRayFixture(Fixture fixture, Vector2 vector2, Vector2 vector21, float v) {
-                if (fixture.getUserData().equals("ground") || fixture.getUserData().equals("hazard")) {
-                    PlayableCharacter.this.collision = true;
-                    return 0;
-                }
-                return 1;
-            }
-        };
-        world.rayCast(callback, b2body.getPosition() , targetPos);
-        if (!collision) {
-            establishConnection();
-        } else {
-            removePlayerState(Constants.PSTATE.EOT);
-            if (entityHandler.characterRollback()) target.looseControl();
-
-            collision = false;
-        }
-    }
-
-    public void establishConnection() {
-        addPlayerState(Constants.PSTATE.EOT);
-        shapeDrawer.drawLine(target.getPosition(), b2body.getPosition(), 2);
     }
 
     @Override
@@ -160,7 +182,22 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
 
     public boolean isStateActive(Constants.PSTATE state) { return playerStates.contains(state); }
 
-    public void setTarget(PlayableCharacter character) { target = character; }
+    public void setBullseye(PlayableCharacter character) {
+        bullseye = character;
+        characterCycle.updateCycle();
+    }
 
-    public PlayableCharacter getTarget() { return target; }
+    public PlayableCharacter getBullseye() { return bullseye; }
+
+    public void increaseFloorContact() {
+        if (floorContacts == 0) land();
+        floorContacts++;
+    }
+
+    public void decreaseFloorContact() {
+        floorContacts--;
+        if (floorContacts == 0) {
+            removePlayerState(Constants.PSTATE.ON_GROUND);
+        }
+    }
 }

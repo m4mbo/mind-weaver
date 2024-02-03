@@ -6,22 +6,15 @@ import com.mygdx.RoleCast.Entity;
 import com.mygdx.RoleCast.PlayableCharacter;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Stack;
 
 // Class to handle risky operations outside world step and map entities to their id
 public class EntityHandler {
     private HashMap<Integer, Entity> entities;
     private LinkedList<EntityOp> entityOps;
-    private Stack<CharacterPair> characterChain;    // Chain of current and prev characters
 
-    public EntityHandler () {}
-
-    public void initializeHandler(PlayableCharacter currCharacter) {
+    public EntityHandler () {
         entityOps = new LinkedList<>();
         entities = new HashMap<>();
-        characterChain = new Stack<>();
-        characterChain.add(new CharacterPair(currCharacter, null));     // Mage will have the previous character as null
-        addEntity(currCharacter);
     }
 
     public void addEntity(Entity entity) {
@@ -56,19 +49,6 @@ public class EntityHandler {
         entityOps.clear();
     }
 
-    public boolean characterRollback() {
-        if (characterChain.peek().prevCharacter == null) return false;
-        characterChain.pop();
-        return true;
-    }
-    public void setCurrCharacter(PlayableCharacter currCharacter) {
-        characterChain.add(new CharacterPair(currCharacter, characterChain.peek().currCharacter));
-    }
-
-    public PlayableCharacter getCurrCharacter() {
-        return characterChain.peek().currCharacter;
-    }
-
     public void update(float delta) {
         for (Entity entity : entities.values()) {
             entity.update(delta);
@@ -81,22 +61,16 @@ public class EntityHandler {
         }
     }
 
+    public LinkedList<Entity> getEntities() {
+        return new LinkedList<>(entities.values());
+    }
+
     private static class EntityOp {
         public Entity entity;
         public String operation;
         public EntityOp(Entity entity, String op) {
             this.entity = entity;
             this.operation = op;
-        }
-    }
-
-    private class CharacterPair {
-        PlayableCharacter currCharacter;
-        PlayableCharacter prevCharacter;
-
-        public CharacterPair(PlayableCharacter currCharacter, PlayableCharacter prevCharacter) {
-            this.currCharacter = currCharacter;
-            this.prevCharacter = prevCharacter;
         }
     }
 }
