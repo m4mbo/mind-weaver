@@ -38,12 +38,15 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Mage/mage_land.png", "mage_land");
 		resourceManager.loadTexture("Mage/mage_fall.png", "mage_fall");
 
-		// BaseGoblin
+		// Base goblin
 		resourceManager.loadTexture("Goblins/basegoblin_run.png", "goblin_run");
 		resourceManager.loadTexture("Goblins/basegoblin_idle.png", "goblin_idle");
 		resourceManager.loadTexture("Goblins/basegoblin_jump.png", "goblin_jump");
 		resourceManager.loadTexture("Goblins/basegoblin_land.png", "goblin_land");
 		resourceManager.loadTexture("Goblins/basegoblin_fall.png", "goblin_fall");
+
+		// Armoured goblin
+		resourceManager.loadTexture("Goblins/armourgoblin_idle.png", "armour_idle");
 
 		// Objects
 		resourceManager.loadTexture("Objects/pressureplate_up.png", "pressureplate_up");
