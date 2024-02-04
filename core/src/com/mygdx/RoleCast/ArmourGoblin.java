@@ -79,8 +79,7 @@ public class ArmourGoblin extends PlayableCharacter {
         b2body.createFixture(fdef).setUserData("bottomSensor");
 
         // Settings for later
-        circleShape.setRadius(2);
-        fdef.shape = circleShape;
+        circleShape.setRadius(3 / Constants.PPM);
         fdef.isSensor = true;
         fdef.filter.categoryBits = Constants.BIT_HAZARD;
         fdef.filter.maskBits = Constants.BIT_GOBLIN | Constants.BIT_MAGE;
@@ -104,19 +103,19 @@ public class ArmourGoblin extends PlayableCharacter {
     public void handleAnimation() {
         switch (currAState) {
             case RUN:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_run"), 20, 14)[0], 1/14f, false, 1f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("armour_run"), 19, 19)[0], 1/10f, false, 1f);
                 break;
             case IDLE:
                 setAnimation(TextureRegion.split(resourceManager.getTexture("armour_idle"), 19, 19)[0], 1/5f, false, 1f);
                 break;
             case JUMP:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_jump"), 20, 14)[0], 1/17f, true, 1f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("armour_jump"), 19, 19)[0], 1/17f, true, 1f);
                 break;
             case FALL:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_fall"), 20, 14)[0], 1/5f, true, 1f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("armour_fall"), 19, 19)[0], 1/5f, true, 1f);
                 break;
             case LAND:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_land"), 20, 14)[0], 1/14f, false, 1f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("armour_land"), 19, 19)[0], 1/14f, false, 1f);
                 break;
         }
     }
@@ -127,8 +126,10 @@ public class ArmourGoblin extends PlayableCharacter {
     }
 
     public void attack() {
-        timer.start(0.2f, "attack", this);
+        circleShape.setPosition(facingRight ? new Vector2(9 / Constants.PPM, 0) : new Vector2(-9 / Constants.PPM, 0));
+        fdef.shape = circleShape;
         b2body.createFixture(fdef).setUserData("attack_box");
+        timer.start(0.2f, "attack", this);
     }
 
     @Override
@@ -146,6 +147,9 @@ public class ArmourGoblin extends PlayableCharacter {
                 movementState = Constants.MSTATE.HSTILL;
                 break;
             case "attack":
+                for (Fixture fixture : b2body.getFixtureList()) {
+                    if (fixture.getUserData() instanceof String && fixture.getUserData().equals("attack_box")) b2body.destroyFixture(fixture);
+                }
                 break;
         }
     }
