@@ -118,7 +118,7 @@ public class ArmourGoblin extends PlayableCharacter {
                 setAnimation(TextureRegion.split(resourceManager.getTexture("armour_land"), 19, 19)[0], 1/14f, false, 1f);
                 break;
             case ATTACK:
-                setAnimation(TextureRegion.split(resourceManager.getTexture("armour_attack"), 23, 19)[0], 1/20f, true, 1f);
+                setAnimation(TextureRegion.split(resourceManager.getTexture("armour_attack"), 24, 19)[0], 1/31f, true, 1f);
                 break;
         }
     }
@@ -138,7 +138,7 @@ public class ArmourGoblin extends PlayableCharacter {
         circleShape.setPosition(facingRight ? new Vector2(9 / Constants.PPM, 0) : new Vector2(-9 / Constants.PPM, 0));
         fdef.shape = circleShape;
         b2body.createFixture(fdef).setUserData("attack_box");
-        timer.start(0.2f, "attack_anim", this);
+        timer.start(0.1f, "attack_anim", this);
     }
 
     @Override

@@ -51,6 +51,7 @@ public class GameInputProcessor implements InputProcessor {
             case Input.Keys.SHIFT_LEFT:
                 characterCycle.cycleNext();
                 character.looseControl();
+                break;
             case Input.Keys.J:
                 if (character instanceof ArmourGoblin) ((ArmourGoblin) character).attack();
                 break;
