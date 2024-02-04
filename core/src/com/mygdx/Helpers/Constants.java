@@ -16,11 +16,11 @@ public class Constants {
     }
     // Player state flag
     public enum PSTATE {
-        STUNNED, ON_GROUND, LANDING,
+        STUNNED, ON_GROUND, LANDING, ATTACKING, ATTACK_STUN
     }
     // Animation state flag
     public enum ASTATE {
-        RUN, JUMP, IDLE, FALL, LAND, OPEN, CLOSED
+        RUN, JUMP, IDLE, FALL, LAND, OPEN, CLOSED, ATTACK
     }
 
     // Bits for collision masking

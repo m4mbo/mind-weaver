@@ -92,7 +92,7 @@ public class GameScreen implements Screen {
         characterCycle.initialize(mage);
 
         entityHandler.addEntity(new ArmourGoblin(180, 150, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap));
-        entityHandler.addEntity(new ArmourGoblin(350, 150, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap));
+        entityHandler.addEntity(new BaseGoblin(200, 150, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap));
 
         visionMap.initialize(entityHandler);
         inputProcessor.setGameVariables(characterCycle);

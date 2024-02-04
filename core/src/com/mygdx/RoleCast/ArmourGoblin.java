@@ -117,6 +117,9 @@ public class ArmourGoblin extends PlayableCharacter {
             case LAND:
                 setAnimation(TextureRegion.split(resourceManager.getTexture("armour_land"), 19, 19)[0], 1/14f, false, 1f);
                 break;
+            case ATTACK:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("armour_attack"), 23, 19)[0], 1/20f, true, 1f);
+                break;
         }
     }
 
@@ -126,10 +129,16 @@ public class ArmourGoblin extends PlayableCharacter {
     }
 
     public void attack() {
+        if (isStateActive(Constants.PSTATE.ATTACK_STUN) || isStateActive(Constants.PSTATE.ATTACKING)) return;
+        addPlayerState(Constants.PSTATE.ATTACKING);
+        timer.start(0.1f, "attack_hb", this);
+    }
+
+    public void slash() {
         circleShape.setPosition(facingRight ? new Vector2(9 / Constants.PPM, 0) : new Vector2(-9 / Constants.PPM, 0));
         fdef.shape = circleShape;
         b2body.createFixture(fdef).setUserData("attack_box");
-        timer.start(0.2f, "attack", this);
+        timer.start(0.2f, "attack_anim", this);
     }
 
     @Override
@@ -146,10 +155,19 @@ public class ArmourGoblin extends PlayableCharacter {
             case "stop":
                 movementState = Constants.MSTATE.HSTILL;
                 break;
-            case "attack":
+            case "attack_anim":
                 for (Fixture fixture : b2body.getFixtureList()) {
                     if (fixture.getUserData() instanceof String && fixture.getUserData().equals("attack_box")) b2body.destroyFixture(fixture);
                 }
+                removePlayerState(Constants.PSTATE.ATTACKING);
+                addPlayerState(Constants.PSTATE.ATTACK_STUN);
+                timer.start(0.2f, "attack", this);
+                break;
+            case "attack" :
+                removePlayerState(Constants.PSTATE.ATTACK_STUN);
+                break;
+            case "attack_hb":
+                slash();
                 break;
         }
     }

@@ -54,14 +54,14 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         if (b2body.getLinearVelocity().y < -Constants.MAX_SPEED_Y)
             b2body.setLinearVelocity(new Vector2(b2body.getLinearVelocity().x, -Constants.MAX_SPEED_Y));
 
-        // Animation priority
         if (!isStateActive(Constants.PSTATE.ON_GROUND)) {
             airIterations++;
         } else {
             airIterations = 0;
         }
 
-        if (airIterations >= 5) {
+        // Animation priority
+       if (airIterations >= 5) {
             if (isFalling()) {
                 currAState = Constants.ASTATE.FALL;
                 b2body.setLinearDamping(0);
@@ -95,6 +95,8 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
                 b2body.setLinearVelocity(0, 0);
                 break;
         }
+
+        if (isStateActive(Constants.PSTATE.ATTACKING)) currAState = Constants.ASTATE.ATTACK;
 
         if (currAState != prevAState) {
             handleAnimation();
