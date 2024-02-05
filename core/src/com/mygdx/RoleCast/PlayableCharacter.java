@@ -134,10 +134,10 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     public void wallJump() {
         if (wallState == -1) {
             particleHandler.addParticleEffect("dust_wall", b2body.getPosition().x - 8 / Constants.PPM, b2body.getPosition().y);
-            b2body.applyLinearImpulse(new Vector2(2, 3), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(1, 3), b2body.getWorldCenter(), true);
         } else {
             particleHandler.addParticleEffect("dust_wall", b2body.getPosition().x + 8 / Constants.PPM, b2body.getPosition().y);
-            b2body.applyLinearImpulse(new Vector2(-2, 3), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(-1, 3), b2body.getWorldCenter(), true);
         }
         addPlayerState(Constants.PSTATE.STUNNED);
         timer.start(0.2f, "stun", this);

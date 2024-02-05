@@ -86,9 +86,9 @@ public class GameScreen implements Screen {
         PressurePlate pressurePlate = new PressurePlate(world, resourceManager, 200, 131, 2);
         pressurePlate.addReactable(door);
         objectHandler.addObject(pressurePlate);
-        entityHandler = new EntityHandler();
         visionMap =  new VisionMap(world, shapeDrawer);
         characterCycle = new CharacterCycle(visionMap);
+        entityHandler = new EntityHandler(characterCycle, shaderHandler);
 
         particleHandler = new ParticleHandler();
 
