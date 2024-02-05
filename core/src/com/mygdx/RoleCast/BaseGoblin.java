@@ -3,6 +3,7 @@ package com.mygdx.RoleCast;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.Graphics.ParticleHandler;
 import com.mygdx.Handlers.CharacterCycle;
 import com.mygdx.Handlers.VisionMap;
 import com.mygdx.Tools.MyResourceManager;
@@ -11,8 +12,8 @@ import com.mygdx.Helpers.Constants;
 
 public class BaseGoblin extends PlayableCharacter{
 
-    public BaseGoblin(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle, VisionMap visionMap) {
-        super(world, id, timer, myResourceManager, characterCycle, visionMap);
+    public BaseGoblin(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle, VisionMap visionMap, ParticleHandler particleHandler) {
+        super(world, id, timer, myResourceManager, characterCycle, visionMap, particleHandler);
 
         // Initializing sprite
         setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_idle"), 20, 14)[0], 1/5f, false, 1f);
@@ -93,6 +94,23 @@ public class BaseGoblin extends PlayableCharacter{
                 setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_land"), 20, 14)[0], 1/14f, false, 1f);
                 break;
         }
+    }
+
+    public void land() {
+        addPlayerState(Constants.PSTATE.ON_GROUND);
+        addPlayerState(Constants.PSTATE.LANDING);
+        if (airIterations >= 5) {
+            particleHandler.addParticleEffect("dust_ground", facingRight ? b2body.getPosition().x - 4 / Constants.PPM : b2body.getPosition().x - 2 / Constants.PPM, b2body.getPosition().y - 7.5f / Constants.PPM);
+            currAState = Constants.ASTATE.LAND;
+        }
+        timer.start(0.2f, "land", this);
+        world.setGravity(new Vector2(0, -Constants.G));
+        b2body.setLinearDamping(0);
+    }
+
+    public void jump() {
+        particleHandler.addParticleEffect("dust_ground", facingRight ? b2body.getPosition().x - 4 / Constants.PPM : b2body.getPosition().x - 2 / Constants.PPM, b2body.getPosition().y - 7.5f / Constants.PPM);
+        b2body.applyLinearImpulse(new Vector2(0, 3f), b2body.getWorldCenter(), true);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.Graphics.ParticleHandler;
 import com.mygdx.Handlers.CharacterCycle;
 import com.mygdx.Handlers.VisionMap;
 import com.mygdx.Tools.MyResourceManager;
@@ -24,9 +25,10 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     protected CharacterCycle characterCycle;
     protected VisionMap visionMap;
     protected int floorContacts; // Number of contacts with the floor to avoid anomalies
-    private int airIterations;
+    protected int airIterations;
+    protected ParticleHandler particleHandler;
 
-    public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle, VisionMap visionMap) {
+    public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle, VisionMap visionMap, ParticleHandler particleHandler) {
 
         super(id, myResourceManager);
         this.timer = timer;
@@ -34,6 +36,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         this.bullseye = null;
         this.characterCycle = characterCycle;
         this.visionMap = visionMap;
+        this.particleHandler = particleHandler;
 
         // Initializing states
         playerStates = EnumSet.noneOf(Constants.PSTATE.class);
@@ -60,7 +63,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         }
 
         // Animation priority
-       if (airIterations >= 5) {
+        if (airIterations >= 5) {
             if (isFalling()) {
                 currAState = Constants.ASTATE.FALL;
                 b2body.setLinearDamping(0);
@@ -101,6 +104,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
             handleAnimation();
             prevAState = currAState;
         }
+
         // Update the animation
         animation.update(delta);
     }
@@ -108,13 +112,17 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     public void land() {
         addPlayerState(Constants.PSTATE.ON_GROUND);
         addPlayerState(Constants.PSTATE.LANDING);
-        if (airIterations >= 5) currAState = Constants.ASTATE.LAND;
+        if (airIterations >= 5) {
+            particleHandler.addParticleEffect("dust_ground", facingRight ? b2body.getPosition().x - 5 / Constants.PPM : b2body.getPosition().x - 3 / Constants.PPM, b2body.getPosition().y - 10/Constants.PPM);
+            currAState = Constants.ASTATE.LAND;
+        }
         timer.start(0.2f, "land", this);
         world.setGravity(new Vector2(0, -Constants.G));
         b2body.setLinearDamping(0);
     }
 
     public void jump() {
+        particleHandler.addParticleEffect("dust_ground", facingRight ? b2body.getPosition().x - 5 / Constants.PPM : b2body.getPosition().x - 3 / Constants.PPM, b2body.getPosition().y - 10/Constants.PPM);
         b2body.applyLinearImpulse(new Vector2(0, 3f), b2body.getWorldCenter(), true);
     }
 
@@ -125,8 +133,10 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
 
     public void wallJump() {
         if (wallState == -1) {
+            particleHandler.addParticleEffect("dust_wall", b2body.getPosition().x - 8 / Constants.PPM, b2body.getPosition().y);
             b2body.applyLinearImpulse(new Vector2(2, 3), b2body.getWorldCenter(), true);
         } else {
+            particleHandler.addParticleEffect("dust_wall", b2body.getPosition().x + 8 / Constants.PPM, b2body.getPosition().y);
             b2body.applyLinearImpulse(new Vector2(-2, 3), b2body.getWorldCenter(), true);
         }
         addPlayerState(Constants.PSTATE.STUNNED);

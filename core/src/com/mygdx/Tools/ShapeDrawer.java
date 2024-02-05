@@ -51,11 +51,13 @@ public class ShapeDrawer {
 
         @Override
         public void render(SpriteBatch batch) {
+            Texture texture = new Texture("Shapes/purple_pixel.png");
             batch.setShader(shaderHandler.getShaderProgram("wave"));
             batch.begin();
-            batch.draw(new TextureRegion(new Texture("Shapes/purple_pixel.png")), start.x, start.y, 0, 0, start.x > end.x ? -width : width, height, 1f, 1f, angle);
+            batch.draw(new TextureRegion(texture), start.x, start.y, 0, 0, start.x > end.x ? -width : width, height, 1f, 1f, angle);
             batch.end();
             batch.setShader(null);
+            texture.dispose();
         }
     }
 }
