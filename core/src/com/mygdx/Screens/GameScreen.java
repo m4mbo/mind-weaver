@@ -18,6 +18,7 @@ import com.mygdx.Listeners.MyContactListener;
 import com.mygdx.Listeners.GameInputProcessor;
 import com.mygdx.Objects.Door;
 import com.mygdx.Objects.PressurePlate;
+import com.mygdx.RoleCast.ArmourGoblin;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.RoleCast.BaseGoblin;
 import com.mygdx.RoleCast.Mage;
@@ -79,7 +80,7 @@ public class GameScreen implements Screen {
         objectHandler = new ObjectHandler();
         Door door = new Door(world, resourceManager, 330, 138);
         objectHandler.addObject(door);
-        PressurePlate pressurePlate = new PressurePlate(world, resourceManager, 200, 131, 1);
+        PressurePlate pressurePlate = new PressurePlate(world, resourceManager, 200, 131, 2);
         pressurePlate.addReactable(door);
         objectHandler.addObject(pressurePlate);
         entityHandler = new EntityHandler();
@@ -90,8 +91,8 @@ public class GameScreen implements Screen {
         entityHandler.addEntity(mage);
         characterCycle.initialize(mage);
 
-        entityHandler.addEntity(new BaseGoblin(180, 150, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap));
-        entityHandler.addEntity(new BaseGoblin(350, 150, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap));
+        entityHandler.addEntity(new ArmourGoblin(180, 150, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap));
+        entityHandler.addEntity(new BaseGoblin(200, 150, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap));
 
         visionMap.initialize(entityHandler);
         inputProcessor.setGameVariables(characterCycle);
@@ -115,8 +116,6 @@ public class GameScreen implements Screen {
 
         world.step(1/60f, 6, 2);
 
-        gameCam.position.set(characterCycle.getCurrentCharacter().getPosition().x, characterCycle.getCurrentCharacter().getPosition().y + 20 / Constants.PPM, 0);
-
         entityHandler.handleEntities();
     }
 
@@ -125,21 +124,23 @@ public class GameScreen implements Screen {
 
         update(delta);
 
+        game.batch.setProjectionMatrix(gameCam.combined);
+
         // Clearing the screen
         Gdx.gl.glClearColor( 0, 0, 0, 1 );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT);
 
-        game.batch.setProjectionMatrix(gameCam.combined);
-
         renderer.setView(gameCam);
         renderer.render();
+
         entityHandler.render(game.batch);
         objectHandler.render(game.batch);
         shapeDrawer.render(game.batch);
 
-        gameCam.update();
-
         //b2dr.render(world, gameCam.combined);
+
+        gameCam.position.set(characterCycle.getCurrentCharacter().getPosition().x, characterCycle.getCurrentCharacter().getPosition().y + 20 / Constants.PPM, 0);
+        gameCam.update();
     }
 
     @Override

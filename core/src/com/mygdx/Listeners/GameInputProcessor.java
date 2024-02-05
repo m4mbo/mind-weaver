@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.mygdx.Game.MindWeaver;
 import com.mygdx.Handlers.CharacterCycle;
+import com.mygdx.RoleCast.ArmourGoblin;
 import com.mygdx.RoleCast.PlayableCharacter;
 import com.mygdx.Screens.GameScreen;
 import com.mygdx.Helpers.Constants;
@@ -50,6 +51,10 @@ public class GameInputProcessor implements InputProcessor {
             case Input.Keys.SHIFT_LEFT:
                 characterCycle.cycleNext();
                 character.looseControl();
+                break;
+            case Input.Keys.J:
+                if (character instanceof ArmourGoblin) ((ArmourGoblin) character).attack();
+                break;
             default:
                 break;
         }

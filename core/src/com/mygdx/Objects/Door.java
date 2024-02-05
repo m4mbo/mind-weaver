@@ -24,7 +24,7 @@ public class Door extends Reactable {
         currAState = Constants.ASTATE.CLOSED;
         prevAState = Constants.ASTATE.CLOSED;
 
-        setAnimation(TextureRegion.split(resourceManager.getTexture("door_closed"), 13, 28)[0], 1/10f, true, 1f);
+        setAnimation(TextureRegion.split(resourceManager.getTexture("door_closed"), 13, 28)[0], 1/9f, true, 1f);
 
         // Creating two bodies for spring joint
         BodyDef bdef = new BodyDef();
@@ -55,8 +55,8 @@ public class Door extends Reactable {
     }
 
     public void handleAnimation() {
-        if (currAState == Constants.ASTATE.OPEN) setAnimation(TextureRegion.split(resourceManager.getTexture("door_open"), 13, 28)[0], 1/10f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
-        else setAnimation(TextureRegion.split(resourceManager.getTexture("door_closed"), 13, 28)[0], 1/10f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
+        if (currAState == Constants.ASTATE.OPEN) setAnimation(TextureRegion.split(resourceManager.getTexture("door_open"), 13, 28)[0], 1/9f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
+        else setAnimation(TextureRegion.split(resourceManager.getTexture("door_closed"), 13, 28)[0], 1/9f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
     }
 
     public void step() {
@@ -64,8 +64,8 @@ public class Door extends Reactable {
         if (currHeight <= 0 && open) return;
         else if (currHeight >= height && !open) return;
 
-        if (open) currHeight -= 10 / Constants.PPM;
-        else currHeight += 10 / Constants.PPM;
+        if (open) currHeight -= 14 / Constants.PPM;
+        else currHeight += 14 / Constants.PPM;
 
         // Destroying current fixture
         Fixture fixture = b2body.getFixtureList().get(0);
