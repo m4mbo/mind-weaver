@@ -10,7 +10,6 @@ import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.Helpers.Subscriber;
 import com.mygdx.Helpers.Constants;
-
 import java.util.EnumSet;
 
 public abstract class PlayableCharacter extends Entity implements Subscriber {

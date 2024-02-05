@@ -1,4 +1,4 @@
-package com.mygdx.Handlers;
+package com.mygdx.Graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
