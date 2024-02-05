@@ -1,14 +1,10 @@
 package com.mygdx.Tools;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.Handlers.ShaderHandler;
+import com.mygdx.Graphics.ShaderHandler;
 
 import java.util.LinkedList;
 
@@ -55,11 +51,13 @@ public class ShapeDrawer {
 
         @Override
         public void render(SpriteBatch batch) {
+            Texture texture = new Texture("Shapes/purple_pixel.png");
             batch.setShader(shaderHandler.getShaderProgram("wave"));
             batch.begin();
-            batch.draw(new TextureRegion(new Texture("Shapes/purple_pixel.png")), start.x, start.y, 0, 0, start.x > end.x ? -width : width, height, 1f, 1f, angle);
+            batch.draw(new TextureRegion(texture), start.x, start.y, 0, 0, start.x > end.x ? -width : width, height, 1f, 1f, angle);
             batch.end();
             batch.setShader(null);
+            texture.dispose();
         }
     }
 }

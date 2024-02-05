@@ -13,6 +13,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.Game.MindWeaver;
+import com.mygdx.Graphics.ParticleHandler;
+import com.mygdx.Graphics.ShaderHandler;
 import com.mygdx.Handlers.*;
 import com.mygdx.Listeners.MyContactListener;
 import com.mygdx.Listeners.GameInputProcessor;
@@ -44,6 +46,7 @@ public class GameScreen implements Screen {
     private final CharacterCycle characterCycle;
     private final ShapeDrawer shapeDrawer;
     private final ShaderHandler shaderHandler;
+    private final ParticleHandler particleHandler;
     public GameScreen(MindWeaver game, int level, MyResourceManager resourceManager, GameInputProcessor inputProcessor) {
 
         this.game = game;
@@ -83,16 +86,18 @@ public class GameScreen implements Screen {
         PressurePlate pressurePlate = new PressurePlate(world, resourceManager, 200, 131, 2);
         pressurePlate.addReactable(door);
         objectHandler.addObject(pressurePlate);
-        entityHandler = new EntityHandler();
         visionMap =  new VisionMap(world, shapeDrawer);
         characterCycle = new CharacterCycle(visionMap);
+        entityHandler = new EntityHandler(characterCycle, shaderHandler);
 
-        Mage mage = new Mage(250, 200, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3, characterCycle, visionMap);
+        particleHandler = new ParticleHandler();
+
+        Mage mage = new Mage(250, 200, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3, characterCycle, visionMap, particleHandler);
         entityHandler.addEntity(mage);
         characterCycle.initialize(mage);
 
-        entityHandler.addEntity(new ArmourGoblin(180, 150, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap));
-        entityHandler.addEntity(new BaseGoblin(200, 150, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap));
+        entityHandler.addEntity(new ArmourGoblin(180, 150, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap, particleHandler));
+        entityHandler.addEntity(new BaseGoblin(200, 150, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap,particleHandler));
 
         visionMap.initialize(entityHandler);
         inputProcessor.setGameVariables(characterCycle);
@@ -136,6 +141,8 @@ public class GameScreen implements Screen {
         entityHandler.render(game.batch);
         objectHandler.render(game.batch);
         shapeDrawer.render(game.batch);
+
+        particleHandler.render(game.batch, delta);
 
         //b2dr.render(world, gameCam.combined);
 

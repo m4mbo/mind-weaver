@@ -3,6 +3,7 @@ package com.mygdx.RoleCast;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.Graphics.ParticleHandler;
 import com.mygdx.Handlers.CharacterCycle;
 import com.mygdx.Handlers.VisionMap;
 import com.mygdx.Tools.MyResourceManager;
@@ -14,8 +15,8 @@ public class Mage extends PlayableCharacter {
     private Vector2 currCheckPoint;
     private int lives;
 
-    public Mage(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, int lives, CharacterCycle characterCycle, VisionMap visionMap) {
-        super(world, id, timer, myResourceManager, characterCycle, visionMap);
+    public Mage(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, int lives, CharacterCycle characterCycle, VisionMap visionMap, ParticleHandler particleHandler) {
+        super(world, id, timer, myResourceManager, characterCycle, visionMap, particleHandler);
 
         this.lives = lives;
 

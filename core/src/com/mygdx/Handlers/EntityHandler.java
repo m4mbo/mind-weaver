@@ -2,8 +2,10 @@ package com.mygdx.Handlers;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.mygdx.Graphics.ShaderHandler;
 import com.mygdx.RoleCast.Entity;
-import com.mygdx.RoleCast.PlayableCharacter;
+import com.mygdx.RoleCast.Mage;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -11,10 +13,14 @@ import java.util.LinkedList;
 public class EntityHandler {
     private HashMap<Integer, Entity> entities;
     private LinkedList<EntityOp> entityOps;
+    private CharacterCycle characterCycle;
+    private ShaderHandler shaderHandler;
 
-    public EntityHandler () {
+    public EntityHandler (CharacterCycle characterCycle, ShaderHandler shaderHandler) {
         entityOps = new LinkedList<>();
         entities = new HashMap<>();
+        this.characterCycle = characterCycle;
+        this.shaderHandler = shaderHandler;
     }
 
     public void addEntity(Entity entity) {
@@ -57,7 +63,11 @@ public class EntityHandler {
 
     public void render(SpriteBatch batch) {
         for (Entity entity : entities.values()) {
+            if (!(entity instanceof Mage) && characterCycle.getCurrentCharacter().equals(entity)) {
+                batch.setShader(shaderHandler.getShaderProgram("outline"));
+            }
             entity.render(batch);
+            batch.setShader(null);
         }
     }
 

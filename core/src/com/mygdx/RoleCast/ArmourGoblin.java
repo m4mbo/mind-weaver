@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.Graphics.ParticleHandler;
 import com.mygdx.Handlers.CharacterCycle;
 import com.mygdx.Handlers.VisionMap;
 import com.mygdx.Helpers.Constants;
@@ -16,8 +17,8 @@ public class ArmourGoblin extends PlayableCharacter {
     private CircleShape circleShape;
     private FixtureDef fdef;
 
-    public ArmourGoblin(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle, VisionMap visionMap) {
-        super(world, id, timer, myResourceManager, characterCycle, visionMap);
+    public ArmourGoblin(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle, VisionMap visionMap, ParticleHandler particleHandler) {
+        super(world, id, timer, myResourceManager, characterCycle, visionMap, particleHandler);
 
         // Initializing sprite
         setAnimation(TextureRegion.split(resourceManager.getTexture("armour_idle"), 19, 19)[0], 1/5f, false, 1f);
@@ -130,6 +131,7 @@ public class ArmourGoblin extends PlayableCharacter {
 
     public void attack() {
         if (isStateActive(Constants.PSTATE.ATTACK_STUN) || isStateActive(Constants.PSTATE.ATTACKING)) return;
+        particleHandler.addParticleEffect(facingRight ? "air_right" : "air_left", b2body.getPosition().x, b2body.getPosition().y - 4 / Constants.PPM);
         addPlayerState(Constants.PSTATE.ATTACKING);
         timer.start(0.1f, "attack_hb", this);
     }
