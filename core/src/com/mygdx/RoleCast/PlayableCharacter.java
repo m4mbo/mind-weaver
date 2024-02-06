@@ -38,6 +38,8 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         this.visionMap = visionMap;
         this.particleHandler = particleHandler;
 
+        lives = 3;
+
         // Initializing states
         playerStates = EnumSet.noneOf(Constants.PSTATE.class);
         addPlayerState(Constants.PSTATE.ON_GROUND);
@@ -139,8 +141,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
             particleHandler.addParticleEffect("dust_wall", b2body.getPosition().x + 8 / Constants.PPM, b2body.getPosition().y);
             b2body.applyLinearImpulse(new Vector2(-1, 3), b2body.getWorldCenter(), true);
         }
-        addPlayerState(Constants.PSTATE.STUNNED);
-        timer.start(0.2f, "stun", this);
+        stun(0.2f);
     }
 
     public void moveRight() {
@@ -160,8 +161,12 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         switch (flag) {
             case "stun":
                 removePlayerState(Constants.PSTATE.STUNNED);
-                if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = Constants.MSTATE.RIGHT;
-                if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = Constants.MSTATE.LEFT;
+                if (characterCycle.getCurrentCharacter().equals(this)) {
+                    if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = Constants.MSTATE.RIGHT;
+                    if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = Constants.MSTATE.LEFT;
+                } else {
+                    movementState = Constants.MSTATE.HSTILL;
+                }
                 break;
             case "land":
                 removePlayerState(Constants.PSTATE.LANDING);
@@ -169,12 +174,30 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
             case "stop":
                 movementState = Constants.MSTATE.HSTILL;
                 break;
+            case "hit" :
+                removePlayerState(Constants.PSTATE.HIT);
         }
     }
 
     public void looseControl() {
         movementState = Constants.MSTATE.PREV;
         timer.start(0.4f, "stop", this);
+    }
+
+    public void stun(float seconds) {
+        addPlayerState(Constants.PSTATE.STUNNED);
+        timer.start(seconds, "stun", this);
+    }
+
+    @Override
+    public void die() {
+        lives--;
+        if (lives == 0) {
+            dispose();
+        } else {
+            timer.start(0.05f, "hit", this);
+            addPlayerState(Constants.PSTATE.HIT);
+        }
     }
 
     public boolean isFalling() { return b2body.getLinearVelocity().y < 0; }
@@ -210,5 +233,12 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         if (floorContacts == 0) {
             removePlayerState(Constants.PSTATE.ON_GROUND);
         }
+    }
+
+    public void dispose() {
+        for (Fixture fixture : b2body.getFixtureList()) {
+            b2body.destroyFixture(fixture);
+        }
+        world.destroyBody(b2body);
     }
 }

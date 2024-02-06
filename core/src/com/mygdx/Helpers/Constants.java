@@ -5,6 +5,7 @@ public class Constants {
     public static final float PPM = 100;
     public static final float MAX_SPEED_X = 1.2f;
     public static final float MAX_SPEED_Y = 5f;
+    public static final float KNOCKBACK_SCALE = 1f;
     public static final float G = 11;
     public static final float G_ENHANCED = 13;
     // Movement state Flag
@@ -16,7 +17,7 @@ public class Constants {
     }
     // Player state flag
     public enum PSTATE {
-        STUNNED, ON_GROUND, LANDING, ATTACKING, ATTACK_STUN
+        STUNNED, ON_GROUND, LANDING, ATTACKING, ATTACK_STUN, HIT
     }
     // Animation state flag
     public enum ASTATE {

@@ -15,10 +15,11 @@ public class Mage extends PlayableCharacter {
     private Vector2 currCheckPoint;
     private int lives;
 
-    public Mage(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, int lives, CharacterCycle characterCycle, VisionMap visionMap, ParticleHandler particleHandler) {
+    public Mage(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle, VisionMap visionMap, ParticleHandler particleHandler) {
+
         super(world, id, timer, myResourceManager, characterCycle, visionMap, particleHandler);
 
-        this.lives = lives;
+        lives = 3;
 
         currCheckPoint = new Vector2(x / Constants.PPM, y / Constants.PPM);
 
@@ -73,7 +74,7 @@ public class Mage extends PlayableCharacter {
         b2body.createFixture(fdef).setUserData("leftSensor");
 
         //Create bottom sensor
-        polygonShape.setAsBox(6.6f / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -8 / Constants.PPM), 0);
+        polygonShape.setAsBox(7f / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -8 / Constants.PPM), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
         fdef.filter.categoryBits = Constants.BIT_FEET;
@@ -103,14 +104,18 @@ public class Mage extends PlayableCharacter {
     }
 
     public void respawn() {
+        lives = 3;
         b2body.setTransform(currCheckPoint, b2body.getAngle());
     }
 
     @Override
     public void die() {
         lives--;
-        //if (lives == 0) return;     // Handle later
-        respawn();
+        if (lives == 0) respawn();
+        else {
+            timer.start(0.05f, "hit", this);
+            addPlayerState(Constants.PSTATE.HIT);
+        }
     }
 
     public void setCheckPoint(Vector2 position) { currCheckPoint = position; }

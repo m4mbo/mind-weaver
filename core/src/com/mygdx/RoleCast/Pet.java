@@ -38,7 +38,7 @@ public class Pet extends Entity {
         b2body = world.createBody(bdef);
         b2body.setGravityScale(0);
 
-        lightManager.addLight(b2body, 60, Constants.BIT_GROUND, new Color(70f/255, 11f/255, 93f/255, 0.5f));
+        lightManager.addLight(b2body, 80, Constants.BIT_GROUND, new Color(70f/255, 11f/255, 93f/255, 0.8f));
 
     }
 

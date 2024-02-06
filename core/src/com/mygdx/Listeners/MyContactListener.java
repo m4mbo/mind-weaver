@@ -1,9 +1,11 @@
 package com.mygdx.Listeners;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Handlers.EntityHandler;
 import com.mygdx.Handlers.CharacterCycle;
 import com.mygdx.Handlers.VisionMap;
+import com.mygdx.Helpers.Constants;
 import com.mygdx.RoleCast.Mage;
 import com.mygdx.RoleCast.PlayableCharacter;
 import com.mygdx.Helpers.Constants.*;
@@ -39,9 +41,27 @@ public class MyContactListener implements ContactListener {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("bottomSensor") ? fa.getBody() : fb.getBody());
             character.increaseFloorContact();
             if (character.getMovementState() == MSTATE.PREV) character.setMovementState(MSTATE.HSTILL);
-        } else if (fa.getUserData().equals("player_hb") || fb.getUserData().equals("player_hb")) {
-            character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("player_hb") ? fa.getBody() : fb.getBody());
+        } else if (fa.getUserData().equals("hazard") || fb.getUserData().equals("hazard")) {
+
+            character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("hazard") ? fb.getBody() : fa.getBody());
             entityHandler.addEntityOperation(character, "die");
+
+            Body targetBody = fa.getUserData().equals("hazard") ? fb.getBody(): fa.getBody();
+            Vector2 targetPos = targetBody.getPosition();
+            Vector2 sourcePos = fa.getUserData().equals("hazard") ? fa.getBody().getPosition() : fb.getBody().getPosition();
+
+            float directionX = targetPos.x - sourcePos.x;
+            float directionY = targetPos.y - sourcePos.y;
+
+            // Normalizing the direction
+            float length = (float) Math.sqrt(directionX * directionX + directionY * directionY);
+            if (length != 0) {
+                directionX /= length;
+                directionY /= length;
+            }
+            character.stun(0.05f);
+            targetBody.applyLinearImpulse(new Vector2(directionX * Constants.KNOCKBACK_SCALE, directionY * Constants.KNOCKBACK_SCALE), targetBody.getWorldCenter(), true);
+
         } else if (fa.getUserData().equals("checkpoint") || fb.getUserData().equals("checkpoint")) {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("checkpoint") ? fb.getBody() : fa.getBody());
             ((Mage) character).setCheckPoint(fa.getUserData().equals("checkpoint") ? fb.getBody().getPosition() : fa.getBody().getPosition());

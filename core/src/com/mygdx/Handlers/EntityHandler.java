@@ -3,9 +3,11 @@ package com.mygdx.Handlers;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.Graphics.ShaderHandler;
+import com.mygdx.Helpers.Constants;
 import com.mygdx.RoleCast.Entity;
 import com.mygdx.RoleCast.Mage;
 import com.mygdx.RoleCast.Pet;
+import com.mygdx.RoleCast.PlayableCharacter;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -16,13 +18,15 @@ public class EntityHandler {
     private LinkedList<EntityOp> entityOps;
     private CharacterCycle characterCycle;
     private ShaderHandler shaderHandler;
+    private VisionMap visionMap;
     private Pet pet;
 
-    public EntityHandler (CharacterCycle characterCycle, ShaderHandler shaderHandler) {
+    public EntityHandler (CharacterCycle characterCycle, ShaderHandler shaderHandler, VisionMap visionMap) {
         entityOps = new LinkedList<>();
         entities = new HashMap<>();
         this.characterCycle = characterCycle;
         this.shaderHandler = shaderHandler;
+        this.visionMap = visionMap;
     }
 
     public void addPet(Pet pet) {
@@ -54,8 +58,10 @@ public class EntityHandler {
         for (EntityOp entityOp : entityOps) {
             if (entityOp.operation.equals("die")) {
                 entityOp.entity.die();
-            } else if (entityOp.operation.equals("teleport")) {
-
+                if (entityOp.entity.getLives() == 0 && !(entityOp.entity instanceof Mage) && (entityOp.entity instanceof PlayableCharacter)) {
+                    visionMap.removeCharacter((PlayableCharacter) entityOp.entity);
+                    entities.remove(entityOp.entity.getID());
+                }
             }
         }
         entityOps.clear();
@@ -71,6 +77,9 @@ public class EntityHandler {
     public void render(SpriteBatch batch) {
         pet.render(batch);
         for (Entity entity : entities.values()) {
+            if (((PlayableCharacter) entity).isStateActive(Constants.PSTATE.HIT)) {
+                batch.setShader(shaderHandler.getShaderProgram("outline"));
+            }
             entity.render(batch);
             batch.setShader(null);
         }

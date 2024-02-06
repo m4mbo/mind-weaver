@@ -32,7 +32,7 @@ public class BaseGoblin extends PlayableCharacter{
         fdef.shape = polygonShape;
         fdef.friction = 0;
         fdef.filter.categoryBits = Constants.BIT_GOBLIN;
-        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_MAGE | Constants.BIT_GOBLIN | Constants.BIT_ROV | Constants.BIT_FEET;
+        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_MAGE | Constants.BIT_GOBLIN | Constants.BIT_ROV | Constants.BIT_FEET | Constants.BIT_HAZARD;
         b2body.createFixture(fdef).setUserData(id);
 
         fdef = new FixtureDef();
@@ -112,7 +112,4 @@ public class BaseGoblin extends PlayableCharacter{
         particleHandler.addParticleEffect("dust_ground", facingRight ? b2body.getPosition().x - 4 / Constants.PPM : b2body.getPosition().x - 2 / Constants.PPM, b2body.getPosition().y - 7.5f / Constants.PPM);
         b2body.applyLinearImpulse(new Vector2(0, 3f), b2body.getWorldCenter(), true);
     }
-
-    @Override
-    public void die() { }
 }

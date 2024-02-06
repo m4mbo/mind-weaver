@@ -24,6 +24,7 @@ public class CharacterCycle {
     }
 
     public PlayableCharacter getCurrentCharacter() {
+        if (currentIndex >= characters.size()) currentIndex = 0;
         return characters.get(currentIndex);
     }
 

@@ -37,7 +37,7 @@ public class ArmourGoblin extends PlayableCharacter {
         fdef.shape = polygonShape;
         fdef.friction = 0;
         fdef.filter.categoryBits = Constants.BIT_GOBLIN;
-        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_MAGE | Constants.BIT_GOBLIN | Constants.BIT_ROV | Constants.BIT_FEET;
+        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_MAGE | Constants.BIT_GOBLIN | Constants.BIT_ROV | Constants.BIT_FEET | Constants.BIT_HAZARD;
         b2body.createFixture(fdef).setUserData(id);
 
         fdef = new FixtureDef();
@@ -126,6 +126,7 @@ public class ArmourGoblin extends PlayableCharacter {
 
     @Override
     public void jump() {
+        particleHandler.addParticleEffect("dust_ground", facingRight ? b2body.getPosition().x - 5 / Constants.PPM : b2body.getPosition().x - 3 / Constants.PPM, b2body.getPosition().y - 10/Constants.PPM);
         b2body.applyLinearImpulse(new Vector2(0, 2.5f), b2body.getWorldCenter(), true);
     }
 
@@ -139,7 +140,7 @@ public class ArmourGoblin extends PlayableCharacter {
     public void slash() {
         circleShape.setPosition(facingRight ? new Vector2(9 / Constants.PPM, 0) : new Vector2(-9 / Constants.PPM, 0));
         fdef.shape = circleShape;
-        b2body.createFixture(fdef).setUserData("attack_box");
+        b2body.createFixture(fdef).setUserData("hazard");
         timer.start(0.1f, "attack_anim", this);
     }
 
@@ -148,8 +149,12 @@ public class ArmourGoblin extends PlayableCharacter {
         switch (flag) {
             case "stun":
                 removePlayerState(Constants.PSTATE.STUNNED);
-                if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = Constants.MSTATE.RIGHT;
-                if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = Constants.MSTATE.LEFT;
+                if (characterCycle.getCurrentCharacter().equals(this)) {
+                    if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = Constants.MSTATE.RIGHT;
+                    if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = Constants.MSTATE.LEFT;
+                } else {
+                    movementState = Constants.MSTATE.HSTILL;
+                }
                 break;
             case "land":
                 removePlayerState(Constants.PSTATE.LANDING);
@@ -159,7 +164,7 @@ public class ArmourGoblin extends PlayableCharacter {
                 break;
             case "attack_anim":
                 for (Fixture fixture : b2body.getFixtureList()) {
-                    if (fixture.getUserData() instanceof String && fixture.getUserData().equals("attack_box")) b2body.destroyFixture(fixture);
+                    if (fixture.getUserData() instanceof String && fixture.getUserData().equals("hazard")) b2body.destroyFixture(fixture);
                 }
                 removePlayerState(Constants.PSTATE.ATTACKING);
                 addPlayerState(Constants.PSTATE.ATTACK_STUN);
@@ -171,6 +176,8 @@ public class ArmourGoblin extends PlayableCharacter {
             case "attack_hb":
                 slash();
                 break;
+            case "hit" :
+                removePlayerState(Constants.PSTATE.HIT);
         }
     }
 }

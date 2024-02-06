@@ -89,11 +89,11 @@ public class GameScreen implements Screen {
         objectHandler.addObject(pressurePlate);
         visionMap =  new VisionMap(world, shapeDrawer);
         characterCycle = new CharacterCycle(visionMap);
-        entityHandler = new EntityHandler(characterCycle, shaderHandler);
+        entityHandler = new EntityHandler(characterCycle, shaderHandler, visionMap);
 
         particleHandler = new ParticleHandler();
 
-        Mage mage = new Mage(250, 200, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3, characterCycle, visionMap, particleHandler);
+        Mage mage = new Mage(250, 200, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle, visionMap, particleHandler);
 
         characterCycle.initialize(mage);
         entityHandler.addEntity(mage);
@@ -107,7 +107,7 @@ public class GameScreen implements Screen {
         world.setContactListener(new MyContactListener(entityHandler, visionMap, characterCycle));
         b2dr = new Box2DDebugRenderer();
         new B2WorldHandler(world, map, resourceManager, timer, eidAllocator);     //Creating world
-        lightManager.setDim(0.8f);
+        lightManager.setDim(0.6f);
     }
 
     @Override

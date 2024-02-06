@@ -7,6 +7,8 @@ import com.mygdx.Sprites.B2Sprite;
 public abstract class Entity extends B2Sprite {
     protected int ID;
     protected final MyResourceManager resourceManager;
+    protected int lives;
+
 
     protected Entity(int ID, MyResourceManager resourceManager) {
         this.ID = ID;
@@ -15,6 +17,10 @@ public abstract class Entity extends B2Sprite {
 
     public int getID() {
         return ID;
+    }
+
+    public int getLives() {
+        return lives;
     }
 
     public void die() {}
