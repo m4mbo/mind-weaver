@@ -107,7 +107,7 @@ public class GameScreen implements Screen {
         visionMap.initialize(entityHandler);
         inputProcessor.setGameVariables(characterCycle);
 
-        world.setContactListener(new MyContactListener(entityHandler, visionMap, characterCycle));
+        world.setContactListener(new MyContactListener(entityHandler, visionMap));
         b2dr = new Box2DDebugRenderer();
         new B2WorldHandler(world, map, resourceManager, timer, eidAllocator);     //Creating world
         lightManager.setDim(0.6f);
