@@ -40,7 +40,7 @@ public class Mage extends PlayableCharacter {
         fdef.shape = polygonShape;
         fdef.friction = 0;
         fdef.filter.categoryBits = Constants.BIT_MAGE;
-        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_CHECKPOINT | Constants.BIT_GOBLIN | Constants.BIT_FEET;
+        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_GOBLIN | Constants.BIT_FEET;
         b2body.createFixture(fdef).setUserData(id);
 
         //Create player hitbox

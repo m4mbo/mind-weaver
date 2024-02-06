@@ -63,7 +63,7 @@ public class VisionMap {
                 }
             } else {
                 if (source.getBullseye() != null && source.getBullseye().equals(target)) {
-                    target.looseControl();
+                    if (!traceable(target)) target.looseControl();
                     source.setBullseye(null);
                 }
             }

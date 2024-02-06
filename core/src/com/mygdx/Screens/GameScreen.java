@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.Game.MindWeaver;
+import com.mygdx.Graphics.LightManager;
 import com.mygdx.Graphics.ParticleHandler;
 import com.mygdx.Graphics.ShaderHandler;
 import com.mygdx.Handlers.*;
@@ -21,6 +22,7 @@ import com.mygdx.Listeners.GameInputProcessor;
 import com.mygdx.Objects.Door;
 import com.mygdx.Objects.PressurePlate;
 import com.mygdx.RoleCast.ArmourGoblin;
+import com.mygdx.RoleCast.Pet;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.RoleCast.BaseGoblin;
 import com.mygdx.RoleCast.Mage;
@@ -28,7 +30,6 @@ import com.mygdx.Handlers.B2WorldHandler;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Tools.ShapeDrawer;
-
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameScreen implements Screen {
@@ -39,18 +40,17 @@ public class GameScreen implements Screen {
     private final OrthogonalTiledMapRenderer renderer;
     private final World world;    // World holding all the physical objects
     private final Box2DDebugRenderer b2dr;
-    private final GameInputProcessor inputProcessor;
     private final EntityHandler entityHandler;
     private final ObjectHandler objectHandler;
     private final VisionMap visionMap;
     private final CharacterCycle characterCycle;
     private final ShapeDrawer shapeDrawer;
     private final ShaderHandler shaderHandler;
+    private final LightManager lightManager;
     private final ParticleHandler particleHandler;
     public GameScreen(MindWeaver game, int level, MyResourceManager resourceManager, GameInputProcessor inputProcessor) {
 
         this.game = game;
-        this.inputProcessor = inputProcessor;
 
         Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());      // Full-screen
 
@@ -77,6 +77,7 @@ public class GameScreen implements Screen {
 
         AtomicInteger eidAllocator = new AtomicInteger();
         shaderHandler = new ShaderHandler();
+        lightManager = new LightManager(world);
         shapeDrawer = new ShapeDrawer(shaderHandler, game.batch);
         timer = new MyTimer();
 
@@ -93,18 +94,20 @@ public class GameScreen implements Screen {
         particleHandler = new ParticleHandler();
 
         Mage mage = new Mage(250, 200, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3, characterCycle, visionMap, particleHandler);
-        entityHandler.addEntity(mage);
+
         characterCycle.initialize(mage);
+        entityHandler.addEntity(mage);
 
         entityHandler.addEntity(new ArmourGoblin(180, 150, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap, particleHandler));
         entityHandler.addEntity(new BaseGoblin(200, 150, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap,particleHandler));
-
+        entityHandler.addPet(new Pet(characterCycle, world, 250, 200, eidAllocator.getAndIncrement(), resourceManager, lightManager, particleHandler));
         visionMap.initialize(entityHandler);
         inputProcessor.setGameVariables(characterCycle);
 
         world.setContactListener(new MyContactListener(entityHandler, visionMap, characterCycle));
         b2dr = new Box2DDebugRenderer();
         new B2WorldHandler(world, map, resourceManager, timer, eidAllocator);     //Creating world
+        lightManager.setDim(0.8f);
     }
 
     @Override
@@ -116,8 +119,8 @@ public class GameScreen implements Screen {
         entityHandler.update(delta);
         visionMap.update(delta);
         timer.update(delta);
-        inputProcessor.update();
         objectHandler.update(delta);
+        lightManager.update(gameCam);
 
         world.step(1/60f, 6, 2);
 
@@ -138,11 +141,12 @@ public class GameScreen implements Screen {
         renderer.setView(gameCam);
         renderer.render();
 
-        entityHandler.render(game.batch);
         objectHandler.render(game.batch);
         shapeDrawer.render(game.batch);
 
         particleHandler.render(game.batch, delta);
+        lightManager.render();
+        entityHandler.render(game.batch);
 
         //b2dr.render(world, gameCam.combined);
 
@@ -165,6 +169,9 @@ public class GameScreen implements Screen {
     public void hide() { }
 
     @Override
-    public void dispose() { }
+    public void dispose() {
+        world.dispose();
+        b2dr.dispose();
+    }
 
 }

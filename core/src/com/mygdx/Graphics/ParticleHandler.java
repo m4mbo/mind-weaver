@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import java.util.LinkedList;
 
 public class ParticleHandler {
@@ -15,32 +14,40 @@ public class ParticleHandler {
     private ParticleEffectPool dustWallEffectPool;
     private ParticleEffectPool airRightEffectPool;
     private ParticleEffectPool airLeftEffectPool;
+    private ParticleEffectPool auraEffectPool;
     private LinkedList<PooledEffect> effects;
 
     public ParticleHandler() {
 
         effects = new LinkedList<>();
 
+        float scaleFactor = 1 / 2000f;
+
         ParticleEffect dustGround = new ParticleEffect();
         dustGround.load(Gdx.files.internal("Particles/dust_ground.p"), Gdx.files.internal("Particles"));
-        dustGround.scaleEffect(1/ 2000f);
+        dustGround.scaleEffect(scaleFactor);
 
         ParticleEffect dustWall = new ParticleEffect();
         dustWall.load(Gdx.files.internal("Particles/dust_wall.p"), Gdx.files.internal("Particles"));
-        dustWall.scaleEffect(1/ 2000f);
+        dustWall.scaleEffect(scaleFactor);
 
         ParticleEffect airRight = new ParticleEffect();
         airRight.load(Gdx.files.internal("Particles/air_right.p"), Gdx.files.internal("Particles"));
-        airRight.scaleEffect(1/ 2000f);
+        airRight.scaleEffect(scaleFactor);
 
         ParticleEffect airLeft = new ParticleEffect();
         airLeft.load(Gdx.files.internal("Particles/air_left.p"), Gdx.files.internal("Particles"));
-        airLeft.scaleEffect(1/ 2000f);
+        airLeft.scaleEffect(scaleFactor);
+
+        ParticleEffect aura = new ParticleEffect();
+        aura.load(Gdx.files.internal("Particles/aura.p"), Gdx.files.internal("Particles"));
+        aura.scaleEffect(scaleFactor);
 
         airRightEffectPool = new ParticleEffectPool(airRight, 1, 2);
         dustGroundEffectPool = new ParticleEffectPool(dustGround, 1, 2);
         dustWallEffectPool = new ParticleEffectPool(dustWall, 1, 2);
         airLeftEffectPool = new ParticleEffectPool(airLeft, 1, 2);
+        auraEffectPool = new ParticleEffectPool(aura, 1, 2);
     }
 
     public void addParticleEffect(String tag, float x, float y) {
@@ -58,6 +65,8 @@ public class ParticleHandler {
             case "air_left":
                 effect = airLeftEffectPool.obtain();
                 break;
+            case "aura":
+                effect = auraEffectPool.obtain();
             default:
                 break;
         }
