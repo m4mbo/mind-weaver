@@ -41,6 +41,7 @@ public abstract class B2Sprite {
     }
 
     public void render(SpriteBatch batch) {
+        if (animation.getFrameNumber() == 0) return;
         batch.begin();
         batch.draw(animation.getFrame(), facingRight ? b2body.getPosition().x - ((width / resize) / Constants.PPM) / 2 : b2body.getPosition().x + ((width / resize) / Constants.PPM) / 2 , b2body.getPosition().y - ((height / resize) / Constants.PPM) / 2, (facingRight ? width : -width) / Constants.PPM, height / Constants.PPM);
         batch.end();

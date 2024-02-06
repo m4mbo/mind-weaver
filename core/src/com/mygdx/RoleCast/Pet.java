@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.Graphics.LightManager;
 import com.mygdx.Graphics.ParticleHandler;
+import com.mygdx.Graphics.ShaderHandler;
 import com.mygdx.Handlers.CharacterCycle;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MathWizard;
@@ -19,18 +20,21 @@ public class Pet extends Entity {
     private final float threshold;
     private float angle;
     private ParticleHandler particleHandler;
+    private ShaderHandler shaderHandler;
 
     private float time;
 
-    public Pet(CharacterCycle characterCycle, World world, float x, float y, int id, MyResourceManager myResourceManager, LightManager lightManager, ParticleHandler particleHandler) {
+    public Pet(CharacterCycle characterCycle, World world, float x, float y, int id, MyResourceManager myResourceManager, LightManager lightManager, ParticleHandler particleHandler, ShaderHandler shaderHandler) {
         super(id, myResourceManager);
         this.characterCycle = characterCycle;
         this.particleHandler = particleHandler;
+        this.shaderHandler = shaderHandler;
+
         threshold = 20 / Constants.PPM;
         angle = 0;
         time = 0;
 
-        setAnimation(TextureRegion.split(resourceManager.getTexture("pet"), 7, 7)[0], 1/4f, false, 0.8f);
+        setAnimation(TextureRegion.split(resourceManager.getTexture("pet"), 7, 7)[0], 1/4f, false, 0.7f);
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, y / Constants.PPM);
@@ -38,6 +42,7 @@ public class Pet extends Entity {
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
         b2body.setGravityScale(0);
+        b2body.setLinearDamping(5);
 
         lightManager.addLight(b2body, 80, Constants.BIT_GROUND, new Color(70f/255, 11f/255, 93f/255, 0.8f));
 
@@ -68,8 +73,10 @@ public class Pet extends Entity {
 
         Vector2 normalized = MathWizard.normalizedDirection(character.getPosition(), b2body.getPosition());
 
+        facingRight = normalized.x > 0;
+
         // Apply the linear impulse to the body
-        b2body.setLinearVelocity(new Vector2(normalized.x * Constants.MAX_SPEED_X / 1.2f, normalized.y * Constants.MAX_SPEED_X / 2));
+        b2body.setLinearVelocity(new Vector2(normalized.x * Constants.MAX_SPEED_X / 1.1f, normalized.y * Constants.MAX_SPEED_X / 2));
 
         angle = MathWizard.angle(character.getPosition(), b2body.getPosition());
     }
@@ -79,7 +86,16 @@ public class Pet extends Entity {
     }
 
     public boolean compareCoords(float p1, float p2) {
-        return (p1 <= p2 + 2 / Constants.PPM && p1 >= p2 - 2 / Constants.PPM);
+        return (p1 <= p2 + 0.1f / Constants.PPM && p1 >= p2 - 0.1f / Constants.PPM);
     }
+
+    public void render(SpriteBatch batch) {
+        batch.begin();
+        batch.setShader(shaderHandler.getShaderProgram("rand_col"));
+        batch.draw(animation.getFrame(), facingRight ? b2body.getPosition().x - (width / Constants.PPM) / 2 : b2body.getPosition().x + (width / Constants.PPM) / 2 , b2body.getPosition().y - (height / Constants.PPM) / 2, 0, 0, (facingRight ? width : -width) / Constants.PPM, height / Constants.PPM, 1, 1, angle);
+        batch.setShader(null);
+        batch.end();
+    }
+
 
 }

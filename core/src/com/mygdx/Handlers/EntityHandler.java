@@ -79,6 +79,8 @@ public class EntityHandler {
         for (Entity entity : entities.values()) {
             if (((PlayableCharacter) entity).isStateActive(Constants.PSTATE.HIT)) {
                 batch.setShader(shaderHandler.getShaderProgram("redMask"));
+            } else if (characterCycle.getCurrentCharacter().equals(entity) && !(entity instanceof Mage)) {
+                batch.setShader(shaderHandler.getShaderProgram("outline"));
             }
             entity.render(batch);
             batch.setShader(null);

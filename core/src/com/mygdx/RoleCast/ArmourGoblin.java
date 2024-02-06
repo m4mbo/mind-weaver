@@ -22,7 +22,7 @@ public class ArmourGoblin extends PlayableCharacter {
 
         super(world, id, timer, myResourceManager, characterCycle, visionMap, particleHandler);
 
-        enemyController = new EnemyController(characterCycle.getCurrentCharacter(), this, visionMap);
+        enemyController = new EnemyController(characterCycle.getCurrentCharacter(), this, visionMap, timer);
 
         // Initializing sprite
         setAnimation(TextureRegion.split(resourceManager.getTexture("armour_idle"), 19, 19)[0], 1/5f, false, 1f);

@@ -52,7 +52,10 @@ public class Animation {
 
     public TextureRegion getFrame() { return frames[currentFrame]; }
     public int getCurrentFrame() { return currentFrame; }
-    public int getFrameNumber() { return frames.length; }
+    public int getFrameNumber() {
+        if (frames == null) return 0;
+        return frames.length;
+    }
     public int getTimesPlayed() { return timesPlayed; }
 
 }
