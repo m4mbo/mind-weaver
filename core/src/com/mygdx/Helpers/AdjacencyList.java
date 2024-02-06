@@ -1,7 +1,4 @@
 package com.mygdx.Helpers;
-
-import com.mygdx.RoleCast.PlayableCharacter;
-
 import java.util.*;
 
 public class AdjacencyList<E> {
@@ -14,6 +11,12 @@ public class AdjacencyList<E> {
     // Add a vertex to the graph
     public void addVertex(E vertex) {
         adjacencyList.put(vertex, new ArrayList<E>());
+    }
+    public void removeVertex(E vertex) {
+        adjacencyList.remove(vertex);
+        for (List<E> edges : adjacencyList.values()) {
+            edges.remove(vertex);
+        }
     }
 
     // Add an edge between two vertices

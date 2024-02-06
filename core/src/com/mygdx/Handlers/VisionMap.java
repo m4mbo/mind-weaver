@@ -63,8 +63,9 @@ public class VisionMap {
                 }
             } else {
                 if (source.getBullseye() != null && source.getBullseye().equals(target)) {
-                    if (!traceable(target)) target.looseControl();
                     source.setBullseye(null);
+                    if (!traceable(target)) target.looseControl();
+                    if (!traceable(source)) source.looseControl();
                 }
             }
         }
@@ -75,7 +76,7 @@ public class VisionMap {
         RayCastCallback callback = new RayCastCallback() {
             @Override
             public float reportRayFixture(Fixture fixture, Vector2 vector2, Vector2 vector21, float v) {
-                if (fixture.getUserData().equals("ground") || fixture.getUserData().equals("hazard")) {
+                if (fixture.getUserData().equals("ground")) {
                     collision = true;
                     return 0;
                 }
@@ -159,5 +160,9 @@ public class VisionMap {
             current = temp;
         }
         return stream;
+    }
+
+    public void removeCharacter(PlayableCharacter character) {
+        targetMap.removeVertex(character);
     }
 }

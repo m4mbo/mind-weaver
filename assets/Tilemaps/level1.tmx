@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="200" height="200" tilewidth="14" tileheight="14" infinite="0" nextlayerid="4" nextobjectid="6">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="200" height="200" tilewidth="14" tileheight="14" infinite="0" nextlayerid="4" nextobjectid="7">
  <tileset firstgid="1" source="dungeon.tsx"/>
  <tileset firstgid="73" source="dungeon padded.tsx"/>
  <layer id="1" name="background" width="200" height="200">
@@ -12,11 +12,10 @@
    eJzt17sKwkAQBdD9P0EwhZX4xt5HL4qN+tNukYCBRE0REzbnwGVDMgvTDENCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASN88ZvJjlt20CJ3JYg4xx5jTl9pR++1Ar2QNamehvE8gdcV87Gq+b9+e9y33An3TZH/A0NTNx6bi3TRm/BZIXTEf95hHzLOiZp2f/s8ZmlUo74RPWeR3LjHXv3cK/XfOz1unXQAAAACQghdGAxPD
   </data>
  </layer>
- <objectgroup id="3" name="ground" visible="0">
+ <objectgroup id="3" name="ground">
   <object id="1" x="140.182" y="2702.18" width="139.667" height="12.1515"/>
-  <object id="2" x="280.091" y="2674.19" width="13.7702" height="27.7234"/>
-  <object id="3" x="293.859" y="2674.18" width="42.0497" height="13.4545"/>
   <object id="4" x="126.182" y="2618.36" width="13.9091" height="83.7273"/>
   <object id="5" x="280.063" y="2632.06" width="55.7727" height="13.875"/>
+  <object id="6" x="280.063" y="2674.13" width="55.875" height="27.875"/>
  </objectgroup>
 </map>

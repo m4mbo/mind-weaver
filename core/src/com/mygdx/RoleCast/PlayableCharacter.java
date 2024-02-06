@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Graphics.ParticleHandler;
 import com.mygdx.Handlers.CharacterCycle;
 import com.mygdx.Handlers.VisionMap;
+import com.mygdx.Tools.EnemyController;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.Helpers.Subscriber;
@@ -27,6 +28,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     protected int floorContacts; // Number of contacts with the floor to avoid anomalies
     protected int airIterations;
     protected ParticleHandler particleHandler;
+    protected EnemyController enemyController;
 
     public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle, VisionMap visionMap, ParticleHandler particleHandler) {
 
@@ -37,6 +39,9 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         this.characterCycle = characterCycle;
         this.visionMap = visionMap;
         this.particleHandler = particleHandler;
+
+        lives = 3;
+        enemyController = null;     // null unless specified in children class
 
         // Initializing states
         playerStates = EnumSet.noneOf(Constants.PSTATE.class);
@@ -52,6 +57,8 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
 
     public void update(float delta) {
 
+        if (!characterCycle.getCurrentCharacter().equals(this) && enemyController != null) enemyController.update();
+
         // Capping y velocity
         if (b2body.getLinearVelocity().y < -Constants.MAX_SPEED_Y)
             b2body.setLinearVelocity(new Vector2(b2body.getLinearVelocity().x, -Constants.MAX_SPEED_Y));
@@ -62,8 +69,14 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
             airIterations = 0;
         }
 
+        if (isStateActive(Constants.PSTATE.STUNNED)) movementState = Constants.MSTATE.PREV;
+
+        handleMovement();
+
         // Animation priority
-        if (airIterations >= 5) {
+        if (isStateActive(Constants.PSTATE.ATTACKING)) {
+            currAState = Constants.ASTATE.ATTACK;
+        } else if (airIterations >= 5) {
             if (isFalling()) {
                 currAState = Constants.ASTATE.FALL;
                 b2body.setLinearDamping(0);
@@ -72,8 +85,16 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
             }
         }
 
-        if (isStateActive(Constants.PSTATE.STUNNED)) movementState = Constants.MSTATE.PREV;
+        if (currAState != prevAState) {
+            handleAnimation();
+            prevAState = currAState;
+        }
 
+        // Update the animation
+        animation.update(delta);
+    }
+
+    public void handleMovement() {
         switch (movementState) {
             case LEFT:
                 if (isStateActive(Constants.PSTATE.ON_GROUND) && !isStateActive(Constants.PSTATE.LANDING)) currAState = Constants.ASTATE.RUN;
@@ -97,16 +118,6 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
                 b2body.setLinearVelocity(0, 0);
                 break;
         }
-
-        if (isStateActive(Constants.PSTATE.ATTACKING)) currAState = Constants.ASTATE.ATTACK;
-
-        if (currAState != prevAState) {
-            handleAnimation();
-            prevAState = currAState;
-        }
-
-        // Update the animation
-        animation.update(delta);
     }
 
     public void land() {
@@ -139,8 +150,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
             particleHandler.addParticleEffect("dust_wall", b2body.getPosition().x + 8 / Constants.PPM, b2body.getPosition().y);
             b2body.applyLinearImpulse(new Vector2(-1, 3), b2body.getWorldCenter(), true);
         }
-        addPlayerState(Constants.PSTATE.STUNNED);
-        timer.start(0.2f, "stun", this);
+        stun(0.2f);
     }
 
     public void moveRight() {
@@ -160,8 +170,12 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         switch (flag) {
             case "stun":
                 removePlayerState(Constants.PSTATE.STUNNED);
-                if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = Constants.MSTATE.RIGHT;
-                if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = Constants.MSTATE.LEFT;
+                if (characterCycle.getCurrentCharacter().equals(this)) {
+                    if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = Constants.MSTATE.RIGHT;
+                    if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = Constants.MSTATE.LEFT;
+                } else {
+                    movementState = Constants.MSTATE.HSTILL;
+                }
                 break;
             case "land":
                 removePlayerState(Constants.PSTATE.LANDING);
@@ -169,12 +183,30 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
             case "stop":
                 movementState = Constants.MSTATE.HSTILL;
                 break;
+            case "hit" :
+                removePlayerState(Constants.PSTATE.HIT);
         }
     }
 
     public void looseControl() {
         movementState = Constants.MSTATE.PREV;
         timer.start(0.4f, "stop", this);
+    }
+
+    public void stun(float seconds) {
+        addPlayerState(Constants.PSTATE.STUNNED);
+        timer.start(seconds, "stun", this);
+    }
+
+    @Override
+    public void die() {
+        lives--;
+        if (lives == 0) {
+            dispose();
+        } else {
+            timer.start(0.05f, "hit", this);
+            addPlayerState(Constants.PSTATE.HIT);
+        }
     }
 
     public boolean isFalling() { return b2body.getLinearVelocity().y < 0; }
@@ -210,5 +242,12 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         if (floorContacts == 0) {
             removePlayerState(Constants.PSTATE.ON_GROUND);
         }
+    }
+
+    public void dispose() {
+        for (Fixture fixture : b2body.getFixtureList()) {
+            b2body.destroyFixture(fixture);
+        }
+        world.destroyBody(b2body);
     }
 }

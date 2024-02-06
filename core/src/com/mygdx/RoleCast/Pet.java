@@ -8,8 +8,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.Graphics.LightManager;
 import com.mygdx.Graphics.ParticleHandler;
+import com.mygdx.Graphics.ShaderHandler;
 import com.mygdx.Handlers.CharacterCycle;
 import com.mygdx.Helpers.Constants;
+import com.mygdx.Tools.MathWizard;
 import com.mygdx.Tools.MyResourceManager;
 
 public class Pet extends Entity {
@@ -17,19 +19,22 @@ public class Pet extends Entity {
     private final CharacterCycle characterCycle;
     private final float threshold;
     private float angle;
-    private ParticleHandler particleHandler;
+    private final ParticleHandler particleHandler;
+    private final ShaderHandler shaderHandler;
 
     private float time;
 
-    public Pet(CharacterCycle characterCycle, World world, float x, float y, int id, MyResourceManager myResourceManager, LightManager lightManager, ParticleHandler particleHandler) {
+    public Pet(CharacterCycle characterCycle, World world, float x, float y, int id, MyResourceManager myResourceManager, LightManager lightManager, ParticleHandler particleHandler, ShaderHandler shaderHandler) {
         super(id, myResourceManager);
         this.characterCycle = characterCycle;
         this.particleHandler = particleHandler;
+        this.shaderHandler = shaderHandler;
+
         threshold = 20 / Constants.PPM;
         angle = 0;
         time = 0;
 
-        setAnimation(TextureRegion.split(resourceManager.getTexture("pet"), 7, 7)[0], 1/4f, false, 1);
+        setAnimation(TextureRegion.split(resourceManager.getTexture("pet"), 7, 7)[0], 1/4f, false, 0.7f);
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, y / Constants.PPM);
@@ -37,8 +42,9 @@ public class Pet extends Entity {
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
         b2body.setGravityScale(0);
+        b2body.setLinearDamping(5);
 
-        lightManager.addLight(b2body, 60, Constants.BIT_GROUND, new Color(70f/255, 11f/255, 93f/255, 0.5f));
+        lightManager.addLight(b2body, 80, Constants.BIT_GROUND, new Color(70f/255, 11f/255, 93f/255, 0.8f));
 
     }
 
@@ -54,9 +60,9 @@ public class Pet extends Entity {
 
     public void assess() {
         PlayableCharacter character = characterCycle.getCurrentCharacter();
-        if (compareCoords(character.getPosition().x, b2body.getPosition().x) && compareCoords(character.getPosition().y, b2body.getPosition().y)) {
+        if (MathWizard.inRange(character.getPosition().x, b2body.getPosition().x, 0.1f / Constants.PPM) && MathWizard.inRange(character.getPosition().y, b2body.getPosition().y, 0.1f / Constants.PPM)) {
             b2body.setLinearVelocity(0, 0);
-        } else if ((compareCoordsThreshold(character.getPosition().x, b2body.getPosition().x) || compareCoordsThreshold(character.getPosition().y, b2body.getPosition().y))) {
+        } else if (!MathWizard.inRange(character.getPosition().x, b2body.getPosition().x, threshold) || !MathWizard.inRange(character.getPosition().y, b2body.getPosition().y, threshold)) {
             track();
         }
     }
@@ -65,43 +71,21 @@ public class Pet extends Entity {
 
         PlayableCharacter character = characterCycle.getCurrentCharacter();
 
-        float targetX = character.getPosition().x;
-        float targetY = character.getPosition().y;
+        Vector2 normalized = MathWizard.normalizedDirection(character.getPosition(), b2body.getPosition());
 
-        float currentX = b2body.getPosition().x;
-        float currentY = b2body.getPosition().y;
-
-        float directionX = targetX - currentX;
-        float directionY = targetY - currentY;
-
-        // Normalizing the direction
-        float length = (float) Math.sqrt(directionX * directionX + directionY * directionY);
-        if (length != 0) {
-            directionX /= length;
-            directionY /= length;
-        }
-
-        // Define the speed or strength of the impulse
-        float vel = 1.0f; // You may adjust this value based on your requirements
+        facingRight = normalized.x > 0;
 
         // Apply the linear impulse to the body
-        b2body.setLinearVelocity(new Vector2(directionX * vel, directionY * vel));
+        b2body.setLinearVelocity(new Vector2(normalized.x * Constants.MAX_SPEED_X / 1.1f, normalized.y * Constants.MAX_SPEED_X / 2));
 
-        float slope = (targetY - currentY) / (targetX - currentX);
-        angle = (float) (Math.atan(slope) * (180 / Math.PI));
-    }
-
-    public boolean compareCoordsThreshold(float p1, float p2) {
-        return (p1 >= p2 + threshold || p1 <= p2 - threshold);
-    }
-
-    public boolean compareCoords(float p1, float p2) {
-        return (p1 <= p2 + 2 / Constants.PPM && p1 >= p2 - 2 / Constants.PPM);
+        angle = MathWizard.angle(character.getPosition(), b2body.getPosition());
     }
 
     public void render(SpriteBatch batch) {
         batch.begin();
+        batch.setShader(shaderHandler.getShaderProgram("rand_col"));
         batch.draw(animation.getFrame(), facingRight ? b2body.getPosition().x - (width / Constants.PPM) / 2 : b2body.getPosition().x + (width / Constants.PPM) / 2 , b2body.getPosition().y - (height / Constants.PPM) / 2, 0, 0, (facingRight ? width : -width) / Constants.PPM, height / Constants.PPM, 1, 1, angle);
+        batch.setShader(null);
         batch.end();
     }
 }

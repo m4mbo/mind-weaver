@@ -23,6 +23,7 @@ import com.mygdx.Objects.Door;
 import com.mygdx.Objects.PressurePlate;
 import com.mygdx.RoleCast.ArmourGoblin;
 import com.mygdx.RoleCast.Pet;
+import com.mygdx.Tools.ColorGenerator;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.RoleCast.BaseGoblin;
 import com.mygdx.RoleCast.Mage;
@@ -69,6 +70,8 @@ public class GameScreen implements Screen {
                 break;
         }
 
+        ColorGenerator colorGenerator = new ColorGenerator();
+
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
         world = new World(new Vector2(0, -Constants.G), true);
         gameCam = new OrthographicCamera();
@@ -76,9 +79,9 @@ public class GameScreen implements Screen {
         gameCam.position.set(2, 77, 0);
 
         AtomicInteger eidAllocator = new AtomicInteger();
-        shaderHandler = new ShaderHandler();
+        shaderHandler = new ShaderHandler(colorGenerator);
         lightManager = new LightManager(world);
-        shapeDrawer = new ShapeDrawer(shaderHandler, game.batch);
+        shapeDrawer = new ShapeDrawer(shaderHandler);
         timer = new MyTimer();
 
         objectHandler = new ObjectHandler();
@@ -88,26 +91,26 @@ public class GameScreen implements Screen {
         pressurePlate.addReactable(door);
         objectHandler.addObject(pressurePlate);
         visionMap =  new VisionMap(world, shapeDrawer);
-        characterCycle = new CharacterCycle(visionMap);
-        entityHandler = new EntityHandler(characterCycle, shaderHandler);
+        characterCycle = new CharacterCycle(visionMap, colorGenerator);
+        entityHandler = new EntityHandler(characterCycle, shaderHandler, visionMap);
 
         particleHandler = new ParticleHandler();
 
-        Mage mage = new Mage(250, 200, world, eidAllocator.getAndIncrement(), timer, resourceManager, 3, characterCycle, visionMap, particleHandler);
+        Mage mage = new Mage(250, 140, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle, visionMap, particleHandler);
 
         characterCycle.initialize(mage);
         entityHandler.addEntity(mage);
 
         entityHandler.addEntity(new ArmourGoblin(180, 150, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap, particleHandler));
         entityHandler.addEntity(new BaseGoblin(200, 150, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap,particleHandler));
-        entityHandler.addPet(new Pet(characterCycle, world, 250, 200, eidAllocator.getAndIncrement(), resourceManager, lightManager, particleHandler));
+        entityHandler.addPet(new Pet(characterCycle, world, 250, 200, eidAllocator.getAndIncrement(), resourceManager, lightManager, particleHandler, shaderHandler));
         visionMap.initialize(entityHandler);
         inputProcessor.setGameVariables(characterCycle);
 
-        world.setContactListener(new MyContactListener(entityHandler, visionMap, characterCycle));
+        world.setContactListener(new MyContactListener(entityHandler, visionMap));
         b2dr = new Box2DDebugRenderer();
         new B2WorldHandler(world, map, resourceManager, timer, eidAllocator);     //Creating world
-        lightManager.setDim(0.8f);
+        lightManager.setDim(0.6f);
     }
 
     @Override
