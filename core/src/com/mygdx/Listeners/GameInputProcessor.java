@@ -86,11 +86,6 @@ public class GameInputProcessor implements InputProcessor {
         return true;
     }
 
-    /*
-     * Input polling for a smoother experience
-     */
-    public void update() { }
-
     @Override
     public boolean keyTyped (char character) {
         return false;

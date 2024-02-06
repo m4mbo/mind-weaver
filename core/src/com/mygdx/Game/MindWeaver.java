@@ -58,6 +58,9 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Objects/pressureplate_down.png", "pressureplate_down");
 		resourceManager.loadTexture("Objects/door_closed.png", "door_closed");
 		resourceManager.loadTexture("Objects/door_open.png", "door_open");
+
+		//Pet
+		resourceManager.loadTexture("Shapes/pet.png", "pet");
 	}
 
 	@Override

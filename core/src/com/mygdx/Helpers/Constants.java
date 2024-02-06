@@ -26,10 +26,10 @@ public class Constants {
     // Bits for collision masking
     public static final short BIT_GROUND = 2;   // Includes ground and walls (because sometimes the ground can be a wall)
     public static final short BIT_HAZARD = 4;
-    public static final short BIT_CHECKPOINT = 8;
-    public static final short BIT_GOBLIN = 16;
-    public static final short BIT_MAGE = 32;
-    public static final short BIT_ROV = 64;
-    public static final short BIT_SUPPORT = 128;
-    public static final short BIT_FEET = 256;
+    public static final short BIT_GOBLIN = 8;
+    public static final short BIT_MAGE = 16;
+    public static final short BIT_ROV = 32;
+    public static final short BIT_SUPPORT = 64;
+    public static final short BIT_FEET = 128;
+    public static final short BIT_LIGHT = 256;
 }
