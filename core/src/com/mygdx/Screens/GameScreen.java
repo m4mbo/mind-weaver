@@ -78,7 +78,7 @@ public class GameScreen implements Screen {
         AtomicInteger eidAllocator = new AtomicInteger();
         shaderHandler = new ShaderHandler();
         lightManager = new LightManager(world);
-        shapeDrawer = new ShapeDrawer(shaderHandler, game.batch);
+        shapeDrawer = new ShapeDrawer(shaderHandler);
         timer = new MyTimer();
 
         objectHandler = new ObjectHandler();
@@ -93,7 +93,7 @@ public class GameScreen implements Screen {
 
         particleHandler = new ParticleHandler();
 
-        Mage mage = new Mage(250, 200, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle, visionMap, particleHandler);
+        Mage mage = new Mage(250, 140, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle, visionMap, particleHandler);
 
         characterCycle.initialize(mage);
         entityHandler.addEntity(mage);

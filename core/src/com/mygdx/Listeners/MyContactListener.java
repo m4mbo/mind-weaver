@@ -9,6 +9,7 @@ import com.mygdx.Helpers.Constants;
 import com.mygdx.RoleCast.Mage;
 import com.mygdx.RoleCast.PlayableCharacter;
 import com.mygdx.Helpers.Constants.*;
+import com.mygdx.Tools.MathWizard;
 
 public class MyContactListener implements ContactListener {
 
@@ -42,26 +43,13 @@ public class MyContactListener implements ContactListener {
             character.increaseFloorContact();
             if (character.getMovementState() == MSTATE.PREV) character.setMovementState(MSTATE.HSTILL);
         } else if (fa.getUserData().equals("hazard") || fb.getUserData().equals("hazard")) {
-
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("hazard") ? fb.getBody() : fa.getBody());
+            Body characterB2body = character.getB2body();
             entityHandler.addEntityOperation(character, "die");
-
-            Body targetBody = fa.getUserData().equals("hazard") ? fb.getBody(): fa.getBody();
-            Vector2 targetPos = targetBody.getPosition();
-            Vector2 sourcePos = fa.getUserData().equals("hazard") ? fa.getBody().getPosition() : fb.getBody().getPosition();
-
-            float directionX = targetPos.x - sourcePos.x;
-            float directionY = targetPos.y - sourcePos.y;
-
-            // Normalizing the direction
-            float length = (float) Math.sqrt(directionX * directionX + directionY * directionY);
-            if (length != 0) {
-                directionX /= length;
-                directionY /= length;
-            }
+            // Hit procedure
+            Vector2 normalized = MathWizard.normalizedDirection(characterB2body.getPosition(), fa.getUserData().equals("hazard") ? fa.getBody().getPosition() : fb.getBody().getPosition());
             character.stun(0.05f);
-            targetBody.applyLinearImpulse(new Vector2(directionX * Constants.KNOCKBACK_SCALE, directionY * Constants.KNOCKBACK_SCALE), targetBody.getWorldCenter(), true);
-
+            characterB2body.applyLinearImpulse(new Vector2(normalized.x * Constants.KNOCKBACK_SCALE, normalized.y * Constants.KNOCKBACK_SCALE), characterB2body.getWorldCenter(), true);
         } else if (fa.getUserData().equals("checkpoint") || fb.getUserData().equals("checkpoint")) {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("checkpoint") ? fb.getBody() : fa.getBody());
             ((Mage) character).setCheckPoint(fa.getUserData().equals("checkpoint") ? fb.getBody().getPosition() : fa.getBody().getPosition());

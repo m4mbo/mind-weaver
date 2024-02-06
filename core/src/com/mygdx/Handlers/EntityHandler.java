@@ -78,7 +78,7 @@ public class EntityHandler {
         pet.render(batch);
         for (Entity entity : entities.values()) {
             if (((PlayableCharacter) entity).isStateActive(Constants.PSTATE.HIT)) {
-                batch.setShader(shaderHandler.getShaderProgram("outline"));
+                batch.setShader(shaderHandler.getShaderProgram("redMask"));
             }
             entity.render(batch);
             batch.setShader(null);

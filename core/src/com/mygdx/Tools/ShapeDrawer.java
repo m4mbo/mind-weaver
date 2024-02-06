@@ -11,10 +11,8 @@ import java.util.LinkedList;
 public class ShapeDrawer {
     private LinkedList<Shape> shapes;
     private ShaderHandler shaderHandler;
-    private SpriteBatch batch;
-    public ShapeDrawer(ShaderHandler shaderHandler, SpriteBatch batch) {
+    public ShapeDrawer(ShaderHandler shaderHandler) {
         shapes = new LinkedList<>();
-        this.batch = batch;
         this.shaderHandler = shaderHandler;
     }
 
@@ -43,9 +41,8 @@ public class ShapeDrawer {
             this.start = start;
             this.end = end;
             this.height = height;
-            float slope = (end.y - start.y) / (end.x - start.x);
-            angle = (float) (Math.atan(slope) * (180 / Math.PI));
-            width = (float) Math.sqrt(Math.pow(end.x - start.x, 2) + Math.pow(end.y - start.y, 2));
+            angle = MathWizard.angle(start, end);
+            width = MathWizard.distance(start, end);
 
         }
 

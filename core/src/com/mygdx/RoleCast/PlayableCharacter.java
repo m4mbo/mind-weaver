@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Graphics.ParticleHandler;
 import com.mygdx.Handlers.CharacterCycle;
 import com.mygdx.Handlers.VisionMap;
+import com.mygdx.Tools.EnemyController;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.Helpers.Subscriber;
@@ -27,6 +28,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     protected int floorContacts; // Number of contacts with the floor to avoid anomalies
     protected int airIterations;
     protected ParticleHandler particleHandler;
+    protected EnemyController enemyController;
 
     public PlayableCharacter(World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle, VisionMap visionMap, ParticleHandler particleHandler) {
 
@@ -39,6 +41,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         this.particleHandler = particleHandler;
 
         lives = 3;
+        enemyController = null;     // null unless specified in children class
 
         // Initializing states
         playerStates = EnumSet.noneOf(Constants.PSTATE.class);
@@ -54,6 +57,8 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
 
     public void update(float delta) {
 
+        if (!characterCycle.getCurrentCharacter().equals(this) && enemyController != null) enemyController.update();
+
         // Capping y velocity
         if (b2body.getLinearVelocity().y < -Constants.MAX_SPEED_Y)
             b2body.setLinearVelocity(new Vector2(b2body.getLinearVelocity().x, -Constants.MAX_SPEED_Y));
@@ -64,8 +69,14 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
             airIterations = 0;
         }
 
+        if (isStateActive(Constants.PSTATE.STUNNED)) movementState = Constants.MSTATE.PREV;
+
+        handleMovement();
+
         // Animation priority
-        if (airIterations >= 5) {
+        if (isStateActive(Constants.PSTATE.ATTACKING)) {
+            currAState = Constants.ASTATE.ATTACK;
+        } else if (airIterations >= 5) {
             if (isFalling()) {
                 currAState = Constants.ASTATE.FALL;
                 b2body.setLinearDamping(0);
@@ -74,8 +85,16 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
             }
         }
 
-        if (isStateActive(Constants.PSTATE.STUNNED)) movementState = Constants.MSTATE.PREV;
+        if (currAState != prevAState) {
+            handleAnimation();
+            prevAState = currAState;
+        }
 
+        // Update the animation
+        animation.update(delta);
+    }
+
+    public void handleMovement() {
         switch (movementState) {
             case LEFT:
                 if (isStateActive(Constants.PSTATE.ON_GROUND) && !isStateActive(Constants.PSTATE.LANDING)) currAState = Constants.ASTATE.RUN;
@@ -99,16 +118,6 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
                 b2body.setLinearVelocity(0, 0);
                 break;
         }
-
-        if (isStateActive(Constants.PSTATE.ATTACKING)) currAState = Constants.ASTATE.ATTACK;
-
-        if (currAState != prevAState) {
-            handleAnimation();
-            prevAState = currAState;
-        }
-
-        // Update the animation
-        animation.update(delta);
     }
 
     public void land() {
