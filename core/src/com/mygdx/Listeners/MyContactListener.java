@@ -17,12 +17,10 @@ public class MyContactListener implements ContactListener {
     private Fixture fb;
     private final EntityHandler entityHandler;
     private final VisionMap visionMap;
-    private final CharacterCycle characterCycle;
 
-    public MyContactListener(EntityHandler entityHandler, VisionMap visionMap, CharacterCycle characterCycle) {
+    public MyContactListener(EntityHandler entityHandler, VisionMap visionMap) {
         this.entityHandler = entityHandler;
         this.visionMap = visionMap;
-        this.characterCycle = characterCycle;
     }
 
     @Override
@@ -50,14 +48,9 @@ public class MyContactListener implements ContactListener {
             Vector2 normalized = MathWizard.normalizedDirection(characterB2body.getPosition(), fa.getUserData().equals("hazard") ? fa.getBody().getPosition() : fb.getBody().getPosition());
             character.stun(0.05f);
             characterB2body.applyLinearImpulse(new Vector2(normalized.x * Constants.KNOCKBACK_SCALE, normalized.y * Constants.KNOCKBACK_SCALE), characterB2body.getWorldCenter(), true);
-        } else if (fa.getUserData().equals("checkpoint") || fb.getUserData().equals("checkpoint")) {
-            character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("checkpoint") ? fb.getBody() : fa.getBody());
-            ((Mage) character).setCheckPoint(fa.getUserData().equals("checkpoint") ? fb.getBody().getPosition() : fa.getBody().getPosition());
         } else if (fa.getUserData().equals("vision") || fb.getUserData().equals("vision")) {
-
             PlayableCharacter source = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("vision") ? fa.getBody() : fb.getBody());
             PlayableCharacter target = (PlayableCharacter) entityHandler.getEntity((Integer) (fa.getUserData().equals("vision") ? fb : fa).getUserData());
-
             visionMap.addTarget(source, target);
         }
     }
@@ -79,15 +72,11 @@ public class MyContactListener implements ContactListener {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("bottomSensor") ? fa.getBody() : fb.getBody());
             character.decreaseFloorContact();
         } else if (fa.getUserData().equals("vision") || fb.getUserData().equals("vision")) {
-
             PlayableCharacter source = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("vision") ? fa.getBody() : fb.getBody());
             PlayableCharacter target = (PlayableCharacter) entityHandler.getEntity((Integer) (fa.getUserData().equals("vision") ? fb : fa).getUserData());
-
             visionMap.removeTarget(source, target);
             if (source.getBullseye() != null && source.getBullseye().equals(target)) source.setBullseye(null);
-
             if (!visionMap.traceable(target)) target.looseControl();
-
         }
     }
 

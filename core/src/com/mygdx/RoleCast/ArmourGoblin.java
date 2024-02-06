@@ -94,14 +94,14 @@ public class ArmourGoblin extends PlayableCharacter {
     public void moveRight() {
         //Initial acceleration
         if (b2body.getLinearVelocity().x == 0) b2body.applyLinearImpulse(new Vector2(0.5f, 0), b2body.getWorldCenter(), true);
-        else b2body.setLinearVelocity(Constants.MAX_SPEED_X - 0.5f, b2body.getLinearVelocity().y);
+        else b2body.setLinearVelocity(Constants.MAX_SPEED_X - 0.9f, b2body.getLinearVelocity().y);
     }
 
     @Override
     public void moveLeft() {
         //Initial acceleration
         if (b2body.getLinearVelocity().x == 0) b2body.applyLinearImpulse(new Vector2(-0.5f, 0), b2body.getWorldCenter(), true);
-        else b2body.setLinearVelocity(-Constants.MAX_SPEED_X + 0.5f, b2body.getLinearVelocity().y);
+        else b2body.setLinearVelocity(-Constants.MAX_SPEED_X + 0.9f, b2body.getLinearVelocity().y);
     }
 
     @Override

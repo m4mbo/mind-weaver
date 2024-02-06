@@ -6,20 +6,19 @@ import java.util.Random;
 public class ColorGenerator {
 
     private Vector3 currColor;
-    private Random random;
+    private final Random random;
 
     public ColorGenerator() {
         random = new Random();
         currColor = getRandomColor();
     }
 
-    public Vector3 getNextColor() {
+    public void getNextColor() {
         Vector3 nextColor;
         do {
             nextColor = getRandomColor();
         } while (nextColor.equals(currColor));
         currColor = nextColor;
-        return nextColor;
     }
 
     private Vector3 getRandomColor() {

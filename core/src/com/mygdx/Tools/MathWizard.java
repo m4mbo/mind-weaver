@@ -1,6 +1,7 @@
 package com.mygdx.Tools;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.Helpers.Constants;
 
 public class MathWizard {
 
@@ -40,6 +41,10 @@ public class MathWizard {
 
     public static float distance(Vector2 pos1, Vector2 pos2) {
         return (float) Math.sqrt(Math.pow(pos2.x - pos1.x, 2) + Math.pow(pos2.y - pos1.y, 2));
+    }
+
+    public static boolean inRange(float p1, float p2, float threshold) {
+        return (p1 >= p2 - threshold && p1 <= p2 + threshold);
     }
 
 

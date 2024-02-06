@@ -19,8 +19,8 @@ public class Pet extends Entity {
     private final CharacterCycle characterCycle;
     private final float threshold;
     private float angle;
-    private ParticleHandler particleHandler;
-    private ShaderHandler shaderHandler;
+    private final ParticleHandler particleHandler;
+    private final ShaderHandler shaderHandler;
 
     private float time;
 
@@ -60,9 +60,9 @@ public class Pet extends Entity {
 
     public void assess() {
         PlayableCharacter character = characterCycle.getCurrentCharacter();
-        if (compareCoords(character.getPosition().x, b2body.getPosition().x) && compareCoords(character.getPosition().y, b2body.getPosition().y)) {
+        if (MathWizard.inRange(character.getPosition().x, b2body.getPosition().x, 0.1f / Constants.PPM) && MathWizard.inRange(character.getPosition().y, b2body.getPosition().y, 0.1f / Constants.PPM)) {
             b2body.setLinearVelocity(0, 0);
-        } else if ((compareCoordsThreshold(character.getPosition().x, b2body.getPosition().x) || compareCoordsThreshold(character.getPosition().y, b2body.getPosition().y))) {
+        } else if (!MathWizard.inRange(character.getPosition().x, b2body.getPosition().x, threshold) || !MathWizard.inRange(character.getPosition().y, b2body.getPosition().y, threshold)) {
             track();
         }
     }
@@ -81,14 +81,6 @@ public class Pet extends Entity {
         angle = MathWizard.angle(character.getPosition(), b2body.getPosition());
     }
 
-    public boolean compareCoordsThreshold(float p1, float p2) {
-        return (p1 >= p2 + threshold || p1 <= p2 - threshold);
-    }
-
-    public boolean compareCoords(float p1, float p2) {
-        return (p1 <= p2 + 0.1f / Constants.PPM && p1 >= p2 - 0.1f / Constants.PPM);
-    }
-
     public void render(SpriteBatch batch) {
         batch.begin();
         batch.setShader(shaderHandler.getShaderProgram("rand_col"));
@@ -96,6 +88,4 @@ public class Pet extends Entity {
         batch.setShader(null);
         batch.end();
     }
-
-
 }
