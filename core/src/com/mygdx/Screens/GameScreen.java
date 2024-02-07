@@ -19,13 +19,9 @@ import com.mygdx.Graphics.ShaderHandler;
 import com.mygdx.Handlers.*;
 import com.mygdx.Listeners.MyContactListener;
 import com.mygdx.Listeners.GameInputProcessor;
-import com.mygdx.Objects.Door;
-import com.mygdx.Objects.PressurePlate;
-import com.mygdx.RoleCast.ArmourGoblin;
 import com.mygdx.RoleCast.Pet;
 import com.mygdx.Tools.ColorGenerator;
 import com.mygdx.Tools.MyTimer;
-import com.mygdx.RoleCast.BaseGoblin;
 import com.mygdx.RoleCast.Mage;
 import com.mygdx.Handlers.B2WorldHandler;
 import com.mygdx.Helpers.Constants;
@@ -85,11 +81,7 @@ public class GameScreen implements Screen {
         timer = new MyTimer();
 
         objectHandler = new ObjectHandler();
-        Door door = new Door(world, resourceManager, 330, 138);
-        objectHandler.addObject(door);
-        PressurePlate pressurePlate = new PressurePlate(world, resourceManager, 200, 131, 2);
-        pressurePlate.addReactable(door);
-        objectHandler.addObject(pressurePlate);
+
         visionMap =  new VisionMap(world, shapeDrawer);
         characterCycle = new CharacterCycle(visionMap, colorGenerator);
         entityHandler = new EntityHandler(characterCycle, shaderHandler, visionMap);
@@ -101,15 +93,13 @@ public class GameScreen implements Screen {
         characterCycle.initialize(mage);
         entityHandler.addEntity(mage);
 
-        entityHandler.addEntity(new ArmourGoblin(180, 150, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap, particleHandler));
-        entityHandler.addEntity(new BaseGoblin(200, 150, world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle,visionMap,particleHandler));
         entityHandler.addPet(new Pet(characterCycle, world, 250, 200, eidAllocator.getAndIncrement(), resourceManager, lightManager, particleHandler, shaderHandler));
-        visionMap.initialize(entityHandler);
         inputProcessor.setGameVariables(characterCycle);
 
         world.setContactListener(new MyContactListener(entityHandler, visionMap));
         b2dr = new Box2DDebugRenderer();
-        new B2WorldHandler(world, map, resourceManager, timer, eidAllocator);     //Creating world
+        new B2WorldHandler(world, map, resourceManager, timer, eidAllocator, entityHandler, characterCycle, particleHandler, visionMap, objectHandler, level);     //Creating world
+        visionMap.initialize(entityHandler);
         lightManager.setDim(0.6f);
     }
 

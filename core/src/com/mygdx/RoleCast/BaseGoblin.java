@@ -12,7 +12,7 @@ import com.mygdx.Helpers.Constants;
 
 public class BaseGoblin extends PlayableCharacter{
 
-    public BaseGoblin(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle, VisionMap visionMap, ParticleHandler particleHandler) {
+    public BaseGoblin(float x, float y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle, VisionMap visionMap, ParticleHandler particleHandler) {
         super(world, id, timer, myResourceManager, characterCycle, visionMap, particleHandler);
 
         // Initializing sprite

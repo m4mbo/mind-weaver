@@ -14,7 +14,7 @@ public class Door extends Reactable {
     private final FixtureDef fdef;
     private final PolygonShape polygonShape;
 
-    public Door(World world, MyResourceManager resourceManager, int x, int y) {
+    public Door(World world, MyResourceManager resourceManager, float x, float y) {
 
         super(world, resourceManager);
 
@@ -61,15 +61,13 @@ public class Door extends Reactable {
 
     public void step() {
 
+        if (!b2body.getFixtureList().isEmpty()) b2body.destroyFixture(b2body.getFixtureList().get(0));
+
         if (currHeight <= 0 && open) return;
         else if (currHeight >= height && !open) return;
 
         if (open) currHeight -= 14 / Constants.PPM;
         else currHeight += 14 / Constants.PPM;
-
-        // Destroying current fixture
-        Fixture fixture = b2body.getFixtureList().get(0);
-        b2body.destroyFixture(fixture);
 
         // Creating new fixture based on current height
         polygonShape.setAsBox(8 / Constants.PPM, currHeight / Constants.PPM, new Vector2(0, (currHeight - height) / Constants.PPM), 0);
