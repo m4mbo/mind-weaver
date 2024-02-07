@@ -141,7 +141,7 @@ public class GameScreen implements Screen {
         lightManager.render();
         entityHandler.render(game.batch);
 
-        //b2dr.render(world, gameCam.combined);
+        b2dr.render(world, gameCam.combined);
 
         gameCam.position.set(characterCycle.getCurrentCharacter().getPosition().x, characterCycle.getCurrentCharacter().getPosition().y + 20 / Constants.PPM, 0);
         gameCam.update();

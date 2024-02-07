@@ -61,13 +61,16 @@ public class Door extends Reactable {
 
     public void step() {
 
-        if (!b2body.getFixtureList().isEmpty()) b2body.destroyFixture(b2body.getFixtureList().get(0));
-
-        if (currHeight <= 0 && open) return;
+        if (currHeight <= 0 && open)  {
+            if (!b2body.getFixtureList().isEmpty()) b2body.destroyFixture(b2body.getFixtureList().get(0));
+            return;
+        }
         else if (currHeight >= height && !open) return;
 
         if (open) currHeight -= 14 / Constants.PPM;
         else currHeight += 14 / Constants.PPM;
+
+        if (!b2body.getFixtureList().isEmpty()) b2body.destroyFixture(b2body.getFixtureList().get(0));
 
         // Creating new fixture based on current height
         polygonShape.setAsBox(8 / Constants.PPM, currHeight / Constants.PPM, new Vector2(0, (currHeight - height) / Constants.PPM), 0);
