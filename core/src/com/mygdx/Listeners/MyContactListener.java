@@ -2,11 +2,10 @@ package com.mygdx.Listeners;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.Handlers.EntityHandler;
-import com.mygdx.Handlers.CharacterCycle;
-import com.mygdx.Handlers.VisionMap;
+import com.mygdx.Objects.Interactable;
+import com.mygdx.World.EntityHandler;
+import com.mygdx.World.VisionMap;
 import com.mygdx.Helpers.Constants;
-import com.mygdx.RoleCast.Mage;
 import com.mygdx.RoleCast.PlayableCharacter;
 import com.mygdx.Helpers.Constants.*;
 import com.mygdx.Tools.MathWizard;
@@ -30,7 +29,10 @@ public class MyContactListener implements ContactListener {
 
         PlayableCharacter character;
 
-        if (fa.getUserData().equals("leftSensor") || fb.getUserData().equals("leftSensor")) {
+        if (fa.getUserData() instanceof Interactable || fb.getUserData() instanceof Interactable) {
+            character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData() instanceof Interactable ? fb.getBody() : fa.getBody());
+            character.addInteractable((Interactable) (fa.getUserData() instanceof Interactable ? fa.getUserData() : fb.getUserData()));
+        } else if (fa.getUserData().equals("leftSensor") || fb.getUserData().equals("leftSensor")) {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("leftSensor") ? fa.getBody() : fb.getBody());
             character.setWallState(-1);
         } else if (fa.getUserData().equals("rightSensor") || fb.getUserData().equals("rightSensor")) {
@@ -43,7 +45,7 @@ public class MyContactListener implements ContactListener {
         } else if (fa.getUserData().equals("hazard") || fb.getUserData().equals("hazard")) {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("hazard") ? fb.getBody() : fa.getBody());
             Body characterB2body = character.getB2body();
-            entityHandler.addEntityOperation(character, "die");
+            character.die();
             // Hit procedure
             Vector2 normalized = MathWizard.normalizedDirection(characterB2body.getPosition(), fa.getUserData().equals("hazard") ? fa.getBody().getPosition() : fb.getBody().getPosition());
             character.stun(0.05f);
@@ -62,7 +64,10 @@ public class MyContactListener implements ContactListener {
 
         PlayableCharacter character;
 
-        if (fa.getUserData().equals("leftSensor") || fb.getUserData().equals("leftSensor")) {
+        if (fa.getUserData() instanceof Interactable || fb.getUserData() instanceof Interactable) {
+            character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData() instanceof Interactable ? fb.getBody() : fa.getBody());
+            character.removeInteractable((Interactable) (fa.getUserData() instanceof Interactable ? fa.getUserData() : fb.getUserData()));
+        } else if (fa.getUserData().equals("leftSensor") || fb.getUserData().equals("leftSensor")) {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("leftSensor") ? fa.getBody() : fb.getBody());
             character.setWallState(0);
         } else if (fa.getUserData().equals("rightSensor") || fb.getUserData().equals("rightSensor")) {

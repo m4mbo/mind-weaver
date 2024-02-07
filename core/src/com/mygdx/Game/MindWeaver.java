@@ -37,6 +37,8 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Mage/mage_jump.png", "mage_jump");
 		resourceManager.loadTexture("Mage/mage_land.png", "mage_land");
 		resourceManager.loadTexture("Mage/mage_fall.png", "mage_fall");
+		resourceManager.loadTexture("Mage/mage_death.png", "mage_death");
+
 
 		// Base goblin
 		resourceManager.loadTexture("Goblins/basegoblin_run.png", "goblin_run");
@@ -44,6 +46,7 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Goblins/basegoblin_jump.png", "goblin_jump");
 		resourceManager.loadTexture("Goblins/basegoblin_land.png", "goblin_land");
 		resourceManager.loadTexture("Goblins/basegoblin_fall.png", "goblin_fall");
+		resourceManager.loadTexture("Goblins/basegoblin_death.png", "goblin_death");
 
 		// Armoured goblin
 		resourceManager.loadTexture("Goblins/armourgoblin_idle.png", "armour_idle");
@@ -52,12 +55,19 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Goblins/armourgoblin_fall.png", "armour_fall");
 		resourceManager.loadTexture("Goblins/armourgoblin_jump.png", "armour_jump");
 		resourceManager.loadTexture("Goblins/armourgoblin_attack.png", "armour_attack");
+		resourceManager.loadTexture("Goblins/armourgoblin_death.png", "armour_death");
 
 		// Objects
 		resourceManager.loadTexture("Objects/pressureplate_up.png", "pressureplate_up");
+		resourceManager.loadTexture("Objects/pressureplate_up2.png", "pressureplate_up2");
 		resourceManager.loadTexture("Objects/pressureplate_down.png", "pressureplate_down");
+		resourceManager.loadTexture("Objects/pressureplate_down2.png", "pressureplate_down2");
 		resourceManager.loadTexture("Objects/door_closed.png", "door_closed");
+		resourceManager.loadTexture("Objects/door_closed2.png", "door_closed2");
 		resourceManager.loadTexture("Objects/door_open.png", "door_open");
+		resourceManager.loadTexture("Objects/door_open2.png", "door_open2");
+		resourceManager.loadTexture("Objects/lever_up.png", "lever_up");
+		resourceManager.loadTexture("Objects/lever_down.png", "lever_down");
 
 		//Pet
 		resourceManager.loadTexture("Shapes/pet.png", "pet");

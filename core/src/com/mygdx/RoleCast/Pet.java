@@ -6,29 +6,21 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.Graphics.LightManager;
-import com.mygdx.Graphics.ParticleHandler;
-import com.mygdx.Graphics.ShaderHandler;
-import com.mygdx.Handlers.CharacterCycle;
+import com.mygdx.Tools.UtilityStation;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MathWizard;
 import com.mygdx.Tools.MyResourceManager;
 
 public class Pet extends Entity {
 
-    private final CharacterCycle characterCycle;
     private final float threshold;
     private float angle;
-    private final ParticleHandler particleHandler;
-    private final ShaderHandler shaderHandler;
-
+    private final UtilityStation util;
     private float time;
 
-    public Pet(CharacterCycle characterCycle, World world, float x, float y, int id, MyResourceManager myResourceManager, LightManager lightManager, ParticleHandler particleHandler, ShaderHandler shaderHandler) {
+    public Pet(World world, float x, float y, int id, MyResourceManager myResourceManager, UtilityStation util) {
         super(id, myResourceManager);
-        this.characterCycle = characterCycle;
-        this.particleHandler = particleHandler;
-        this.shaderHandler = shaderHandler;
+        this.util = util;
 
         threshold = 20 / Constants.PPM;
         angle = 0;
@@ -44,7 +36,7 @@ public class Pet extends Entity {
         b2body.setGravityScale(0);
         b2body.setLinearDamping(5);
 
-        lightManager.addLight(b2body, 80, Constants.BIT_GROUND, new Color(70f/255, 11f/255, 93f/255, 0.8f));
+        util.getLightManager().addLight(b2body, 80, Constants.BIT_GROUND, new Color(70f/255, 11f/255, 93f/255, 0.8f));
 
     }
 
@@ -52,14 +44,14 @@ public class Pet extends Entity {
         time += delta;
         if (time >= 0.2f) {
             time = 0;
-            particleHandler.addParticleEffect("aura", b2body.getPosition().x - 4 / Constants.PPM, b2body.getPosition().y + 8 / Constants.PPM);
+            util.getParticleHandler().addParticleEffect("aura", b2body.getPosition().x - 4 / Constants.PPM, b2body.getPosition().y + 8 / Constants.PPM);
         }
         animation.update(delta);
         assess();
     }
 
     public void assess() {
-        PlayableCharacter character = characterCycle.getCurrentCharacter();
+        PlayableCharacter character = util.getCharacterCycle().getCurrentCharacter();
         if (MathWizard.inRange(character.getPosition().x, b2body.getPosition().x, 0.1f / Constants.PPM) && MathWizard.inRange(character.getPosition().y, b2body.getPosition().y, 0.1f / Constants.PPM)) {
             b2body.setLinearVelocity(0, 0);
         } else if (!MathWizard.inRange(character.getPosition().x, b2body.getPosition().x, threshold) || !MathWizard.inRange(character.getPosition().y, b2body.getPosition().y, threshold)) {
@@ -69,7 +61,7 @@ public class Pet extends Entity {
 
     public void track() {
 
-        PlayableCharacter character = characterCycle.getCurrentCharacter();
+        PlayableCharacter character = util.getCharacterCycle().getCurrentCharacter();
 
         Vector2 normalized = MathWizard.normalizedDirection(character.getPosition(), b2body.getPosition());
 
@@ -83,7 +75,7 @@ public class Pet extends Entity {
 
     public void render(SpriteBatch batch) {
         batch.begin();
-        batch.setShader(shaderHandler.getShaderProgram("rand_col"));
+        batch.setShader(util.getShaderHandler().getShaderProgram("rand_col"));
         batch.draw(animation.getFrame(), facingRight ? b2body.getPosition().x - (width / Constants.PPM) / 2 : b2body.getPosition().x + (width / Constants.PPM) / 2 , b2body.getPosition().y - (height / Constants.PPM) / 2, 0, 0, (facingRight ? width : -width) / Constants.PPM, height / Constants.PPM, 1, 1, angle);
         batch.setShader(null);
         batch.end();

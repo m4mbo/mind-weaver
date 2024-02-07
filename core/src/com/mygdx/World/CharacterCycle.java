@@ -1,4 +1,4 @@
-package com.mygdx.Handlers;
+package com.mygdx.World;
 
 import com.mygdx.RoleCast.PlayableCharacter;
 import com.mygdx.Tools.ColorGenerator;

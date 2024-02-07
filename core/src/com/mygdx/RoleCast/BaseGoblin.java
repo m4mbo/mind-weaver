@@ -4,16 +4,18 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Graphics.ParticleHandler;
-import com.mygdx.Handlers.CharacterCycle;
-import com.mygdx.Handlers.VisionMap;
+import com.mygdx.Tools.UtilityStation;
+import com.mygdx.World.CharacterCycle;
+import com.mygdx.World.EntityHandler;
+import com.mygdx.World.VisionMap;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.Helpers.Constants;
 
 public class BaseGoblin extends PlayableCharacter{
 
-    public BaseGoblin(float x, float y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle, VisionMap visionMap, ParticleHandler particleHandler) {
-        super(world, id, timer, myResourceManager, characterCycle, visionMap, particleHandler);
+    public BaseGoblin(float x, float y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, UtilityStation utilityStation) {
+        super(world, id, timer, myResourceManager, utilityStation);
 
         // Initializing sprite
         setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_idle"), 20, 14)[0], 1/5f, false, 1f);
@@ -32,7 +34,7 @@ public class BaseGoblin extends PlayableCharacter{
         fdef.shape = polygonShape;
         fdef.friction = 0;
         fdef.filter.categoryBits = Constants.BIT_GOBLIN;
-        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_MAGE | Constants.BIT_GOBLIN | Constants.BIT_ROV | Constants.BIT_FEET | Constants.BIT_HAZARD;
+        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_MAGE | Constants.BIT_GOBLIN | Constants.BIT_ROV | Constants.BIT_FEET | Constants.BIT_HAZARD | Constants.BIT_INTERACT;
         b2body.createFixture(fdef).setUserData(id);
 
         fdef = new FixtureDef();
@@ -93,6 +95,9 @@ public class BaseGoblin extends PlayableCharacter{
             case LAND:
                 setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_land"), 20, 14)[0], 1/14f, false, 1f);
                 break;
+            case DEATH:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("goblin_death"), 20, 14)[0], 1/13f, true, 1f);
+                break;
         }
     }
 
@@ -100,7 +105,7 @@ public class BaseGoblin extends PlayableCharacter{
         addPlayerState(Constants.PSTATE.ON_GROUND);
         addPlayerState(Constants.PSTATE.LANDING);
         if (airIterations >= 5) {
-            particleHandler.addParticleEffect("dust_ground", facingRight ? b2body.getPosition().x - 4 / Constants.PPM : b2body.getPosition().x - 2 / Constants.PPM, b2body.getPosition().y - 7.5f / Constants.PPM);
+            util.getParticleHandler().addParticleEffect("dust_ground", facingRight ? b2body.getPosition().x - 4 / Constants.PPM : b2body.getPosition().x - 2 / Constants.PPM, b2body.getPosition().y - 7.5f / Constants.PPM);
             currAState = Constants.ASTATE.LAND;
         }
         timer.start(0.2f, "land", this);
@@ -109,7 +114,7 @@ public class BaseGoblin extends PlayableCharacter{
     }
 
     public void jump() {
-        particleHandler.addParticleEffect("dust_ground", facingRight ? b2body.getPosition().x - 4 / Constants.PPM : b2body.getPosition().x - 2 / Constants.PPM, b2body.getPosition().y - 7.5f / Constants.PPM);
+        util.getParticleHandler().addParticleEffect("dust_ground", facingRight ? b2body.getPosition().x - 4 / Constants.PPM : b2body.getPosition().x - 2 / Constants.PPM, b2body.getPosition().y - 7.5f / Constants.PPM);
         b2body.applyLinearImpulse(new Vector2(0, 3f), b2body.getWorldCenter(), true);
     }
 }

@@ -10,6 +10,7 @@ public class AdjacencyList<E> {
 
     // Add a vertex to the graph
     public void addVertex(E vertex) {
+        if (vertex == null) return;
         adjacencyList.put(vertex, new ArrayList<E>());
     }
     public void removeVertex(E vertex) {
@@ -21,10 +22,12 @@ public class AdjacencyList<E> {
 
     // Add an edge between two vertices
     public void addEdge(E source, E destination) {
+        if (source == null || destination == null) return;
         adjacencyList.get(source).add(destination);
     }
 
     public void removeEdge(E source, E destination) {
+        if (source == null || destination == null) return;
         adjacencyList.get(source).remove(destination);
     }
 

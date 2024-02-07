@@ -1,29 +1,39 @@
-package com.mygdx.Handlers;
+package com.mygdx.World;
 
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.Graphics.ParticleHandler;
 import com.mygdx.Objects.Door;
+import com.mygdx.Objects.Lever;
 import com.mygdx.Objects.PressurePlate;
+import com.mygdx.RoleCast.ArmourGoblin;
 import com.mygdx.RoleCast.BaseGoblin;
+import com.mygdx.RoleCast.Mage;
+import com.mygdx.RoleCast.Pet;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MyResourceManager;
+import com.mygdx.Tools.UtilityStation;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class B2WorldHandler {
 
     private final World world;
     private final MyResourceManager resourceManager;
-    private final ObjectHandler objectHandler;
+    private final UtilityStation util;
 
-    public B2WorldHandler(World world, TiledMap map, MyResourceManager resourceManager, MyTimer timer, AtomicInteger eidAllocator, EntityHandler entityHandler, CharacterCycle characterCycle, ParticleHandler particleHandler, VisionMap visionMap, ObjectHandler objectHandler, int level) {
+    public B2WorldHandler(World world, TiledMap map, MyResourceManager resourceManager, MyTimer timer, AtomicInteger eidAllocator, UtilityStation util, int level) {
 
         this.world = world;
         this.resourceManager = resourceManager;
-        this.objectHandler = objectHandler;
+        this.util = util;
+
+        // Creating Mage and pet
+        Mage mage = new Mage(250, 140, world, eidAllocator.getAndIncrement(), timer, resourceManager, util);
+        util.getCharacterCycle().initialize(mage);
+        util.getEntityHandler().addEntity(mage);
+        util.getEntityHandler().addPet(new Pet(world, 250, 200, eidAllocator.getAndIncrement(), resourceManager, util));
 
         BodyDef bdef  = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -69,21 +79,24 @@ public class B2WorldHandler {
         // Create base goblins
         for (RectangleMapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = object.getRectangle();
-            entityHandler.addEntity(new BaseGoblin(rect.getX(), rect.getY(), world, eidAllocator.getAndIncrement(), timer, resourceManager, characterCycle, visionMap, particleHandler));
+            util.getEntityHandler().addEntity(new BaseGoblin(rect.getX(), rect.getY(), world, eidAllocator.getAndIncrement(), timer, resourceManager, util));
         }
 
         createObjects(level);
+
+        util.getVisionMap().initialize(util.getEntityHandler());
+
     }
 
     public void createObjects(int level) {
 
         switch (level) {
             case 1:
-                Door door = new Door(world, resourceManager, 567, 151.8f);
-                objectHandler.addObject(door);
+                Door door = new Door(world, resourceManager, 567, 151.8f, 1);
+                util.getObjectHandler().addObject(door);
                 PressurePlate pressurePlate = new PressurePlate(world, resourceManager, 598, 116.5f, 1);
                 pressurePlate.addReactable(door);
-                objectHandler.addObject(pressurePlate);
+                util.getObjectHandler().addObject(pressurePlate);
                 break;
             case 2:
 

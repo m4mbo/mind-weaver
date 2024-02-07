@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.mygdx.Game.MindWeaver;
-import com.mygdx.Handlers.CharacterCycle;
+import com.mygdx.World.CharacterCycle;
 import com.mygdx.RoleCast.ArmourGoblin;
 import com.mygdx.RoleCast.PlayableCharacter;
 import com.mygdx.Screens.GameScreen;
@@ -30,6 +30,9 @@ public class GameInputProcessor implements InputProcessor {
         if (!(game.getScreen() instanceof GameScreen)) return false;
 
         PlayableCharacter character = characterCycle.getCurrentCharacter();
+
+        if (character.isStateActive(PSTATE.DYING)) return true;
+
         switch (keycode) {
             case Input.Keys.SPACE:
                 if (character.isStateActive(PSTATE.ON_GROUND)) {
@@ -55,6 +58,9 @@ public class GameInputProcessor implements InputProcessor {
             case Input.Keys.J:
                 if (character instanceof ArmourGoblin) ((ArmourGoblin) character).attack();
                 break;
+            case Input.Keys.X:
+                character.interact();
+                break;
             default:
                 break;
         }
@@ -67,6 +73,9 @@ public class GameInputProcessor implements InputProcessor {
         if (!(game.getScreen() instanceof GameScreen)) return false;
 
         PlayableCharacter character = characterCycle.getCurrentCharacter();
+        
+        if (character.isStateActive(PSTATE.DYING)) return true;
+
         switch (keycode) {
             case Input.Keys.SPACE:
                 if (character.isStateActive(PSTATE.ON_GROUND) || character.isStateActive(PSTATE.STUNNED)) break;

@@ -3,9 +3,7 @@ package com.mygdx.RoleCast;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.Graphics.ParticleHandler;
-import com.mygdx.Handlers.CharacterCycle;
-import com.mygdx.Handlers.VisionMap;
+import com.mygdx.Tools.UtilityStation;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.Helpers.Constants;
@@ -13,13 +11,10 @@ import com.mygdx.Helpers.Constants;
 public class Mage extends PlayableCharacter {
 
     private Vector2 currCheckPoint;
-    private int lives;
 
-    public Mage(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle, VisionMap visionMap, ParticleHandler particleHandler) {
+    public Mage(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, UtilityStation utilityStation) {
 
-        super(world, id, timer, myResourceManager, characterCycle, visionMap, particleHandler);
-
-        lives = 3;
+        super(world, id, timer, myResourceManager, utilityStation);
 
         currCheckPoint = new Vector2(x / Constants.PPM, y / Constants.PPM);
 
@@ -41,7 +36,7 @@ public class Mage extends PlayableCharacter {
         fdef.shape = polygonShape;
         fdef.friction = 0;
         fdef.filter.categoryBits = Constants.BIT_MAGE;
-        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_GOBLIN | Constants.BIT_FEET;
+        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_GOBLIN | Constants.BIT_FEET | Constants.BIT_INTERACT;
         b2body.createFixture(fdef).setUserData(id);
 
         //Create player hitbox
@@ -100,19 +95,26 @@ public class Mage extends PlayableCharacter {
             case LAND:
                 setAnimation(TextureRegion.split(resourceManager.getTexture("mage_land"), 20, 20)[0], 1/5f, false, 1f);
                 break;
+            case DEATH:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("mage_death"), 24, 20)[0], 1/13f, true, 1f);
+                break;
         }
     }
 
     public void respawn() {
         lives = 3;
         b2body.setTransform(currCheckPoint, b2body.getAngle());
+        removePlayerState(Constants.PSTATE.DYING);
+        movementState = Constants.MSTATE.HSTILL;
     }
 
     @Override
     public void die() {
         lives--;
-        if (lives == 0) respawn();
-        else {
+        if (lives == 0 && !isStateActive(Constants.PSTATE.DYING)) {
+            timer.start(2f, "death", this);
+            addPlayerState(Constants.PSTATE.DYING);
+        } else {
             timer.start(0.05f, "hit", this);
             addPlayerState(Constants.PSTATE.HIT);
         }

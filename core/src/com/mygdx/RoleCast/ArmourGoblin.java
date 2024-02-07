@@ -5,9 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.Graphics.ParticleHandler;
-import com.mygdx.Handlers.CharacterCycle;
-import com.mygdx.Handlers.VisionMap;
+import com.mygdx.Tools.UtilityStation;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.EnemyController;
 import com.mygdx.Tools.MyResourceManager;
@@ -15,14 +13,14 @@ import com.mygdx.Tools.MyTimer;
 
 public class ArmourGoblin extends PlayableCharacter {
 
-    private CircleShape circleShape;
+    private final CircleShape circleShape;
     private FixtureDef fdef;
 
-    public ArmourGoblin(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, CharacterCycle characterCycle, VisionMap visionMap, ParticleHandler particleHandler) {
+    public ArmourGoblin(float x, float y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, UtilityStation utilityStation) {
 
-        super(world, id, timer, myResourceManager, characterCycle, visionMap, particleHandler);
+        super(world, id, timer, myResourceManager, utilityStation);
 
-        enemyController = new EnemyController(characterCycle.getCurrentCharacter(), this, visionMap, timer);
+        enemyController = new EnemyController(util.getCharacterCycle().getCurrentCharacter(), this, util.getVisionMap(), timer);
 
         // Initializing sprite
         setAnimation(TextureRegion.split(resourceManager.getTexture("armour_idle"), 19, 19)[0], 1/5f, false, 1f);
@@ -41,7 +39,7 @@ public class ArmourGoblin extends PlayableCharacter {
         fdef.shape = polygonShape;
         fdef.friction = 0;
         fdef.filter.categoryBits = Constants.BIT_GOBLIN;
-        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_MAGE | Constants.BIT_GOBLIN | Constants.BIT_ROV | Constants.BIT_FEET | Constants.BIT_HAZARD;
+        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_MAGE | Constants.BIT_GOBLIN | Constants.BIT_ROV | Constants.BIT_FEET | Constants.BIT_HAZARD | Constants.BIT_INTERACT;
         b2body.createFixture(fdef).setUserData(id);
 
         fdef = new FixtureDef();
@@ -125,18 +123,21 @@ public class ArmourGoblin extends PlayableCharacter {
             case ATTACK:
                 setAnimation(TextureRegion.split(resourceManager.getTexture("armour_attack"), 24, 19)[0], 1/31f, true, 1f);
                 break;
+            case DEATH:
+                setAnimation(TextureRegion.split(resourceManager.getTexture("armour_death"), 23, 20)[0], 1/13f, true, 1f);
+                break;
         }
     }
 
     @Override
     public void jump() {
-        particleHandler.addParticleEffect("dust_ground", facingRight ? b2body.getPosition().x - 5 / Constants.PPM : b2body.getPosition().x - 3 / Constants.PPM, b2body.getPosition().y - 10/Constants.PPM);
+        util.getParticleHandler().addParticleEffect("dust_ground", facingRight ? b2body.getPosition().x - 5 / Constants.PPM : b2body.getPosition().x - 3 / Constants.PPM, b2body.getPosition().y - 10/Constants.PPM);
         b2body.applyLinearImpulse(new Vector2(0, 2.5f), b2body.getWorldCenter(), true);
     }
 
     public void attack() {
         if (isStateActive(Constants.PSTATE.ATTACK_STUN) || isStateActive(Constants.PSTATE.ATTACKING)) return;
-        particleHandler.addParticleEffect(facingRight ? "air_right" : "air_left", b2body.getPosition().x, b2body.getPosition().y - 4 / Constants.PPM);
+        util.getParticleHandler().addParticleEffect(facingRight ? "air_right" : "air_left", b2body.getPosition().x, b2body.getPosition().y - 4 / Constants.PPM);
         addPlayerState(Constants.PSTATE.ATTACKING);
         timer.start(0.1f, "attack_hb", this);
     }
@@ -153,7 +154,7 @@ public class ArmourGoblin extends PlayableCharacter {
         switch (flag) {
             case "stun":
                 removePlayerState(Constants.PSTATE.STUNNED);
-                if (characterCycle.getCurrentCharacter().equals(this)) {
+                if (util.getCharacterCycle().getCurrentCharacter().equals(this)) {
                     if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = Constants.MSTATE.RIGHT;
                     if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = Constants.MSTATE.LEFT;
                 } else {
@@ -182,6 +183,15 @@ public class ArmourGoblin extends PlayableCharacter {
                 break;
             case "hit" :
                 removePlayerState(Constants.PSTATE.HIT);
+                break;
+            case "death_and_disposal":
+                System.out.println("here");
+                dispose();
+                util.getEntityHandler().addEntityOperation(this, "die");
+                break;
+            case "death":
+                util.getEntityHandler().addEntityOperation(this, "die");
+                break;
         }
     }
 }

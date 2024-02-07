@@ -1,4 +1,4 @@
-package com.mygdx.Handlers;
+package com.mygdx.World;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -57,10 +57,11 @@ public class EntityHandler {
     public void handleEntities() {
         for (EntityOp entityOp : entityOps) {
             if (entityOp.operation.equals("die")) {
-                entityOp.entity.die();
-                if (entityOp.entity.getLives() == 0 && !(entityOp.entity instanceof Mage) && (entityOp.entity instanceof PlayableCharacter)) {
+                if (!(entityOp.entity instanceof Mage) && (entityOp.entity instanceof PlayableCharacter)) {
                     visionMap.removeCharacter((PlayableCharacter) entityOp.entity);
                     entities.remove(entityOp.entity.getID());
+                } else if (entityOp.entity instanceof Mage) {
+                    ((Mage) entityOp.entity).respawn();
                 }
             }
         }
@@ -72,6 +73,8 @@ public class EntityHandler {
         for (Entity entity : entities.values()) {
             entity.update(delta);
         }
+
+        handleEntities();
     }
 
     public void render(SpriteBatch batch) {

@@ -13,10 +13,13 @@ public class Door extends Reactable {
     private float currHeight;
     private final FixtureDef fdef;
     private final PolygonShape polygonShape;
+    private final int level;
 
-    public Door(World world, MyResourceManager resourceManager, float x, float y) {
+    public Door(World world, MyResourceManager resourceManager, float x, float y, int level) {
 
         super(world, resourceManager);
+
+        this.level = level;
 
         height = 14;
         currHeight = height;
@@ -24,7 +27,7 @@ public class Door extends Reactable {
         currAState = Constants.ASTATE.CLOSED;
         prevAState = Constants.ASTATE.CLOSED;
 
-        setAnimation(TextureRegion.split(resourceManager.getTexture("door_closed"), 13, 28)[0], 1/9f, true, 1f);
+        setAnimation(TextureRegion.split(resourceManager.getTexture(level == 1 ? "door_closed" : "door_closed2"), 13, 28)[0], 1/9f, true, 1f);
 
         // Creating two bodies for spring joint
         BodyDef bdef = new BodyDef();
@@ -55,8 +58,8 @@ public class Door extends Reactable {
     }
 
     public void handleAnimation() {
-        if (currAState == Constants.ASTATE.OPEN) setAnimation(TextureRegion.split(resourceManager.getTexture("door_open"), 13, 28)[0], 1/9f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
-        else setAnimation(TextureRegion.split(resourceManager.getTexture("door_closed"), 13, 28)[0], 1/9f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
+        if (currAState == Constants.ASTATE.OPEN) setAnimation(TextureRegion.split(resourceManager.getTexture(level == 1 ? "door_open" : "door_open2"), 13, 28)[0], 1/9f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
+        else setAnimation(TextureRegion.split(resourceManager.getTexture(level == 1 ? "door_closed" : "door_closed2"), 13, 28)[0], 1/9f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
     }
 
     public void step() {
