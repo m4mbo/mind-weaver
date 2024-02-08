@@ -3,9 +3,11 @@ package com.mygdx.World;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Objects.Door;
 import com.mygdx.Objects.Lever;
+import com.mygdx.Objects.Platform;
 import com.mygdx.Objects.PressurePlate;
 import com.mygdx.RoleCast.ArmourGoblin;
 import com.mygdx.RoleCast.BaseGoblin;
@@ -15,6 +17,8 @@ import com.mygdx.Tools.MyTimer;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Tools.UtilityStation;
+
+import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class B2WorldHandler {
@@ -34,6 +38,7 @@ public class B2WorldHandler {
         util.getCharacterCycle().initialize(mage);
         util.getEntityHandler().addEntity(mage);
         util.getEntityHandler().addPet(new Pet(world, 250, 200, eidAllocator.getAndIncrement(), resourceManager, util));
+
 
         BodyDef bdef  = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -97,6 +102,14 @@ public class B2WorldHandler {
                 PressurePlate pressurePlate = new PressurePlate(world, resourceManager, 598, 116.5f, 1);
                 pressurePlate.addReactable(door);
                 util.getObjectHandler().addObject(pressurePlate);
+//                Lever lever = new Lever(557, 151.8f, world, resourceManager);
+//                LinkedList<Vector2> positions = new LinkedList<>();
+//                positions.add(new Vector2(400 / Constants.PPM, 180 / Constants.PPM));
+//                positions.add(new Vector2(400 / Constants.PPM, 240 / Constants.PPM));
+//                Platform platform = new Platform(positions, world, resourceManager);
+//                lever.addReactable(platform);
+//                util.getObjectHandler().addObject(lever);
+//                util.getObjectHandler().addObject(platform);
                 break;
             case 2:
 

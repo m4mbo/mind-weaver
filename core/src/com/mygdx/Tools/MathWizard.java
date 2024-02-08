@@ -47,5 +47,9 @@ public class MathWizard {
         return (p1 >= p2 - threshold && p1 <= p2 + threshold);
     }
 
+    public static boolean inRange(Vector2 pos1, Vector2 pos2, float threshold) {
+        return inRange(pos1.x, pos2.x, threshold) && inRange(pos1.y, pos2.y, threshold);
+    }
+
 
 }

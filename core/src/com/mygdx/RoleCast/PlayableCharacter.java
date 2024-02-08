@@ -173,8 +173,8 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
                 removePlayerState(Constants.PSTATE.STUNNED);
                 if (util.getCharacterCycle().getCurrentCharacter().equals(this)) {
                     if (Gdx.input.isKeyPressed(Input.Keys.D)) movementState = Constants.MSTATE.RIGHT;
-                    if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = Constants.MSTATE.LEFT;
-                    else movementState = Constants.MSTATE.HSTILL;
+                    else if (Gdx.input.isKeyPressed(Input.Keys.A)) movementState = Constants.MSTATE.LEFT;
+                    else if (isStateActive(Constants.PSTATE.ON_GROUND)) movementState = Constants.MSTATE.HSTILL;
                 } else {
                     movementState = Constants.MSTATE.HSTILL;
                 }

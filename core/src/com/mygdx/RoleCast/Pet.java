@@ -52,22 +52,20 @@ public class Pet extends Entity {
 
     public void assess() {
         PlayableCharacter character = util.getCharacterCycle().getCurrentCharacter();
-        if (MathWizard.inRange(character.getPosition().x, b2body.getPosition().x, 0.1f / Constants.PPM) && MathWizard.inRange(character.getPosition().y, b2body.getPosition().y, 0.1f / Constants.PPM)) {
+        if (MathWizard.inRange(character.getPosition(), b2body.getPosition(), 0.1f / Constants.PPM)) {
             b2body.setLinearVelocity(0, 0);
         } else if (!MathWizard.inRange(character.getPosition().x, b2body.getPosition().x, threshold) || !MathWizard.inRange(character.getPosition().y, b2body.getPosition().y, threshold)) {
-            track();
+            step(character);
         }
     }
 
-    public void track() {
-
-        PlayableCharacter character = util.getCharacterCycle().getCurrentCharacter();
+    public void step(PlayableCharacter character) {
 
         Vector2 normalized = MathWizard.normalizedDirection(character.getPosition(), b2body.getPosition());
 
         facingRight = normalized.x > 0;
 
-        // Apply the linear impulse to the body
+        // Apply linear velocity
         b2body.setLinearVelocity(new Vector2(normalized.x * Constants.MAX_SPEED_X / 1.1f, normalized.y * Constants.MAX_SPEED_X / 2));
 
         angle = MathWizard.angle(character.getPosition(), b2body.getPosition());
