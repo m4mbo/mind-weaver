@@ -17,8 +17,6 @@ import com.mygdx.Tools.MyTimer;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Tools.UtilityStation;
-
-import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class B2WorldHandler {
@@ -102,14 +100,14 @@ public class B2WorldHandler {
                 PressurePlate pressurePlate = new PressurePlate(world, resourceManager, 598, 116.5f, 1);
                 pressurePlate.addReactable(door);
                 util.getObjectHandler().addObject(pressurePlate);
-                Lever lever = new Lever(400, 140, world, resourceManager);
-                LinkedList<Vector2> positions = new LinkedList<>();
-                positions.add(new Vector2(400 / Constants.PPM, 110 / Constants.PPM));
-                positions.add(new Vector2(500 / Constants.PPM, 110 / Constants.PPM));
-                Platform platform = new Platform(positions, world, resourceManager);
-                lever.addReactable(platform);
-                util.getObjectHandler().addObject(lever);
-                util.getObjectHandler().addObject(platform);
+//                Lever lever = new Lever(400, 140, world, resourceManager);
+//                LinkedList<Vector2> positions = new LinkedList<>();
+//                positions.add(new Vector2(400 / Constants.PPM, 110 / Constants.PPM));
+//                positions.add(new Vector2(500 / Constants.PPM, 110 / Constants.PPM));
+//                Platform platform = new Platform(positions, world, resourceManager);
+//                lever.addReactable(platform);
+//                util.getObjectHandler().addObject(lever);
+//                util.getObjectHandler().addObject(platform);
                 break;
             case 2:
 

@@ -71,6 +71,9 @@ public class Platform extends Reactable {
     public void step(Vector2 position) {
         Vector2 normalized = MathWizard.normalizedDirection(position, b2body.getPosition());
         b2body.setLinearVelocity(new Vector2(normalized.x * Constants.MAX_SPEED_X / 1.1f, normalized.y * Constants.MAX_SPEED_X / 2));
+        for (Entity entity : entitiesOnTop) {
+            entity.getB2body().setLinearVelocity(new Vector2(normalized.x * Constants.MAX_SPEED_X / 1.1f, entity.getB2body().getLinearVelocity().y));
+        }
     }
 
     public void addEntityOnTop(Entity entity) {

@@ -34,6 +34,7 @@ public class GameInputProcessor implements InputProcessor {
         if (character.isStateActive(PSTATE.DYING)) return true;
 
         switch (keycode) {
+            case Input.Keys.UP:
             case Input.Keys.SPACE:
                 if (character.isStateActive(PSTATE.ON_GROUND)) {
                     character.jump();
@@ -45,9 +46,11 @@ public class GameInputProcessor implements InputProcessor {
                     break;
                 }
                 break;
+            case Input.Keys.RIGHT:
             case Input.Keys.D:
                 character.setMovementState(Constants.MSTATE.RIGHT);
                 break;
+            case Input.Keys.LEFT:
             case Input.Keys.A:
                 character.setMovementState(Constants.MSTATE.LEFT);
                 break;
@@ -77,14 +80,17 @@ public class GameInputProcessor implements InputProcessor {
         if (character.isStateActive(PSTATE.DYING)) return true;
 
         switch (keycode) {
+            case Input.Keys.UP:
             case Input.Keys.SPACE:
                 if (character.isStateActive(PSTATE.ON_GROUND) || character.isStateActive(PSTATE.STUNNED)) break;
                 character.fall();
                 break;
+            case Input.Keys.RIGHT:
             case Input.Keys.D:
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) character.setMovementState(Constants.MSTATE.LEFT);
                 else character.setMovementState(Constants.MSTATE.HSTILL);
                 break;
+            case Input.Keys.LEFT:
             case Input.Keys.A:
                 if (Gdx.input.isKeyPressed(Input.Keys.D)) character.setMovementState(Constants.MSTATE.RIGHT);
                 else character.setMovementState(Constants.MSTATE.HSTILL);

@@ -20,8 +20,6 @@ import com.mygdx.Tools.*;
 import com.mygdx.World.*;
 import com.mygdx.Listeners.MyContactListener;
 import com.mygdx.Listeners.GameInputProcessor;
-import com.mygdx.RoleCast.Pet;
-import com.mygdx.RoleCast.Mage;
 import com.mygdx.World.B2WorldHandler;
 import com.mygdx.Helpers.Constants;
 
@@ -117,7 +115,9 @@ public class GameScreen implements Screen {
 
         shapeDrawer.render(game.batch);
 
-        b2dr.render(world, gameCam.combined);
+        game.hud.render(game.batch);
+
+        //b2dr.render(world, gameCam.combined);
 
         gameCam.position.set(util.getCharacterCycle().getCurrentCharacter().getPosition().x, util.getCharacterCycle().getCurrentCharacter().getPosition().y + 20 / Constants.PPM, 0);
         gameCam.update();
