@@ -3,6 +3,7 @@ package com.mygdx.Listeners;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Objects.Interactable;
+import com.mygdx.Objects.Platform;
 import com.mygdx.World.EntityHandler;
 import com.mygdx.World.VisionMap;
 import com.mygdx.Helpers.Constants;
@@ -32,6 +33,12 @@ public class MyContactListener implements ContactListener {
         if (fa.getUserData() instanceof Interactable || fb.getUserData() instanceof Interactable) {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData() instanceof Interactable ? fb.getBody() : fa.getBody());
             character.addInteractable((Interactable) (fa.getUserData() instanceof Interactable ? fa.getUserData() : fb.getUserData()));
+        } else if (fa.getUserData() instanceof Platform || fb.getUserData() instanceof Platform) {
+            character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData() instanceof Platform ? fb.getBody() : fa.getBody());
+            character.increaseFloorContact();
+            if (character.getMovementState() == MSTATE.PREV) character.setMovementState(MSTATE.HSTILL);
+            Platform platform = (Platform) (fa.getUserData() instanceof Platform ? fa.getUserData() : fb.getUserData());
+            platform.addEntityOnTop(character);
         } else if (fa.getUserData().equals("leftSensor") || fb.getUserData().equals("leftSensor")) {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("leftSensor") ? fa.getBody() : fb.getBody());
             character.setWallState(-1);
@@ -67,6 +74,11 @@ public class MyContactListener implements ContactListener {
         if (fa.getUserData() instanceof Interactable || fb.getUserData() instanceof Interactable) {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData() instanceof Interactable ? fb.getBody() : fa.getBody());
             character.removeInteractable((Interactable) (fa.getUserData() instanceof Interactable ? fa.getUserData() : fb.getUserData()));
+        } else if (fa.getUserData() instanceof Platform || fb.getUserData() instanceof Platform) {
+            character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData() instanceof Platform ? fb.getBody() : fa.getBody());
+            character.decreaseFloorContact();
+            Platform platform = (Platform) (fa.getUserData() instanceof Platform ? fa.getUserData() : fb.getUserData());
+            platform.removeEntityOnTop(character);
         } else if (fa.getUserData().equals("leftSensor") || fb.getUserData().equals("leftSensor")) {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("leftSensor") ? fa.getBody() : fb.getBody());
             character.setWallState(0);

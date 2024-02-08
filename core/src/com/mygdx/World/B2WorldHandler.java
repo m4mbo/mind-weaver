@@ -102,14 +102,14 @@ public class B2WorldHandler {
                 PressurePlate pressurePlate = new PressurePlate(world, resourceManager, 598, 116.5f, 1);
                 pressurePlate.addReactable(door);
                 util.getObjectHandler().addObject(pressurePlate);
-//                Lever lever = new Lever(557, 151.8f, world, resourceManager);
-//                LinkedList<Vector2> positions = new LinkedList<>();
-//                positions.add(new Vector2(400 / Constants.PPM, 180 / Constants.PPM));
-//                positions.add(new Vector2(400 / Constants.PPM, 240 / Constants.PPM));
-//                Platform platform = new Platform(positions, world, resourceManager);
-//                lever.addReactable(platform);
-//                util.getObjectHandler().addObject(lever);
-//                util.getObjectHandler().addObject(platform);
+                Lever lever = new Lever(400, 140, world, resourceManager);
+                LinkedList<Vector2> positions = new LinkedList<>();
+                positions.add(new Vector2(400 / Constants.PPM, 110 / Constants.PPM));
+                positions.add(new Vector2(500 / Constants.PPM, 110 / Constants.PPM));
+                Platform platform = new Platform(positions, world, resourceManager);
+                lever.addReactable(platform);
+                util.getObjectHandler().addObject(lever);
+                util.getObjectHandler().addObject(platform);
                 break;
             case 2:
 

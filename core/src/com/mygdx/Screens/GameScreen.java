@@ -117,7 +117,7 @@ public class GameScreen implements Screen {
 
         shapeDrawer.render(game.batch);
 
-        //b2dr.render(world, gameCam.combined);
+        b2dr.render(world, gameCam.combined);
 
         gameCam.position.set(util.getCharacterCycle().getCurrentCharacter().getPosition().x, util.getCharacterCycle().getCurrentCharacter().getPosition().y + 20 / Constants.PPM, 0);
         gameCam.update();
