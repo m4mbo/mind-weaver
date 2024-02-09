@@ -19,8 +19,6 @@ import com.mygdx.Tools.MyTimer;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Tools.UtilityStation;
-
-import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class B2WorldHandler {
@@ -35,12 +33,9 @@ public class B2WorldHandler {
         this.resourceManager = resourceManager;
         this.util = util;
 
-        // Creating Mage and pet
-        Mage mage = new Mage(250, 140, world, eidAllocator.getAndIncrement(), timer, resourceManager, util);
-        hud.setPlayer(mage);
-        util.getCharacterCycle().initialize(mage);
-        util.getEntityHandler().addEntity(mage);
-        util.getEntityHandler().addPet(new Pet(world, 250, 200, eidAllocator.getAndIncrement(), resourceManager, util));
+        createPlayer(eidAllocator, timer, hud, level);
+
+        util.getEntityHandler().addPet(new Pet(world, 100, 100, eidAllocator.getAndIncrement(), resourceManager, util));
 
         BodyDef bdef  = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -86,6 +81,7 @@ public class B2WorldHandler {
             body = world.createBody(bdef);
             shape.setAsBox((rect.getWidth() / 2) / Constants.PPM, (rect.getHeight() / 2) / Constants.PPM);
             fdef.shape = shape;
+            fdef.isSensor = false;
             fdef.filter.categoryBits = Constants.BIT_GROUND;
             body.createFixture(fdef).setUserData("seethrough");
         }
@@ -97,7 +93,7 @@ public class B2WorldHandler {
         }
 
         // Create armour goblins
-        for (RectangleMapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)) {
+        for (RectangleMapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = object.getRectangle();
             util.getEntityHandler().addEntity(new ArmourGoblin(rect.getX(), rect.getY(), world, eidAllocator.getAndIncrement(), timer, resourceManager, util));
         }
@@ -133,7 +129,28 @@ public class B2WorldHandler {
 
                 break;
         }
+    }
 
+    public void createPlayer(AtomicInteger eidAllocator, MyTimer timer, HUD hud, int level) {
 
+        Mage mage = null;
+
+        switch (level) {
+            case 1:
+                mage = new Mage(250, 140, world, eidAllocator.getAndIncrement(), timer, resourceManager, util);
+                break;
+            case 2:
+                mage = new Mage(437, 212, world, eidAllocator.getAndIncrement(), timer, resourceManager, util);
+                break;
+            case 3:
+
+                break;
+            default:
+                break;
+
+        }
+        hud.setPlayer(mage);
+        util.getCharacterCycle().initialize(mage);
+        util.getEntityHandler().addEntity(mage);
     }
 }

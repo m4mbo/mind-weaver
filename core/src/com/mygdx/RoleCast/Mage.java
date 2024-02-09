@@ -12,7 +12,7 @@ public class Mage extends PlayableCharacter {
 
     private Vector2 currCheckPoint;
 
-    public Mage(int x, int y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, UtilityStation utilityStation) {
+    public Mage(float x, float y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, UtilityStation utilityStation) {
 
         super(world, id, timer, myResourceManager, utilityStation);
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="14" tileheight="14" infinite="0" nextlayerid="9" nextobjectid="27">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="14" tileheight="14" infinite="0" nextlayerid="10" nextobjectid="49">
  <tileset firstgid="1" source="dungeon padded.tsx"/>
  <layer id="1" name="background" width="100" height="100">
   <data encoding="base64" compression="zlib">
@@ -8,13 +8,38 @@
  </layer>
  <layer id="2" name="graphics" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJztwzENAAAIA7Bd+JeMgiGAtEkTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPhpSoDLAjNXACU=
+   eJzt17tOwzAYBtAISKAMLAyImXJZeBPe/3mwpQxplMRYdbEh50jf0IsUx5/8t+k6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgPPd114AJ/TRFn20RR9tiX28hBxDXkOuQoYxtxXXtVd3s9c3IYcx88+o42uSLcNCPkLexrxfcI3syyGRS/Bb0ZbrzO8/dMszaii8rj2KZ+Np9l7qjOT2x88t7e3Ws8hSf//Z2hyIeSx8rbW9Xetjb12klHyGTu3t0swyp06V7CN3b2N/v/Ff7y957rbnWU7i2egzrv1Z5A44x3Rm6aO+rfMFAAA19JPQhj4RgDXfQfYFjg==
   </data>
  </layer>
- <objectgroup id="3" name="ground"/>
- <objectgroup id="4" name="seethrough"/>
+ <objectgroup id="3" name="ground">
+  <object id="27" x="254" y="1218" width="292" height="13.5"/>
+  <object id="28" x="150.667" y="1175.67" width="114.667" height="41.6667"/>
+  <object id="30" x="518.318" y="1189.91" width="36.5" height="28.0909"/>
+  <object id="31" x="560.114" y="1119.95" width="55.8295" height="28.0909"/>
+  <object id="32" x="546.114" y="1148.14" width="13.9545" height="28.0909"/>
+  <object id="33" x="532.114" y="1175.95" width="27.7727" height="13.5454"/>
+  <object id="34" x="630.167" y="1064.08" width="55.2273" height="28.0909"/>
+  <object id="35" x="574.295" y="1009.41" width="13.9545" height="82.2727"/>
+  <object id="38" x="630.333" y="1190.12" width="13.3333" height="43.3939"/>
+  <object id="39" x="616.424" y="1148.12" width="13.3333" height="43.3939"/>
+  <object id="40" x="644.242" y="1231.94" width="13.3333" height="27.5757"/>
+  <object id="41" x="658.061" y="1246.03" width="84.0606" height="13.5757"/>
+  <object id="45" x="686.091" y="1204" width="13.7273" height="14"/>
+  <object id="46" x="700.045" y="1176" width="55.8182" height="41.8182"/>
+  <object id="47" x="714.136" y="1162" width="13.7273" height="14"/>
+  <object id="48" x="728.136" y="1134" width="97.8182" height="28"/>
+ </objectgroup>
+ <objectgroup id="4" name="seethrough">
+  <object id="42" x="686.273" y="1218.27" width="13.0909" height="27.8182"/>
+  <object id="43" x="588.727" y="1064.27" width="40.7273" height="4.54545"/>
+ </objectgroup>
  <objectgroup id="5" name="end"/>
- <objectgroup id="6" name="basegoblins"/>
+ <objectgroup id="6" name="basegoblins">
+  <object id="44" x="590.636" y="1034.55" width="13.6364" height="14.4545"/>
+ </objectgroup>
  <objectgroup id="7" name="armourgoblins"/>
- <objectgroup id="8" name="snails"/>
+ <objectgroup id="8" name="papaya"/>
+ <objectgroup id="9" name="spikes">
+  <object id="37" x="644" y="1092.25" width="41.3333" height="8.41667"/>
+ </objectgroup>
 </map>

@@ -16,6 +16,7 @@ import java.util.*;
 public class VisionMap {
     private boolean collision;
     private final AdjacencyList<PlayableCharacter> targetMap;
+    private final AdjacencyList<PlayableCharacter> bullseyeMap;
     private EntityHandler entityHandler;
     private final World world;
     private final ShapeDrawer shapeDrawer;
@@ -26,6 +27,7 @@ public class VisionMap {
         this.world = world;
         this.shapeDrawer = shapeDrawer;
         this.targetMap = new AdjacencyList<>();
+        this.bullseyeMap = new AdjacencyList<>();
     }
 
     public void initialize(EntityHandler entityHandler) {
@@ -48,6 +50,20 @@ public class VisionMap {
         for (PlayableCharacter character : targetMap.getVerticesWithNeighbours()) {
             attemptConnection(character);
         }
+
+        solidifyConnections();
+
+    }
+
+    public void solidifyConnections() {
+        List<PlayableCharacter> bullsEyeStream = getBullseyeStream();
+
+        for (PlayableCharacter character : bullsEyeStream) {
+            if (character.getBullseye() == null) continue;
+            if (!character.isStateActive(Constants.PSTATE.DYING) && !character.getBullseye().isStateActive(Constants.PSTATE.DYING)) {
+                establishConnection(character, character.getBullseye());
+            }
+        }
     }
 
     public void attemptConnection(PlayableCharacter source) {
@@ -56,9 +72,10 @@ public class VisionMap {
             if (sendSignal(source, target)) {
                 if (source instanceof Mage || traceable(mage, source) || traceable(mage, target)) {
                     if (target.getBullseye() == null || !target.getBullseye().equals(source)){
-                        if (source.getBullseye() == null || !source.getBullseye().equals(target)) source.setBullseye(target);
-                        establishConnection(source, target);
-                        return;
+                        if (!traceable(target) && (source.getBullseye() == null || !source.getBullseye().equals(target)) && (!source.isStateActive(Constants.PSTATE.DYING) && !target.isStateActive(Constants.PSTATE.DYING))) {
+                            source.setBullseye(target);
+                            return;
+                        }
                     }
                 }
             } else {

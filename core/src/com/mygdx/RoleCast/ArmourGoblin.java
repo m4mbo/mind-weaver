@@ -170,7 +170,7 @@ public class ArmourGoblin extends PlayableCharacter {
                 break;
             case "attack_anim":
                 for (Fixture fixture : b2body.getFixtureList()) {
-                    if (fixture.getUserData() instanceof String && fixture.getUserData().equals("hazard")) b2body.destroyFixture(fixture);
+                    if (fixture.getUserData() instanceof String && fixture.getUserData().equals("attack")) b2body.destroyFixture(fixture);
                 }
                 removePlayerState(Constants.PSTATE.ATTACKING);
                 addPlayerState(Constants.PSTATE.ATTACK_STUN);
