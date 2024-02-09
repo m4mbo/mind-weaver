@@ -35,7 +35,7 @@ public class ArmourGoblin extends PlayableCharacter {
         PolygonShape polygonShape = new PolygonShape();
 
         //Create body fixture
-        polygonShape.setAsBox(8 / Constants.PPM, 8 / Constants.PPM, new Vector2(0, 0), 0);
+        polygonShape.setAsBox(7 / Constants.PPM, 8 / Constants.PPM, new Vector2(0, 0), 0);
         fdef.shape = polygonShape;
         fdef.friction = 0;
         fdef.filter.categoryBits = Constants.BIT_GOBLIN;
@@ -45,7 +45,7 @@ public class ArmourGoblin extends PlayableCharacter {
         fdef = new FixtureDef();
 
         //Create player hitbox
-        polygonShape.setAsBox(9 / Constants.PPM, 9 / Constants.PPM, new Vector2(0, 0), 0);
+        polygonShape.setAsBox(8 / Constants.PPM, 9 / Constants.PPM, new Vector2(0, 0), 0);
         fdef.shape = polygonShape;
         fdef.filter.maskBits = Constants.BIT_HAZARD;
         fdef.isSensor = true;
@@ -60,21 +60,21 @@ public class ArmourGoblin extends PlayableCharacter {
         b2body.createFixture(fdef).setUserData("vision");
 
         //Create right sensor
-        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(8.2f / Constants.PPM, 0), 0);
+        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(7 / Constants.PPM, 0), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
         fdef.filter.maskBits = Constants.BIT_GROUND;
         b2body.createFixture(fdef).setUserData("rightSensor");
 
         //Create left sensor
-        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(-8.2f / Constants.PPM, 0), 0);
+        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(-7 / Constants.PPM, 0), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
         fdef.filter.maskBits = Constants.BIT_GROUND;
         b2body.createFixture(fdef).setUserData("leftSensor");
 
         //Create bottom sensor
-        polygonShape.setAsBox(6.6f / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -8 / Constants.PPM), 0);
+        polygonShape.setAsBox(6 / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -8 / Constants.PPM), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
         fdef.filter.categoryBits = Constants.BIT_FEET;
@@ -145,7 +145,7 @@ public class ArmourGoblin extends PlayableCharacter {
     public void slash() {
         circleShape.setPosition(facingRight ? new Vector2(9 / Constants.PPM, 0) : new Vector2(-9 / Constants.PPM, 0));
         fdef.shape = circleShape;
-        b2body.createFixture(fdef).setUserData("hazard");
+        b2body.createFixture(fdef).setUserData("attack");
         timer.start(0.1f, "attack_anim", this);
     }
 

@@ -8,9 +8,6 @@ public class Constants {
     public static final float KNOCKBACK_SCALE = 1f;
     public static final float G = 11;
     public static final float G_ENHANCED = 13;
-    public enum ITEM {
-        SNAIL, ARMOUR_PIERCING
-    }
     // Movement state Flag
     public enum MSTATE {
         LEFT, RIGHT,

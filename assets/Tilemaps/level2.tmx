@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="14" tileheight="14" infinite="0" nextlayerid="9" nextobjectid="27">
+ <tileset firstgid="1" source="dungeon padded.tsx"/>
+ <layer id="1" name="background" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztw8EJAAAMA6H7ZP+VC51DwVVTVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/AWtAw1E=
+  </data>
+ </layer>
+ <layer id="2" name="graphics" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztwzENAAAIA7Bd+JeMgiGAtEkTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPhpSoDLAjNXACU=
+  </data>
+ </layer>
+ <objectgroup id="3" name="ground"/>
+ <objectgroup id="4" name="seethrough"/>
+ <objectgroup id="5" name="end"/>
+ <objectgroup id="6" name="basegoblins"/>
+ <objectgroup id="7" name="armourgoblins"/>
+ <objectgroup id="8" name="snails"/>
+</map>

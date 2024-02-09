@@ -22,7 +22,6 @@ import com.mygdx.Listeners.MyContactListener;
 import com.mygdx.Listeners.GameInputProcessor;
 import com.mygdx.World.B2WorldHandler;
 import com.mygdx.Helpers.Constants;
-
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameScreen implements Screen {
@@ -60,7 +59,6 @@ public class GameScreen implements Screen {
         world = new World(new Vector2(0, -Constants.G), true);
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(Constants.TILE_SIZE * 30 / Constants.PPM, Constants.TILE_SIZE * 17 / Constants.PPM, gameCam);
-        gameCam.position.set(2, 77, 0);
 
         ColorGenerator colorGenerator = new ColorGenerator();
         AtomicInteger eidAllocator = new AtomicInteger();
@@ -84,7 +82,7 @@ public class GameScreen implements Screen {
 
         world.setContactListener(new MyContactListener(entityHandler, visionMap));
         b2dr = new Box2DDebugRenderer();
-        new B2WorldHandler(world, map, resourceManager, timer, eidAllocator, util, level);     //Creating world
+        new B2WorldHandler(world, map, resourceManager, timer, eidAllocator, util, level, game.hud);     //Creating world
         lightManager.setDim(0.6f);
     }
 

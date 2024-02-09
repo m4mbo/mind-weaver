@@ -36,7 +36,7 @@ public class Pet extends Entity {
         b2body.setGravityScale(0);
         b2body.setLinearDamping(5);
 
-        util.getLightManager().addLight(b2body, 80, Constants.BIT_GROUND, new Color(70f/255, 11f/255, 93f/255, 0.8f));
+        util.getLightManager().addPointLight(b2body, 80, Constants.BIT_GROUND, new Color(70f/255, 11f/255, 93f/255, 0.8f));
 
     }
 

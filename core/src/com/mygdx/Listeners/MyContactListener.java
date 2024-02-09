@@ -49,14 +49,18 @@ public class MyContactListener implements ContactListener {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("bottomSensor") ? fa.getBody() : fb.getBody());
             character.increaseFloorContact();
             if (character.getMovementState() == MSTATE.PREV) character.setMovementState(MSTATE.HSTILL);
-        } else if (fa.getUserData().equals("hazard") || fb.getUserData().equals("hazard")) {
-            character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("hazard") ? fb.getBody() : fa.getBody());
+        } else if (fa.getUserData().equals("attack") || fb.getUserData().equals("attack")) {
+            character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("attack") ? fb.getBody() : fa.getBody());
             Body characterB2body = character.getB2body();
             character.die();
             // Hit procedure
             Vector2 normalized = MathWizard.normalizedDirection(characterB2body.getPosition(), fa.getUserData().equals("hazard") ? fa.getBody().getPosition() : fb.getBody().getPosition());
             character.stun(0.05f);
             characterB2body.applyLinearImpulse(new Vector2(normalized.x * Constants.KNOCKBACK_SCALE, normalized.y * Constants.KNOCKBACK_SCALE), characterB2body.getWorldCenter(), true);
+        } else if (fa.getUserData().equals("spike") || fb.getUserData().equals("spike")) {
+            character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("spike") ? fb.getBody() : fa.getBody());
+            character.setLives(1);
+            character.die();
         } else if (fa.getUserData().equals("vision") || fb.getUserData().equals("vision")) {
             PlayableCharacter source = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("vision") ? fa.getBody() : fb.getBody());
             PlayableCharacter target = (PlayableCharacter) entityHandler.getEntity((Integer) (fa.getUserData().equals("vision") ? fb : fa).getUserData());

@@ -212,12 +212,11 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     @Override
     public void die() {
         lives--;
+        timer.start(0.05f, "hit", this);
+        addPlayerState(Constants.PSTATE.HIT);
         if (lives == 0 && !isStateActive(Constants.PSTATE.DYING)) {
             timer.start(2f, "death_and_disposal", this);
             addPlayerState(Constants.PSTATE.DYING);
-        } else {
-            timer.start(0.05f, "hit", this);
-            addPlayerState(Constants.PSTATE.HIT);
         }
     }
 
@@ -275,5 +274,9 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
             b2body.destroyFixture(fixture);
         }
         world.destroyBody(b2body);
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
     }
 }

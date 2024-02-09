@@ -1,5 +1,6 @@
 package com.mygdx.World;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
@@ -13,10 +14,13 @@ import com.mygdx.RoleCast.ArmourGoblin;
 import com.mygdx.RoleCast.BaseGoblin;
 import com.mygdx.RoleCast.Mage;
 import com.mygdx.RoleCast.Pet;
+import com.mygdx.Scenes.HUD;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Tools.UtilityStation;
+
+import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class B2WorldHandler {
@@ -25,7 +29,7 @@ public class B2WorldHandler {
     private final MyResourceManager resourceManager;
     private final UtilityStation util;
 
-    public B2WorldHandler(World world, TiledMap map, MyResourceManager resourceManager, MyTimer timer, AtomicInteger eidAllocator, UtilityStation util, int level) {
+    public B2WorldHandler(World world, TiledMap map, MyResourceManager resourceManager, MyTimer timer, AtomicInteger eidAllocator, UtilityStation util, int level, HUD hud) {
 
         this.world = world;
         this.resourceManager = resourceManager;
@@ -33,10 +37,10 @@ public class B2WorldHandler {
 
         // Creating Mage and pet
         Mage mage = new Mage(250, 140, world, eidAllocator.getAndIncrement(), timer, resourceManager, util);
+        hud.setPlayer(mage);
         util.getCharacterCycle().initialize(mage);
         util.getEntityHandler().addEntity(mage);
         util.getEntityHandler().addPet(new Pet(world, 250, 200, eidAllocator.getAndIncrement(), resourceManager, util));
-
 
         BodyDef bdef  = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -55,17 +59,24 @@ public class B2WorldHandler {
             body.createFixture(fdef).setUserData("ground");
         }
 
-//        // Create spikes
-//        for (RectangleMapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)) {
-//            Rectangle rect = object.getRectangle();
-//            bdef.type = BodyDef.BodyType.StaticBody;
-//            bdef.position.set((rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getHeight() / 2) / Constants.PPM);
-//            body = world.createBody(bdef);
-//            shape.setAsBox((rect.getWidth() / 2) / Constants.PPM, (rect.getHeight() / 2) / Constants.PPM);
-//            fdef.shape = shape;
-//            fdef.filter.categoryBits = Constants.BIT_HAZARD;
-//            body.createFixture(fdef).setUserData("hazard");
-//        }
+        // Create ending sensors
+        for (RectangleMapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = object.getRectangle();
+            util.getLightManager().addConeLight(rect.getX() / Constants.PPM, (rect.getY() + rect.getHeight() / 2) / Constants.PPM, 60, new Color(96 / 255f, 130 / 255f, 182 / 255f, 1), 180, 90l);
+        }
+
+        // Create spikes
+        for (RectangleMapObject object : map.getLayers().get(8).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = object.getRectangle();
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getHeight() / 2) / Constants.PPM);
+            body = world.createBody(bdef);
+            shape.setAsBox((rect.getWidth() / 2) / Constants.PPM, (rect.getHeight() / 2) / Constants.PPM);
+            fdef.shape = shape;
+            fdef.isSensor = true;
+            fdef.filter.categoryBits = Constants.BIT_HAZARD;
+            body.createFixture(fdef).setUserData("spike");
+        }
 
         // Create see through fixtures
         for (RectangleMapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)) {
@@ -83,6 +94,12 @@ public class B2WorldHandler {
         for (RectangleMapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = object.getRectangle();
             util.getEntityHandler().addEntity(new BaseGoblin(rect.getX(), rect.getY(), world, eidAllocator.getAndIncrement(), timer, resourceManager, util));
+        }
+
+        // Create armour goblins
+        for (RectangleMapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = object.getRectangle();
+            util.getEntityHandler().addEntity(new ArmourGoblin(rect.getX(), rect.getY(), world, eidAllocator.getAndIncrement(), timer, resourceManager, util));
         }
 
         createObjects(level);

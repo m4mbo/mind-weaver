@@ -1,5 +1,6 @@
 package com.mygdx.Objects;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -36,17 +37,19 @@ public class Platform extends Reactable {
         b2body = world.createBody(bdef);
         b2body.setLinearDamping(5);
 
-        polygonShape.setAsBox(28 / Constants.PPM, 14 / Constants.PPM);
+        polygonShape.setAsBox(14 / Constants.PPM, 7 / Constants.PPM);
         fdef.shape = polygonShape;
         fdef.filter.categoryBits = Constants.BIT_GROUND;
         b2body.createFixture(fdef).setUserData("platform");
 
-        polygonShape.setAsBox(28 / Constants.PPM, 2 / Constants.PPM, new Vector2(0, 14 / Constants.PPM), 0);
+        polygonShape.setAsBox(14 / Constants.PPM, 2 / Constants.PPM, new Vector2(0, 7 / Constants.PPM), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
         fdef.filter.categoryBits = Constants.BIT_GROUND;
         fdef.filter.maskBits = Constants.BIT_FEET;
         b2body.createFixture(fdef).setUserData(this);
+
+        setAnimation(TextureRegion.split(resourceManager.getTexture("platform"), 28, 14)[0], 1/10f, true, 1f);
     }
 
     public void update(float delta) {
@@ -55,16 +58,20 @@ public class Platform extends Reactable {
     }
 
     public void react() {
-        currPosition++;
-        if (currPosition >= positionCycle.size()) currPosition = 0;
+        if (assess()) {
+            currPosition++;
+            if (currPosition >= positionCycle.size()) currPosition = 0;
+        }
     }
 
-    public void assess() {
+    public boolean assess() {
         Vector2 position = positionCycle.get(currPosition);
         if (MathWizard.inRange(position, b2body.getPosition(), 10f / Constants.PPM)) {
             b2body.setLinearVelocity(0, 0);
+            return true;
         } else {
             step(position);
+            return false;
         }
     }
 

@@ -18,6 +18,7 @@ public class MindWeaver extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		resourceManager = new MyResourceManager();
+		hud = new HUD();
 
 		// Input chain
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
@@ -70,9 +71,14 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Objects/door_open2.png", "door_open2");
 		resourceManager.loadTexture("Objects/lever_up.png", "lever_up");
 		resourceManager.loadTexture("Objects/lever_down.png", "lever_down");
+		resourceManager.loadTexture("Objects/platform.png", "platform");
+
+		//Items
+		resourceManager.loadTexture("Items/bug.png", "bug");
+		resourceManager.loadTexture("Items/papaya.png", "papaya");
 
 		//Pet
-		resourceManager.loadTexture("Shapes/pet.png", "pet");
+		resourceManager.loadTexture("Items/pet.png", "pet");
 	}
 
 	@Override
