@@ -24,6 +24,8 @@ public class MenuScreen implements Screen {
     private final MyResourceManager resourceManager;
     private Stage menuStage;
     private final List<TextButton> menuScreenButtons = new ArrayList<>();
+    private ScreenManager screenManager;
+
     public MenuScreen(MindWeaver game, MyResourceManager resourceManager) {
 
         menuStage = new Stage(new ScreenViewport());
