@@ -150,12 +150,14 @@ public class StartScreen implements Screen {
     @Override
     public void dispose() {
         this.dispose();
+        startStage.dispose();
         titleFont.dispose();
         game.batch.dispose();
         generator.dispose();
         for (TextButton button : startScreenButtons) {
             button.getSkin().dispose();
         }
+
     }
     @Override
     public void show() {

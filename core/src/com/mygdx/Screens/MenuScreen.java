@@ -14,12 +14,16 @@ import com.badlogic.gdx.Screen;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Helpers.Constants;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MenuScreen implements Screen {
     private final MindWeaver game;
     private TextButton resumeButton, levelsButton, settingsButton, quitButton;
     private final float buttonWidth, buttonHeight;
     private final MyResourceManager resourceManager;
     private Stage menuStage;
+    private final List<TextButton> menuScreenButtons = new ArrayList<>();
     public MenuScreen(MindWeaver game, MyResourceManager resourceManager) {
 
         menuStage = new Stage(new ScreenViewport());
@@ -137,6 +141,16 @@ public class MenuScreen implements Screen {
     public Stage getMenuStage() {
         return this.menuStage;
     }
+
+    @Override
+    public void dispose() {
+        this.dispose();
+        menuStage.dispose();
+        for(TextButton button: menuScreenButtons) {
+            button.getSkin().dispose();
+        }
+
+    }
     @Override
     public void show() {
 
@@ -160,11 +174,4 @@ public class MenuScreen implements Screen {
     public void hide() {
 
     }
-
-    @Override
-    public void dispose() {
-
-    }
-
-
 }
