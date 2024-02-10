@@ -22,7 +22,6 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     protected Constants.ASTATE currAState;     // Current animation state
     protected Constants.ASTATE prevAState;     // Previous animation state
     protected final EnumSet<Constants.PSTATE> playerStates;       // Set of player states
-    protected PlayableCharacter bullseye;
     protected int floorContacts; // Number of contacts with the floor to avoid anomalies
     protected int airIterations;
     protected EnemyController enemyController;
@@ -34,7 +33,6 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         super(id, myResourceManager);
         this.timer = timer;
         this.world = world;
-        this.bullseye = null;
         this.util = utilityStation;
 
         lives = 3;
@@ -249,13 +247,6 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     public void removePlayerState(Constants.PSTATE state) { playerStates.remove(state); }
 
     public boolean isStateActive(Constants.PSTATE state) { return playerStates.contains(state); }
-
-    public void setBullseye(PlayableCharacter character) {
-        bullseye = character;
-        util.getCharacterCycle().updateCycle();
-    }
-
-    public PlayableCharacter getBullseye() { return bullseye; }
 
     public void increaseFloorContact() {
         if (floorContacts == 0) land();

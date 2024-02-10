@@ -100,7 +100,7 @@ public class B2WorldHandler {
 
         createObjects(level);
 
-        util.getVisionMap().initialize(util.getEntityHandler());
+        util.getVisionMap().initialize(util.getEntityHandler(), util.getCharacterCycle());
 
     }
 

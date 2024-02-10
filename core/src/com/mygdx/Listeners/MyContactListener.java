@@ -96,7 +96,6 @@ public class MyContactListener implements ContactListener {
             PlayableCharacter source = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("vision") ? fa.getBody() : fb.getBody());
             PlayableCharacter target = (PlayableCharacter) entityHandler.getEntity((Integer) (fa.getUserData().equals("vision") ? fb : fa).getUserData());
             visionMap.removeTarget(source, target);
-            if (source.getBullseye() != null && source.getBullseye().equals(target)) source.setBullseye(null);
             if (!visionMap.traceable(target)) target.looseControl();
         }
     }
