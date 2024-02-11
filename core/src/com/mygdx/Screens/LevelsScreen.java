@@ -15,7 +15,6 @@ import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MyResourceManager;
 
 public class LevelsScreen implements Screen {
-    private final MyResourceManager resourceManager;
     private final ScreenManager screenManager;
     private final float buttonWidth, buttonHeight;
     private TextButton playButton;
@@ -28,13 +27,9 @@ public class LevelsScreen implements Screen {
 
         Gdx.input.setInputProcessor(levelsStage);
 
-        this.resourceManager = resourceManager;
         this.screenManager = screenManager;
         this.buttonWidth = Constants.BUTTON_WIDTH;
         this.buttonHeight = Constants.BUTTON_HEIGHT;
-
-        resourceManager.loadTexture("StartAndMenuScreenButtons/UnclickedPlayButton.png", "UnclickedPlayButton");
-        resourceManager.loadTexture("StartAndMenuScreenButtons/ClickedPlayButton.png", "ClickedPlayButton");
 
         playSkin = new Skin();
 

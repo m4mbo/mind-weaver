@@ -4,11 +4,9 @@ import com.badlogic.gdx.Screen;
 import com.mygdx.Tools.MyResourceManager;
 
 public class LevelCompleteScreen implements Screen {
-    private final MyResourceManager resourceManager;
     private ScreenManager screenManager;
 
     public LevelCompleteScreen(MyResourceManager resourceManager, ScreenManager screenManager) {
-        this.resourceManager = resourceManager;
         this.screenManager = screenManager;
     }
     @Override

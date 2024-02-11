@@ -23,7 +23,6 @@ public class StartScreen implements Screen {
     private final MindWeaver game;
     private final ScreenManager screenManager;
     private Stage startStage;
-    private final MyResourceManager resourceManager;
     private TextButton playButton, settingsButton, exitButton;
     private Skin playSkin, settingsSkin, exitSkin;
     private FreeTypeFontGenerator generator;
@@ -41,7 +40,6 @@ public class StartScreen implements Screen {
         Gdx.input.setInputProcessor(startStage);
 
         this.game = game;
-        this.resourceManager = resourceManager;
         this.screenManager = screenManager;
         this.buttonWidth = Constants.BUTTON_WIDTH;
         this.buttonHeight = Constants.BUTTON_HEIGHT;

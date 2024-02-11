@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MenuScreen implements Screen {
-    private final MyResourceManager resourceManager;
     private final ScreenManager screenManager;
     private TextButton resumeButton, levelsButton, settingsButton, quitButton;
     private final float buttonWidth, buttonHeight;
@@ -31,7 +30,6 @@ public class MenuScreen implements Screen {
 
         Gdx.input.setInputProcessor(menuStage);
 
-        this.resourceManager = resourceManager;
         this.screenManager = screenManager;
         this.buttonWidth = Constants.BUTTON_WIDTH;
         this.buttonHeight = Constants.BUTTON_HEIGHT;
