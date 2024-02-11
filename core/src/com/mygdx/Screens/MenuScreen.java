@@ -18,22 +18,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MenuScreen implements Screen {
-    private final MindWeaver game;
+    private final MyResourceManager resourceManager;
+    private final ScreenManager screenManager;
     private TextButton resumeButton, levelsButton, settingsButton, quitButton;
     private final float buttonWidth, buttonHeight;
-    private final MyResourceManager resourceManager;
     private Stage menuStage;
     private final List<TextButton> menuScreenButtons = new ArrayList<>();
-    private ScreenManager screenManager;
 
-    public MenuScreen(MindWeaver game, MyResourceManager resourceManager) {
+    public MenuScreen(MyResourceManager resourceManager, ScreenManager screenManager) {
 
         menuStage = new Stage(new ScreenViewport());
 
         Gdx.input.setInputProcessor(menuStage);
 
-        this.game = game;
         this.resourceManager = resourceManager;
+        this.screenManager = screenManager;
         this.buttonWidth = Constants.BUTTON_WIDTH;
         this.buttonHeight = Constants.BUTTON_HEIGHT;
 
@@ -49,7 +48,7 @@ public class MenuScreen implements Screen {
         menuStage.draw();
 
     }
-    private void initMenuScreen(final MyResourceManager resourceManager) {
+    private void initMenuScreen(MyResourceManager resourceManager) {
         final Skin resumeSkin = new Skin();
         final Skin levelsSkin = new Skin();
         final Skin settingsSkin = new Skin();
@@ -93,8 +92,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 resumeButton.getStyle().down = resumeSkin.getDrawable("ClickedResumeButton");
                 resumeButton.setStyle(resumeButton.getStyle());
-                //Gdx.input.setInputProcessor(game.getGameInputProcessor());
-                //game.setScreen(new GameScreen(game, "everlush", resourceManager, game.getGameInputProcessor()));
+                screenManager.setCurrentScreen(ScreenManager.ScreenType.RESUME);
             }
         });
 
@@ -106,7 +104,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 levelsButton.getStyle().down = levelsSkin.getDrawable("ClickedLevelsButton");
                 levelsButton.setStyle(levelsButton.getStyle());
-                game.setScreen(new LevelsScreen(game, resourceManager));
+                screenManager.setCurrentScreen(ScreenManager.ScreenType.LEVELS);
             }
         });
 
@@ -118,7 +116,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 settingsButton.getStyle().down = settingsSkin.getDrawable("ClickedSettingsButton");
                 settingsButton.setStyle(settingsButton.getStyle());
-                game.setScreen(new SettingsScreen(game, resourceManager));
+                screenManager.setCurrentScreen(ScreenManager.ScreenType.SETTINGS);
             }
         });
 
@@ -130,7 +128,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 quitButton.getStyle().down = quitSkin.getDrawable("ClickedQuitButton");
                 quitButton.setStyle(quitButton.getStyle());
-                game.setScreen(new StartScreen(game, resourceManager));
+                screenManager.setCurrentScreen(ScreenManager.ScreenType.START);
             }
         });
 
@@ -140,18 +138,12 @@ public class MenuScreen implements Screen {
         menuStage.addActor(quitButton);
 
     }
-    public Stage getMenuStage() {
-        return this.menuStage;
-    }
-
     @Override
     public void dispose() {
-        this.dispose();
         menuStage.dispose();
         for(TextButton button: menuScreenButtons) {
             button.getSkin().dispose();
         }
-
     }
     @Override
     public void show() {

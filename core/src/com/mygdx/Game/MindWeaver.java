@@ -10,30 +10,26 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MindWeaver extends Game {
 	public SpriteBatch batch;
+	private ScreenManager screenManager;
 	private MyResourceManager resourceManager;
 	GameInputProcessor gameInputProcessor;
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
+		gameInputProcessor = new GameInputProcessor(this);
 		resourceManager = new MyResourceManager();
+		screenManager = new ScreenManager(this, resourceManager, gameInputProcessor);
 
 		// Input chain
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
-		gameInputProcessor = new GameInputProcessor(this);
 		inputMultiplexer.addProcessor(gameInputProcessor);
 
 		loadSprites();
 
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		//setScreen(new GameScreen(this, 1, resourceManager, gameInputProcessor));
-		setScreen(new StartScreen(this, resourceManager));
+		screenManager.setCurrentScreen(ScreenManager.ScreenType.START);
 	}
-
-	public GameInputProcessor getGameInputProcessor() {
-		return this.gameInputProcessor;
-	}
-
-
 	public void loadSprites() {
 		//Start Screen buttons
 		resourceManager.loadTexture("StartAndMenuScreenButtons/UnclickedPlayButton.png", "UnclickedPlayButton");

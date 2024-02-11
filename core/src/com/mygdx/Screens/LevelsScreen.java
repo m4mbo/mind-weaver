@@ -15,21 +15,21 @@ import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MyResourceManager;
 
 public class LevelsScreen implements Screen {
-    private final MindWeaver game;
     private final MyResourceManager resourceManager;
+    private final ScreenManager screenManager;
     private final float buttonWidth, buttonHeight;
     private TextButton playButton;
     private Skin playSkin;
     private Stage levelsStage;
 
-    public LevelsScreen(final MindWeaver game, final MyResourceManager resourceManager) {
+    public LevelsScreen(MyResourceManager resourceManager, ScreenManager screenManager) {
 
         levelsStage = new Stage(new ScreenViewport());
 
         Gdx.input.setInputProcessor(levelsStage);
 
-        this.game = game;
         this.resourceManager = resourceManager;
+        this.screenManager = screenManager;
         this.buttonWidth = Constants.BUTTON_WIDTH;
         this.buttonHeight = Constants.BUTTON_HEIGHT;
 
@@ -57,7 +57,7 @@ public class LevelsScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 playButton.getStyle().down = playSkin.getDrawable("ClickedPlayButton");
                 playButton.setStyle(playButton.getStyle());
-                game.setScreen(new GameScreen(game, 1, resourceManager, game.getGameInputProcessor()));
+                //game.setScreen(new GameScreen(game, 1, resourceManager, game.getGameInputProcessor()));
             }
         });
 

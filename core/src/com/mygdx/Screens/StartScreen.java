@@ -21,6 +21,7 @@ import java.util.List;
 
 public class StartScreen implements Screen {
     private final MindWeaver game;
+    private final ScreenManager screenManager;
     private Stage startStage;
     private final MyResourceManager resourceManager;
     private TextButton playButton, settingsButton, exitButton;
@@ -33,7 +34,7 @@ public class StartScreen implements Screen {
     private CharSequence text;
     private final List<TextButton> startScreenButtons = new ArrayList<>();
 
-    public StartScreen(MindWeaver game, MyResourceManager resourceManager) {
+    public StartScreen(MindWeaver game, MyResourceManager resourceManager, ScreenManager screenManager) {
 
         startStage = new Stage(new ScreenViewport());
 
@@ -41,6 +42,7 @@ public class StartScreen implements Screen {
 
         this.game = game;
         this.resourceManager = resourceManager;
+        this.screenManager = screenManager;
         this.buttonWidth = Constants.BUTTON_WIDTH;
         this.buttonHeight = Constants.BUTTON_HEIGHT;
 
@@ -59,13 +61,9 @@ public class StartScreen implements Screen {
         startStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         startStage.draw();
 
-        //for (Button button : startScreenButtons) {
-        //    game.batch.draw(button.getTexture(), button.getX(), button.getY(), button.getWidth(), button.getHeight());
-        //}
-
         game.batch.end();
     }
-    private void initStartScreen(final MyResourceManager resourceManager) {
+    private void initStartScreen(MyResourceManager resourceManager) {
 
         generator = new FreeTypeFontGenerator(Gdx.files.internal("KnightWarrior.ttf"));
         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -111,7 +109,7 @@ public class StartScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 playButton.getStyle().down = playSkin.getDrawable("ClickedPlayButton");
                 playButton.setStyle(playButton.getStyle());
-                game.setScreen(new LevelsScreen(game, resourceManager));
+                screenManager.setCurrentScreen(ScreenManager.ScreenType.LEVELS);
             }
         });
 
@@ -123,7 +121,7 @@ public class StartScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 settingsButton.getStyle().down = settingsSkin.getDrawable("ClickedSettingsButton");
                 settingsButton.setStyle(settingsButton.getStyle());
-                game.setScreen(new SettingsScreen(game, resourceManager));
+                screenManager.setCurrentScreen(ScreenManager.ScreenType.SETTINGS);
             }
         });
 
@@ -135,7 +133,7 @@ public class StartScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 exitButton.getStyle().down = exitSkin.getDrawable("ClickedExitButton");
                 exitButton.setStyle(exitButton.getStyle());
-                Gdx.app.exit();
+                screenManager.setCurrentScreen((ScreenManager.ScreenType.EXIT));
             }
         });
 
@@ -144,20 +142,14 @@ public class StartScreen implements Screen {
         startStage.addActor(exitButton);
 
     }
-    public List<TextButton> getStartScreenButtons() {
-        return startScreenButtons;
-    }
     @Override
     public void dispose() {
-        this.dispose();
         startStage.dispose();
         titleFont.dispose();
-        game.batch.dispose();
         generator.dispose();
         for (TextButton button : startScreenButtons) {
             button.getSkin().dispose();
         }
-
     }
     @Override
     public void show() {
