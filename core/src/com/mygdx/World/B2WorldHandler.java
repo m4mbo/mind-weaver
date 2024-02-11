@@ -6,15 +6,10 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.Objects.Door;
-import com.mygdx.Objects.Lever;
-import com.mygdx.Objects.Platform;
-import com.mygdx.Objects.PressurePlate;
-import com.mygdx.RoleCast.ArmourGoblin;
-import com.mygdx.RoleCast.BaseGoblin;
-import com.mygdx.RoleCast.Mage;
-import com.mygdx.RoleCast.Pet;
+import com.mygdx.Objects.*;
+import com.mygdx.RoleCast.*;
 import com.mygdx.Scenes.HUD;
+import java.util.LinkedList;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MyResourceManager;
@@ -36,6 +31,8 @@ public class B2WorldHandler {
         createPlayer(eidAllocator, timer, hud, level);
 
         util.getEntityHandler().addPet(new Pet(world, 100, 100, eidAllocator.getAndIncrement(), resourceManager, util));
+
+        if (level == 2) util.getEntityHandler().addEntity(new Merchant(460, 212, eidAllocator.getAndIncrement(), world, resourceManager));
 
         BodyDef bdef  = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -93,9 +90,15 @@ public class B2WorldHandler {
         }
 
         // Create armour goblins
-        for (RectangleMapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {
+        for (RectangleMapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = object.getRectangle();
             util.getEntityHandler().addEntity(new ArmourGoblin(rect.getX(), rect.getY(), world, eidAllocator.getAndIncrement(), timer, resourceManager, util));
+        }
+
+        // Create armour goblins
+        for (RectangleMapObject object : map.getLayers().get(7).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = object.getRectangle();
+            util.getObjectHandler().addObject(new Item(rect.getX(), rect.getY(), world, "papaya", util.getShaderHandler(), resourceManager));
         }
 
         createObjects(level);
@@ -105,28 +108,32 @@ public class B2WorldHandler {
     }
 
     public void createObjects(int level) {
-
+        Door door;
+        PressurePlate pressurePlate;
         switch (level) {
             case 1:
-                Door door = new Door(world, resourceManager, 567, 151.8f, 1);
+                door = new Door(world, resourceManager, 567, 151.8f, 1);
                 util.getObjectHandler().addObject(door);
-                PressurePlate pressurePlate = new PressurePlate(world, resourceManager, 598, 116.5f, 1);
+                pressurePlate = new PressurePlate(world, resourceManager, 598, 116.5f, 1);
                 pressurePlate.addReactable(door);
                 util.getObjectHandler().addObject(pressurePlate);
-//                Lever lever = new Lever(400, 140, world, resourceManager);
-//                LinkedList<Vector2> positions = new LinkedList<>();
-//                positions.add(new Vector2(400 / Constants.PPM, 110 / Constants.PPM));
-//                positions.add(new Vector2(500 / Constants.PPM, 110 / Constants.PPM));
-//                Platform platform = new Platform(positions, world, resourceManager);
-//                lever.addReactable(platform);
-//                util.getObjectHandler().addObject(lever);
-//                util.getObjectHandler().addObject(platform);
                 break;
             case 2:
-
+                door = new Door(world, resourceManager, 819, 278f, 2);
+                util.getObjectHandler().addObject(door);
+                pressurePlate = new PressurePlate(world, resourceManager, 749, 298.5f, 2);
+                pressurePlate.addReactable(door);
+                util.getObjectHandler().addObject(pressurePlate);
                 break;
             case 3:
-
+                Lever lever = new Lever(400, 140, world, resourceManager);
+                LinkedList<Vector2> positions = new LinkedList<>();
+                positions.add(new Vector2(400 / Constants.PPM, 110 / Constants.PPM));
+                positions.add(new Vector2(500 / Constants.PPM, 110 / Constants.PPM));
+                Platform platform = new Platform(positions, world, resourceManager);
+                lever.addReactable(platform);
+                util.getObjectHandler().addObject(lever);
+                util.getObjectHandler().addObject(platform);
                 break;
         }
     }

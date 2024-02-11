@@ -16,9 +16,13 @@ public class MindWeaver extends Game {
 	public HUD hud;		// HUD holding inventory will remain constant across all screens
 	@Override
 	public void create () {
+
 		batch = new SpriteBatch();
 		resourceManager = new MyResourceManager();
-		hud = new HUD();
+
+		loadSprites();
+
+		hud = new HUD(batch, resourceManager);
 
 		// Input chain
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
@@ -27,10 +31,8 @@ public class MindWeaver extends Game {
 		inputMultiplexer.addProcessor(gameInputProcessor);
 		inputMultiplexer.addProcessor(startInputProcessor);
 
-		loadSprites();
-
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		setScreen(new GameScreen(this, 1, resourceManager, gameInputProcessor));
+		setScreen(new GameScreen(this, 2, resourceManager, gameInputProcessor));
 	}
 
 	public void loadSprites() {
@@ -79,6 +81,15 @@ public class MindWeaver extends Game {
 
 		//Pet
 		resourceManager.loadTexture("Items/pet.png", "pet");
+
+		//Merchant
+		resourceManager.loadTexture("Merchant/merchant_idle.png", "merchant_idle");
+
+		//HUD
+		resourceManager.loadTexture("HUD/life.png", "life");
+		resourceManager.loadTexture("HUD/pause.png", "pause");
+		resourceManager.loadTexture("HUD/inventory.png", "inventory");
+
 	}
 
 	@Override

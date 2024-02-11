@@ -13,6 +13,7 @@ public class AdjacencyList<E> {
         if (vertex == null) return;
         adjacencyList.put(vertex, new ArrayList<E>());
     }
+
     public void removeVertex(E vertex) {
         adjacencyList.remove(vertex);
         for (List<E> edges : adjacencyList.values()) {
@@ -105,7 +106,6 @@ public class AdjacencyList<E> {
         return vertices;
     }
 
-
     // Get all vertices pointing to the given vertex
     public List<E> getVerticesPointingTo(E destination) {
         List<E> verticesPointingTo = new ArrayList<>();
@@ -121,18 +121,5 @@ public class AdjacencyList<E> {
 
     public LinkedList<E> getNeighbours(E source) {
         return new LinkedList<E>(adjacencyList.get(source));
-    }
-
-    public void printAdjacencyList() {
-        for (Map.Entry<E, List<E>> entry : adjacencyList.entrySet()) {
-            Object vertex = entry.getKey();
-            List<E> neighbors = entry.getValue();
-
-            System.out.print("Vertex " + vertex + " is connected to: ");
-            for (Object neighbor : neighbors) {
-                System.out.print(neighbor + " ");
-            }
-            System.out.println();
-        }
     }
 }

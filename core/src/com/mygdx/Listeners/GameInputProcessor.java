@@ -33,6 +33,11 @@ public class GameInputProcessor implements InputProcessor {
 
         if (character.isStateActive(PSTATE.DYING)) return true;
 
+        if (game.hud.standBy()) {
+            if (keycode == Input.Keys.I) game.hud.removeInventory();
+            return true;
+        }
+
         switch (keycode) {
             case Input.Keys.UP:
             case Input.Keys.SPACE:
@@ -64,6 +69,9 @@ public class GameInputProcessor implements InputProcessor {
             case Input.Keys.X:
                 character.interact();
                 break;
+            case Input.Keys.I:
+                game.hud.pushInventory();
+                break;
             default:
                 break;
         }
@@ -78,6 +86,8 @@ public class GameInputProcessor implements InputProcessor {
         PlayableCharacter character = characterCycle.getCurrentCharacter();
         
         if (character.isStateActive(PSTATE.DYING)) return true;
+
+        if (game.hud.standBy()) return true;
 
         switch (keycode) {
             case Input.Keys.UP:

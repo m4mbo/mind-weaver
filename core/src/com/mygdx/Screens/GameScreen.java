@@ -16,6 +16,7 @@ import com.mygdx.Game.MindWeaver;
 import com.mygdx.Graphics.LightManager;
 import com.mygdx.Graphics.ParticleHandler;
 import com.mygdx.Graphics.ShaderHandler;
+import com.mygdx.Scenes.HUD;
 import com.mygdx.Tools.*;
 import com.mygdx.World.*;
 import com.mygdx.Listeners.MyContactListener;
@@ -80,7 +81,7 @@ public class GameScreen implements Screen {
 
         inputProcessor.setGameVariables(characterCycle);
 
-        world.setContactListener(new MyContactListener(entityHandler, visionMap));
+        world.setContactListener(new MyContactListener(util, game.hud));
         b2dr = new Box2DDebugRenderer();
         new B2WorldHandler(world, map, resourceManager, timer, eidAllocator, util, level, game.hud);     //Creating world
         lightManager.setDim(0.6f);

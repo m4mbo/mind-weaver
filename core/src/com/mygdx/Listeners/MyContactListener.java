@@ -3,7 +3,10 @@ package com.mygdx.Listeners;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Objects.Interactable;
+import com.mygdx.Objects.Item;
 import com.mygdx.Objects.Platform;
+import com.mygdx.Scenes.HUD;
+import com.mygdx.Tools.UtilityStation;
 import com.mygdx.World.EntityHandler;
 import com.mygdx.World.VisionMap;
 import com.mygdx.Helpers.Constants;
@@ -15,12 +18,12 @@ public class MyContactListener implements ContactListener {
 
     private Fixture fa;
     private Fixture fb;
-    private final EntityHandler entityHandler;
-    private final VisionMap visionMap;
+    private UtilityStation util;
+    private HUD hud;
 
-    public MyContactListener(EntityHandler entityHandler, VisionMap visionMap) {
-        this.entityHandler = entityHandler;
-        this.visionMap = visionMap;
+    public MyContactListener(UtilityStation util, HUD hud) {
+        this.util = util;
+        this.hud = hud;
     }
 
     @Override
@@ -30,9 +33,15 @@ public class MyContactListener implements ContactListener {
 
         PlayableCharacter character;
 
+        EntityHandler entityHandler = util.getEntityHandler();
+
         if (fa.getUserData() instanceof Interactable || fb.getUserData() instanceof Interactable) {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData() instanceof Interactable ? fb.getBody() : fa.getBody());
             character.addInteractable((Interactable) (fa.getUserData() instanceof Interactable ? fa.getUserData() : fb.getUserData()));
+        } else if (fa.getUserData() instanceof Item || fb.getUserData() instanceof Item) {
+            Item item = (Item) (fa.getUserData() instanceof Item ? fa.getUserData() : fb.getUserData());
+            util.getObjectHandler().removeObject(item);
+            hud.addItem(item);
         } else if (fa.getUserData() instanceof Platform || fb.getUserData() instanceof Platform) {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData() instanceof Platform ? fb.getBody() : fa.getBody());
             character.increaseFloorContact();
@@ -64,7 +73,7 @@ public class MyContactListener implements ContactListener {
         } else if (fa.getUserData().equals("vision") || fb.getUserData().equals("vision")) {
             PlayableCharacter source = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("vision") ? fa.getBody() : fb.getBody());
             PlayableCharacter target = (PlayableCharacter) entityHandler.getEntity((Integer) (fa.getUserData().equals("vision") ? fb : fa).getUserData());
-            visionMap.addTarget(source, target);
+            util.getVisionMap().addTarget(source, target);
         }
     }
 
@@ -74,6 +83,8 @@ public class MyContactListener implements ContactListener {
         if (handleFixtures(contact)) return;
 
         PlayableCharacter character;
+
+        EntityHandler entityHandler = util.getEntityHandler();
 
         if (fa.getUserData() instanceof Interactable || fb.getUserData() instanceof Interactable) {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData() instanceof Interactable ? fb.getBody() : fa.getBody());
@@ -95,8 +106,8 @@ public class MyContactListener implements ContactListener {
         } else if (fa.getUserData().equals("vision") || fb.getUserData().equals("vision")) {
             PlayableCharacter source = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("vision") ? fa.getBody() : fb.getBody());
             PlayableCharacter target = (PlayableCharacter) entityHandler.getEntity((Integer) (fa.getUserData().equals("vision") ? fb : fa).getUserData());
-            visionMap.removeTarget(source, target);
-            if (!visionMap.traceable(target)) target.looseControl();
+            util.getVisionMap().removeTarget(source, target);
+            if (!util.getVisionMap().traceable(target)) target.looseControl();
         }
     }
 

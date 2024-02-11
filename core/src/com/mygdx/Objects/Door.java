@@ -29,7 +29,6 @@ public class Door extends Reactable {
 
         setAnimation(TextureRegion.split(resourceManager.getTexture(level == 1 ? "door_closed" : "door_closed2"), 13, 28)[0], 1/9f, true, 1f);
 
-        // Creating two bodies for spring joint
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, (y + 2) / Constants.PPM);
         bdef.type = BodyDef.BodyType.StaticBody;
@@ -40,7 +39,7 @@ public class Door extends Reactable {
         polygonShape = new PolygonShape();
 
         //Create body fixture
-        polygonShape.setAsBox(8 / Constants.PPM, height / Constants.PPM, new Vector2(0,0), 0);
+        polygonShape.setAsBox(6 / Constants.PPM, height / Constants.PPM, new Vector2(0,0), 0);
         fdef.shape = polygonShape;
         fdef.filter.categoryBits = Constants.BIT_GROUND;
         b2body.createFixture(fdef).setUserData("door");
@@ -76,7 +75,7 @@ public class Door extends Reactable {
         if (!b2body.getFixtureList().isEmpty()) b2body.destroyFixture(b2body.getFixtureList().get(0));
 
         // Creating new fixture based on current height
-        polygonShape.setAsBox(8 / Constants.PPM, currHeight / Constants.PPM, new Vector2(0, (currHeight - height) / Constants.PPM), 0);
+        polygonShape.setAsBox(6 / Constants.PPM, currHeight / Constants.PPM, new Vector2(0, (currHeight - height) / Constants.PPM), 0);
         fdef.shape = polygonShape;
         b2body.createFixture(fdef).setUserData("door");
     }

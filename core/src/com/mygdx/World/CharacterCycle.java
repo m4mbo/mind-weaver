@@ -20,7 +20,7 @@ public class CharacterCycle {
     public void initialize(PlayableCharacter currCharacter) { characters.add(currCharacter); }
 
     public void updateCycle() {
-        characters = new ArrayList<>(visionMap.getBullseyeStream());
+        characters = visionMap.getBullseyeStream();
         if (characters.size() >= currentIndex) {
             currentIndex = currentIndex % characters.size(); // Adjust the current index after updating
         }
