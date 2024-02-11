@@ -6,10 +6,12 @@ import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.Helpers.AdjacencyList;
 import com.mygdx.Helpers.Constants;
+import com.mygdx.RoleCast.ArmourGoblin;
 import com.mygdx.RoleCast.Entity;
 import com.mygdx.RoleCast.PlayableCharacter;
 import com.mygdx.RoleCast.Mage;
 import com.mygdx.Tools.ShapeDrawer;
+import com.mygdx.Scenes.HUD;
 import java.util.*;
 
 public class VisionMap {
@@ -23,15 +25,17 @@ public class VisionMap {
     private final World world;
     private final ShapeDrawer shapeDrawer;
     private CharacterCycle characterCycle;
+    private HUD hud;
     private PlayableCharacter mage;
 
-    public VisionMap(World world, ShapeDrawer shapeDrawer) {
+    public VisionMap(World world, ShapeDrawer shapeDrawer, HUD hud) {
         collision = true;
         bullseyeChange = true;
         this.world = world;
         this.shapeDrawer = shapeDrawer;
         this.targetMap = new AdjacencyList<>();
         this.bullseyeMap = new AdjacencyList<>();
+        this.hud = hud;
     }
 
     public void initialize(EntityHandler entityHandler, CharacterCycle characterCycle) {
@@ -77,8 +81,16 @@ public class VisionMap {
     }
 
     public void attemptConnection(PlayableCharacter source) {
+
+        boolean armourUnlocked = hud.isTier2Unlocked();
+
+        if (source instanceof ArmourGoblin && !armourUnlocked) return;
+
         LinkedList<PlayableCharacter> targets = targetMap.getNeighbours(source);
         for (PlayableCharacter target : targets) {
+
+            if (target instanceof ArmourGoblin && !armourUnlocked) continue;
+
             if (sendSignal(source, target)) {
                 if (source instanceof Mage || traceable(mage, source)) {
                     if (bullseyeMap.addEdge(source, target)) {

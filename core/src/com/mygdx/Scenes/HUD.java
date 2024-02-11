@@ -15,10 +15,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.Graphics.ShaderHandler;
 import com.mygdx.Helpers.FancyFontHelper;
 import com.mygdx.Objects.Item;
 import com.mygdx.RoleCast.Mage;
+import com.mygdx.Tools.ColorGenerator;
 import com.mygdx.Tools.MyResourceManager;
+import com.mygdx.Tools.ShapeDrawer;
+
 import java.util.LinkedList;
 
 public class HUD {
@@ -28,16 +32,21 @@ public class HUD {
     private Viewport viewport;
     private MyResourceManager resourceManager;
     private InventoryActor inventoryActor;
+    private ShapeDrawer shapeDrawer;
     private boolean standBy;
+    private boolean tier2Unlocked;
 
     public HUD(SpriteBatch batch, MyResourceManager resourceManager) {
         this.resourceManager = resourceManager;
 
+        this.shapeDrawer = new ShapeDrawer(new ShaderHandler(new ColorGenerator()), resourceManager);
+
         inventory = new LinkedList<>();
-        viewport = new FitViewport(2000, 1000, new OrthographicCamera());
+        viewport = new FitViewport(3840, 2160, new OrthographicCamera());
         stage = new Stage(viewport, batch);
 
         standBy = false;
+        tier2Unlocked = false;
 
         stage.addActor(new ButtonActor(resourceManager.getTexture("pause"), resourceManager.getTexture("inventory")));
 
@@ -49,6 +58,7 @@ public class HUD {
     }
 
     public void addItem(Item item) {
+        if (item.getName().equals("bug")) tier2Unlocked = true;
         inventory.add(item);
     }
 
@@ -75,6 +85,10 @@ public class HUD {
         return standBy;
     }
 
+    public boolean isTier2Unlocked() {
+        return tier2Unlocked;
+    }
+
     private class LifeActor extends Actor {
         private final TextureRegion region;
         private final Mage player;
@@ -88,14 +102,13 @@ public class HUD {
         public void draw(Batch batch, float parentAlpha) {
             Color color = getColor();
             batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-            float x = 10;
-            float y = viewport.getWorldHeight() - 110;
+            float x = 20;
+            float y = viewport.getWorldHeight() - 240;
 
             for (int i = 0; i < player.getLives(); i++) {
-                batch.draw(region, x, y, 100, 100);
-                x += 110;
+                batch.draw(region, x, y, 230, 180);
+                x += 250;
             }
-
         }
     }
 
@@ -113,10 +126,9 @@ public class HUD {
             Color color = getColor();
             batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
 
-            batch.draw(region1, viewport.getWorldWidth() - 110, viewport.getWorldHeight() - 110, 100, 100);
+            batch.draw(region1, viewport.getWorldWidth() - 310, viewport.getWorldHeight() - 210, 300, 180);
 
-            batch.draw(region2, viewport.getWorldWidth() - 220, viewport.getWorldHeight() - 110, 50, 100);
-
+            batch.draw(region2, viewport.getWorldWidth() - 460, viewport.getWorldHeight() - 210, 150, 180);
         }
     }
 
@@ -158,6 +170,12 @@ public class HUD {
 
             Color color = getColor();
             batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+
+            shapeDrawer.drawRectangle(viewport.getWorldHeight(), viewport.getWorldWidth(), 0, 0, "translucent");
+
+            batch.end();
+            shapeDrawer.render((SpriteBatch) batch);
+            batch.begin();
 
             super.draw(batch, parentAlpha);
         }

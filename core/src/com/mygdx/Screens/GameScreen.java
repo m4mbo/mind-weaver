@@ -45,16 +45,7 @@ public class GameScreen implements Screen {
         TmxMapLoader mapLoader = new TmxMapLoader();
         TiledMap map = null;
 
-        switch (level) {
-            case 1:
-                map = mapLoader.load("Tilemaps/level1.tmx");
-                break;
-            case 2:
-                map = mapLoader.load("Tilemaps/level2.tmx");
-                break;
-            default:
-                break;
-        }
+        map = mapLoader.load("Tilemaps/level" + level + ".tmx");
 
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
         world = new World(new Vector2(0, -Constants.G), true);
@@ -68,10 +59,10 @@ public class GameScreen implements Screen {
 
         // Tools and handlers
         ShaderHandler shaderHandler = new ShaderHandler(colorGenerator);
-        shapeDrawer = new ShapeDrawer(shaderHandler);
+        shapeDrawer = new ShapeDrawer(shaderHandler, resourceManager);
         LightManager lightManager = new LightManager(world);
         ObjectHandler objectHandler = new ObjectHandler();
-        VisionMap visionMap =  new VisionMap(world, shapeDrawer);
+        VisionMap visionMap =  new VisionMap(world, shapeDrawer, game.hud);
         CharacterCycle characterCycle = new CharacterCycle(visionMap, colorGenerator);
         EntityHandler entityHandler = new EntityHandler(characterCycle, shaderHandler, visionMap);
         ParticleHandler particleHandler = new ParticleHandler();
@@ -91,6 +82,7 @@ public class GameScreen implements Screen {
     public void show() {  }
 
     public void update(float delta) {
+        if (game.hud.standBy()) return;
         util.update(delta, gameCam);
         timer.update(delta);
         world.step(1/60f, 6, 2);

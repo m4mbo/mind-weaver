@@ -70,6 +70,7 @@ public class GameInputProcessor implements InputProcessor {
                 character.interact();
                 break;
             case Input.Keys.I:
+                character.setMovementState(MSTATE.HSTILL);
                 game.hud.pushInventory();
                 break;
             default:

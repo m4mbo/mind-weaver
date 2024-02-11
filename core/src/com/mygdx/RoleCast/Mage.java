@@ -32,19 +32,12 @@ public class Mage extends PlayableCharacter {
         PolygonShape polygonShape = new PolygonShape();
 
         //Create body fixture
-        polygonShape.setAsBox(7 / Constants.PPM, 8 / Constants.PPM, new Vector2(0, 0), 0);
+        polygonShape.setAsBox(5f / Constants.PPM, 8 / Constants.PPM, new Vector2(0, 0), 0);
         fdef.shape = polygonShape;
         fdef.friction = 0;
         fdef.filter.categoryBits = Constants.BIT_MAGE;
-        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_GOBLIN | Constants.BIT_FEET | Constants.BIT_INTERACT;
+        fdef.filter.maskBits = Constants.BIT_GROUND | Constants.BIT_GOBLIN | Constants.BIT_FEET | Constants.BIT_INTERACT | Constants.BIT_HAZARD;
         b2body.createFixture(fdef).setUserData(id);
-
-        //Create player hitbox
-        polygonShape.setAsBox(8 / Constants.PPM, 9 / Constants.PPM, new Vector2(0, 0), 0);
-        fdef.shape = polygonShape;
-        fdef.filter.maskBits = Constants.BIT_HAZARD;
-        fdef.isSensor = true;
-        b2body.createFixture(fdef).setUserData("player_hb");
 
         //Create mage range of vision
         circleShape.setRadius(150 / Constants.PPM);
@@ -55,21 +48,21 @@ public class Mage extends PlayableCharacter {
         b2body.createFixture(fdef).setUserData("vision");
 
         //Create right sensor
-        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(7 / Constants.PPM, 0), 0);
+        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(5 / Constants.PPM, 0), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
         fdef.filter.maskBits = Constants.BIT_GROUND;
         b2body.createFixture(fdef).setUserData("rightSensor");
 
         //Create left sensor
-        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(-7 / Constants.PPM, 0), 0);
+        polygonShape.setAsBox(1 / Constants.PPM, 3 / Constants.PPM, new Vector2(-5 / Constants.PPM, 0), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
         fdef.filter.maskBits = Constants.BIT_GROUND;
         b2body.createFixture(fdef).setUserData("leftSensor");
 
         //Create bottom sensor
-        polygonShape.setAsBox(6f / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -8 / Constants.PPM), 0);
+        polygonShape.setAsBox(4f / Constants.PPM, 1 / Constants.PPM, new Vector2(0, -8 / Constants.PPM), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
         fdef.filter.categoryBits = Constants.BIT_FEET;

@@ -15,7 +15,7 @@ public class Door extends Reactable {
     private final PolygonShape polygonShape;
     private final int level;
 
-    public Door(World world, MyResourceManager resourceManager, float x, float y, int level) {
+    public Door(World world, MyResourceManager resourceManager, float x, float y, int level, boolean isOpen) {
 
         super(world, resourceManager);
 
@@ -24,10 +24,12 @@ public class Door extends Reactable {
         height = 14;
         currHeight = height;
 
-        currAState = Constants.ASTATE.CLOSED;
-        prevAState = Constants.ASTATE.CLOSED;
+        currAState = isOpen ? Constants.ASTATE.OPEN : Constants.ASTATE.CLOSED;
+        prevAState = currAState;
 
-        setAnimation(TextureRegion.split(resourceManager.getTexture(level == 1 ? "door_closed" : "door_closed2"), 13, 28)[0], 1/9f, true, 1f);
+        open = isOpen;
+
+        setAnimation(TextureRegion.split(resourceManager.getTexture(isOpen ? (level == 1 ? "door_open" : "door_open2") : (level == 1 ? "door_closed" : "door_closed2")), 13, 28)[0], 1/9f, true, 1f);
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, (y + 2) / Constants.PPM);

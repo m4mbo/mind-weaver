@@ -32,7 +32,7 @@ public class MindWeaver extends Game {
 		inputMultiplexer.addProcessor(startInputProcessor);
 
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		setScreen(new GameScreen(this, 2, resourceManager, gameInputProcessor));
+		setScreen(new GameScreen(this, 3, resourceManager, gameInputProcessor));
 	}
 
 	public void loadSprites() {
@@ -89,6 +89,10 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("HUD/life.png", "life");
 		resourceManager.loadTexture("HUD/pause.png", "pause");
 		resourceManager.loadTexture("HUD/inventory.png", "inventory");
+
+		//Shapes
+		resourceManager.loadTexture("Shapes/purple_pixel.png", "purple_pixel");
+		resourceManager.loadTexture("Shapes/translucent_pixel.png", "translucent_pixel");
 
 	}
 

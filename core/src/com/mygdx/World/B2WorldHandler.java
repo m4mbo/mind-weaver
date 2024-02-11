@@ -4,12 +4,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Objects.*;
 import com.mygdx.RoleCast.*;
 import com.mygdx.Scenes.HUD;
-import java.util.LinkedList;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MyResourceManager;
@@ -29,8 +27,6 @@ public class B2WorldHandler {
         this.util = util;
 
         createPlayer(eidAllocator, timer, hud, level);
-
-        util.getEntityHandler().addPet(new Pet(world, 100, 100, eidAllocator.getAndIncrement(), resourceManager, util));
 
         if (level == 2) util.getEntityHandler().addEntity(new Merchant(460, 212, eidAllocator.getAndIncrement(), world, resourceManager));
 
@@ -108,32 +104,45 @@ public class B2WorldHandler {
     }
 
     public void createObjects(int level) {
-        Door door;
+        Door door1;
+        Door door2;
         PressurePlate pressurePlate;
         switch (level) {
             case 1:
-                door = new Door(world, resourceManager, 567, 151.8f, 1);
-                util.getObjectHandler().addObject(door);
+                door1 = new Door(world, resourceManager, 567, 151.8f, 1, false);
+                util.getObjectHandler().addObject(door1);
                 pressurePlate = new PressurePlate(world, resourceManager, 598, 116.5f, 1);
-                pressurePlate.addReactable(door);
+                pressurePlate.addReactable(door1);
                 util.getObjectHandler().addObject(pressurePlate);
                 break;
             case 2:
-                door = new Door(world, resourceManager, 819, 278f, 2);
-                util.getObjectHandler().addObject(door);
+                door1 = new Door(world, resourceManager, 819, 278f, 2, false);
+                util.getObjectHandler().addObject(door1);
                 pressurePlate = new PressurePlate(world, resourceManager, 749, 298.5f, 2);
-                pressurePlate.addReactable(door);
+                pressurePlate.addReactable(door1);
                 util.getObjectHandler().addObject(pressurePlate);
                 break;
             case 3:
-                Lever lever = new Lever(400, 140, world, resourceManager);
-                LinkedList<Vector2> positions = new LinkedList<>();
-                positions.add(new Vector2(400 / Constants.PPM, 110 / Constants.PPM));
-                positions.add(new Vector2(500 / Constants.PPM, 110 / Constants.PPM));
-                Platform platform = new Platform(positions, world, resourceManager);
-                lever.addReactable(platform);
-                util.getObjectHandler().addObject(lever);
-                util.getObjectHandler().addObject(platform);
+
+                door1 = new Door(world, resourceManager, 1511, 236f, 1, true);
+                util.getObjectHandler().addObject(door1);
+                door2 = new Door(world, resourceManager, 1630, 320f, 1, false);
+                util.getObjectHandler().addObject(door2);
+
+                pressurePlate = new PressurePlate(world, resourceManager, 1626, 256.5f, 1);
+                pressurePlate.addReactable(door1);
+                pressurePlate.addReactable(door2);
+                util.getObjectHandler().addObject(pressurePlate);
+
+
+//                Lever lever = new Lever(400, 140, world, resourceManager);
+//                LinkedList<Vector2> positions = new LinkedList<>();
+//                positions.add(new Vector2(400 / Constants.PPM, 110 / Constants.PPM));
+//                positions.add(new Vector2(500 / Constants.PPM, 110 / Constants.PPM));
+//                Platform platform = new Platform(positions, world, resourceManager);
+//                lever.addReactable(platform);
+//                util.getObjectHandler().addObject(lever);
+//                util.getObjectHandler().addObject(platform);
                 break;
         }
     }
@@ -145,12 +154,15 @@ public class B2WorldHandler {
         switch (level) {
             case 1:
                 mage = new Mage(250, 140, world, eidAllocator.getAndIncrement(), timer, resourceManager, util);
+                util.getEntityHandler().addPet(new Pet(world, 250, 300, eidAllocator.getAndIncrement(), resourceManager, util));
                 break;
             case 2:
                 mage = new Mage(437, 212, world, eidAllocator.getAndIncrement(), timer, resourceManager, util);
+                util.getEntityHandler().addPet(new Pet(world, 437, 212, eidAllocator.getAndIncrement(), resourceManager, util));
                 break;
             case 3:
-
+                mage = new Mage(1078, 359, world, eidAllocator.getAndIncrement(), timer, resourceManager, util);
+                util.getEntityHandler().addPet(new Pet(world, 1078, 359, eidAllocator.getAndIncrement(), resourceManager, util));
                 break;
             default:
                 break;
