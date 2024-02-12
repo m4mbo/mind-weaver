@@ -24,12 +24,14 @@ public class MenuScreen implements Screen {
     private Stage stage;
     private final List<TextButton> menuScreenButtons = new ArrayList<>();
 
-    public MenuScreen(MyResourceManager resourceManager, ScreenManager screenManager, Stage stage) {
+    public MenuScreen(MyResourceManager resourceManager, ScreenManager screenManager) {
 
         this.screenManager = screenManager;
-        this.stage = stage;
+        this.stage = new Stage(new ScreenViewport());
         this.buttonWidth = Constants.BUTTON_WIDTH;
         this.buttonHeight = Constants.BUTTON_HEIGHT;
+
+        Gdx.input.setInputProcessor(stage);
 
         initMenuScreen(resourceManager);
     }

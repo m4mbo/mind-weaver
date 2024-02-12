@@ -35,7 +35,7 @@ public class GameScreen implements Screen {
     private final Box2DDebugRenderer b2dr;
     private final UtilityStation util;
     private final ShapeDrawer shapeDrawer;
-    public GameScreen(MindWeaver game, int level, MyResourceManager resourceManager, GameInputProcessor inputProcessor) {
+    public GameScreen(MindWeaver game, int level, MyResourceManager resourceManager, ScreenManager screenManager) {
 
         this.game = game;
 
@@ -67,10 +67,10 @@ public class GameScreen implements Screen {
         EntityHandler entityHandler = new EntityHandler(characterCycle, shaderHandler, visionMap);
         ParticleHandler particleHandler = new ParticleHandler();
 
+        Gdx.input.setInputProcessor(new GameInputProcessor(game, screenManager, characterCycle));
+
         // Creating station
         util = new UtilityStation(entityHandler, objectHandler, characterCycle, visionMap, particleHandler, shaderHandler, lightManager);
-
-        inputProcessor.setGameVariables(characterCycle);
 
         world.setContactListener(new MyContactListener(util, game.hud));
         b2dr = new Box2DDebugRenderer();

@@ -1,8 +1,6 @@
 package com.mygdx.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -14,22 +12,24 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.Game.MindWeaver;
 import com.mygdx.Helpers.Constants;
-import com.mygdx.Listeners.LevelsInputProcessor;
 import com.mygdx.Tools.MyResourceManager;
 
 public class LevelsScreen implements Screen {
     private final ScreenManager screenManager;
-    private final LevelsInputProcessor inputProcessor;
     private final float buttonWidth, buttonHeight;
     private TextButton playButton;
     private Skin playSkin;
+    private final Stage stage;
 
-    public LevelsScreen(MyResourceManager resourceManager, ScreenManager screenManager, LevelsInputProcessor inputProcessor) {
+    public LevelsScreen(MindWeaver game, MyResourceManager resourceManager, final ScreenManager screenManager) {
 
         this.screenManager = screenManager;
-        this.inputProcessor = inputProcessor;
         this.buttonWidth = Constants.BUTTON_WIDTH;
         this.buttonHeight = Constants.BUTTON_HEIGHT;
+
+        stage = new Stage(new ScreenViewport());
+
+        Gdx.input.setInputProcessor(stage);
 
         playSkin = new Skin();
 
@@ -54,15 +54,22 @@ public class LevelsScreen implements Screen {
                 playButton.setStyle(playButton.getStyle());
 
                 screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_1);
-                //game.setScreen(new GameScreen(game, 1, resourceManager, game.getGameInputProcessor()));
             }
         });
 
-        levelsStage.addActor(playButton);
+        stage.addActor(playButton);
     }
 
     @Override
     public void show() {
+
+    }
+
+    public void update(float delta) {
+
+    }
+
+    public void handleInput() {
 
     }
 
@@ -71,12 +78,9 @@ public class LevelsScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        levelsStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        levelsStage.draw();
     }
     @Override
     public void dispose() {
-        levelsStage.dispose();
     }
 
     @Override

@@ -18,13 +18,9 @@ public class GameInputProcessor implements InputProcessor {
     private final MindWeaver game;
     private final ScreenManager screenManager;
 
-    public GameInputProcessor(MindWeaver game, ScreenManager screenManager) {
+    public GameInputProcessor(MindWeaver game, ScreenManager screenManager, CharacterCycle characterCycle) {
         this.game = game;
         this.screenManager = screenManager;
-    }
-
-    // Function called only by the game screen
-    public void setGameVariables(CharacterCycle characterCycle) {
         this.characterCycle = characterCycle;
     }
 

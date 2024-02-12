@@ -34,15 +34,16 @@ public class StartScreen implements Screen {
     private CharSequence text;
     private final List<TextButton> startScreenButtons = new ArrayList<>();
 
-    public StartScreen(MindWeaver game, MyResourceManager resourceManager, ScreenManager screenManager, Stage stage) {
-
-        stage.clear();
+    public StartScreen(MindWeaver game, MyResourceManager resourceManager, ScreenManager screenManager) {
 
         this.game = game;
         this.screenManager = screenManager;
-        this.stage = stage;
         this.buttonWidth = Constants.BUTTON_WIDTH;
         this.buttonHeight = Constants.BUTTON_HEIGHT;
+        this.stage = new Stage(new ScreenViewport());
+
+        Gdx.input.setInputProcessor(stage);
+
 
         initStartScreen(resourceManager);
     }

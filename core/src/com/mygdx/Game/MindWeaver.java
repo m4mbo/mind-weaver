@@ -1,13 +1,7 @@
 package com.mygdx.Game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.Helpers.Constants;
-import com.mygdx.Listeners.GameInputProcessor;
 import com.mygdx.Scenes.HUD;
-import com.mygdx.Listeners.LevelsInputProcessor;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Screens.*;
 import com.badlogic.gdx.Game;
@@ -18,34 +12,17 @@ public class MindWeaver extends Game {
 	private ScreenManager screenManager;
 	private MyResourceManager resourceManager;
 	public HUD hud;		// HUD holding inventory will remain constant across all screens
-	private GameInputProcessor gameInputProcessor;
-	private LevelsInputProcessor levelsInputProcessor;
-	private Stage startStage;
-	private Stage menuStage;
+
 	@Override
 	public void create () {
 
 		batch = new SpriteBatch();
 		resourceManager = new MyResourceManager();
-		startStage = new Stage(new ScreenViewport());
-		menuStage = new Stage(new ScreenViewport());
-		screenManager = new ScreenManager(this, resourceManager, startStage, menuStage);
-		gameInputProcessor = new GameInputProcessor(this, screenManager);
-		levelsInputProcessor = new LevelsInputProcessor(this, resourceManager, screenManager);
-		screenManager.setGameInputProcessor(gameInputProcessor);
+		screenManager = new ScreenManager(this, resourceManager);
 
 		loadSprites();
 
 		hud = new HUD(batch, resourceManager);
-
-		// Input chain
-		InputMultiplexer inputMultiplexer = new InputMultiplexer();
-		inputMultiplexer.addProcessor(gameInputProcessor);
-		inputMultiplexer.addProcessor(levelsInputProcessor);
-		inputMultiplexer.addProcessor(startStage);
-		inputMultiplexer.addProcessor(menuStage);
-
-		Gdx.input.setInputProcessor(inputMultiplexer);
 
 		screenManager.pushScreen(Constants.SCREEN_TYPE.START);
 	}
