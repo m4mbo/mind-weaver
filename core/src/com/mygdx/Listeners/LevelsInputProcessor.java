@@ -13,7 +13,7 @@ public class LevelsInputProcessor implements InputProcessor {
     public LevelsInputProcessor(MindWeaver game, MyResourceManager resourceManager, ScreenManager screenManager) {
         this.game = game;
         this.resourceManager = resourceManager;
-        this.screenManager =screenManager;
+        this.screenManager = screenManager;
     }
     @Override
     public boolean keyDown(int keycode) {

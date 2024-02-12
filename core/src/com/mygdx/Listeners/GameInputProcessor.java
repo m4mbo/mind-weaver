@@ -65,6 +65,7 @@ public class GameInputProcessor implements InputProcessor {
                 break;
             case Input.Keys.ESCAPE:
                 screenManager.setCurrentScreen(ScreenManager.ScreenType.MENU);
+                break;
             default:
                 break;
         }
