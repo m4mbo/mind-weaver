@@ -3,6 +3,7 @@ package com.mygdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.mygdx.Listeners.GameInputProcessor;
+import com.mygdx.Listeners.LevelsInputProcessor;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Screens.*;
 import com.badlogic.gdx.Game;
@@ -12,17 +13,21 @@ public class MindWeaver extends Game {
 	public SpriteBatch batch;
 	private ScreenManager screenManager;
 	private MyResourceManager resourceManager;
-	GameInputProcessor gameInputProcessor;
+	private GameInputProcessor gameInputProcessor;
+	private LevelsInputProcessor levelsInputProcessor;
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		gameInputProcessor = new GameInputProcessor(this);
 		resourceManager = new MyResourceManager();
-		screenManager = new ScreenManager(this, resourceManager, gameInputProcessor);
+		screenManager = new ScreenManager(this, resourceManager);
+		gameInputProcessor = new GameInputProcessor(this, screenManager);
+		levelsInputProcessor = new LevelsInputProcessor(this, resourceManager, screenManager);
+		screenManager.setGameInputProcessor(gameInputProcessor);
 
 		// Input chain
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(gameInputProcessor);
+		inputMultiplexer.addProcessor(levelsInputProcessor);
 
 		loadSprites();
 

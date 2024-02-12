@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.mygdx.Game.MindWeaver;
+import com.mygdx.Screens.ScreenManager;
 import com.mygdx.World.CharacterCycle;
 import com.mygdx.RoleCast.ArmourGoblin;
 import com.mygdx.RoleCast.PlayableCharacter;
@@ -12,11 +13,12 @@ import com.mygdx.Helpers.Constants;
 import com.mygdx.Helpers.Constants.*;
 
 public class GameInputProcessor implements InputProcessor {
-
     private CharacterCycle characterCycle;
     private final MindWeaver game;
-    public GameInputProcessor(MindWeaver game) {
+    private final ScreenManager screenManager;
+    public GameInputProcessor(MindWeaver game, ScreenManager screenManager) {
         this.game = game;
+        this.screenManager = screenManager;
     }
 
     // Function called only by the game screen
@@ -61,6 +63,8 @@ public class GameInputProcessor implements InputProcessor {
             case Input.Keys.X:
                 character.interact();
                 break;
+            case Input.Keys.ESCAPE:
+                screenManager.setCurrentScreen(ScreenManager.ScreenType.MENU);
             default:
                 break;
         }
@@ -89,6 +93,8 @@ public class GameInputProcessor implements InputProcessor {
                 if (Gdx.input.isKeyPressed(Input.Keys.D)) character.setMovementState(Constants.MSTATE.RIGHT);
                 else character.setMovementState(Constants.MSTATE.HSTILL);
                 break;
+            case Input.Keys.ESCAPE:
+
             default:
                 break;
         }

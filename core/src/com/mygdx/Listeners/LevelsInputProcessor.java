@@ -1,8 +1,20 @@
 package com.mygdx.Listeners;
 
 import com.badlogic.gdx.InputProcessor;
+import com.mygdx.Game.MindWeaver;
+import com.mygdx.Screens.ScreenManager;
+import com.mygdx.Tools.MyResourceManager;
 
-public class StoreInputProcessor implements InputProcessor {
+public class LevelsInputProcessor implements InputProcessor {
+    private final MindWeaver game;
+    private final MyResourceManager resourceManager;
+    private final ScreenManager screenManager;
+
+    public LevelsInputProcessor(MindWeaver game, MyResourceManager resourceManager, ScreenManager screenManager) {
+        this.game = game;
+        this.resourceManager = resourceManager;
+        this.screenManager =screenManager;
+    }
     @Override
     public boolean keyDown(int keycode) {
         return false;

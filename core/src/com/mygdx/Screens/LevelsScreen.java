@@ -21,7 +21,7 @@ public class LevelsScreen implements Screen {
     private Skin playSkin;
     private Stage levelsStage;
 
-    public LevelsScreen(MyResourceManager resourceManager, ScreenManager screenManager) {
+    public LevelsScreen(MyResourceManager resourceManager, final ScreenManager screenManager) {
 
         levelsStage = new Stage(new ScreenViewport());
 
@@ -52,6 +52,7 @@ public class LevelsScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 playButton.getStyle().down = playSkin.getDrawable("ClickedPlayButton");
                 playButton.setStyle(playButton.getStyle());
+                screenManager.setCurrentScreen(ScreenManager.ScreenType.LEVEL1);
                 //game.setScreen(new GameScreen(game, 1, resourceManager, game.getGameInputProcessor()));
             }
         });

@@ -131,7 +131,7 @@ public class StartScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 exitButton.getStyle().down = exitSkin.getDrawable("ClickedExitButton");
                 exitButton.setStyle(exitButton.getStyle());
-                screenManager.setCurrentScreen((ScreenManager.ScreenType.EXIT));
+                screenManager.setCurrentScreen(ScreenManager.ScreenType.EXIT);
             }
         });
 

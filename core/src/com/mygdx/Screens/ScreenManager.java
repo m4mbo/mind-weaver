@@ -1,27 +1,29 @@
 package com.mygdx.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.mygdx.Game.MindWeaver;
 import com.mygdx.Listeners.GameInputProcessor;
 import com.mygdx.Tools.MyResourceManager;
 
 public final class ScreenManager {
 
-    private MindWeaver game;
-    private MyResourceManager resourceManager;
+    private final MindWeaver game;
+    private final MyResourceManager resourceManager;
     private GameInputProcessor gameInputProcessor;
     private ScreenType currentScreen;
 
     public enum ScreenType {
-        START, RESUME, LEVELS, SETTINGS, MENU, LEVELCOMPLETE, EXIT
+        START, RESUME, LEVELS, LEVEL1, SETTINGS, MENU, LEVELCOMPLETE, EXIT
     }
 
-    public ScreenManager(MindWeaver game, MyResourceManager resourceManager, GameInputProcessor gameInputProcessor) {
+    public ScreenManager(MindWeaver game, MyResourceManager resourceManager) {
         this.game = game;
         this.resourceManager = resourceManager;
-        this.gameInputProcessor = gameInputProcessor;
         this.currentScreen = null;
+    }
+
+    public void setGameInputProcessor(GameInputProcessor gameInputProcessor) {
+        this.gameInputProcessor = gameInputProcessor;
     }
 
     public void setCurrentScreen(ScreenType screenType) {
@@ -36,21 +38,25 @@ public final class ScreenManager {
                 game.setScreen(new StartScreen(game, resourceManager, this));
                 break;
             case RESUME:
-                //game.setScreen(new GameScreen(game, "everlush", resourceManager, game.getGameInputProcessor()));
+                //game.setScreen(new GameScreen(game, 1, resourceManager, gameInputProcessor));
+                break;
             case LEVELS:
                 game.setScreen(new LevelsScreen(resourceManager, this));
+                break;
+            case LEVEL1:
+                game.setScreen(new GameScreen(game, 1, resourceManager, gameInputProcessor));
                 break;
             case SETTINGS:
                 game.setScreen(new SettingsScreen(resourceManager, this));
                 break;
             case MENU:
                 game.setScreen(new MenuScreen(resourceManager, this));
+                break;
             case LEVELCOMPLETE:
                 game.setScreen(new LevelCompleteScreen(resourceManager, this));
             case EXIT:
                 Gdx.app.exit();;
             default:
-
                 break;
         }
 
