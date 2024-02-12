@@ -3,22 +3,24 @@ import com.badlogic.gdx.Gdx;
 import com.mygdx.Game.MindWeaver;
 import com.mygdx.Listeners.GameInputProcessor;
 import com.mygdx.Tools.MyResourceManager;
+import com.badlogic.gdx.Screen;
 
 public final class ScreenManager {
 
     private final MindWeaver game;
     private final MyResourceManager resourceManager;
     private GameInputProcessor gameInputProcessor;
-    private ScreenType currentScreen;
+    private Screen prevScreen;
+    private Screen currScreen;
 
     public enum ScreenType {
-        START, RESUME, LEVELS, LEVEL1, SETTINGS, MENU, LEVEL_COMPLETE, EXIT
+        START, RESUME, LEVELS, LEVEL_1, SETTINGS, MENU, LEVEL_COMPLETE, EXIT
     }
 
     public ScreenManager(MindWeaver game, MyResourceManager resourceManager) {
         this.game = game;
         this.resourceManager = resourceManager;
-        this.currentScreen = null;
+        this.currScreen = null;
     }
 
     public void setGameInputProcessor(GameInputProcessor gameInputProcessor) {
@@ -27,66 +29,51 @@ public final class ScreenManager {
 
     public void setCurrentScreen(ScreenType screenType) {
         // Dispose resources of the current screen if it exists
-        if (currentScreen != null) {
-            disposeCurrentScreen();
+        if(prevScreen != null) {
+            prevScreen.dispose();
+        }
+
+        // Dispose resources of the current screen if it exists
+        if (currScreen != null) {
+            prevScreen = currScreen;
+            game.getScreen().dispose();
         }
 
         // Set the new screen
         switch (screenType) {
             case START:
-                game.setScreen(new StartScreen(game, resourceManager, this));
+                currScreen = new StartScreen(game, resourceManager, this);
                 break;
             case RESUME:
                 //game.setScreen(new GameScreen(game, 1, resourceManager, gameInputProcessor));
                 break;
             case LEVELS:
-                game.setScreen(new LevelsScreen(resourceManager, this));
+                currScreen = new LevelsScreen(resourceManager, this);
                 break;
-            case LEVEL1:
-                game.setScreen(new GameScreen(game, 1, resourceManager, gameInputProcessor));
+            case LEVEL_1:
+                currScreen = new GameScreen(game, 1, resourceManager, gameInputProcessor);
                 break;
             case SETTINGS:
-                game.setScreen(new SettingsScreen(resourceManager, this));
+                currScreen = new SettingsScreen(resourceManager, this);
                 break;
             case MENU:
-                game.setScreen(new MenuScreen(resourceManager, this));
+                currScreen = new MenuScreen(resourceManager, this);
                 break;
             case LEVEL_COMPLETE:
-                game.setScreen(new LevelCompleteScreen(resourceManager, this));
+                currScreen = new LevelCompleteScreen(resourceManager, this);
+                break;
             case EXIT:
                 Gdx.app.exit();;
+                break;
             default:
                 break;
         }
-
-        currentScreen = screenType;
     }
 
     private void disposeCurrentScreen() {
         game.getScreen().dispose();
     }
 
-    public ScreenType getCurrentScreen() {
-        return currentScreen;
-    }
 }
 
-        /*@Override
-        public void create() {
-        screens = new HashMap<>();
-        ScreenType.START.getScreen(this).build();
-        setScreen(MENU);
-        }
 
-     public void pushScreen() {
-        if (prevScreen)
-        setScreen(m);
-        }
-
-        @Override
-    public void dispose() {
-        super.dispose();
-        for (Screen screen : screens.values()) {
-            screen.dispose();
-        }
-    }*/
