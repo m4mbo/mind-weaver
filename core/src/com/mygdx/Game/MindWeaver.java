@@ -40,7 +40,7 @@ public class MindWeaver extends Game {
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
 		//setScreen(new GameScreen(this, 1, resourceManager, gameInputProcessor));
-		screenManager.setCurrentScreen(ScreenManager.ScreenType.START);
+		screenManager.setCurrentScreen(ScreenManager.SCREEN_TYPE.START);
 	}
 	public void loadSprites() {
 		//Start Screen buttons

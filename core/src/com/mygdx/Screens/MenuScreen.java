@@ -90,7 +90,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 resumeButton.getStyle().down = resumeSkin.getDrawable("ClickedResumeButton");
                 resumeButton.setStyle(resumeButton.getStyle());
-                screenManager.setCurrentScreen(ScreenManager.ScreenType.RESUME);
+                screenManager.setCurrentScreen(ScreenManager.SCREEN_TYPE.RESUME);
             }
         });
 
@@ -102,7 +102,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 levelsButton.getStyle().down = levelsSkin.getDrawable("ClickedLevelsButton");
                 levelsButton.setStyle(levelsButton.getStyle());
-                screenManager.setCurrentScreen(ScreenManager.ScreenType.LEVELS);
+                screenManager.setCurrentScreen(ScreenManager.SCREEN_TYPE.LEVELS);
             }
         });
 
@@ -114,7 +114,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 settingsButton.getStyle().down = settingsSkin.getDrawable("ClickedSettingsButton");
                 settingsButton.setStyle(settingsButton.getStyle());
-                screenManager.setCurrentScreen(ScreenManager.ScreenType.SETTINGS);
+                screenManager.setCurrentScreen(ScreenManager.SCREEN_TYPE.SETTINGS);
             }
         });
 
@@ -126,7 +126,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 quitButton.getStyle().down = quitSkin.getDrawable("ClickedQuitButton");
                 quitButton.setStyle(quitButton.getStyle());
-                screenManager.setCurrentScreen(ScreenManager.ScreenType.START);
+                screenManager.setCurrentScreen(ScreenManager.SCREEN_TYPE.START);
             }
         });
 

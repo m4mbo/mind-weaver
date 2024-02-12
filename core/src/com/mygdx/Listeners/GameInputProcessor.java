@@ -80,7 +80,7 @@ public class GameInputProcessor implements InputProcessor {
                 game.hud.pushInventory();
                 break;
             case Input.Keys.ESCAPE:
-                screenManager.setCurrentScreen(ScreenManager.ScreenType.MENU);
+                screenManager.setCurrentScreen(ScreenManager.SCREEN_TYPE.MENU);
                 break;
             default:
                 break;

@@ -9,9 +9,9 @@ public final class ScreenManager {
     private final MindWeaver game;
     private final MyResourceManager resourceManager;
     private GameInputProcessor gameInputProcessor;
-    private ScreenType currentScreen;
+    private SCREEN_TYPE currentScreen;
 
-    public enum ScreenType {
+    public enum SCREEN_TYPE {
         START, RESUME, LEVELS, LEVEL1, SETTINGS, MENU, LEVEL_COMPLETE, EXIT
     }
 
@@ -25,7 +25,7 @@ public final class ScreenManager {
         this.gameInputProcessor = gameInputProcessor;
     }
 
-    public void setCurrentScreen(ScreenType screenType) {
+    public void setCurrentScreen(SCREEN_TYPE screenType) {
         // Dispose resources of the current screen if it exists
         if (currentScreen != null) {
             disposeCurrentScreen();
@@ -66,7 +66,7 @@ public final class ScreenManager {
         game.getScreen().dispose();
     }
 
-    public ScreenType getCurrentScreen() {
+    public SCREEN_TYPE getCurrentScreen() {
         return currentScreen;
     }
 }
@@ -74,7 +74,7 @@ public final class ScreenManager {
         /*@Override
         public void create() {
         screens = new HashMap<>();
-        ScreenType.START.getScreen(this).build();
+        SCREEN_TYPE.START.getScreen(this).build();
         setScreen(MENU);
         }
 
