@@ -5,12 +5,15 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.Game.MindWeaver;
 import com.mygdx.Helpers.Constants;
@@ -24,7 +27,8 @@ public class StartScreen implements Screen {
     private final MindWeaver game;
     private final ScreenManager screenManager;
     private Stage stage;
-    private TextButton playButton, settingsButton, exitButton;
+    private TextButton settingsButton, exitButton;
+    private ImageButton playButton;
     private Skin playSkin, settingsSkin, exitSkin;
     private FreeTypeFontGenerator generator;
     private FreeTypeFontGenerator.FreeTypeFontParameter parameter;
@@ -84,23 +88,23 @@ public class StartScreen implements Screen {
         exitSkin.add("UnclickedExitButton", resourceManager.getTexture("UnclickedExitButton"));
         exitSkin.add("ClickedExitButton", resourceManager.getTexture("ClickedExitButton"));
 
-        TextButton.TextButtonStyle PlayButtonStyle = new TextButton.TextButtonStyle();
+        ImageButton.ImageButtonStyle PlayButtonStyle = new ImageButton.ImageButtonStyle();
         TextButton.TextButtonStyle SettingsButtonStyle = new TextButton.TextButtonStyle();
         TextButton.TextButtonStyle ExitButtonStyle = new TextButton.TextButtonStyle();
 
         PlayButtonStyle.up = playSkin.getDrawable("UnclickedPlayButton");
         PlayButtonStyle.down = playSkin.getDrawable("ClickedPlayButton");
         SettingsButtonStyle.up = settingsSkin.getDrawable("UnclickedSettingsButton");
-        SettingsButtonStyle.down= settingsSkin.getDrawable("ClickedSettingsButton");
+        SettingsButtonStyle.down = settingsSkin.getDrawable("ClickedSettingsButton");
         ExitButtonStyle.up = exitSkin.getDrawable("UnclickedExitButton");
         ExitButtonStyle.down = exitSkin.getDrawable("ClickedExitButton");
 
         BitmapFont font = new BitmapFont();
-        PlayButtonStyle.font = font;
         SettingsButtonStyle.font = font;
         ExitButtonStyle.font = font;
 
-        playButton = new TextButton(" ", PlayButtonStyle);
+        playButton = new ImageButton(playSkin);
+        PlayButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(resourceManager.getTexture("UnclickedPlayButton")));
         playButton.setPosition((Gdx.graphics.getWidth() - buttonWidth) / 2, (Gdx.graphics.getHeight() - buttonHeight)/2 - 50);
         playButton.setSize(buttonWidth, buttonHeight);
         playButton.addListener(new ClickListener() {
@@ -141,6 +145,10 @@ public class StartScreen implements Screen {
         stage.addActor(exitButton);
 
     }
+
+    /*public void initButton(TextButton.TextButtonStyle textButtonStyle, ) {
+
+    }*/
 
     @Override
     public void dispose() {
