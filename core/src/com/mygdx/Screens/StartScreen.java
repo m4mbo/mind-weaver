@@ -112,7 +112,7 @@ public class StartScreen implements Screen {
         });
 
         settingsButton = new TextButton(" ", SettingsButtonStyle);
-        settingsButton.setPosition((Gdx.graphics.getWidth() - buttonWidth) / 2, (Gdx.graphics.getHeight() - buttonHeight) / 2 - 450);
+        settingsButton.setPosition((Gdx.graphics.getWidth() - buttonWidth) / 2, (Gdx.graphics.getHeight() - buttonHeight) / 2 - 250);
         settingsButton.setSize(buttonWidth, buttonHeight);
         settingsButton.addListener(new ClickListener() {
             @Override
@@ -124,7 +124,7 @@ public class StartScreen implements Screen {
         });
 
         exitButton = new TextButton(" ", ExitButtonStyle);
-        exitButton.setPosition((Gdx.graphics.getWidth() - buttonWidth) / 2, (Gdx.graphics.getHeight() - buttonHeight) / 2 - 250);
+        exitButton.setPosition((Gdx.graphics.getWidth() - buttonWidth) / 2, (Gdx.graphics.getHeight() - buttonHeight) / 2 - 450);
         exitButton.setSize(buttonWidth, buttonHeight);
         exitButton.addListener(new ClickListener() {
             @Override
