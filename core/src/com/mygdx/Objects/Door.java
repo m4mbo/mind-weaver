@@ -71,8 +71,8 @@ public class Door extends Reactable {
         }
         else if (currHeight >= height && !open) return;
 
-        if (open) currHeight -= 35 / Constants.PPM;
-        else currHeight += 35 / Constants.PPM;
+        if (open) currHeight -= 50 / Constants.PPM;
+        else currHeight += 50 / Constants.PPM;
 
         if (!b2body.getFixtureList().isEmpty()) b2body.destroyFixture(b2body.getFixtureList().get(0));
 
