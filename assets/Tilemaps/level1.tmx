@@ -1,21 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="200" height="200" tilewidth="14" tileheight="14" infinite="0" nextlayerid="4" nextobjectid="7">
- <tileset firstgid="1" source="dungeon.tsx"/>
- <tileset firstgid="73" source="dungeon padded.tsx"/>
- <layer id="1" name="background" width="200" height="200">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="50" tilewidth="14" tileheight="14" infinite="0" nextlayerid="11" nextobjectid="28">
+ <tileset firstgid="1" source="dungeon padded.tsx"/>
+ <layer id="1" name="background" width="100" height="50">
   <data encoding="base64" compression="zlib">
-   eJztwwENAAAMw6AanH87t3ABkLBqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqPB9JOAgI=
+   eJztwzENAAAMBKFb3r/lyugCCaumqqqqqqqqqqqqqqqqqqqqqqqq6vsDo4hhqQ==
   </data>
  </layer>
- <layer id="2" name="graphics" width="200" height="200">
+ <layer id="2" name="graphics" width="100" height="50">
   <data encoding="base64" compression="zlib">
-   eJzt17sKwkAQBdD9P0EwhZX4xt5HL4qN+tNukYCBRE0REzbnwGVDMgvTDENCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASN88ZvJjlt20CJ3JYg4xx5jTl9pR++1Ar2QNamehvE8gdcV87Gq+b9+e9y33An3TZH/A0NTNx6bi3TRm/BZIXTEf95hHzLOiZp2f/s8ZmlUo74RPWeR3LjHXv3cK/XfOz1unXQAAAACQghdGAxPD
+   eJzt2NtKxDAQgOGAqOiFN57ddW/UC4+IiCdUUN//nZzCBkJJphPdbDft/8GwpR3S7CRNSp0DAAAAAAAAAAAAAAAAAAAAAACLtP7PwGIdSGz9IVDGdt8dGIGcOb/fUx9rp9X4qJVbYs7fF2izZlqN1zJyc+xIbCSiNjlrRnt+x8RqPJv/5o7HQ+L8mcT5PC4i7dasqcmVxLXETUeu5X9rNd5z+XvCoyHH9+tV4s2Qv8py1ox2Pfvcd5+C46E9H41Z4vo0OL4s2I+T4FjbD2JxWLBfy1byvX6qXNNqPqT65kqNxyRyzjJvdw33PHX62td+bxjCvmDlx+NL4lviJ5Lj1xLLOn3s9PHaDHJvE234+zwr93kx9KVGXfWLrSPafPXf7iaRc43webxLtDGk/bk0P2ffE9e7vq9axn/M+8eyfUh89t2JEUs9RwCA1fUL54MNkA==
   </data>
  </layer>
  <objectgroup id="3" name="ground">
-  <object id="1" x="140.182" y="2702.18" width="139.667" height="12.1515"/>
-  <object id="4" x="126.182" y="2618.36" width="13.9091" height="83.7273"/>
-  <object id="5" x="280.063" y="2632.06" width="55.7727" height="13.875"/>
-  <object id="6" x="280.063" y="2674.13" width="55.875" height="27.875"/>
+  <object id="1" x="140.182" y="602.18" width="139.667" height="12.1515"/>
+  <object id="4" x="126.182" y="518.36" width="13.9091" height="83.7273"/>
+  <object id="5" x="140.188" y="504.2" width="153.898" height="13.9034"/>
+  <object id="6" x="280.063" y="574.13" width="139.542" height="41.875"/>
+  <object id="7" x="280.197" y="517.96" width="139.439" height="27.9034"/>
+  <object id="8" x="419.954" y="616.08" width="238.212" height="12.1515"/>
+  <object id="9" x="406.25" y="476.38" width="13.625" height="41.625"/>
+  <object id="11" x="546.25" y="560.38" width="112.625" height="27.375"/>
+  <object id="14" x="644.063" y="588.25" width="14" height="27.6875"/>
+  <object id="15" x="504" y="475.63" width="69.875" height="56.25"/>
+  <object id="16" x="419.909" y="588.18" width="111.875" height="27.8523"/>
+  <object id="17" x="559.818" y="435" width="168" height="40.8182"/>
+  <object id="19" x="812.144" y="490.09" width="112.636" height="69.7557"/>
+  <object id="21" x="644" y="545.77" width="168" height="13.8182"/>
+  <object id="22" x="728.091" y="420.23" width="195.636" height="27.4849"/>
+  <object id="26" x="909.909" y="447.91" width="14.1818" height="42.1321"/>
  </objectgroup>
+ <objectgroup id="4" name="seethrough">
+  <object id="12" x="561.938" y="588.06" width="10.25" height="28"/>
+  <object id="25" x="756.043" y="504.81" width="56.2065" height="3.93577"/>
+ </objectgroup>
+ <objectgroup id="5" name="end">
+  <object id="20" x="909.994" y="448.03" width="14.1307" height="41.909"/>
+ </objectgroup>
+ <objectgroup id="6" name="basegoblins">
+  <object id="23" x="776.182" y="483.09" width="11.0909" height="10.3636"/>
+  <object id="24" x="632.288" y="597.15" width="11.0909" height="10.3636"/>
+ </objectgroup>
+ <objectgroup id="7" name="armourgoblins"/>
+ <objectgroup id="8" name="papaya"/>
+ <objectgroup id="9" name="spikes"/>
+ <objectgroup id="10" name="merchant"/>
 </map>

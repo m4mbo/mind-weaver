@@ -12,7 +12,7 @@ public abstract class B2Sprite {
     protected float width;
     protected float height;
     protected boolean facingRight;
-    private float resize;
+    protected float resize;
 
     public B2Sprite() {
         animation = new Animation();

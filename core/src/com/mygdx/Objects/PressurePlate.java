@@ -12,6 +12,7 @@ public class PressurePlate extends Interactable {
     private Body b2body2;
     private DistanceJoint distanceJoint;
     private float threshold;
+    private int level;
     private int pressedIterations;
     private int closedIterations;
     private boolean isPressed;
@@ -20,9 +21,11 @@ public class PressurePlate extends Interactable {
     private PolygonShape polygonShape;
     private FixtureDef fdef;
 
-    public PressurePlate(World world, MyResourceManager resourceManager, float x, float y, int strength) {
+    public PressurePlate(World world, MyResourceManager resourceManager, float x, float y, int level) {
 
         super(world, resourceManager);
+
+        this.level = level;
 
         pressedIterations = 0;
         closedIterations = 0;
@@ -84,14 +87,14 @@ public class PressurePlate extends Interactable {
 
         distanceJoint = (DistanceJoint) world.createJoint(djd);
 
-        if (strength == 1) threshold = -0.006f;
-        else if (strength == 2) threshold = -0.009f;
+        if (level == 1) threshold = -0.006f;
+        else if (level == 2) threshold = -0.009f;
         else threshold = -0.006f;
 
         currAState = Constants.ASTATE.CLOSED;
         prevAState = Constants.ASTATE.CLOSED;
 
-        setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_up"), 14, 5)[0], 1/14f, true, 1f, animation.getCurrentFrame());
+        setAnimation(TextureRegion.split(resourceManager.getTexture(level == 1 ? "pressureplate_up" : "pressureplate_up2"), 14, 5)[0], 1/14f, true, 1f, animation.getCurrentFrame());
 
         // Assigning values for later use
         fdef.density = 0;
@@ -131,8 +134,8 @@ public class PressurePlate extends Interactable {
 
     public void handleAnimation() {
         interact();
-        if (currAState == Constants.ASTATE.OPEN) setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_down"), 14, 5)[0], 1/14f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
-        else setAnimation(TextureRegion.split(resourceManager.getTexture("pressureplate_up"), 14, 5)[0], 1/14f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
+        if (currAState == Constants.ASTATE.OPEN) setAnimation(TextureRegion.split(resourceManager.getTexture(level == 1 ? "pressureplate_down" : "pressureplate_down2"), 14, 5)[0], 1/14f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
+        else setAnimation(TextureRegion.split(resourceManager.getTexture(level == 1 ? "pressureplate_up" : "pressureplate_up2"), 14, 5)[0], 1/14f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
     }
 
     public void step() {

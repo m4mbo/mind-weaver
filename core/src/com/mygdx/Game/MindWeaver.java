@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.mygdx.Listeners.GameInputProcessor;
 import com.mygdx.Listeners.StartInputProcessor;
+import com.mygdx.Scenes.HUD;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Screens.*;
 import com.badlogic.gdx.Game;
@@ -12,10 +13,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class MindWeaver extends Game {
 	public SpriteBatch batch;
 	private MyResourceManager resourceManager;
+	public HUD hud;		// HUD holding inventory will remain constant across all screens
 	@Override
 	public void create () {
+
 		batch = new SpriteBatch();
 		resourceManager = new MyResourceManager();
+
+		loadSprites();
+
+		hud = new HUD(batch, resourceManager);
 
 		// Input chain
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
@@ -24,10 +31,8 @@ public class MindWeaver extends Game {
 		inputMultiplexer.addProcessor(gameInputProcessor);
 		inputMultiplexer.addProcessor(startInputProcessor);
 
-		loadSprites();
-
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		setScreen(new GameScreen(this, 1, resourceManager, gameInputProcessor));
+		setScreen(new GameScreen(this, 4, resourceManager, gameInputProcessor));
 	}
 
 	public void loadSprites() {
@@ -37,6 +42,8 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Mage/mage_jump.png", "mage_jump");
 		resourceManager.loadTexture("Mage/mage_land.png", "mage_land");
 		resourceManager.loadTexture("Mage/mage_fall.png", "mage_fall");
+		resourceManager.loadTexture("Mage/mage_death.png", "mage_death");
+
 
 		// Base goblin
 		resourceManager.loadTexture("Goblins/basegoblin_run.png", "goblin_run");
@@ -44,6 +51,7 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Goblins/basegoblin_jump.png", "goblin_jump");
 		resourceManager.loadTexture("Goblins/basegoblin_land.png", "goblin_land");
 		resourceManager.loadTexture("Goblins/basegoblin_fall.png", "goblin_fall");
+		resourceManager.loadTexture("Goblins/basegoblin_death.png", "goblin_death");
 
 		// Armoured goblin
 		resourceManager.loadTexture("Goblins/armourgoblin_idle.png", "armour_idle");
@@ -52,15 +60,40 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Goblins/armourgoblin_fall.png", "armour_fall");
 		resourceManager.loadTexture("Goblins/armourgoblin_jump.png", "armour_jump");
 		resourceManager.loadTexture("Goblins/armourgoblin_attack.png", "armour_attack");
+		resourceManager.loadTexture("Goblins/armourgoblin_death.png", "armour_death");
 
 		// Objects
 		resourceManager.loadTexture("Objects/pressureplate_up.png", "pressureplate_up");
+		resourceManager.loadTexture("Objects/pressureplate_up2.png", "pressureplate_up2");
 		resourceManager.loadTexture("Objects/pressureplate_down.png", "pressureplate_down");
+		resourceManager.loadTexture("Objects/pressureplate_down2.png", "pressureplate_down2");
 		resourceManager.loadTexture("Objects/door_closed.png", "door_closed");
+		resourceManager.loadTexture("Objects/door_closed2.png", "door_closed2");
 		resourceManager.loadTexture("Objects/door_open.png", "door_open");
+		resourceManager.loadTexture("Objects/door_open2.png", "door_open2");
+		resourceManager.loadTexture("Objects/lever_up.png", "lever_up");
+		resourceManager.loadTexture("Objects/lever_down.png", "lever_down");
+		resourceManager.loadTexture("Objects/platform.png", "platform");
+
+		//Items
+		resourceManager.loadTexture("Items/bug.png", "bug");
+		resourceManager.loadTexture("Items/papaya.png", "papaya");
 
 		//Pet
-		resourceManager.loadTexture("Shapes/pet.png", "pet");
+		resourceManager.loadTexture("Items/pet.png", "pet");
+
+		//Merchant
+		resourceManager.loadTexture("Merchant/merchant_idle.png", "merchant_idle");
+
+		//HUD
+		resourceManager.loadTexture("HUD/life.png", "life");
+		resourceManager.loadTexture("HUD/pause.png", "pause");
+		resourceManager.loadTexture("HUD/inventory.png", "inventory");
+
+		//Shapes
+		resourceManager.loadTexture("Shapes/purple_pixel.png", "purple_pixel");
+		resourceManager.loadTexture("Shapes/translucent_pixel.png", "translucent_pixel");
+
 	}
 
 	@Override

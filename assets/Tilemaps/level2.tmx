@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="14" tileheight="14" infinite="0" nextlayerid="11" nextobjectid="83">
+ <tileset firstgid="1" source="dungeon padded.tsx"/>
+ <layer id="1" name="background" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztw8EJAAAMA6H7ZP+VC51DwVVTVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/AWtAw1E=
+  </data>
+ </layer>
+ <layer id="2" name="graphics" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt10lLw0AAhuGhi7teBKsgXtSDB9e61KKe3XD//7/FGcjAMM7aNolp3gc+CmnSTPMlk0QIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACaaUtmOZLt2kbXPisJ6/QEvVQlpQ9N95KTnA5j12ob5PSRa13kdbhU4liaIqWPy9JHAU31sS9zIHMo05FZKLKY+VtrieutZvzmbuYYmsI3N9tzRC/wnXZV0hg185wwMw90D6lz85HMq5EU7zKfMm8yXzLfRX7E32Mbuub2is9u4n6bRnWheni0ll/PeD/nRmz2sU25X9XdR8o72SSJXROxe0Vqb9P00XHsu+4+ynzmDDH/txrDMLL+hnDP67rP3D5eiu/VsufANlWzx1MFdV4OZG5lxjI7Iv48FTpOanvVy0dkG/Vfn4x0PcvqZJ4zp5nbprwbXDiWuf5z6DrV/ZnGCdvb+9G96Qw8y+pkj8fO5oz3Zx7bkbHc14fdxcixjn52CG03L2Z5fwkdI9+cFZo/7kS7ulBS+7DnujPHOq5jexPYl3q3mOQ5ru57QJli81lO1DnbD+zL1f1x5njn+dqommvOOvGs63o/aXMX9zIP1jLXvTbXNNdjW7sAAABAufpG8D/0IwEAn1/OnBb3
+  </data>
+ </layer>
+ <objectgroup id="3" name="ground">
+  <object id="27" x="254" y="1218" width="292" height="13.5"/>
+  <object id="28" x="150.667" y="1175.67" width="114.667" height="41.6667"/>
+  <object id="30" x="518.318" y="1189.91" width="36.5" height="28.0909"/>
+  <object id="31" x="560.114" y="1119.95" width="55.8295" height="28.0909"/>
+  <object id="32" x="546.114" y="1148.14" width="13.9545" height="28.0909"/>
+  <object id="33" x="532.114" y="1175.95" width="27.7727" height="13.5454"/>
+  <object id="34" x="630.167" y="1064.08" width="55.2273" height="28.0909"/>
+  <object id="35" x="574.295" y="1009.41" width="13.9545" height="82.2727"/>
+  <object id="38" x="630.333" y="1190.12" width="13.3333" height="43.3939"/>
+  <object id="39" x="616.424" y="1148.12" width="13.3333" height="43.3939"/>
+  <object id="40" x="644.242" y="1231.94" width="13.3333" height="27.5757"/>
+  <object id="41" x="658.061" y="1246.03" width="196.561" height="13.5757"/>
+  <object id="45" x="686.091" y="1204" width="13.7273" height="14"/>
+  <object id="46" x="700.045" y="1176" width="125.818" height="41.8182"/>
+  <object id="47" x="714.136" y="1162" width="13.7273" height="14"/>
+  <object id="48" x="728.136" y="1134" width="111.318" height="28"/>
+  <object id="49" x="839.818" y="1148.18" width="28" height="13.5455"/>
+  <object id="50" x="826.091" y="1162.14" width="28" height="27.7273"/>
+  <object id="51" x="825.966" y="1190.1" width="14.125" height="13.8143"/>
+  <object id="52" x="812.333" y="1092.1" width="41.25" height="13.5455"/>
+  <object id="53" x="882.045" y="1190.02" width="13.9091" height="27.9091"/>
+  <object id="54" x="868.045" y="1217.95" width="13.9091" height="27.9091"/>
+  <object id="55" x="854.136" y="1232.05" width="13.9091" height="27.9091"/>
+  <object id="56" x="896.045" y="1176.05" width="13.9091" height="27.9091"/>
+  <object id="59" x="503.477" y="1078.34" width="70.7727" height="13.5454"/>
+  <object id="60" x="909.92" y="1092.1" width="70.9091" height="87.9091"/>
+  <object id="61" x="1022" y="1120.07" width="27.9526" height="41.9526"/>
+  <object id="62" x="981.274" y="1162.27" width="110.453" height="17.7026"/>
+  <object id="63" x="1092.27" y="1078.27" width="97.7329" height="101.453"/>
+  <object id="66" x="1176.04" y="1036.18" width="13.9659" height="42.017"/>
+  <object id="67" x="910.182" y="1034.7" width="168" height="14.9091"/>
+  <object id="68" x="1066.24" y="1008.12" width="123.823" height="28"/>
+  <object id="69" x="728.333" y="1020.88" width="182" height="14.9091"/>
+  <object id="77" x="700" y="1006.92" width="41" height="14.9091"/>
+  <object id="78" x="587.75" y="993.545" width="112.455" height="14.9091"/>
+  <object id="79" x="153.667" y="1120.33" width="273.667" height="13"/>
+  <object id="80" x="140.333" y="1121.33" width="13.9697" height="57"/>
+ </objectgroup>
+ <objectgroup id="4" name="seethrough">
+  <object id="42" x="700.818" y="1217.91" width="13.0909" height="27.8182"/>
+  <object id="43" x="588.727" y="1063.84" width="41.3523" height="4.97727"/>
+  <object id="58" x="853.688" y="1101.19" width="56.3424" height="4.48283"/>
+ </objectgroup>
+ <objectgroup id="5" name="end">
+  <object id="64" x="1176.12" y="1036.23" width="13.858" height="41.8864"/>
+ </objectgroup>
+ <objectgroup id="6" name="basegoblins">
+  <object id="44" x="600.386" y="1037.05" width="13.6364" height="14.4545"/>
+  <object id="57" x="735.182" y="1224.77" width="13.6364" height="14.4545"/>
+ </objectgroup>
+ <objectgroup id="7" name="armourgoblins"/>
+ <objectgroup id="8" name="papaya">
+  <object id="74" x="171.625" y="1165.25" width="7.5" height="6.25"/>
+ </objectgroup>
+ <objectgroup id="9" name="spikes">
+  <object id="37" x="644" y="1092.25" width="41.3333" height="8.41667"/>
+  <object id="70" x="1012.91" y="1134.04" width="8.9375" height="12.9545"/>
+  <object id="71" x="980.895" y="1153.75" width="40.9375" height="8.5"/>
+  <object id="72" x="1050.08" y="1133.8" width="8.9375" height="12.9545"/>
+  <object id="73" x="1049.99" y="1153.43" width="42.0284" height="8.77268"/>
+  <object id="81" x="153.87" y="1147.91" width="7.13043" height="13.3913"/>
+ </objectgroup>
+ <objectgroup id="10" name="merchant">
+  <object id="82" x="463" y="1201.33" width="9" height="8"/>
+ </objectgroup>
+</map>

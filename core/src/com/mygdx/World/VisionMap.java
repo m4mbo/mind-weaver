@@ -1,4 +1,4 @@
-package com.mygdx.Handlers;
+package com.mygdx.World;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -6,41 +6,56 @@ import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.Helpers.AdjacencyList;
 import com.mygdx.Helpers.Constants;
+import com.mygdx.RoleCast.ArmourGoblin;
 import com.mygdx.RoleCast.Entity;
 import com.mygdx.RoleCast.PlayableCharacter;
 import com.mygdx.RoleCast.Mage;
 import com.mygdx.Tools.ShapeDrawer;
-
+import com.mygdx.Scenes.HUD;
 import java.util.*;
 
 public class VisionMap {
     private boolean collision;
-    private final AdjacencyList<PlayableCharacter> targetMap;
-    private EntityHandler entityHandler;
+    private final AdjacencyList<PlayableCharacter> targetMap;       // Map keeping characters in target, helps with performance
+    private final AdjacencyList<PlayableCharacter> bullseyeMap;
+
+    // Avoiding spanning tree creation at every frame
+    private boolean bullseyeChange;
+    private Map<PlayableCharacter, List<PlayableCharacter>> bullseyeStream;     // Spanning tree of bullseyeMap
     private final World world;
     private final ShapeDrawer shapeDrawer;
+    private CharacterCycle characterCycle;
+    private HUD hud;
     private PlayableCharacter mage;
 
-    public VisionMap(World world, ShapeDrawer shapeDrawer) {
+    public VisionMap(World world, ShapeDrawer shapeDrawer, HUD hud) {
         collision = true;
+        bullseyeChange = true;
         this.world = world;
         this.shapeDrawer = shapeDrawer;
         this.targetMap = new AdjacencyList<>();
+        this.bullseyeMap = new AdjacencyList<>();
+        this.hud = hud;
     }
 
-    public void initialize(EntityHandler entityHandler) {
-        this.entityHandler = entityHandler;
+    public void initialize(EntityHandler entityHandler, CharacterCycle characterCycle) {
         this.mage = (PlayableCharacter) entityHandler.getEntity(0);
         for (Entity entity : entityHandler.getEntities()) {
             if (entity instanceof PlayableCharacter) {
                 targetMap.addVertex((PlayableCharacter) entity);
+                bullseyeMap.addVertex((PlayableCharacter) entity);
             }
         }
+        this.characterCycle = characterCycle;
     }
 
     public void addTarget(PlayableCharacter source, PlayableCharacter target) { targetMap.addEdge(source, target); }
 
     public void removeTarget(PlayableCharacter source, PlayableCharacter target) {
+        if (bullseyeMap.removeEdge(source, target)) {
+            characterCycle.updateCycle();
+            bullseyeChange = true;
+        }
         targetMap.removeEdge(source, target);
     }
 
@@ -48,25 +63,48 @@ public class VisionMap {
         for (PlayableCharacter character : targetMap.getVerticesWithNeighbours()) {
             attemptConnection(character);
         }
+        solidifyConnections();
+    }
+
+    public void solidifyConnections() {
+        if (bullseyeChange) {
+            bullseyeStream = bullseyeMap.getSpanningTree(mage);
+            bullseyeChange = false;
+        }
+        for (PlayableCharacter character : bullseyeStream.keySet()) {
+            for (PlayableCharacter neighbour : bullseyeStream.get(character)) {
+                if (!character.isStateActive(Constants.PSTATE.DYING) && !neighbour.isStateActive(Constants.PSTATE.DYING)) {
+                    establishConnection(character, neighbour);
+                }
+            }
+        }
     }
 
     public void attemptConnection(PlayableCharacter source) {
+
+        boolean armourUnlocked = hud.isTier2Unlocked();
+
+        if (source instanceof ArmourGoblin && !armourUnlocked) return;
+
         LinkedList<PlayableCharacter> targets = targetMap.getNeighbours(source);
         for (PlayableCharacter target : targets) {
+
+            if (target instanceof ArmourGoblin && !armourUnlocked) continue;
+
             if (sendSignal(source, target)) {
-                if (source instanceof Mage || traceable(mage, source) || traceable(mage, target)) {
-                    if (target.getBullseye() == null || !target.getBullseye().equals(source)){
-                        if (source.getBullseye() == null || !source.getBullseye().equals(target)) source.setBullseye(target);
-                        establishConnection(source, target);
-                        return;
+                if (source instanceof Mage || traceable(mage, source)) {
+                    if (bullseyeMap.addEdge(source, target)) {
+                        characterCycle.updateCycle();
+                        bullseyeChange = true;
                     }
                 }
             } else {
-                if (source.getBullseye() != null && source.getBullseye().equals(target)) {
-                    source.setBullseye(null);
-                    if (!traceable(target)) target.looseControl();
-                    if (!traceable(source)) source.looseControl();
+                if (bullseyeMap.removeEdge(source, target) || bullseyeMap.removeEdge(target, source)) {
+                    characterCycle.updateCycle();
+                    bullseyeChange = true;
                 }
+                if (!traceable(target)) target.looseControl();
+                if (!traceable(source)) source.looseControl();
             }
         }
     }
@@ -76,7 +114,7 @@ public class VisionMap {
         RayCastCallback callback = new RayCastCallback() {
             @Override
             public float reportRayFixture(Fixture fixture, Vector2 vector2, Vector2 vector21, float v) {
-                if (fixture.getUserData().equals("ground")) {
+                if (fixture.getUserData().equals("ground") || fixture.getUserData().equals("platform")) {
                     collision = true;
                     return 0;
                 }
@@ -112,54 +150,16 @@ public class VisionMap {
         shapeDrawer.drawWave(new Vector2(targetX, targetY) , new Vector2(playerX, playerY), 3 / Constants.PPM);
     }
 
-    public LinkedList<PlayableCharacter> getObservers(PlayableCharacter character) {
-        if (entityHandler == null) return null;
-        LinkedList<PlayableCharacter> observers = new LinkedList<>();
-        for (Entity entity :  entityHandler.getEntities()) {
-            if (entity instanceof PlayableCharacter) {
-                if (((PlayableCharacter) entity).getBullseye() != null && ((PlayableCharacter) entity).getBullseye().equals(character)){
-                    observers.add((PlayableCharacter) entity);
-                }
-            }
-        }
-        return observers;
-    }
-
-    public boolean traceable(PlayableCharacter current, PlayableCharacter destination) {
-        while(current != null) {
-            if (current.equals(destination)) return true;
-            current = current.getBullseye();
-        }
-        return false;
+    public boolean traceable(PlayableCharacter source, PlayableCharacter destination) {
+        return bullseyeMap.traceable(source, destination);
     }
 
     public boolean traceable(PlayableCharacter destination) {
-        PlayableCharacter current = mage;
-        while(current != null) {
-            if (current.equals(destination)) return true;
-            current = current.getBullseye();
-        }
-        return false;
+        return bullseyeMap.traceable(mage, destination);
     }
 
     public List<PlayableCharacter> getBullseyeStream() {
-        PlayableCharacter current = mage;
-        ArrayList<PlayableCharacter> stream = new ArrayList<>();
-        while(current != null) {
-            stream.add(current);
-            PlayableCharacter temp = current.getBullseye();
-            if (temp == null) {
-                for (PlayableCharacter observer : getObservers(current)) {
-                    if (!stream.contains(observer)) {
-                        temp = observer;
-                    }
-                }
-            } else {
-                if (stream.contains(temp)) temp = null;
-            }
-            current = temp;
-        }
-        return stream;
+        return bullseyeMap.getReachableVertices(mage);
     }
 
     public void removeCharacter(PlayableCharacter character) {

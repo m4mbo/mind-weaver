@@ -1,4 +1,4 @@
-package com.mygdx.Handlers;
+package com.mygdx.World;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -8,17 +8,16 @@ import com.mygdx.RoleCast.Entity;
 import com.mygdx.RoleCast.Mage;
 import com.mygdx.RoleCast.Pet;
 import com.mygdx.RoleCast.PlayableCharacter;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 
 // Class to handle risky operations outside world step and map entities to their id
 public class EntityHandler {
-    private HashMap<Integer, Entity> entities;
-    private LinkedList<EntityOp> entityOps;
-    private CharacterCycle characterCycle;
-    private ShaderHandler shaderHandler;
-    private VisionMap visionMap;
+    private final HashMap<Integer, Entity> entities;
+    private final LinkedList<EntityOp> entityOps;
+    private final CharacterCycle characterCycle;
+    private final ShaderHandler shaderHandler;
+    private final VisionMap visionMap;
     private Pet pet;
 
     public EntityHandler (CharacterCycle characterCycle, ShaderHandler shaderHandler, VisionMap visionMap) {
@@ -57,10 +56,11 @@ public class EntityHandler {
     public void handleEntities() {
         for (EntityOp entityOp : entityOps) {
             if (entityOp.operation.equals("die")) {
-                entityOp.entity.die();
-                if (entityOp.entity.getLives() == 0 && !(entityOp.entity instanceof Mage) && (entityOp.entity instanceof PlayableCharacter)) {
+                if (!(entityOp.entity instanceof Mage) && (entityOp.entity instanceof PlayableCharacter)) {
                     visionMap.removeCharacter((PlayableCharacter) entityOp.entity);
                     entities.remove(entityOp.entity.getID());
+                } else if (entityOp.entity instanceof Mage) {
+                    ((Mage) entityOp.entity).respawn();
                 }
             }
         }
@@ -70,16 +70,21 @@ public class EntityHandler {
     public void update(float delta) {
         pet.update(delta);
         for (Entity entity : entities.values()) {
+            //if (entity instanceof Mage) System.out.println(((PlayableCharacter) entity).getPosition());
             entity.update(delta);
         }
+        handleEntities();
     }
 
     public void render(SpriteBatch batch) {
         pet.render(batch);
         for (Entity entity : entities.values()) {
-            if (((PlayableCharacter) entity).isStateActive(Constants.PSTATE.HIT)) {
-                batch.setShader(shaderHandler.getShaderProgram("redMask"));
-            } else if (characterCycle.getCurrentCharacter().equals(entity) && !(entity instanceof Mage)) {
+            if (entity instanceof PlayableCharacter) {
+                if (((PlayableCharacter) entity).isStateActive(Constants.PSTATE.HIT)) {
+                    batch.setShader(shaderHandler.getShaderProgram("redMask"));
+                }
+            }
+            if (characterCycle.getCurrentCharacter().equals(entity) && !(entity instanceof Mage)) {
                 batch.setShader(shaderHandler.getShaderProgram("outline"));
             }
             entity.render(batch);

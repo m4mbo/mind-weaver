@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.mygdx.Game.MindWeaver;
-import com.mygdx.Handlers.CharacterCycle;
+import com.mygdx.World.CharacterCycle;
 import com.mygdx.RoleCast.ArmourGoblin;
 import com.mygdx.RoleCast.PlayableCharacter;
 import com.mygdx.Screens.GameScreen;
@@ -30,7 +30,16 @@ public class GameInputProcessor implements InputProcessor {
         if (!(game.getScreen() instanceof GameScreen)) return false;
 
         PlayableCharacter character = characterCycle.getCurrentCharacter();
+
+        if (character.isStateActive(PSTATE.DYING)) return true;
+
+        if (game.hud.standBy()) {
+            if (keycode == Input.Keys.I) game.hud.removeInventory();
+            return true;
+        }
+
         switch (keycode) {
+            case Input.Keys.UP:
             case Input.Keys.SPACE:
                 if (character.isStateActive(PSTATE.ON_GROUND)) {
                     character.jump();
@@ -42,9 +51,11 @@ public class GameInputProcessor implements InputProcessor {
                     break;
                 }
                 break;
+            case Input.Keys.RIGHT:
             case Input.Keys.D:
                 character.setMovementState(Constants.MSTATE.RIGHT);
                 break;
+            case Input.Keys.LEFT:
             case Input.Keys.A:
                 character.setMovementState(Constants.MSTATE.LEFT);
                 break;
@@ -54,6 +65,13 @@ public class GameInputProcessor implements InputProcessor {
                 break;
             case Input.Keys.J:
                 if (character instanceof ArmourGoblin) ((ArmourGoblin) character).attack();
+                break;
+            case Input.Keys.X:
+                character.interact();
+                break;
+            case Input.Keys.I:
+                character.setMovementState(MSTATE.HSTILL);
+                game.hud.pushInventory();
                 break;
             default:
                 break;
@@ -67,15 +85,23 @@ public class GameInputProcessor implements InputProcessor {
         if (!(game.getScreen() instanceof GameScreen)) return false;
 
         PlayableCharacter character = characterCycle.getCurrentCharacter();
+        
+        if (character.isStateActive(PSTATE.DYING)) return true;
+
+        if (game.hud.standBy()) return true;
+
         switch (keycode) {
+            case Input.Keys.UP:
             case Input.Keys.SPACE:
                 if (character.isStateActive(PSTATE.ON_GROUND) || character.isStateActive(PSTATE.STUNNED)) break;
                 character.fall();
                 break;
+            case Input.Keys.RIGHT:
             case Input.Keys.D:
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) character.setMovementState(Constants.MSTATE.LEFT);
                 else character.setMovementState(Constants.MSTATE.HSTILL);
                 break;
+            case Input.Keys.LEFT:
             case Input.Keys.A:
                 if (Gdx.input.isKeyPressed(Input.Keys.D)) character.setMovementState(Constants.MSTATE.RIGHT);
                 else character.setMovementState(Constants.MSTATE.HSTILL);

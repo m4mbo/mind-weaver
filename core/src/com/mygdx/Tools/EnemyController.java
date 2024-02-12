@@ -1,7 +1,7 @@
 package com.mygdx.Tools;
 
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.Handlers.VisionMap;
+import com.mygdx.World.VisionMap;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Helpers.Subscriber;
 import com.mygdx.RoleCast.ArmourGoblin;
@@ -28,6 +28,13 @@ public class EnemyController implements Subscriber {
     }
 
     public void update() {
+
+        if (enemy.isStateActive(Constants.PSTATE.DYING)) return;
+
+        if (player.isStateActive(Constants.PSTATE.DYING)) {
+            enemy.setMovementState(Constants.MSTATE.HSTILL);
+            return;
+        }
 
         // Handling behaviour when eyes are not on player
         if (!visionMap.sendSignal(enemy, player)) {

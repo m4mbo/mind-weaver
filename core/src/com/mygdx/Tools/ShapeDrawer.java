@@ -1,19 +1,20 @@
 package com.mygdx.Tools;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.Graphics.ShaderHandler;
-
 import java.util.LinkedList;
 
 public class ShapeDrawer {
     private LinkedList<Shape> shapes;
     private ShaderHandler shaderHandler;
-    public ShapeDrawer(ShaderHandler shaderHandler) {
+    private MyResourceManager resourceManager;
+
+    public ShapeDrawer(ShaderHandler shaderHandler, MyResourceManager resourceManager) {
         shapes = new LinkedList<>();
         this.shaderHandler = shaderHandler;
+        this.resourceManager = resourceManager;
     }
 
     public void render(SpriteBatch batch) {
@@ -27,8 +28,39 @@ public class ShapeDrawer {
         shapes.add(new Wave(start, end, height));
     }
 
+    public void drawRectangle(float height, float width, float x, float y, String type) { shapes.add(new Rectangle(height, width, x, y, type)); }
+
+
     private interface Shape {
         void render(SpriteBatch batch);
+    }
+
+    private class Rectangle implements Shape {
+
+        final float height;
+        final float width;
+        final float x;
+        final float y;
+        final String type;
+
+        public Rectangle(float height, float width, float x, float y, String type) {
+            this.height = height;
+            this.width = width;
+            this.x = x;
+            this.y = y;
+            this.type = type;
+        }
+
+        @Override
+        public void render(SpriteBatch batch) {
+
+            if (type.equals("translucent")) {
+                batch.begin();
+                batch.draw(new TextureRegion(resourceManager.getTexture("translucent_pixel")), x, y, width, height);
+                batch.end();
+            }
+
+        }
     }
 
     private class Wave implements Shape {
@@ -48,13 +80,11 @@ public class ShapeDrawer {
 
         @Override
         public void render(SpriteBatch batch) {
-            Texture texture = new Texture("Shapes/purple_pixel.png");
             batch.setShader(shaderHandler.getShaderProgram("wave"));
             batch.begin();
-            batch.draw(new TextureRegion(texture), start.x, start.y, 0, 0, start.x > end.x ? -width : width, height, 1f, 1f, angle);
+            batch.draw(new TextureRegion(resourceManager.getTexture("purple_pixel")), start.x, start.y, 0, 0, start.x > end.x ? -width : width, height, 1f, 1f, angle);
             batch.end();
             batch.setShader(null);
-            texture.dispose();
         }
     }
 }

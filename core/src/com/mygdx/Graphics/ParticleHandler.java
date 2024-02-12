@@ -67,6 +67,7 @@ public class ParticleHandler {
                 break;
             case "aura":
                 effect = auraEffectPool.obtain();
+                break;
             default:
                 break;
         }

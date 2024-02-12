@@ -13,20 +13,24 @@ public class Door extends Reactable {
     private float currHeight;
     private final FixtureDef fdef;
     private final PolygonShape polygonShape;
+    private final int level;
 
-    public Door(World world, MyResourceManager resourceManager, int x, int y) {
+    public Door(World world, MyResourceManager resourceManager, float x, float y, int level, boolean isOpen) {
 
         super(world, resourceManager);
+
+        this.level = level;
 
         height = 14;
         currHeight = height;
 
-        currAState = Constants.ASTATE.CLOSED;
-        prevAState = Constants.ASTATE.CLOSED;
+        currAState = isOpen ? Constants.ASTATE.OPEN : Constants.ASTATE.CLOSED;
+        prevAState = currAState;
 
-        setAnimation(TextureRegion.split(resourceManager.getTexture("door_closed"), 13, 28)[0], 1/9f, true, 1f);
+        open = isOpen;
 
-        // Creating two bodies for spring joint
+        setAnimation(TextureRegion.split(resourceManager.getTexture(isOpen ? (level == 1 ? "door_open" : "door_open2") : (level == 1 ? "door_closed" : "door_closed2")), 13, 28)[0], 1/22f, true, 1f);
+
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, (y + 2) / Constants.PPM);
         bdef.type = BodyDef.BodyType.StaticBody;
@@ -37,7 +41,7 @@ public class Door extends Reactable {
         polygonShape = new PolygonShape();
 
         //Create body fixture
-        polygonShape.setAsBox(8 / Constants.PPM, height / Constants.PPM, new Vector2(0,0), 0);
+        polygonShape.setAsBox(6 / Constants.PPM, height / Constants.PPM, new Vector2(0,0), 0);
         fdef.shape = polygonShape;
         fdef.filter.categoryBits = Constants.BIT_GROUND;
         b2body.createFixture(fdef).setUserData("door");
@@ -55,24 +59,25 @@ public class Door extends Reactable {
     }
 
     public void handleAnimation() {
-        if (currAState == Constants.ASTATE.OPEN) setAnimation(TextureRegion.split(resourceManager.getTexture("door_open"), 13, 28)[0], 1/9f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
-        else setAnimation(TextureRegion.split(resourceManager.getTexture("door_closed"), 13, 28)[0], 1/9f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
+        if (currAState == Constants.ASTATE.OPEN) setAnimation(TextureRegion.split(resourceManager.getTexture(level == 1 ? "door_open" : "door_open2"), 13, 28)[0], 1/22f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
+        else setAnimation(TextureRegion.split(resourceManager.getTexture(level == 1 ? "door_closed" : "door_closed2"), 13, 28)[0], 1/22f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
     }
 
     public void step() {
 
-        if (currHeight <= 0 && open) return;
+        if (currHeight <= 0 && open)  {
+            if (!b2body.getFixtureList().isEmpty()) b2body.destroyFixture(b2body.getFixtureList().get(0));
+            return;
+        }
         else if (currHeight >= height && !open) return;
 
-        if (open) currHeight -= 14 / Constants.PPM;
-        else currHeight += 14 / Constants.PPM;
+        if (open) currHeight -= 50 / Constants.PPM;
+        else currHeight += 50 / Constants.PPM;
 
-        // Destroying current fixture
-        Fixture fixture = b2body.getFixtureList().get(0);
-        b2body.destroyFixture(fixture);
+        if (!b2body.getFixtureList().isEmpty()) b2body.destroyFixture(b2body.getFixtureList().get(0));
 
         // Creating new fixture based on current height
-        polygonShape.setAsBox(8 / Constants.PPM, currHeight / Constants.PPM, new Vector2(0, (currHeight - height) / Constants.PPM), 0);
+        polygonShape.setAsBox(6 / Constants.PPM, currHeight / Constants.PPM, new Vector2(0, (currHeight - height) / Constants.PPM), 0);
         fdef.shape = polygonShape;
         b2body.createFixture(fdef).setUserData("door");
     }
