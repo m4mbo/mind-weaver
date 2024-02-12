@@ -66,7 +66,7 @@ public class LevelsScreen implements Screen {
     }
 
     public void update(float delta) {
-
+        handleInput();
     }
 
     public void handleInput() {
