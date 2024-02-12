@@ -8,7 +8,7 @@
  </layer>
  <layer id="2" name="graphics" width="150" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt2dlu1DAYBtCIUvZLoOxvAFLZKhD0ir3sm4D3fxBiNVZNSOxk6k477TnSLzeTqSedfLXjpGkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGC6q22dr1jXlnv4HBH9HJ2r3P9a5f5YDRcOuP/TjXHsOJg7j8Xx6f6Mz3hQ4ThD3mpla8rfzOLC91tzHnvU2z7V1pmuzs7s6+LAa1OyNSUztedudsXvPvf9Pi70ETKTy0rYv5Fs15o/x+ZJmTlcIVNXMvvTMSZXITO5rMTr7+dde72ZNmbdnvAejp7SuDFnPTbWV3+setbW9oTPLrm1z98fEo71S6/mztksnqutkb6+tvWtre9tfWh2z8vY+u1Os3fObhSPtJ5Pzf/ZiZWO3b+79scSj+24GMvVr66tMV4FueugeE5jJmOl2Qz1MdP/pRnHOdWfrpWr+cJ1Tum6KedJW0+7n9NczZmj3k/YX3pPqrSGmEuuDldpTn1Y+fPG1hSlNcTcfkv/WxyssXM5dO30c+S9c+6v5ubo/eTKs6OjZehcDs1J6TVTXG+9y/S70+yNIWlfufNfmt/3M/ezXEO5Wht4/W7XbnYVrl/SXIX12udke6frJ6wf0/ucxpWToZ+feN+qfw/0XtemuXqbqdBPP1OBXJ0M/blnI7Mv5Czm6nIzfj8p3v8aeh4jV/SFsS3mqkna4EVbL9t61dbrtt4k+252bf8ePidTeC64nWzHuXGz+TdfUe65oEyRs+iaTaYAAABW03pSUNN6oQBYDX8BIVklGQ==
+   eJzt2dlu1DAYBlALKDt3QNnfAKSyFIGgV+z7LuD9H4RYjVWTTpxkxp3OtOdIv0ya4EknX+04CQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMa72tS5inVtuafPiujm6Gzl/k9W7o/1cP6A+z8VjGNHwdR5LI1P9yd8xoMK5xnzVitbY35n5he/35rz2KPO9ommTrd1ZmJfF2b8bEy2xmSm9tzNrvTdl77f7YE+YmZKWYn7N7PtWvNn3zwpM4crZupKYX8+xpQqZqaUlXT//bxtr4dxY9btEceweobGjSnrsb6+umPVs6Z2Rnz2kFsL/v9Z4rl+7dTUOZv5c/W4p69vTX1v6kdTH8Pudelbv90Je9fsxuCZ1vM57M9Oqnzs/tO2P5d4bkdFX65+t22N8Soq3Qela5oymSrPZqxPhf4vTjjPsf62rVxNF+9zhu6bSp409bT9d56rKXPUhxH7h47JDa0hppKrwzU0pz6s/Hl9a4qhNcTUfof+tjhYfddy1r3Tr55jpzxfLc3Ri+TKu6PVMutazppD8numtN56V+j3fdgbQ/L5rXT9h+b3ReZ+lmtsru627VZb8Zg8V3G99iXbjrmKGYrrx/w5p3HleOjmKo4xl8L+ceZe2+a5eluo2E83U5FcHQ/duWezsC/mLOXqcuh/npSef816HyNXdMWxLeUqZG30oqmXTb1q6nVTb7J9N9u2+wyf4ym+F9zJttP7wa3wf76S0ntBmaJk3jWbTAEAAKynjaygpo2BAmA9/APqqSWQ
   </data>
  </layer>
  <objectgroup id="3" name="ground">
@@ -16,7 +16,7 @@
   <object id="83" x="924.75" y="1064.41" width="27.25" height="152.841"/>
   <object id="84" x="994.364" y="1106.25" width="138.97" height="13.5"/>
   <object id="85" x="994.159" y="1204.27" width="55.4318" height="13.4545"/>
-  <object id="86" x="1008.28" y="1176.27" width="27.1818" height="28.2045"/>
+  <object id="86" x="1008.28" y="1176.27" width="13.9318" height="28.2045"/>
   <object id="87" x="1037.28" y="1217.77" width="68.9318" height="27.9545"/>
   <object id="88" x="1119.78" y="1260.27" width="181.932" height="13.4545"/>
   <object id="89" x="1092.53" y="1246.27" width="27.4318" height="13.4545"/>
