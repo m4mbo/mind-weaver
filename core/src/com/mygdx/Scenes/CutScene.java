@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.mygdx.Helpers.Constants;
-import com.mygdx.Helpers.FancyFontHelper;
+import com.mygdx.Tools.FancyFontHelper;
 
 // Cutscene actor represented as a stack of other actors
 public class CutScene extends Stack {

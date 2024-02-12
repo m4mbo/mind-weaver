@@ -1,4 +1,4 @@
-package com.mygdx.Helpers;
+package com.mygdx.Tools;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

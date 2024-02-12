@@ -20,9 +20,6 @@ public class Constants {
         FSTILL; // Full still
     }
 
-    public enum SCREEN_TYPE {
-        GAME, LEVELS, MENU, SETTINGS, START
-    }
     // Player state flag
     public enum PSTATE {
         STUNNED, ON_GROUND, LANDING, ATTACKING, ATTACK_STUN, HIT, DYING

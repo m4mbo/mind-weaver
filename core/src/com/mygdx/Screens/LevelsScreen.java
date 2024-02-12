@@ -52,7 +52,8 @@ public class LevelsScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 playButton.getStyle().down = playSkin.getDrawable("ClickedPlayButton");
                 playButton.setStyle(playButton.getStyle());
-                screenManager.setCurrentScreen(ScreenManager.ScreenType.LEVEL_1);
+
+                screenManager.pushScreen(ScreenManager.SCREEN_TYPE.LEVEL_1);
                 //game.setScreen(new GameScreen(game, 1, resourceManager, game.getGameInputProcessor()));
             }
         });

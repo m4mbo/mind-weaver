@@ -107,7 +107,7 @@ public class StartScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 playButton.getStyle().down = playSkin.getDrawable("ClickedPlayButton");
                 playButton.setStyle(playButton.getStyle());
-                screenManager.setCurrentScreen(ScreenManager.ScreenType.LEVELS);
+                screenManager.setCurrentScreen(ScreenManager.SCREEN_TYPE.LEVELS);
             }
         });
 
@@ -119,7 +119,7 @@ public class StartScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 settingsButton.getStyle().down = settingsSkin.getDrawable("ClickedSettingsButton");
                 settingsButton.setStyle(settingsButton.getStyle());
-                screenManager.setCurrentScreen(ScreenManager.ScreenType.SETTINGS);
+                screenManager.setCurrentScreen(ScreenManager.SCREEN_TYPE.SETTINGS);
             }
         });
 
@@ -131,7 +131,7 @@ public class StartScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 exitButton.getStyle().down = exitSkin.getDrawable("ClickedExitButton");
                 exitButton.setStyle(exitButton.getStyle());
-                screenManager.setCurrentScreen(ScreenManager.ScreenType.EXIT);
+                screenManager.setCurrentScreen(ScreenManager.SCREEN_TYPE.EXIT);
             }
         });
 

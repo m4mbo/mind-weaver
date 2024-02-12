@@ -6,15 +6,15 @@ import com.mygdx.Tools.MyResourceManager;
 import com.badlogic.gdx.Screen;
 
 public final class ScreenManager {
-
     private final MindWeaver game;
     private final MyResourceManager resourceManager;
     private GameInputProcessor gameInputProcessor;
     private Screen prevScreen;
     private Screen currScreen;
 
-    public enum ScreenType {
+    public enum SCREEN_TYPE {
         START, RESUME, LEVELS, LEVEL_1, SETTINGS, MENU, LEVEL_COMPLETE, EXIT
+
     }
 
     public ScreenManager(MindWeaver game, MyResourceManager resourceManager) {
@@ -27,7 +27,7 @@ public final class ScreenManager {
         this.gameInputProcessor = gameInputProcessor;
     }
 
-    public void setCurrentScreen(ScreenType screenType) {
+    public void pushScreen(SCREEN_TYPE screenType) {
         // Dispose resources of the current screen if it exists
         if(prevScreen != null) {
             prevScreen.dispose();
@@ -68,10 +68,6 @@ public final class ScreenManager {
             default:
                 break;
         }
-    }
-
-    private void disposeCurrentScreen() {
-        game.getScreen().dispose();
     }
 
 }

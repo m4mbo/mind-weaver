@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.Graphics.ShaderHandler;
-import com.mygdx.Helpers.FancyFontHelper;
+import com.mygdx.Tools.FancyFontHelper;
 import com.mygdx.Objects.Item;
 import com.mygdx.RoleCast.Mage;
 import com.mygdx.Tools.ColorGenerator;
