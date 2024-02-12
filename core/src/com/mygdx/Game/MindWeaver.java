@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.mygdx.Listeners.GameInputProcessor;
 import com.mygdx.Listeners.StartInputProcessor;
 import com.mygdx.Scenes.HUD;
+import com.mygdx.Listeners.LevelsInputProcessor;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Screens.*;
 import com.badlogic.gdx.Game;
@@ -12,13 +13,21 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MindWeaver extends Game {
 	public SpriteBatch batch;
+	private ScreenManager screenManager;
 	private MyResourceManager resourceManager;
 	public HUD hud;		// HUD holding inventory will remain constant across all screens
+	private GameInputProcessor gameInputProcessor;
+	private LevelsInputProcessor levelsInputProcessor;
+
 	@Override
 	public void create () {
 
 		batch = new SpriteBatch();
 		resourceManager = new MyResourceManager();
+		screenManager = new ScreenManager(this, resourceManager);
+		gameInputProcessor = new GameInputProcessor(this, screenManager);
+		levelsInputProcessor = new LevelsInputProcessor(this, resourceManager, screenManager);
+		screenManager.setGameInputProcessor(gameInputProcessor);
 
 		loadSprites();
 
@@ -26,16 +35,33 @@ public class MindWeaver extends Game {
 
 		// Input chain
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
-		GameInputProcessor gameInputProcessor = new GameInputProcessor(this);
-		StartInputProcessor startInputProcessor = new StartInputProcessor();
 		inputMultiplexer.addProcessor(gameInputProcessor);
-		inputMultiplexer.addProcessor(startInputProcessor);
+		inputMultiplexer.addProcessor(levelsInputProcessor);
 
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		setScreen(new GameScreen(this, 4, resourceManager, gameInputProcessor));
-	}
 
+		//setScreen(new GameScreen(this, 1, resourceManager, gameInputProcessor));
+		screenManager.setCurrentScreen(ScreenManager.ScreenType.START);
+	}
 	public void loadSprites() {
+		//Start Screen buttons
+		resourceManager.loadTexture("StartAndMenuScreenButtons/UnclickedPlayButton.png", "UnclickedPlayButton");
+		resourceManager.loadTexture("StartAndMenuScreenButtons/ClickedPlayButton.png", "ClickedPlayButton");
+		resourceManager.loadTexture("StartAndMenuScreenButtons/UnclickedSettingsButton.png", "UnclickedSettingsButton");
+		resourceManager.loadTexture("StartAndMenuScreenButtons/ClickedSettingsButton.png", "ClickedSettingsButton");
+		resourceManager.loadTexture("StartAndMenuScreenButtons/UnclickedExitButton.png", "UnclickedExitButton");
+		resourceManager.loadTexture("StartAndMenuScreenButtons/ClickedExitButton.png", "ClickedExitButton");
+
+		//Menu Screen buttons
+		resourceManager.loadTexture("StartAndMenuScreenButtons/UnclickedResumeButton.png", "UnclickedResumeButton");
+		resourceManager.loadTexture("StartAndMenuScreenButtons/ClickedResumeButton.png", "ClickedResumeButton");
+		resourceManager.loadTexture("StartAndMenuScreenButtons/UnclickedLevelsButton.png", "UnclickedLevelsButton");
+		resourceManager.loadTexture("StartAndMenuScreenButtons/ClickedLevelsButton.png", "ClickedLevelsButton");
+		resourceManager.loadTexture("StartAndMenuScreenButtons/UnclickedSettingsButton.png", "UnclickedSettingsButton");
+		resourceManager.loadTexture("StartAndMenuScreenButtons/ClickedSettingsButton.png", "ClickedSettingsButton");
+		resourceManager.loadTexture("StartAndMenuScreenButtons/UnclickedQuitButton.png", "UnclickedQuitButton");
+		resourceManager.loadTexture("StartAndMenuScreenButtons/ClickedQuitButton.png", "ClickedQuitButton");
+
 		// Mage
 		resourceManager.loadTexture("Mage/mage_run.png", "mage_run");
 		resourceManager.loadTexture("Mage/mage_idle.png", "mage_idle");

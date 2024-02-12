@@ -8,6 +8,8 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+		config.setResizable(false);
+		config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode() );
 		config.setForegroundFPS(60);
 		config.setTitle("Mind Weaver");
 		new Lwjgl3Application(new MindWeaver(), config);
