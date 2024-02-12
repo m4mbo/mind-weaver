@@ -21,16 +21,13 @@ public class MenuScreen implements Screen {
     private final ScreenManager screenManager;
     private TextButton resumeButton, levelsButton, settingsButton, quitButton;
     private final float buttonWidth, buttonHeight;
-    private Stage menuStage;
+    private Stage stage;
     private final List<TextButton> menuScreenButtons = new ArrayList<>();
 
-    public MenuScreen(MyResourceManager resourceManager, ScreenManager screenManager) {
-
-        menuStage = new Stage(new ScreenViewport());
-
-        Gdx.input.setInputProcessor(menuStage);
+    public MenuScreen(MyResourceManager resourceManager, ScreenManager screenManager, Stage stage) {
 
         this.screenManager = screenManager;
+        this.stage = stage;
         this.buttonWidth = Constants.BUTTON_WIDTH;
         this.buttonHeight = Constants.BUTTON_HEIGHT;
 
@@ -42,8 +39,8 @@ public class MenuScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);;
 
-        menuStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        menuStage.draw();
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
 
     }
     private void initMenuScreen(MyResourceManager resourceManager) {
@@ -90,7 +87,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 resumeButton.getStyle().down = resumeSkin.getDrawable("ClickedResumeButton");
                 resumeButton.setStyle(resumeButton.getStyle());
-                screenManager.setCurrentScreen(ScreenManager.SCREEN_TYPE.RESUME);
+                screenManager.pushScreen(Constants.SCREEN_TYPE.RESUME);
             }
         });
 
@@ -102,7 +99,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 levelsButton.getStyle().down = levelsSkin.getDrawable("ClickedLevelsButton");
                 levelsButton.setStyle(levelsButton.getStyle());
-                screenManager.setCurrentScreen(ScreenManager.SCREEN_TYPE.LEVELS);
+                screenManager.pushScreen(Constants.SCREEN_TYPE.LEVELS);
             }
         });
 
@@ -114,7 +111,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 settingsButton.getStyle().down = settingsSkin.getDrawable("ClickedSettingsButton");
                 settingsButton.setStyle(settingsButton.getStyle());
-                screenManager.setCurrentScreen(ScreenManager.SCREEN_TYPE.SETTINGS);
+                screenManager.pushScreen(Constants.SCREEN_TYPE.SETTINGS);
             }
         });
 
@@ -126,19 +123,19 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 quitButton.getStyle().down = quitSkin.getDrawable("ClickedQuitButton");
                 quitButton.setStyle(quitButton.getStyle());
-                screenManager.setCurrentScreen(ScreenManager.SCREEN_TYPE.START);
+                screenManager.pushScreen(Constants.SCREEN_TYPE.START);
             }
         });
 
-        menuStage.addActor(resumeButton);
-        menuStage.addActor(levelsButton);
-        menuStage.addActor(settingsButton);
-        menuStage.addActor(quitButton);
+        stage.addActor(resumeButton);
+        stage.addActor(levelsButton);
+        stage.addActor(settingsButton);
+        stage.addActor(quitButton);
 
     }
     @Override
     public void dispose() {
-        menuStage.dispose();
+        stage.dispose();
         for(TextButton button: menuScreenButtons) {
             button.getSkin().dispose();
         }

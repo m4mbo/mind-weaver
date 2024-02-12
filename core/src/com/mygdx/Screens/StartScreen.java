@@ -18,11 +18,12 @@ import com.mygdx.Tools.MyResourceManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class StartScreen implements Screen {
     private final MindWeaver game;
     private final ScreenManager screenManager;
-    private Stage startStage;
+    private Stage stage;
     private TextButton playButton, settingsButton, exitButton;
     private Skin playSkin, settingsSkin, exitSkin;
     private FreeTypeFontGenerator generator;
@@ -33,14 +34,13 @@ public class StartScreen implements Screen {
     private CharSequence text;
     private final List<TextButton> startScreenButtons = new ArrayList<>();
 
-    public StartScreen(MindWeaver game, MyResourceManager resourceManager, ScreenManager screenManager) {
+    public StartScreen(MindWeaver game, MyResourceManager resourceManager, ScreenManager screenManager, Stage stage) {
 
-        startStage = new Stage(new ScreenViewport());
-
-        Gdx.input.setInputProcessor(startStage);
+        stage.clear();
 
         this.game = game;
         this.screenManager = screenManager;
+        this.stage = stage;
         this.buttonWidth = Constants.BUTTON_WIDTH;
         this.buttonHeight = Constants.BUTTON_HEIGHT;
 
@@ -56,8 +56,8 @@ public class StartScreen implements Screen {
 
         titleFont.draw(game.batch, text, (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - layout.height)/2 + 650);
 
-        startStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        startStage.draw();
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
 
         game.batch.end();
     }
@@ -107,7 +107,7 @@ public class StartScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 playButton.getStyle().down = playSkin.getDrawable("ClickedPlayButton");
                 playButton.setStyle(playButton.getStyle());
-                screenManager.setCurrentScreen(ScreenManager.SCREEN_TYPE.LEVELS);
+                screenManager.pushScreen(Constants.SCREEN_TYPE.LEVELS);
             }
         });
 
@@ -119,7 +119,7 @@ public class StartScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 settingsButton.getStyle().down = settingsSkin.getDrawable("ClickedSettingsButton");
                 settingsButton.setStyle(settingsButton.getStyle());
-                screenManager.setCurrentScreen(ScreenManager.SCREEN_TYPE.SETTINGS);
+                screenManager.pushScreen(Constants.SCREEN_TYPE.SETTINGS);
             }
         });
 
@@ -131,23 +131,19 @@ public class StartScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 exitButton.getStyle().down = exitSkin.getDrawable("ClickedExitButton");
                 exitButton.setStyle(exitButton.getStyle());
-                screenManager.setCurrentScreen(ScreenManager.SCREEN_TYPE.EXIT);
+                screenManager.pushScreen(Constants.SCREEN_TYPE.EXIT);
             }
         });
 
-        startStage.addActor(playButton);
-        startStage.addActor(settingsButton);
-        startStage.addActor(exitButton);
+        stage.addActor(playButton);
+        stage.addActor(settingsButton);
+        stage.addActor(exitButton);
 
     }
+
     @Override
     public void dispose() {
-        startStage.dispose();
-        titleFont.dispose();
-        generator.dispose();
-        for (TextButton button : startScreenButtons) {
-            button.getSkin().dispose();
-        }
+
     }
     @Override
     public void show() {

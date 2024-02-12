@@ -29,6 +29,11 @@ public class Constants {
         RUN, JUMP, IDLE, FALL, LAND, OPEN, CLOSED, ATTACK, DEATH
     }
 
+    public enum SCREEN_TYPE {
+        START, RESUME, LEVELS, LEVEL_1, SETTINGS, MENU, LEVEL_COMPLETE, EXIT
+
+    }
+
     // Bits for collision masking
     public static final short BIT_GROUND = 2;   // Includes ground and walls (because sometimes the ground can be a wall)
     public static final short BIT_HAZARD = 4;

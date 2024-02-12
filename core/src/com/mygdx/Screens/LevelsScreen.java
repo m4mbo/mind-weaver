@@ -1,6 +1,8 @@
 package com.mygdx.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,22 +14,20 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.Game.MindWeaver;
 import com.mygdx.Helpers.Constants;
+import com.mygdx.Listeners.LevelsInputProcessor;
 import com.mygdx.Tools.MyResourceManager;
 
 public class LevelsScreen implements Screen {
     private final ScreenManager screenManager;
+    private final LevelsInputProcessor inputProcessor;
     private final float buttonWidth, buttonHeight;
     private TextButton playButton;
     private Skin playSkin;
-    private Stage levelsStage;
 
-    public LevelsScreen(MyResourceManager resourceManager, final ScreenManager screenManager) {
-
-        levelsStage = new Stage(new ScreenViewport());
-
-        Gdx.input.setInputProcessor(levelsStage);
+    public LevelsScreen(MyResourceManager resourceManager, ScreenManager screenManager, LevelsInputProcessor inputProcessor) {
 
         this.screenManager = screenManager;
+        this.inputProcessor = inputProcessor;
         this.buttonWidth = Constants.BUTTON_WIDTH;
         this.buttonHeight = Constants.BUTTON_HEIGHT;
 
@@ -53,7 +53,7 @@ public class LevelsScreen implements Screen {
                 playButton.getStyle().down = playSkin.getDrawable("ClickedPlayButton");
                 playButton.setStyle(playButton.getStyle());
 
-                screenManager.pushScreen(ScreenManager.SCREEN_TYPE.LEVEL_1);
+                screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_1);
                 //game.setScreen(new GameScreen(game, 1, resourceManager, game.getGameInputProcessor()));
             }
         });
