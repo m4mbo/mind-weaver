@@ -3,7 +3,6 @@ package com.mygdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.mygdx.Listeners.GameInputProcessor;
-import com.mygdx.Listeners.StartInputProcessor;
 import com.mygdx.Scenes.HUD;
 import com.mygdx.Listeners.LevelsInputProcessor;
 import com.mygdx.Tools.MyResourceManager;

@@ -75,7 +75,7 @@ public class LevelsScreen implements Screen {
     }
     @Override
     public void dispose() {
-
+        levelsStage.dispose();
     }
 
     @Override

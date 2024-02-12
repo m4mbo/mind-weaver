@@ -1,5 +1,4 @@
 package com.mygdx.Screens;
-
 import com.badlogic.gdx.Gdx;
 import com.mygdx.Game.MindWeaver;
 import com.mygdx.Listeners.GameInputProcessor;
@@ -13,7 +12,7 @@ public final class ScreenManager {
     private ScreenType currentScreen;
 
     public enum ScreenType {
-        START, RESUME, LEVELS, LEVEL1, SETTINGS, MENU, LEVELCOMPLETE, EXIT
+        START, RESUME, LEVELS, LEVEL1, SETTINGS, MENU, LEVEL_COMPLETE, EXIT
     }
 
     public ScreenManager(MindWeaver game, MyResourceManager resourceManager) {
@@ -52,7 +51,7 @@ public final class ScreenManager {
             case MENU:
                 game.setScreen(new MenuScreen(resourceManager, this));
                 break;
-            case LEVELCOMPLETE:
+            case LEVEL_COMPLETE:
                 game.setScreen(new LevelCompleteScreen(resourceManager, this));
             case EXIT:
                 Gdx.app.exit();;

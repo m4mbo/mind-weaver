@@ -31,6 +31,8 @@ public class GameInputProcessor implements InputProcessor {
     @Override
     public boolean keyDown (int keycode) {
 
+        System.out.println("here");
+
         if (!(game.getScreen() instanceof GameScreen)) return false;
 
         PlayableCharacter character = characterCycle.getCurrentCharacter();

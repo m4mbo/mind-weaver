@@ -63,7 +63,7 @@ public class StartScreen implements Screen {
     }
     private void initStartScreen(MyResourceManager resourceManager) {
 
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("KnightWarrior.ttf"));
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/KnightWarrior.ttf"));
         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 300;
         titleFont = generator.generateFont(parameter);
