@@ -25,10 +25,10 @@ import java.util.Set;
 
 public class StartScreen implements Screen {
     private final MindWeaver game;
+    private final MyResourceManager resourceManager;
     private final ScreenManager screenManager;
     private Stage stage;
-    private TextButton settingsButton, exitButton;
-    private ImageButton playButton;
+    private ImageButton playButton, settingsButton, exitButton;
     private Skin playSkin, settingsSkin, exitSkin;
     private FreeTypeFontGenerator generator;
     private FreeTypeFontGenerator.FreeTypeFontParameter parameter;
@@ -36,20 +36,41 @@ public class StartScreen implements Screen {
     private final float buttonWidth, buttonHeight;
     private GlyphLayout layout;
     private CharSequence text;
-    private final List<TextButton> startScreenButtons = new ArrayList<>();
+    private final List<ImageButton> startScreenButtons = new ArrayList<>();
 
     public StartScreen(MindWeaver game, MyResourceManager resourceManager, ScreenManager screenManager) {
 
         this.game = game;
+        this.resourceManager = resourceManager;
         this.screenManager = screenManager;
+        this.stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
         this.buttonWidth = Constants.BUTTON_WIDTH;
         this.buttonHeight = Constants.BUTTON_HEIGHT;
-        this.stage = new Stage(new ScreenViewport());
-
-        Gdx.input.setInputProcessor(stage);
-
 
         initStartScreen(resourceManager);
+    }
+
+    public ImageButton initButton(final Skin skin, final String unclickedImagePath, final String clickedImagePath, float x, float y, float width, float height, final Constants.SCREEN_TYPE screenType) {
+        ImageButton.ImageButtonStyle buttonStyle = new ImageButton.ImageButtonStyle();
+        buttonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(resourceManager.getTexture(unclickedImagePath)));
+        buttonStyle.imageDown = new TextureRegionDrawable(new TextureRegion(resourceManager.getTexture(clickedImagePath)));
+
+        final ImageButton button = new ImageButton(buttonStyle);
+        button.getStyle().up = skin.getDrawable(unclickedImagePath);
+        button.setStyle(button.getStyle());
+        button.setPosition(x, y);
+        button.getImageCell().size(width, height);
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                button.getStyle().down = skin.getDrawable(clickedImagePath);
+                button.setStyle(button.getStyle());
+                screenManager.pushScreen(screenType);
+            }
+        });
+
+        return button;
     }
 
     @Override
@@ -78,67 +99,19 @@ public class StartScreen implements Screen {
         layout = new GlyphLayout(titleFont, text);
 
         playSkin = new Skin();
-        settingsSkin = new Skin();
-        exitSkin = new Skin();
-
         playSkin.add("UnclickedPlayButton", resourceManager.getTexture("UnclickedPlayButton"));
         playSkin.add("ClickedPlayButton", resourceManager.getTexture("ClickedPlayButton"));
+        playButton = initButton(playSkin, "UnclickedPlayButton", "ClickedPlayButton", Gdx.graphics.getWidth()/2f - buttonWidth/ 2f , (Gdx.graphics.getHeight() - buttonHeight)/2f - 50, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.LEVELS);
+
+        settingsSkin = new Skin();
         settingsSkin.add("UnclickedSettingsButton", resourceManager.getTexture("UnclickedSettingsButton"));
         settingsSkin.add("ClickedSettingsButton", resourceManager.getTexture("ClickedSettingsButton"));
+        settingsButton = initButton(settingsSkin, "UnclickedSettingsButton", "ClickedSettingsButton", (Gdx.graphics.getWidth() - buttonWidth) / 2f, (Gdx.graphics.getHeight() - buttonHeight) / 2f - 250, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.SETTINGS);
+
+        exitSkin = new Skin();
         exitSkin.add("UnclickedExitButton", resourceManager.getTexture("UnclickedExitButton"));
         exitSkin.add("ClickedExitButton", resourceManager.getTexture("ClickedExitButton"));
-
-        ImageButton.ImageButtonStyle PlayButtonStyle = new ImageButton.ImageButtonStyle();
-        TextButton.TextButtonStyle SettingsButtonStyle = new TextButton.TextButtonStyle();
-        TextButton.TextButtonStyle ExitButtonStyle = new TextButton.TextButtonStyle();
-
-        PlayButtonStyle.up = playSkin.getDrawable("UnclickedPlayButton");
-        PlayButtonStyle.down = playSkin.getDrawable("ClickedPlayButton");
-        SettingsButtonStyle.up = settingsSkin.getDrawable("UnclickedSettingsButton");
-        SettingsButtonStyle.down = settingsSkin.getDrawable("ClickedSettingsButton");
-        ExitButtonStyle.up = exitSkin.getDrawable("UnclickedExitButton");
-        ExitButtonStyle.down = exitSkin.getDrawable("ClickedExitButton");
-
-        BitmapFont font = new BitmapFont();
-        SettingsButtonStyle.font = font;
-        ExitButtonStyle.font = font;
-
-        playButton = new ImageButton(playSkin);
-        PlayButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(resourceManager.getTexture("UnclickedPlayButton")));
-        playButton.setPosition((Gdx.graphics.getWidth() - buttonWidth) / 2, (Gdx.graphics.getHeight() - buttonHeight)/2 - 50);
-        playButton.setSize(buttonWidth, buttonHeight);
-        playButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                playButton.getStyle().down = playSkin.getDrawable("ClickedPlayButton");
-                playButton.setStyle(playButton.getStyle());
-                screenManager.pushScreen(Constants.SCREEN_TYPE.LEVELS);
-            }
-        });
-
-        settingsButton = new TextButton(" ", SettingsButtonStyle);
-        settingsButton.setPosition((Gdx.graphics.getWidth() - buttonWidth) / 2, (Gdx.graphics.getHeight() - buttonHeight) / 2 - 250);
-        settingsButton.setSize(buttonWidth, buttonHeight);
-        settingsButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                settingsButton.getStyle().down = settingsSkin.getDrawable("ClickedSettingsButton");
-                settingsButton.setStyle(settingsButton.getStyle());
-                screenManager.pushScreen(Constants.SCREEN_TYPE.SETTINGS);
-            }
-        });
-
-        exitButton = new TextButton(" ", ExitButtonStyle);
-        exitButton.setPosition((Gdx.graphics.getWidth() - buttonWidth) / 2, (Gdx.graphics.getHeight() - buttonHeight) / 2 - 450);
-        exitButton.setSize(buttonWidth, buttonHeight);
-        exitButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                exitButton.getStyle().down = exitSkin.getDrawable("ClickedExitButton");
-                exitButton.setStyle(exitButton.getStyle());
-                screenManager.pushScreen(Constants.SCREEN_TYPE.EXIT);
-            }
-        });
+        exitButton = initButton(exitSkin, "UnclickedExitButton", "ClickedExitButton", (Gdx.graphics.getWidth() - buttonWidth) / 2f, (Gdx.graphics.getHeight() - buttonHeight) / 2f - 450, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.EXIT);
 
         stage.addActor(playButton);
         stage.addActor(settingsButton);
@@ -146,13 +119,9 @@ public class StartScreen implements Screen {
 
     }
 
-    /*public void initButton(TextButton.TextButtonStyle textButtonStyle, ) {
-
-    }*/
-
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
     @Override
     public void show() {

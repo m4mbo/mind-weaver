@@ -16,28 +16,20 @@ import com.mygdx.Tools.MyResourceManager;
 
 public class LevelsScreen implements Screen {
     private final MindWeaver game;
-    private final MyResourceManager resourceManager;
     private final ScreenManager screenManager;
     private final float buttonWidth, buttonHeight;
     private TextButton playButton;
     private Skin playSkin;
     private Stage stage;
 
-    public LevelsScreen(MindWeaver game, MyResourceManager resourceManager, final ScreenManager screenManager) {
+    public LevelsScreen(MindWeaver game, MyResourceManager resourceManager, ScreenManager screenManager) {
 
         this.game = game;
-        this.resourceManager = resourceManager;
         this.screenManager = screenManager;
-
-        stage = new Stage(new ScreenViewport());
+        this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-
         this.buttonWidth = Constants.BUTTON_WIDTH;
         this.buttonHeight = Constants.BUTTON_HEIGHT;
-
-        stage = new Stage(new ScreenViewport());
-
-        Gdx.input.setInputProcessor(stage);
 
         playSkin = new Skin();
 
@@ -60,16 +52,14 @@ public class LevelsScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 playButton.getStyle().down = playSkin.getDrawable("ClickedPlayButton");
                 playButton.setStyle(playButton.getStyle());
-
-                screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_1);
+                //screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_1);
             }
         });
 
         stage.addActor(playButton);
 
-                //screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_1);
-                //game.setScreen(new GameScreen(game, 1, resourceManager, game.getGameInputProcessor()));
-            }
+
+    }
 
     @Override
     public void show() {
