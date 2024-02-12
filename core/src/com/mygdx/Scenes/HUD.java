@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -72,6 +73,18 @@ public class HUD {
     public void pushInventory() {
         standBy = true;
         inventoryActor.setVisibility(true);
+    }
+
+    public void pushCutscene(CutScene cutScene) {
+        stage.addActor(cutScene);
+    }
+
+    public void removeCutscene() {
+        for (Actor actor : stage.getActors()) {
+            if (actor instanceof Stack) {
+                actor.remove();
+            }
+        }
     }
 
     public void removeInventory() {
