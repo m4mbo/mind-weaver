@@ -104,7 +104,7 @@ public class PressurePlate extends Interactable {
     }
 
     public void update(float delta) {
-
+        
         if (distanceJoint.getReactionForce(delta).y < threshold) pressedIterations++;
         else { closedIterations++; }
 

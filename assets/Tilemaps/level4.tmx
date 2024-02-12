@@ -57,7 +57,7 @@
  <objectgroup id="4" name="seethrough">
   <object id="160" x="531.818" y="1120.49" width="28.1818" height="4.23864"/>
   <object id="181" x="364.182" y="1241.09" width="41.9091" height="4.81818"/>
-  <object id="198" x="588.125" y="1022.25" width="41.875" height="4.75"/>
+  <object id="198" x="588.125" y="1023.25" width="41.875" height="3.75"/>
  </objectgroup>
  <objectgroup id="5" name="end">
   <object id="209" x="630.5" y="840.25" width="14" height="41.5"/>
