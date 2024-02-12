@@ -40,7 +40,7 @@ public class Mage extends PlayableCharacter {
         b2body.createFixture(fdef).setUserData(id);
 
         //Create mage range of vision
-        circleShape.setRadius(150 / Constants.PPM);
+        circleShape.setRadius(155 / Constants.PPM);
         fdef.shape = circleShape;
         fdef.isSensor = true;
         fdef.filter.categoryBits = Constants.BIT_ROV;

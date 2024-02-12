@@ -11,7 +11,7 @@ import com.mygdx.Tools.MyResourceManager;
 
 public class Lever extends Interactable {
 
-    public Lever(float x, float y, World world, MyResourceManager resourceManager) {
+    public Lever(float x, float y, World world, MyResourceManager resourceManager, boolean right) {
         super(world, resourceManager);
 
         BodyDef bdef = new BodyDef();
@@ -29,6 +29,8 @@ public class Lever extends Interactable {
         fdef.filter.categoryBits = Constants.BIT_INTERACT;
         fdef.filter.maskBits = Constants.BIT_MAGE | Constants.BIT_GOBLIN;
         b2body.createFixture(fdef).setUserData(this);
+
+        facingRight = right;
 
         setAnimation(TextureRegion.split(resourceManager.getTexture("lever_up"), 7, 10)[0], 1/5f, true, 1f);
 

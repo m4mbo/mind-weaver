@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="14" tileheight="14" infinite="0" nextlayerid="10" nextobjectid="82">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="14" tileheight="14" infinite="0" nextlayerid="11" nextobjectid="83">
  <tileset firstgid="1" source="dungeon padded.tsx"/>
  <layer id="1" name="background" width="100" height="100">
   <data encoding="base64" compression="zlib">
@@ -73,5 +73,8 @@
   <object id="72" x="1050.08" y="1133.8" width="8.9375" height="12.9545"/>
   <object id="73" x="1049.99" y="1153.43" width="42.0284" height="8.77268"/>
   <object id="81" x="153.87" y="1147.91" width="7.13043" height="13.3913"/>
+ </objectgroup>
+ <objectgroup id="10" name="merchant">
+  <object id="82" x="463" y="1201.33" width="9" height="8"/>
  </objectgroup>
 </map>

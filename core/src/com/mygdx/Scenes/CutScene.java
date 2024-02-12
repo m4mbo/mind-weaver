@@ -1,4 +1,9 @@
 package com.mygdx.Scenes;
 
-public class CutScene {
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+
+public class CutScene extends Stack {
+
+
+
 }

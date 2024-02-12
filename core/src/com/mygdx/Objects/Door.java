@@ -29,7 +29,7 @@ public class Door extends Reactable {
 
         open = isOpen;
 
-        setAnimation(TextureRegion.split(resourceManager.getTexture(isOpen ? (level == 1 ? "door_open" : "door_open2") : (level == 1 ? "door_closed" : "door_closed2")), 13, 28)[0], 1/9f, true, 1f);
+        setAnimation(TextureRegion.split(resourceManager.getTexture(isOpen ? (level == 1 ? "door_open" : "door_open2") : (level == 1 ? "door_closed" : "door_closed2")), 13, 28)[0], 1/22f, true, 1f);
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, (y + 2) / Constants.PPM);
@@ -59,8 +59,8 @@ public class Door extends Reactable {
     }
 
     public void handleAnimation() {
-        if (currAState == Constants.ASTATE.OPEN) setAnimation(TextureRegion.split(resourceManager.getTexture(level == 1 ? "door_open" : "door_open2"), 13, 28)[0], 1/9f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
-        else setAnimation(TextureRegion.split(resourceManager.getTexture(level == 1 ? "door_closed" : "door_closed2"), 13, 28)[0], 1/9f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
+        if (currAState == Constants.ASTATE.OPEN) setAnimation(TextureRegion.split(resourceManager.getTexture(level == 1 ? "door_open" : "door_open2"), 13, 28)[0], 1/22f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
+        else setAnimation(TextureRegion.split(resourceManager.getTexture(level == 1 ? "door_closed" : "door_closed2"), 13, 28)[0], 1/22f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
     }
 
     public void step() {
@@ -71,8 +71,8 @@ public class Door extends Reactable {
         }
         else if (currHeight >= height && !open) return;
 
-        if (open) currHeight -= 14 / Constants.PPM;
-        else currHeight += 14 / Constants.PPM;
+        if (open) currHeight -= 35 / Constants.PPM;
+        else currHeight += 35 / Constants.PPM;
 
         if (!b2body.getFixtureList().isEmpty()) b2body.destroyFixture(b2body.getFixtureList().get(0));
 

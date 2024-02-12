@@ -32,7 +32,7 @@ public class MindWeaver extends Game {
 		inputMultiplexer.addProcessor(startInputProcessor);
 
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		setScreen(new GameScreen(this, 3, resourceManager, gameInputProcessor));
+		setScreen(new GameScreen(this, 4, resourceManager, gameInputProcessor));
 	}
 
 	public void loadSprites() {

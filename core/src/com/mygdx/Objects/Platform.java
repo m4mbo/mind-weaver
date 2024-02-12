@@ -66,7 +66,7 @@ public class Platform extends Reactable {
 
     public boolean assess() {
         Vector2 position = positionCycle.get(currPosition);
-        if (MathWizard.inRange(position, b2body.getPosition(), 10f / Constants.PPM)) {
+        if (MathWizard.inRange(position, b2body.getPosition(), 1f / Constants.PPM)) {
             b2body.setLinearVelocity(0, 0);
             return true;
         } else {
@@ -78,6 +78,9 @@ public class Platform extends Reactable {
     public void step(Vector2 position) {
         Vector2 normalized = MathWizard.normalizedDirection(position, b2body.getPosition());
         b2body.setLinearVelocity(new Vector2(normalized.x * Constants.MAX_SPEED_X / 1.1f, normalized.y * Constants.MAX_SPEED_X / 2));
+
+        if (b2body.getLinearVelocity().x == 0) return;
+
         for (Entity entity : entitiesOnTop) {
             entity.getB2body().setLinearVelocity(new Vector2(normalized.x * Constants.MAX_SPEED_X / 1.1f, entity.getB2body().getLinearVelocity().y));
         }

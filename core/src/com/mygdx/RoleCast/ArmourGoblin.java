@@ -51,7 +51,7 @@ public class ArmourGoblin extends PlayableCharacter {
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData("goblin_hb");
 
-        circleShape.setRadius(140 / Constants.PPM);
+        circleShape.setRadius(155 / Constants.PPM);
         fdef.shape = circleShape;
         fdef.isSensor = true;
         fdef.filter.categoryBits = Constants.BIT_ROV;

@@ -114,7 +114,7 @@ public class VisionMap {
         RayCastCallback callback = new RayCastCallback() {
             @Override
             public float reportRayFixture(Fixture fixture, Vector2 vector2, Vector2 vector21, float v) {
-                if (fixture.getUserData().equals("ground")) {
+                if (fixture.getUserData().equals("ground") || fixture.getUserData().equals("platform")) {
                     collision = true;
                     return 0;
                 }

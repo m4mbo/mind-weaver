@@ -36,7 +36,7 @@ public class BaseGoblin extends PlayableCharacter{
         fdef = new FixtureDef();
 
         //Create mage range of vision
-        circleShape.setRadius(140 / Constants.PPM);
+        circleShape.setRadius(155 / Constants.PPM);
         fdef.shape = circleShape;
         fdef.isSensor = true;
         fdef.filter.categoryBits = Constants.BIT_ROV;

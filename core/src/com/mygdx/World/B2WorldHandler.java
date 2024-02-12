@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Objects.*;
 import com.mygdx.RoleCast.*;
@@ -12,6 +13,7 @@ import com.mygdx.Tools.MyTimer;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Tools.UtilityStation;
+import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class B2WorldHandler {
@@ -27,8 +29,6 @@ public class B2WorldHandler {
         this.util = util;
 
         createPlayer(eidAllocator, timer, hud, level);
-
-        if (level == 2) util.getEntityHandler().addEntity(new Merchant(460, 212, eidAllocator.getAndIncrement(), world, resourceManager));
 
         BodyDef bdef  = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -97,6 +97,12 @@ public class B2WorldHandler {
             util.getObjectHandler().addObject(new Item(rect.getX(), rect.getY(), world, "papaya", util.getShaderHandler(), resourceManager));
         }
 
+        // Create merchant
+        for (RectangleMapObject object : map.getLayers().get(9).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = object.getRectangle();
+            util.getEntityHandler().addEntity(new Merchant(rect.getX(), rect.getY(), eidAllocator.getAndIncrement(), world, resourceManager));
+        }
+
         createObjects(level);
 
         util.getVisionMap().initialize(util.getEntityHandler(), util.getCharacterCycle());
@@ -104,45 +110,42 @@ public class B2WorldHandler {
     }
 
     public void createObjects(int level) {
-        Door door1;
-        Door door2;
-        PressurePlate pressurePlate;
+
         switch (level) {
             case 1:
-                door1 = new Door(world, resourceManager, 567, 151.8f, 1, false);
-                util.getObjectHandler().addObject(door1);
-                pressurePlate = new PressurePlate(world, resourceManager, 598, 116.5f, 1);
-                pressurePlate.addReactable(door1);
-                util.getObjectHandler().addObject(pressurePlate);
+                createDoorAndPressurePlate(567, 151.8f, 598, 116.5f, 1, false);
                 break;
             case 2:
-                door1 = new Door(world, resourceManager, 819, 278f, 2, false);
-                util.getObjectHandler().addObject(door1);
-                pressurePlate = new PressurePlate(world, resourceManager, 749, 298.5f, 2);
-                pressurePlate.addReactable(door1);
-                util.getObjectHandler().addObject(pressurePlate);
+                createDoorAndPressurePlate(819, 278f, 749, 298.5f, 2, false);
                 break;
             case 3:
+                PressurePlate pressurePlate = createDoorAndPressurePlate(1511, 236f, 1626, 256.5f, 1, true);
+                addDoor(1630, 320f, pressurePlate, 1, false);
+            case 4:
 
-                door1 = new Door(world, resourceManager, 1511, 236f, 1, true);
-                util.getObjectHandler().addObject(door1);
-                door2 = new Door(world, resourceManager, 1630, 320f, 1, false);
-                util.getObjectHandler().addObject(door2);
-
-                pressurePlate = new PressurePlate(world, resourceManager, 1626, 256.5f, 1);
-                pressurePlate.addReactable(door1);
-                pressurePlate.addReactable(door2);
-                util.getObjectHandler().addObject(pressurePlate);
+                createDoorAndPressurePlate(469, 222, 469, 298.5f, 1, false);
+                createDoorAndPressurePlate(540, 291, 620, 409.5f, 1, false);
+                createDoorAndPressurePlate(540, 348, 620, 368.5f, 1, false);
+                createDoorAndPressurePlate(259, 348, 94, 270.5f, 1, false);
+                createDoorAndPressurePlate(175, 278, 130, 270.5f, 1, false);
 
 
-//                Lever lever = new Lever(400, 140, world, resourceManager);
-//                LinkedList<Vector2> positions = new LinkedList<>();
-//                positions.add(new Vector2(400 / Constants.PPM, 110 / Constants.PPM));
-//                positions.add(new Vector2(500 / Constants.PPM, 110 / Constants.PPM));
-//                Platform platform = new Platform(positions, world, resourceManager);
-//                lever.addReactable(platform);
-//                util.getObjectHandler().addObject(lever);
-//                util.getObjectHandler().addObject(platform);
+                LinkedList<Vector2> positions = new LinkedList<>();
+                positions.add(new Vector2(321 / Constants.PPM, 205 / Constants.PPM));
+                positions.add(new Vector2(321 / Constants.PPM, 329 / Constants.PPM));
+                createLeverAndPlatform(367.5f, 140, true, positions);
+
+                positions = new LinkedList<>();
+                positions.add(new Vector2(504 / Constants.PPM, 161 / Constants.PPM));
+                positions.add(new Vector2(504 / Constants.PPM, 329 / Constants.PPM));
+                createLeverAndPlatform(543, 175, false, positions);
+
+                positions = new LinkedList<>();
+                positions.add(new Vector2(198 / Constants.PPM, 259 / Constants.PPM));
+                positions.add(new Vector2(260 / Constants.PPM, 259 / Constants.PPM));
+                createLeverAndPlatform(346.5f, 344, false, positions);
+
+
                 break;
         }
     }
@@ -164,6 +167,10 @@ public class B2WorldHandler {
                 mage = new Mage(1078, 359, world, eidAllocator.getAndIncrement(), timer, resourceManager, util);
                 util.getEntityHandler().addPet(new Pet(world, 1078, 359, eidAllocator.getAndIncrement(), resourceManager, util));
                 break;
+            case 4:
+                mage = new Mage(437, 359, world, eidAllocator.getAndIncrement(), timer, resourceManager, util);
+                util.getEntityHandler().addPet(new Pet(world, 1078, 359, eidAllocator.getAndIncrement(), resourceManager, util));
+                break;
             default:
                 break;
 
@@ -172,4 +179,28 @@ public class B2WorldHandler {
         util.getCharacterCycle().initialize(mage);
         util.getEntityHandler().addEntity(mage);
     }
+
+    public PressurePlate createDoorAndPressurePlate(float xDoor, float yDoor, float xPressurePlate, float yPressurePlate, int level, boolean isDoorOpen) {
+        Door door = new Door(world, resourceManager, xDoor, yDoor, level, isDoorOpen);
+        util.getObjectHandler().addObject(door);
+        PressurePlate pressurePlate = new PressurePlate(world, resourceManager, xPressurePlate, yPressurePlate, level);
+        pressurePlate.addReactable(door);
+        util.getObjectHandler().addObject(pressurePlate);
+        return pressurePlate;
+    }
+
+    public void addDoor(float xDoor, float yDoor, PressurePlate pressurePlate, int level, boolean isDoorOpen) {
+        Door door = new Door(world, resourceManager, xDoor, yDoor, level, isDoorOpen);
+        util.getObjectHandler().addObject(door);
+        pressurePlate.addReactable(door);
+    }
+
+    public void createLeverAndPlatform(float xLever, float yLever, boolean right, LinkedList<Vector2> platformPositions) {
+        Lever lever = new Lever(xLever, yLever, world, resourceManager, right);
+        Platform platform = new Platform(new LinkedList<>(platformPositions), world, resourceManager);
+        lever.addReactable(platform);
+        util.getObjectHandler().addObject(lever);
+        util.getObjectHandler().addObject(platform);
+    }
+
 }
