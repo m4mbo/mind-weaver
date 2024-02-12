@@ -44,6 +44,15 @@ public final class ScreenManager {
             case LEVEL_1:
                 currScreen = new GameScreen(game, 1, resourceManager, this);
                 break;
+            case LEVEL_2:
+                currScreen = new GameScreen(game, 2, resourceManager, this);
+                break;
+            case LEVEL_3:
+                currScreen = new GameScreen(game, 3, resourceManager, this);
+                break;
+            case LEVEL_4:
+                currScreen = new GameScreen(game, 4, resourceManager, this);
+                break;
             case SETTINGS:
                 currScreen = new SettingsScreen(resourceManager, this);
                 break;

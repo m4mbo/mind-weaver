@@ -128,7 +128,7 @@ public class B2WorldHandler {
                 createDoorAndPressurePlate(540, 348, 620, 368.5f, 1, false);
                 createDoorAndPressurePlate(259, 348, 94, 270.5f, 1, false);
                 createDoorAndPressurePlate(175, 278, 130, 270.5f, 1, false);
-                createDoorAndPressurePlate(301, 446, 490, 438.5f, 1, false);
+                createDoorAndPressurePlate(301, 446, 382, 466.5f, 1, false);
 
                 LinkedList<Vector2> positions = new LinkedList<>();
                 positions.add(new Vector2(321 / Constants.PPM, 205 / Constants.PPM));
