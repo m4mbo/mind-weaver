@@ -73,12 +73,44 @@ public class CutScene extends Actor {
                 messageChain.add("...    .");
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("butterfly")));
                 break;
-            case "open_shop":
-                messageChain.add("You found me!");
-                characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_neutral")));
-                break;
             case "closed_shop":
-                messageChain.add("You found me!");
+                messageChain.add("Hi there fellow\ntraveler!");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_neutral")));
+                messageChain.add("Hello... sorry, who\nare you?");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_neutral")));
+                messageChain.add("WHO AM I? I am one of \nthe merchants of \nall time, of course.");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_bling")));
+                messageChain.add("Yeah...");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_pokerface")));
+                messageChain.add("DO YOU SMELL THAT?");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_smell")));
+                messageChain.add("is that...");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_smell")));
+                messageChain.add("PAPAYA!");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_papaya")));
+                messageChain.add("huh");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_surprised")));
+                messageChain.add("You see, these nasty \ngoblins and I share \none thing in common.");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_bling")));
+                messageChain.add("We both have a BIG \nobsession with that\ntasty, sweet, juicy\nfruit.");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_neutral")));
+                messageChain.add("I have spent many years \nof my life roaming through\nthis dungeon in search\nof those tasty treats.");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_neutral")));
+                messageChain.add("I see... well good luck.");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_neutral")));
+                messageChain.add("WAIT!");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_neutral")));
+                messageChain.add("Please, if you find \nsome, let me know.");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_smell")));
+                messageChain.add("I can reveal some very \nIMPORTANT secrets about \nthis place.");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_smell")));
+                break;
+            case "closed_shop2":
+                messageChain.add("Find me 3 slices of PAPAYA\nto reveal their secrets.");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_papaya3")));
+                break;
+            case "open_shop":
+                messageChain.add("Hi there fellow traveler!\nI l");
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_neutral")));
                 break;
             default:

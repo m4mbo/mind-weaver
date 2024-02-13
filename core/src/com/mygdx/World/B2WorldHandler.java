@@ -36,7 +36,7 @@ public class B2WorldHandler {
         FixtureDef fdef = new FixtureDef();
         Body body;
 
-        hud.pushCutscene("intro");
+        if (level == 1) hud.pushCutscene("intro");
 
         // Create ground
         for (RectangleMapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {

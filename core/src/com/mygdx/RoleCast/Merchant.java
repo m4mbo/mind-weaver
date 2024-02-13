@@ -49,7 +49,9 @@ public class Merchant extends Entity{
 
     public void interact() {
         if (hud.enoughPapaya()) hud.pushCutscene("open_shop");
-        else hud.pushCutscene("closed_shop");
+        else if (interactionNumber == 0) hud.pushCutscene("closed_shop");
+        else hud.pushCutscene("closed_shop2");
+        interactionNumber++;
     }
 
 }
