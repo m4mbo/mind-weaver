@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Objects.*;
 import com.mygdx.RoleCast.*;
+import com.mygdx.Scenes.CutScene;
 import com.mygdx.Scenes.HUD;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.Helpers.Constants;
@@ -34,6 +35,8 @@ public class B2WorldHandler {
         PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
         Body body;
+
+        if (level == 1) hud.pushCutscene("intro");
 
         // Create ground
         for (RectangleMapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {
@@ -100,7 +103,7 @@ public class B2WorldHandler {
         // Create merchant
         for (RectangleMapObject object : map.getLayers().get(9).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = object.getRectangle();
-            util.getEntityHandler().addEntity(new Merchant(rect.getX(), rect.getY(), eidAllocator.getAndIncrement(), world, resourceManager));
+            util.getEntityHandler().addEntity(new Merchant(rect.getX(), rect.getY(), eidAllocator.getAndIncrement(), world, resourceManager, hud));
         }
 
         createObjects(level);
@@ -128,7 +131,7 @@ public class B2WorldHandler {
                 createDoorAndPressurePlate(540, 348, 620, 368.5f, 1, false);
                 createDoorAndPressurePlate(259, 348, 94, 270.5f, 1, false);
                 createDoorAndPressurePlate(175, 278, 130, 270.5f, 1, false);
-                createDoorAndPressurePlate(301, 446, 490, 438.5f, 1, false);
+                createDoorAndPressurePlate(301, 446, 382, 466.5f, 1, false);
 
                 LinkedList<Vector2> positions = new LinkedList<>();
                 positions.add(new Vector2(321 / Constants.PPM, 205 / Constants.PPM));

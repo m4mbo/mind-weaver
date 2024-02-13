@@ -5,10 +5,13 @@ public class Constants {
     public static final float PPM = 100;
     public static final float MAX_SPEED_X = 1.2f;
     public static final float MAX_SPEED_Y = 5f;
-    public static final float TEXT_SPEED = 1.5f;
+    public static final float TEXT_SPEED = 12f;
     public static final float KNOCKBACK_SCALE = 1f;
     public static final float G = 11;
     public static final float G_ENHANCED = 13;
+    public static final float BUTTON_WIDTH = 345;
+    public static final float BUTTON_HEIGHT = 190.5f;
+
     // Movement state Flag
     public enum MSTATE {
         LEFT, RIGHT,
@@ -16,6 +19,7 @@ public class Constants {
         HSTILL, // Horizontal still
         FSTILL; // Full still
     }
+
     // Player state flag
     public enum PSTATE {
         STUNNED, ON_GROUND, LANDING, ATTACKING, ATTACK_STUN, HIT, DYING
@@ -23,6 +27,11 @@ public class Constants {
     // Animation state flag
     public enum ASTATE {
         RUN, JUMP, IDLE, FALL, LAND, OPEN, CLOSED, ATTACK, DEATH
+    }
+
+    public enum SCREEN_TYPE {
+        START, RESUME, LEVELS, LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, SETTINGS, MENU, LEVEL_COMPLETE, EXIT
+
     }
 
     // Bits for collision masking

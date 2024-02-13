@@ -1,9 +1,6 @@
 package com.mygdx.Game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.mygdx.Listeners.GameInputProcessor;
-import com.mygdx.Listeners.StartInputProcessor;
+import com.mygdx.Helpers.Constants;
 import com.mygdx.Scenes.HUD;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Screens.*;
@@ -11,31 +8,45 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MindWeaver extends Game {
+
 	public SpriteBatch batch;
+	private ScreenManager screenManager;
 	private MyResourceManager resourceManager;
 	public HUD hud;		// HUD holding inventory will remain constant across all screens
+
 	@Override
 	public void create () {
-
 		batch = new SpriteBatch();
 		resourceManager = new MyResourceManager();
+		screenManager = new ScreenManager(this, resourceManager);
 
 		loadSprites();
 
 		hud = new HUD(batch, resourceManager);
 
-		// Input chain
-		InputMultiplexer inputMultiplexer = new InputMultiplexer();
-		GameInputProcessor gameInputProcessor = new GameInputProcessor(this);
-		StartInputProcessor startInputProcessor = new StartInputProcessor();
-		inputMultiplexer.addProcessor(gameInputProcessor);
-		inputMultiplexer.addProcessor(startInputProcessor);
-
-		Gdx.input.setInputProcessor(inputMultiplexer);
-		setScreen(new GameScreen(this, 4, resourceManager, gameInputProcessor));
+		screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_3);
 	}
 
 	public void loadSprites() {
+
+		//Start Screen buttons
+		resourceManager.loadTexture("Buttons/UnclickedPlayButton.png", "UnclickedPlayButton");
+		resourceManager.loadTexture("Buttons/ClickedPlayButton.png", "ClickedPlayButton");
+		resourceManager.loadTexture("Buttons/UnclickedSettingsButton.png", "UnclickedSettingsButton");
+		resourceManager.loadTexture("Buttons/ClickedSettingsButton.png", "ClickedSettingsButton");
+		resourceManager.loadTexture("Buttons/UnclickedExitButton.png", "UnclickedExitButton");
+		resourceManager.loadTexture("Buttons/ClickedExitButton.png", "ClickedExitButton");
+
+		//Menu Screen buttons
+		resourceManager.loadTexture("Buttons/UnclickedResumeButton.png", "UnclickedResumeButton");
+		resourceManager.loadTexture("Buttons/ClickedResumeButton.png", "ClickedResumeButton");
+		resourceManager.loadTexture("Buttons/UnclickedLevelsButton.png", "UnclickedLevelsButton");
+		resourceManager.loadTexture("Buttons/ClickedLevelsButton.png", "ClickedLevelsButton");
+		resourceManager.loadTexture("Buttons/UnclickedSettingsButton.png", "UnclickedSettingsButton");
+		resourceManager.loadTexture("Buttons/ClickedSettingsButton.png", "ClickedSettingsButton");
+		resourceManager.loadTexture("Buttons/UnclickedQuitButton.png", "UnclickedQuitButton");
+		resourceManager.loadTexture("Buttons/ClickedQuitButton.png", "ClickedQuitButton");
+
 		// Mage
 		resourceManager.loadTexture("Mage/mage_run.png", "mage_run");
 		resourceManager.loadTexture("Mage/mage_idle.png", "mage_idle");
@@ -43,7 +54,6 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Mage/mage_land.png", "mage_land");
 		resourceManager.loadTexture("Mage/mage_fall.png", "mage_fall");
 		resourceManager.loadTexture("Mage/mage_death.png", "mage_death");
-
 
 		// Base goblin
 		resourceManager.loadTexture("Goblins/basegoblin_run.png", "goblin_run");
@@ -94,6 +104,20 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Shapes/purple_pixel.png", "purple_pixel");
 		resourceManager.loadTexture("Shapes/translucent_pixel.png", "translucent_pixel");
 
+		//Cutscenes
+		resourceManager.loadTexture("Cutscenes/cutscene_bg.png", "cutscene_bg");
+		resourceManager.loadTexture("Cutscenes/mage_neutral.png", "mage_neutral");
+		resourceManager.loadTexture("Cutscenes/mage_chained.png", "mage_chained");
+		resourceManager.loadTexture("Cutscenes/mage_freed.png", "mage_freed");
+		resourceManager.loadTexture("Cutscenes/mage_happy.png", "mage_happy");
+		resourceManager.loadTexture("Cutscenes/mage_pokerface.png", "mage_pokerface");
+		resourceManager.loadTexture("Cutscenes/mage_surprised.png", "mage_surprised");
+		resourceManager.loadTexture("Cutscenes/merchant_neutral.png", "merchant_neutral");
+		resourceManager.loadTexture("Cutscenes/merchant_bling.png", "merchant_bling");
+		resourceManager.loadTexture("Cutscenes/butterfly.png", "butterfly");
+		resourceManager.loadTexture("Cutscenes/merchant_papaya.png", "merchant_papaya");
+		resourceManager.loadTexture("Cutscenes/merchant_papaya3.png", "merchant_papaya3");
+		resourceManager.loadTexture("Cutscenes/merchant_smell.png", "merchant_smell");
 	}
 
 	@Override

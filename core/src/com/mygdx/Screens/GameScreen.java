@@ -35,7 +35,8 @@ public class GameScreen implements Screen {
     private final Box2DDebugRenderer b2dr;
     private final UtilityStation util;
     private final ShapeDrawer shapeDrawer;
-    public GameScreen(MindWeaver game, int level, MyResourceManager resourceManager, GameInputProcessor inputProcessor) {
+    private final GameInputProcessor inputProcessor;
+    public GameScreen(MindWeaver game, int level, MyResourceManager resourceManager, ScreenManager screenManager) {
 
         this.game = game;
 
@@ -67,10 +68,11 @@ public class GameScreen implements Screen {
         EntityHandler entityHandler = new EntityHandler(characterCycle, shaderHandler, visionMap);
         ParticleHandler particleHandler = new ParticleHandler();
 
+        inputProcessor = new GameInputProcessor(game, screenManager, characterCycle);
+        Gdx.input.setInputProcessor(inputProcessor);
+
         // Creating station
         util = new UtilityStation(entityHandler, objectHandler, characterCycle, visionMap, particleHandler, shaderHandler, lightManager);
-
-        inputProcessor.setGameVariables(characterCycle);
 
         world.setContactListener(new MyContactListener(util, game.hud));
         b2dr = new Box2DDebugRenderer();
@@ -82,6 +84,7 @@ public class GameScreen implements Screen {
     public void show() {  }
 
     public void update(float delta) {
+        game.hud.update(delta);
         if (game.hud.standBy()) return;
         util.update(delta, gameCam);
         timer.update(delta);
@@ -123,7 +126,9 @@ public class GameScreen implements Screen {
     public void pause() { }
 
     @Override
-    public void resume() { }
+    public void resume() {
+        Gdx.input.setInputProcessor(inputProcessor);
+    }
 
     @Override
     public void hide() { }
