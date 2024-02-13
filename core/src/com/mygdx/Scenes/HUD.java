@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -34,6 +33,7 @@ public class HUD {
     private ShapeDrawer shapeDrawer;
     private boolean standBy;
     private boolean tier2Unlocked;
+    private CutScene currCutscene;
 
     public HUD(SpriteBatch batch, MyResourceManager resourceManager) {
         this.resourceManager = resourceManager;
@@ -52,6 +52,8 @@ public class HUD {
         inventoryActor = new InventoryActor(resourceManager.getTexture("papaya"), resourceManager.getTexture("bug"));
 
         stage.addActor(inventoryActor);
+
+        currCutscene = null;
 
         inventoryActor.setVisibility(false);
     }
@@ -75,16 +77,26 @@ public class HUD {
         inventoryActor.setVisibility(true);
     }
 
-    public void pushCutscene(CutScene cutScene) {
-        stage.addActor(cutScene);
+    public void pushCutscene(String tag) {
+        if (currCutscene == null) {
+            currCutscene = new CutScene(stage, tag, resourceManager);
+            stage.addActor(currCutscene);
+        } else {
+            currCutscene = new CutScene(stage, tag, resourceManager);
+        }
+        currCutscene.setVisible(true);
+        standBy = true;
     }
 
-    public void removeCutscene() {
-        for (Actor actor : stage.getActors()) {
-            if (actor instanceof Stack) {
-                actor.remove();
-            }
-        }
+    public void cycleCutscene() {
+        System.out.println("here");
+        if (!currCutscene.cycleMessage()) return;
+        standBy = false;
+        currCutscene.setVisible(false);
+    }
+
+    public void update(float delta) {
+        currCutscene.update(delta);
     }
 
     public void removeInventory() {

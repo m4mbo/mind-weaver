@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Objects.*;
 import com.mygdx.RoleCast.*;
+import com.mygdx.Scenes.CutScene;
 import com.mygdx.Scenes.HUD;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.Helpers.Constants;

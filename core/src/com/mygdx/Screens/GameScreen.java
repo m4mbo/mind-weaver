@@ -82,6 +82,7 @@ public class GameScreen implements Screen {
     public void show() {  }
 
     public void update(float delta) {
+        game.hud.update(delta);
         if (game.hud.standBy()) return;
         util.update(delta, gameCam);
         timer.update(delta);
