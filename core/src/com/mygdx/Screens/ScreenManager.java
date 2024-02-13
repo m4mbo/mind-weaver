@@ -19,8 +19,6 @@ public final class ScreenManager {
     }
 
     public void pushScreen(Constants.SCREEN_TYPE screenType) {
-        // Dispose resources of the previous screen if it exists
-
 
         if (screenType == Constants.SCREEN_TYPE.RESUME) {
             currScreen.dispose();
@@ -38,7 +36,6 @@ public final class ScreenManager {
         // Dispose resources of the current screen if it exists
         if (currScreen != null) {
             prevScreen = currScreen;
-            currScreen.dispose();
         }
 
         // Set the new screen
@@ -46,9 +43,6 @@ public final class ScreenManager {
             case START:
                 currScreen = new StartScreen(game, resourceManager, this);
                 break;
-            case RESUME:
-                currScreen = new GameScreen(game, 1, resourceManager, this);
-                //currScreen = prevScreen;
             case RESTART:
                 int level = ((GameScreen) prevScreen).getLevel();
                 currScreen = new GameScreen(game, level, resourceManager, this);
@@ -69,12 +63,13 @@ public final class ScreenManager {
                 currScreen = new GameScreen(game, 4, resourceManager, this);
                 break;
             case LEVEL_5:
-                currScreen = new GameScreen(game, 5, resourceManager, this);
+                //currScreen = new GameScreen(game, 5, resourceManager, this);
                 break;
             case SETTINGS:
                 currScreen = new SettingsScreen(resourceManager, this);
                 break;
             case MENU:
+                prevScreen = currScreen;                //store game screen
                 currScreen = new MenuScreen(resourceManager, this);
                 break;
             case LEVEL_COMPLETE:
