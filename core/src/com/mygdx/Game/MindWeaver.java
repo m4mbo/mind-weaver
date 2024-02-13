@@ -24,7 +24,7 @@ public class MindWeaver extends Game {
 
 		hud = new HUD(batch, resourceManager);
 
-		screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_4);
+		screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_2);
 	}
 
 	public void loadSprites() {

@@ -36,6 +36,8 @@ public class B2WorldHandler {
         FixtureDef fdef = new FixtureDef();
         Body body;
 
+        hud.pushCutscene("intro");
+
         // Create ground
         for (RectangleMapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = object.getRectangle();
@@ -101,7 +103,7 @@ public class B2WorldHandler {
         // Create merchant
         for (RectangleMapObject object : map.getLayers().get(9).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = object.getRectangle();
-            util.getEntityHandler().addEntity(new Merchant(rect.getX(), rect.getY(), eidAllocator.getAndIncrement(), world, resourceManager));
+            util.getEntityHandler().addEntity(new Merchant(rect.getX(), rect.getY(), eidAllocator.getAndIncrement(), world, resourceManager, hud));
         }
 
         createObjects(level);

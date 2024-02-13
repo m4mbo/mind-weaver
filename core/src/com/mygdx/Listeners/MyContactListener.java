@@ -5,10 +5,11 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Objects.Interactable;
 import com.mygdx.Objects.Item;
 import com.mygdx.Objects.Platform;
+import com.mygdx.RoleCast.Merchant;
+import com.mygdx.RoleCast.Mage;
 import com.mygdx.Scenes.HUD;
 import com.mygdx.Tools.UtilityStation;
 import com.mygdx.World.EntityHandler;
-import com.mygdx.World.VisionMap;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.RoleCast.PlayableCharacter;
 import com.mygdx.Helpers.Constants.*;
@@ -18,8 +19,8 @@ public class MyContactListener implements ContactListener {
 
     private Fixture fa;
     private Fixture fb;
-    private UtilityStation util;
-    private HUD hud;
+    private final UtilityStation util;
+    private final HUD hud;
 
     public MyContactListener(UtilityStation util, HUD hud) {
         this.util = util;
@@ -42,6 +43,10 @@ public class MyContactListener implements ContactListener {
             Item item = (Item) (fa.getUserData() instanceof Item ? fa.getUserData() : fb.getUserData());
             util.getObjectHandler().removeObject(item);
             hud.addItem(item);
+        } else if (fa.getUserData() instanceof Merchant || fb.getUserData() instanceof Merchant) {
+            Mage mage = (Mage) entityHandler.getEntity(fa.getUserData() instanceof Merchant ? fb.getBody() : fa.getBody());
+            Merchant merchant = (Merchant) (fa.getUserData() instanceof Merchant ? fa.getUserData() : fb.getUserData());
+            mage.setMerchantInRange(merchant);
         } else if (fa.getUserData() instanceof Platform || fb.getUserData() instanceof Platform) {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData() instanceof Platform ? fb.getBody() : fa.getBody());
             character.increaseFloorContact();
@@ -94,6 +99,9 @@ public class MyContactListener implements ContactListener {
             character.decreaseFloorContact();
             Platform platform = (Platform) (fa.getUserData() instanceof Platform ? fa.getUserData() : fb.getUserData());
             platform.removeEntityOnTop(character);
+        } else if (fa.getUserData() instanceof Merchant || fb.getUserData() instanceof Merchant) {
+            Mage mage = (Mage) entityHandler.getEntity(fa.getUserData() instanceof Merchant ? fb.getBody() : fa.getBody());
+            mage.setMerchantInRange(null);
         } else if (fa.getUserData().equals("leftSensor") || fb.getUserData().equals("leftSensor")) {
             character = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("leftSensor") ? fa.getBody() : fb.getBody());
             character.setWallState(0);

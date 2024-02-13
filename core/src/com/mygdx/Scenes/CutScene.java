@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.FancyFontHelper;
 import com.mygdx.Tools.MyResourceManager;
-
 import java.util.LinkedList;
 
 // Cutscene actor represented as a stack of other actors
@@ -17,12 +16,11 @@ public class CutScene extends Actor {
     private final Stage stage;
     private final MyResourceManager resourceManager;
     private LinkedList<String> messageChain;
-    private int message;
+    private LinkedList<TextureRegion> characterRegions;
+    private int currIndex;
     private final BitmapFont font;
     private float stringCompleteness;
     private TextureRegion bgRegion;
-    private LinkedList<TextureRegion> characterRegions;
-    private int currCharacter;
     private int bgWidth = 3000;
     private int bgHeight = 800;
 
@@ -39,8 +37,7 @@ public class CutScene extends Actor {
 
         handleTag(tag);
 
-        message = 0;
-        currCharacter = 0;
+        currIndex = 0;
 
         font = FancyFontHelper.getInstance().getFont(Color.WHITE, 80);
     }
@@ -50,12 +47,10 @@ public class CutScene extends Actor {
     }
 
     public boolean cycleMessage() {
-        message++;
-        currCharacter++;
+        currIndex++;
         stringCompleteness = 0;
-        if (message >= messageChain.size()) {
-            message = 0;
-            currCharacter = 0;
+        if (currIndex >= messageChain.size()) {
+            currIndex = 0;
             return true;
         }
         return false;
@@ -68,8 +63,13 @@ public class CutScene extends Actor {
                 messageChain.add("Where am I? yessi ghthg\nfgfgfg fggfgf");
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_neutral")));
                 break;
-            case "merchant":
+            case "open_shop":
                 messageChain.add("You found me!");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_neutral")));
+                break;
+            case "closed_shop":
+                messageChain.add("You found me!");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_neutral")));
                 break;
             default:
                 break;
@@ -82,11 +82,11 @@ public class CutScene extends Actor {
 
         batch.draw(bgRegion, (stage.getViewport().getWorldWidth() - bgWidth) / 2, 50, bgWidth, bgHeight);
 
-        batch.draw(characterRegions.get(currCharacter), (stage.getViewport().getWorldWidth() - bgWidth) / 2 + 110, 150, 600, 600);
+        batch.draw(characterRegions.get(currIndex), (stage.getViewport().getWorldWidth() - bgWidth) / 2 + 110, 150, 600, 600);
 
         int charCountThisFrame = (int) stringCompleteness;
 
         // Drawing first charCountThisFrame characters of the message
-        font.draw(batch, messageChain.get(message).substring(0, Math.min(messageChain.get(message).length(), charCountThisFrame)), getX(), getY());
+        font.draw(batch, messageChain.get(currIndex).substring(0, Math.min(messageChain.get(currIndex).length(), charCountThisFrame)), getX(), getY());
     }
 }

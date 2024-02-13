@@ -55,7 +55,7 @@ public class HUD {
 
         currCutscene = null;
 
-        inventoryActor.setVisibility(false);
+        inventoryActor.setVisible(false);
     }
 
     public void addItem(Item item) {
@@ -74,38 +74,44 @@ public class HUD {
 
     public void pushInventory() {
         standBy = true;
-        inventoryActor.setVisibility(true);
+        inventoryActor.setVisible(true);
     }
 
     public void pushCutscene(String tag) {
-        if (currCutscene == null) {
-            currCutscene = new CutScene(stage, tag, resourceManager);
-            stage.addActor(currCutscene);
-        } else {
-            currCutscene = new CutScene(stage, tag, resourceManager);
+        if (currCutscene != null) {
+            currCutscene.remove();
         }
+        currCutscene = new CutScene(stage, tag, resourceManager);
+        stage.addActor(currCutscene);
         currCutscene.setVisible(true);
         standBy = true;
     }
 
     public void cycleCutscene() {
-        System.out.println("here");
         if (!currCutscene.cycleMessage()) return;
         standBy = false;
         currCutscene.setVisible(false);
     }
 
     public void update(float delta) {
-        currCutscene.update(delta);
+        if (currCutscene != null) currCutscene.update(delta);
     }
 
     public void removeInventory() {
         standBy = false;
-        inventoryActor.setVisibility(false);
+        inventoryActor.setVisible(false);
     }
 
     public boolean standBy() {
         return standBy;
+    }
+
+    public boolean enoughPapaya() {
+        int papayaCount = 0;
+        for (Item item : inventory) {
+            if (item.getName().equals("papaya")) papayaCount++;
+        }
+        return papayaCount >= 3;
     }
 
     public boolean isTier2Unlocked() {
@@ -201,10 +207,6 @@ public class HUD {
             batch.begin();
 
             super.draw(batch, parentAlpha);
-        }
-
-        public void setVisibility(boolean state) {
-            setVisible(state);
         }
     }
 }
