@@ -69,7 +69,6 @@ public final class ScreenManager {
                 currScreen = new SettingsScreen(resourceManager, this);
                 break;
             case MENU:
-                prevScreen = currScreen;                //store game screen
                 currScreen = new MenuScreen(resourceManager, this);
                 break;
             case LEVEL_COMPLETE:

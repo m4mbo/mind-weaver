@@ -30,20 +30,20 @@ public class MindWeaver extends Game {
 	public void loadSprites() {
 
 		//Start Screen buttons
-		resourceManager.loadTexture("StartAndMenuScreenButtons/UnclickedPlayButton.png", "UnclickedPlayButton");
-		resourceManager.loadTexture("StartAndMenuScreenButtons/ClickedPlayButton.png", "ClickedPlayButton");
-		resourceManager.loadTexture("StartAndMenuScreenButtons/UnclickedSettingsButton.png", "UnclickedSettingsButton");
-		resourceManager.loadTexture("StartAndMenuScreenButtons/ClickedSettingsButton.png", "ClickedSettingsButton");
-		resourceManager.loadTexture("StartAndMenuScreenButtons/UnclickedExitButton.png", "UnclickedExitButton");
-		resourceManager.loadTexture("StartAndMenuScreenButtons/ClickedExitButton.png", "ClickedExitButton");
+		resourceManager.loadTexture("Buttons/UnclickedPlayButton.png", "UnclickedPlayButton");
+		resourceManager.loadTexture("Buttons/ClickedPlayButton.png", "ClickedPlayButton");
+		resourceManager.loadTexture("Buttons/UnclickedSettingsButton.png", "UnclickedSettingsButton");
+		resourceManager.loadTexture("Buttons/ClickedSettingsButton.png", "ClickedSettingsButton");
+		resourceManager.loadTexture("Buttons/UnclickedExitButton.png", "UnclickedExitButton");
+		resourceManager.loadTexture("Buttons/ClickedExitButton.png", "ClickedExitButton");
 
 		//Menu Screen buttons
-		resourceManager.loadTexture("StartAndMenuScreenButtons/UnclickedResumeButton.png", "UnclickedResumeButton");
-		resourceManager.loadTexture("StartAndMenuScreenButtons/ClickedResumeButton.png", "ClickedResumeButton");
-		resourceManager.loadTexture("StartAndMenuScreenButtons/UnclickedRestartButton.png", "UnclickedRestartButton");
-		resourceManager.loadTexture("StartAndMenuScreenButtons/ClickedRestartButton.png", "ClickedRestartButton");
-		resourceManager.loadTexture("StartAndMenuScreenButtons/UnclickedQuitButton.png", "UnclickedQuitButton");
-		resourceManager.loadTexture("StartAndMenuScreenButtons/ClickedQuitButton.png", "ClickedQuitButton");
+		resourceManager.loadTexture("Buttons/UnclickedResumeButton.png", "UnclickedResumeButton");
+		resourceManager.loadTexture("Buttons/ClickedResumeButton.png", "ClickedResumeButton");
+		resourceManager.loadTexture("Buttons/UnclickedRestartButton.png", "UnclickedRestartButton");
+		resourceManager.loadTexture("Buttons/ClickedRestartButton.png", "ClickedRestartButton");
+		resourceManager.loadTexture("Buttons/UnclickedQuitButton.png", "UnclickedQuitButton");
+		resourceManager.loadTexture("Buttons/ClickedQuitButton.png", "ClickedQuitButton");
 
 		// Mage
 		resourceManager.loadTexture("Mage/mage_run.png", "mage_run");

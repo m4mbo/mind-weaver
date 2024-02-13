@@ -65,7 +65,7 @@ public class MenuScreen implements Screen {
         final Skin restartSkin = new Skin();
         restartSkin.add("UnclickedRestartButton", resourceManager.getTexture("UnclickedRestartButton"));
         restartSkin.add("ClickedRestartButton", resourceManager.getTexture("ClickedRestartButton"));
-        restartButton = initButton(restartSkin, "UnclickedRestartButton", "ClickedRestartButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.START);
+        restartButton = initButton(restartSkin, "UnclickedRestartButton", "ClickedRestartButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.RESTART);
 
         final Skin settingsSkin = new Skin();
         settingsSkin.add("UnclickedSettingsButton", resourceManager.getTexture("UnclickedSettingsButton"));
