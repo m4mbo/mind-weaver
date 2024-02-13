@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -19,10 +20,10 @@ import java.util.List;
 
 public class MenuScreen implements Screen {
     private final ScreenManager screenManager;
-    private TextButton resumeButton, levelsButton, settingsButton, quitButton;
+    private ImageButton resumeButton, levelsButton, settingsButton, quitButton;
     private final float buttonWidth, buttonHeight;
     private Stage stage;
-    private final List<TextButton> menuScreenButtons = new ArrayList<>();
+    private final List<ImageButton> menuScreenButtons = new ArrayList<>();
 
     public MenuScreen(MyResourceManager resourceManager, ScreenManager screenManager) {
 
@@ -36,6 +37,53 @@ public class MenuScreen implements Screen {
         initMenuScreen(resourceManager);
     }
 
+    public ImageButton initButton(final Skin skin, final String unclickedImagePath, final String clickedImagePath, int offset, final float width, final float height, final Constants.SCREEN_TYPE screenType) {
+        ImageButton.ImageButtonStyle buttonStyle = new ImageButton.ImageButtonStyle();
+        buttonStyle.imageUp = skin.getDrawable(unclickedImagePath);
+        buttonStyle.imageDown = skin.getDrawable(clickedImagePath);
+
+        final ImageButton button = new ImageButton(buttonStyle);
+        button.setPosition((Gdx.graphics.getWidth() - button.getWidth())/2 , (Gdx.graphics.getHeight() - button.getHeight())/2 - offset);
+        button.getImageCell().size(width, height);
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                button.setChecked(false);
+                screenManager.pushScreen(screenType);
+            }
+        });
+
+        return button;
+    }
+
+    private void initMenuScreen(MyResourceManager resourceManager) {
+        final Skin resumeSkin = new Skin();
+        resumeSkin.add("UnclickedResumeButton", resourceManager.getTexture("UnclickedResumeButton"));
+        resumeSkin.add("ClickedResumeButton", resourceManager.getTexture("ClickedResumeButton"));
+        resumeButton = initButton(resumeSkin, "UnclickedResumeButton", "ClickedResumeButton", -150, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.RESUME );
+
+        final Skin levelsSkin = new Skin();
+        levelsSkin.add("UnclickedLevelsButton", resourceManager.getTexture("UnclickedLevelsButton"));
+        levelsSkin.add("ClickedLevelsButton", resourceManager.getTexture("ClickedLevelsButton"));
+        levelsButton = initButton(levelsSkin, "UnclickedLevelsButton", "ClickedLevelsButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.LEVELS);
+
+        final Skin settingsSkin = new Skin();
+        settingsSkin.add("UnclickedSettingsButton", resourceManager.getTexture("UnclickedSettingsButton"));
+        settingsSkin.add("ClickedSettingsButton", resourceManager.getTexture("ClickedSettingsButton"));
+        settingsButton = initButton(settingsSkin, "UnclickedSettingsButton", "ClickedSettingsButton", 250, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.SETTINGS);
+
+        final Skin quitSkin = new Skin();
+        quitSkin.add("UnclickedQuitButton", resourceManager.getTexture("UnclickedQuitButton"));
+        quitSkin.add("ClickedQuitButton", resourceManager.getTexture("ClickedQuitButton"));
+        quitButton = initButton(quitSkin, "UnclickedQuitButton", "ClickedQuitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.START);
+
+        stage.addActor(resumeButton);
+        stage.addActor(levelsButton);
+        stage.addActor(settingsButton);
+        stage.addActor(quitButton);
+
+    }
+
     @Override
     public void render(float v) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -45,103 +93,9 @@ public class MenuScreen implements Screen {
         stage.draw();
 
     }
-    private void initMenuScreen(MyResourceManager resourceManager) {
-        final Skin resumeSkin = new Skin();
-        final Skin levelsSkin = new Skin();
-        final Skin settingsSkin = new Skin();
-        final Skin quitSkin = new Skin();
 
-        resumeSkin.add("UnclickedResumeButton", resourceManager.getTexture("UnclickedResumeButton"));
-        resumeSkin.add("ClickedResumeButton", resourceManager.getTexture("ClickedResumeButton"));
-        levelsSkin.add("UnclickedLevelsButton", resourceManager.getTexture("UnclickedLevelsButton"));
-        levelsSkin.add("ClickedLevelsButton", resourceManager.getTexture("ClickedLevelsButton"));
-        settingsSkin.add("UnclickedSettingsButton", resourceManager.getTexture("UnclickedSettingsButton"));
-        settingsSkin.add("ClickedSettingsButton", resourceManager.getTexture("ClickedSettingsButton"));
-        quitSkin.add("UnclickedQuitButton", resourceManager.getTexture("UnclickedQuitButton"));
-        quitSkin.add("ClickedQuitButton", resourceManager.getTexture("ClickedQuitButton"));
-
-
-        TextButton.TextButtonStyle ResumeButtonStyle = new TextButton.TextButtonStyle();
-        TextButton.TextButtonStyle LevelsButtonStyle = new TextButton.TextButtonStyle();
-        TextButton.TextButtonStyle SettingsButtonStyle = new TextButton.TextButtonStyle();
-        TextButton.TextButtonStyle QuitButtonStyle = new TextButton.TextButtonStyle();
-
-        ResumeButtonStyle.up = resumeSkin.getDrawable("UnclickedResumeButton");
-        ResumeButtonStyle.down = resumeSkin.getDrawable("ClickedResumeButton");
-        LevelsButtonStyle.up = levelsSkin.getDrawable("UnclickedLevelsButton");
-        LevelsButtonStyle.down = levelsSkin.getDrawable("ClickedLevelsButton");
-        SettingsButtonStyle.up = settingsSkin.getDrawable("UnclickedSettingsButton");
-        SettingsButtonStyle.down = settingsSkin.getDrawable("ClickedSettingsButton");
-        QuitButtonStyle.up = quitSkin.getDrawable("UnclickedQuitButton");
-        QuitButtonStyle.down = quitSkin.getDrawable("ClickedQuitButton");
-
-        BitmapFont font = new BitmapFont();
-        ResumeButtonStyle.font = font;
-        LevelsButtonStyle.font = font;
-        SettingsButtonStyle.font = font;
-        QuitButtonStyle.font = font;
-
-        resumeButton = new TextButton(" ", ResumeButtonStyle);
-        resumeButton.setPosition((Gdx.graphics.getWidth() - buttonWidth) / 2, (Gdx.graphics.getHeight() - buttonHeight)/2 + 150);
-        resumeButton.setSize(buttonWidth, buttonHeight);
-        resumeButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                resumeButton.getStyle().down = resumeSkin.getDrawable("ClickedResumeButton");
-                resumeButton.setStyle(resumeButton.getStyle());
-                screenManager.pushScreen(Constants.SCREEN_TYPE.RESUME);
-            }
-        });
-
-        levelsButton = new TextButton(" ", LevelsButtonStyle);
-        levelsButton.setPosition((Gdx.graphics.getWidth() - buttonWidth) / 2, (Gdx.graphics.getHeight() - buttonHeight)/2 - 50);
-        levelsButton.setSize(buttonWidth, buttonHeight);
-        levelsButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                levelsButton.getStyle().down = levelsSkin.getDrawable("ClickedLevelsButton");
-                levelsButton.setStyle(levelsButton.getStyle());
-                screenManager.pushScreen(Constants.SCREEN_TYPE.LEVELS);
-            }
-        });
-
-        settingsButton = new TextButton(" ", SettingsButtonStyle);
-        settingsButton.setPosition((Gdx.graphics.getWidth() - buttonWidth) / 2, (Gdx.graphics.getHeight() - buttonHeight)/2 - 250);
-        settingsButton.setSize(buttonWidth, buttonHeight);
-        settingsButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                settingsButton.getStyle().down = settingsSkin.getDrawable("ClickedSettingsButton");
-                settingsButton.setStyle(settingsButton.getStyle());
-                screenManager.pushScreen(Constants.SCREEN_TYPE.SETTINGS);
-            }
-        });
-
-        quitButton = new TextButton(" ", QuitButtonStyle);
-        quitButton.setPosition((Gdx.graphics.getWidth() - buttonWidth) / 2, (Gdx.graphics.getHeight() - buttonHeight)/2 - 450);
-        quitButton.setSize(buttonWidth, buttonHeight);
-        quitButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                quitButton.getStyle().down = quitSkin.getDrawable("ClickedQuitButton");
-                quitButton.setStyle(quitButton.getStyle());
-                screenManager.pushScreen(Constants.SCREEN_TYPE.START);
-            }
-        });
-
-        stage.addActor(resumeButton);
-        stage.addActor(levelsButton);
-        stage.addActor(settingsButton);
-        stage.addActor(quitButton);
-
-    }
     @Override
-    public void dispose() {
-        stage.dispose();
-        for(TextButton button: menuScreenButtons) {
-            button.getSkin().dispose();
-        }
-    }
+    public void dispose() { }
     @Override
     public void show() {
 

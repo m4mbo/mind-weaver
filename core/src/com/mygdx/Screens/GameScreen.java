@@ -39,8 +39,6 @@ public class GameScreen implements Screen {
 
         this.game = game;
 
-        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());      // Full-screen
-
         // Creating tile map
         TmxMapLoader mapLoader = new TmxMapLoader();
         TiledMap map = null;

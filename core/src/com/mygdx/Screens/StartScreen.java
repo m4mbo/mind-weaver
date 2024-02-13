@@ -36,8 +36,6 @@ public class StartScreen implements Screen {
     private final float buttonWidth, buttonHeight;
     private GlyphLayout layout;
     private CharSequence text;
-    private final List<ImageButton> startScreenButtons = new ArrayList<>();
-
     public StartScreen(MindWeaver game, MyResourceManager resourceManager, ScreenManager screenManager) {
 
         this.game = game;
@@ -51,26 +49,54 @@ public class StartScreen implements Screen {
         initStartScreen(resourceManager);
     }
 
-    public ImageButton initButton(final Skin skin, final String unclickedImagePath, final String clickedImagePath, float x, float y, float width, float height, final Constants.SCREEN_TYPE screenType) {
+    public ImageButton initButton(final Skin skin, final String unclickedImagePath, final String clickedImagePath, int offset, final float width, final float height, final Constants.SCREEN_TYPE screenType) {
         ImageButton.ImageButtonStyle buttonStyle = new ImageButton.ImageButtonStyle();
-        buttonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(resourceManager.getTexture(unclickedImagePath)));
-        buttonStyle.imageDown = new TextureRegionDrawable(new TextureRegion(resourceManager.getTexture(clickedImagePath)));
+        buttonStyle.imageUp = skin.getDrawable(unclickedImagePath);
+        buttonStyle.imageDown = skin.getDrawable(clickedImagePath);
 
         final ImageButton button = new ImageButton(buttonStyle);
-        button.getStyle().up = skin.getDrawable(unclickedImagePath);
-        button.setStyle(button.getStyle());
-        button.setPosition(x, y);
+        button.setPosition((Gdx.graphics.getWidth() - button.getWidth())/2 , (Gdx.graphics.getHeight() - button.getHeight())/2 - offset);
         button.getImageCell().size(width, height);
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                button.getStyle().down = skin.getDrawable(clickedImagePath);
-                button.setStyle(button.getStyle());
+                button.setChecked(false);
                 screenManager.pushScreen(screenType);
             }
         });
 
         return button;
+    }
+
+    private void initStartScreen(MyResourceManager resourceManager) {
+
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/KnightWarrior.ttf"));
+        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 300;
+        titleFont = generator.generateFont(parameter);
+        titleFont.setColor(112/255f, 41/255f, 99/255f, 1);
+
+        text = "Mind Weaver";
+        layout = new GlyphLayout(titleFont, text);
+
+        playSkin = new Skin();
+        playSkin.add("UnclickedPlayButton", resourceManager.getTexture("UnclickedPlayButton"));
+        playSkin.add("ClickedPlayButton", resourceManager.getTexture("ClickedPlayButton"));
+        playButton = initButton(playSkin, "UnclickedPlayButton", "ClickedPlayButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.LEVELS);
+
+        settingsSkin = new Skin();
+        settingsSkin.add("UnclickedSettingsButton", resourceManager.getTexture("UnclickedSettingsButton"));
+        settingsSkin.add("ClickedSettingsButton", resourceManager.getTexture("ClickedSettingsButton"));
+        settingsButton = initButton(settingsSkin, "UnclickedSettingsButton", "ClickedSettingsButton",  250, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.SETTINGS);
+
+        exitSkin = new Skin();
+        exitSkin.add("UnclickedExitButton", resourceManager.getTexture("UnclickedExitButton"));
+        exitSkin.add("ClickedExitButton", resourceManager.getTexture("ClickedExitButton"));
+        exitButton = initButton(exitSkin, "UnclickedExitButton", "ClickedExitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.EXIT);
+
+        stage.addActor(playButton);
+        stage.addActor(settingsButton);
+        stage.addActor(exitButton);
     }
 
     @Override
@@ -87,60 +113,16 @@ public class StartScreen implements Screen {
 
         game.batch.end();
     }
-    private void initStartScreen(MyResourceManager resourceManager) {
-
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/KnightWarrior.ttf"));
-        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 300;
-        titleFont = generator.generateFont(parameter);
-        titleFont.setColor(112/255f, 41/255f, 99/255f, 1);
-
-        text = "Mind Weaver";
-        layout = new GlyphLayout(titleFont, text);
-
-        playSkin = new Skin();
-        playSkin.add("UnclickedPlayButton", resourceManager.getTexture("UnclickedPlayButton"));
-        playSkin.add("ClickedPlayButton", resourceManager.getTexture("ClickedPlayButton"));
-        playButton = initButton(playSkin, "UnclickedPlayButton", "ClickedPlayButton", Gdx.graphics.getWidth()/2f - buttonWidth/ 2f , (Gdx.graphics.getHeight() - buttonHeight)/2f - 50, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.LEVELS);
-
-        settingsSkin = new Skin();
-        settingsSkin.add("UnclickedSettingsButton", resourceManager.getTexture("UnclickedSettingsButton"));
-        settingsSkin.add("ClickedSettingsButton", resourceManager.getTexture("ClickedSettingsButton"));
-        settingsButton = initButton(settingsSkin, "UnclickedSettingsButton", "ClickedSettingsButton", (Gdx.graphics.getWidth() - buttonWidth) / 2f, (Gdx.graphics.getHeight() - buttonHeight) / 2f - 250, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.SETTINGS);
-
-        exitSkin = new Skin();
-        exitSkin.add("UnclickedExitButton", resourceManager.getTexture("UnclickedExitButton"));
-        exitSkin.add("ClickedExitButton", resourceManager.getTexture("ClickedExitButton"));
-        exitButton = initButton(exitSkin, "UnclickedExitButton", "ClickedExitButton", (Gdx.graphics.getWidth() - buttonWidth) / 2f, (Gdx.graphics.getHeight() - buttonHeight) / 2f - 450, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.EXIT);
-
-        stage.addActor(playButton);
-        stage.addActor(settingsButton);
-        stage.addActor(exitButton);
-
-    }
-
     @Override
-    public void dispose() {
-        stage.dispose();
-    }
+    public void dispose() { }
     @Override
-    public void show() {
-
-    }
+    public void show() { }
     @Override
-    public void resize(int width, int height) {
-
-    }
+    public void resize(int width, int height) { }
     @Override
-    public void pause() {
-
-    }
+    public void pause() { }
     @Override
-    public void resume() {
-
-    }
+    public void resume() { }
     @Override
-    public void hide() {
-
-    }
+    public void hide() { }
 }
