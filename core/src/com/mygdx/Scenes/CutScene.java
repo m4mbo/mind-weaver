@@ -33,7 +33,7 @@ public class CutScene extends Actor {
 
         bgRegion = new TextureRegion(resourceManager.getTexture("cutscene_bg"));
 
-        setBounds(stage.getViewport().getWorldWidth() / 2 - 600, 550, bgWidth, bgHeight);
+        setPosition(stage.getViewport().getWorldWidth() / 2 - 400, 500);
 
         handleTag(tag);
 
@@ -70,7 +70,7 @@ public class CutScene extends Actor {
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("butterfly")));
                 messageChain.add("How did I end up here?");
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_neutral")));
-                messageChain.add("...           .");
+                messageChain.add("...    .");
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("butterfly")));
                 break;
             case "open_shop":

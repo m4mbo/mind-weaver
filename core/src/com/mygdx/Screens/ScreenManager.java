@@ -21,8 +21,9 @@ public final class ScreenManager {
     public void pushScreen(Constants.SCREEN_TYPE screenType) {
 
         if (screenType == Constants.SCREEN_TYPE.RESUME) {
-            currScreen.dispose();
+            Screen temp = currScreen;
             currScreen = prevScreen;
+            prevScreen = temp;
             game.setScreen(currScreen);
             currScreen.resume();
             return;

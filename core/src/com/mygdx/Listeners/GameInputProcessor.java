@@ -34,8 +34,12 @@ public class GameInputProcessor implements InputProcessor {
 
         if (character.isStateActive(PSTATE.DYING)) return true;
 
-        if (game.hud.standBy()) {
+        if (game.hud.getCurrCutscene() != null) {
             if (keycode == Input.Keys.X) game.hud.cycleCutscene();
+            return true;
+        }
+
+        if (game.hud.standBy()) {
             if (keycode == Input.Keys.I) game.hud.removeInventory();
             return true;
         }

@@ -78,19 +78,16 @@ public class HUD {
     }
 
     public void pushCutscene(String tag) {
-        if (currCutscene != null) {
-            currCutscene.remove();
-        }
         currCutscene = new CutScene(stage, tag, resourceManager);
         stage.addActor(currCutscene);
         currCutscene.setVisible(true);
-        standBy = true;
     }
 
     public void cycleCutscene() {
         if (!currCutscene.cycleMessage()) return;
-        standBy = false;
         currCutscene.setVisible(false);
+        currCutscene.remove();
+        currCutscene = null;
     }
 
     public void update(float delta) {
@@ -104,6 +101,10 @@ public class HUD {
 
     public boolean standBy() {
         return standBy;
+    }
+
+    public CutScene getCurrCutscene() {
+        return currCutscene;
     }
 
     public boolean enoughPapaya() {
