@@ -11,6 +11,7 @@ import com.mygdx.Helpers.Constants;
 public class Mage extends PlayableCharacter {
 
     private Vector2 currCheckPoint;
+    private Merchant merchantInRange;
 
     public Mage(float x, float y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, UtilityStation utilityStation) {
 
@@ -112,5 +113,11 @@ public class Mage extends PlayableCharacter {
         }
     }
 
-    public void setCheckPoint(Vector2 position) { currCheckPoint = position; }
+    public void setMerchantInRange(Merchant merchant) {
+        merchantInRange = merchant;
+    }
+
+    public Merchant getMerchantInRange() {
+        return merchantInRange;
+    }
 }

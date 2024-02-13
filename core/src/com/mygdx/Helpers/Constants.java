@@ -5,7 +5,7 @@ public class Constants {
     public static final float PPM = 100;
     public static final float MAX_SPEED_X = 1.2f;
     public static final float MAX_SPEED_Y = 5f;
-    public static final float TEXT_SPEED = 1.5f;
+    public static final float TEXT_SPEED = 8f;
     public static final float KNOCKBACK_SCALE = 1f;
     public static final float G = 11;
     public static final float G_ENHANCED = 13;

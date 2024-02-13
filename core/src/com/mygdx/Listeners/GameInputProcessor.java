@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.mygdx.Game.MindWeaver;
+import com.mygdx.RoleCast.Mage;
 import com.mygdx.Screens.ScreenManager;
 import com.mygdx.World.CharacterCycle;
 import com.mygdx.RoleCast.ArmourGoblin;
@@ -14,7 +15,7 @@ import com.mygdx.Helpers.Constants.*;
 
 public class GameInputProcessor implements InputProcessor {
     
-    private CharacterCycle characterCycle;
+    private final CharacterCycle characterCycle;
     private final MindWeaver game;
     private final ScreenManager screenManager;
 
@@ -34,6 +35,7 @@ public class GameInputProcessor implements InputProcessor {
         if (character.isStateActive(PSTATE.DYING)) return true;
 
         if (game.hud.standBy()) {
+            if (keycode == Input.Keys.X) game.hud.cycleCutscene();
             if (keycode == Input.Keys.I) game.hud.removeInventory();
             return true;
         }
@@ -67,7 +69,11 @@ public class GameInputProcessor implements InputProcessor {
                 if (character instanceof ArmourGoblin) ((ArmourGoblin) character).attack();
                 break;
             case Input.Keys.X:
-                character.interact();
+                if (character instanceof Mage && ((Mage) character).getMerchantInRange() != null) {
+                    ((Mage) character).getMerchantInRange().interact();
+                } else {
+                    character.interact();
+                }
                 break;
             case Input.Keys.I:
                 character.setMovementState(MSTATE.HSTILL);

@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -34,6 +33,7 @@ public class HUD {
     private ShapeDrawer shapeDrawer;
     private boolean standBy;
     private boolean tier2Unlocked;
+    private CutScene currCutscene;
 
     public HUD(SpriteBatch batch, MyResourceManager resourceManager) {
         this.resourceManager = resourceManager;
@@ -53,7 +53,9 @@ public class HUD {
 
         stage.addActor(inventoryActor);
 
-        inventoryActor.setVisibility(false);
+        currCutscene = null;
+
+        inventoryActor.setVisible(false);
     }
 
     public void addItem(Item item) {
@@ -72,28 +74,44 @@ public class HUD {
 
     public void pushInventory() {
         standBy = true;
-        inventoryActor.setVisibility(true);
+        inventoryActor.setVisible(true);
     }
 
-    public void pushCutscene(CutScene cutScene) {
-        stage.addActor(cutScene);
-    }
-
-    public void removeCutscene() {
-        for (Actor actor : stage.getActors()) {
-            if (actor instanceof Stack) {
-                actor.remove();
-            }
+    public void pushCutscene(String tag) {
+        if (currCutscene != null) {
+            currCutscene.remove();
         }
+        currCutscene = new CutScene(stage, tag, resourceManager);
+        stage.addActor(currCutscene);
+        currCutscene.setVisible(true);
+        standBy = true;
+    }
+
+    public void cycleCutscene() {
+        if (!currCutscene.cycleMessage()) return;
+        standBy = false;
+        currCutscene.setVisible(false);
+    }
+
+    public void update(float delta) {
+        if (currCutscene != null) currCutscene.update(delta);
     }
 
     public void removeInventory() {
         standBy = false;
-        inventoryActor.setVisibility(false);
+        inventoryActor.setVisible(false);
     }
 
     public boolean standBy() {
         return standBy;
+    }
+
+    public boolean enoughPapaya() {
+        int papayaCount = 0;
+        for (Item item : inventory) {
+            if (item.getName().equals("papaya")) papayaCount++;
+        }
+        return papayaCount >= 3;
     }
 
     public boolean isTier2Unlocked() {
@@ -189,10 +207,6 @@ public class HUD {
             batch.begin();
 
             super.draw(batch, parentAlpha);
-        }
-
-        public void setVisibility(boolean state) {
-            setVisible(state);
         }
     }
 }

@@ -8,6 +8,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MindWeaver extends Game {
+
 	public SpriteBatch batch;
 	private ScreenManager screenManager;
 	private MyResourceManager resourceManager;
@@ -15,7 +16,6 @@ public class MindWeaver extends Game {
 
 	@Override
 	public void create () {
-
 		batch = new SpriteBatch();
 		resourceManager = new MyResourceManager();
 		screenManager = new ScreenManager(this, resourceManager);
@@ -24,9 +24,11 @@ public class MindWeaver extends Game {
 
 		hud = new HUD(batch, resourceManager);
 
-		screenManager.pushScreen(Constants.SCREEN_TYPE.START);
+		screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_2);
 	}
+
 	public void loadSprites() {
+
 		//Start Screen buttons
 		resourceManager.loadTexture("StartAndMenuScreenButtons/UnclickedPlayButton.png", "UnclickedPlayButton");
 		resourceManager.loadTexture("StartAndMenuScreenButtons/ClickedPlayButton.png", "ClickedPlayButton");
@@ -50,7 +52,6 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Mage/mage_land.png", "mage_land");
 		resourceManager.loadTexture("Mage/mage_fall.png", "mage_fall");
 		resourceManager.loadTexture("Mage/mage_death.png", "mage_death");
-
 
 		// Base goblin
 		resourceManager.loadTexture("Goblins/basegoblin_run.png", "goblin_run");
@@ -101,6 +102,9 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Shapes/purple_pixel.png", "purple_pixel");
 		resourceManager.loadTexture("Shapes/translucent_pixel.png", "translucent_pixel");
 
+		//Cutscenes
+		resourceManager.loadTexture("Cutscenes/cutscene_bg.png", "cutscene_bg");
+		resourceManager.loadTexture("Cutscenes/mage_neutral.png", "mage_neutral");
 	}
 
 	@Override

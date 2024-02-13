@@ -20,6 +20,17 @@ public final class ScreenManager {
 
     public void pushScreen(Constants.SCREEN_TYPE screenType) {
         // Dispose resources of the previous screen if it exists
+
+
+        if (screenType == Constants.SCREEN_TYPE.RESUME) {
+            currScreen.dispose();
+            currScreen = prevScreen;
+            game.setScreen(currScreen);
+            currScreen.resume();
+            return;
+        }
+
+        // Dispose resources of the current screen if it exists
         if(prevScreen != null) {
             prevScreen.dispose();
         }
@@ -37,7 +48,6 @@ public final class ScreenManager {
                 break;
             case RESUME:
                 currScreen = new GameScreen(game, 1, resourceManager, this);
-                //currScreen = prevScreen;
                 break;
             case LEVELS:
                 currScreen = new LevelsScreen(game, resourceManager, this);
