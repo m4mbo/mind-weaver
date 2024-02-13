@@ -48,6 +48,10 @@ public final class ScreenManager {
                 break;
             case RESUME:
                 currScreen = new GameScreen(game, 1, resourceManager, this);
+                //currScreen = prevScreen;
+            case RESTART:
+                int level = ((GameScreen) prevScreen).getLevel();
+                currScreen = new GameScreen(game, level, resourceManager, this);
                 break;
             case LEVELS:
                 currScreen = new LevelsScreen(game, resourceManager, this);

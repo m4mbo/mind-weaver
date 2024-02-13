@@ -20,7 +20,7 @@ import java.util.List;
 
 public class MenuScreen implements Screen {
     private final ScreenManager screenManager;
-    private ImageButton resumeButton, levelsButton, settingsButton, quitButton;
+    private ImageButton resumeButton, restartButton, settingsButton, quitButton;
     private final float buttonWidth, buttonHeight;
     private Stage stage;
     private final List<ImageButton> menuScreenButtons = new ArrayList<>();
@@ -60,12 +60,12 @@ public class MenuScreen implements Screen {
         final Skin resumeSkin = new Skin();
         resumeSkin.add("UnclickedResumeButton", resourceManager.getTexture("UnclickedResumeButton"));
         resumeSkin.add("ClickedResumeButton", resourceManager.getTexture("ClickedResumeButton"));
-        resumeButton = initButton(resumeSkin, "UnclickedResumeButton", "ClickedResumeButton", -150, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.RESUME );
+        resumeButton = initButton(resumeSkin, "UnclickedResumeButton", "ClickedResumeButton", -150, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.RESUME);
 
-        final Skin levelsSkin = new Skin();
-        levelsSkin.add("UnclickedLevelsButton", resourceManager.getTexture("UnclickedLevelsButton"));
-        levelsSkin.add("ClickedLevelsButton", resourceManager.getTexture("ClickedLevelsButton"));
-        levelsButton = initButton(levelsSkin, "UnclickedLevelsButton", "ClickedLevelsButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.LEVELS);
+        final Skin restartSkin = new Skin();
+        restartSkin.add("UnclickedRestartButton", resourceManager.getTexture("UnclickedRestartButton"));
+        restartSkin.add("ClickedRestartButton", resourceManager.getTexture("ClickedRestartButton"));
+        restartButton = initButton(restartSkin, "UnclickedRestartButton", "ClickedRestartButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.START);
 
         final Skin settingsSkin = new Skin();
         settingsSkin.add("UnclickedSettingsButton", resourceManager.getTexture("UnclickedSettingsButton"));
@@ -75,10 +75,10 @@ public class MenuScreen implements Screen {
         final Skin quitSkin = new Skin();
         quitSkin.add("UnclickedQuitButton", resourceManager.getTexture("UnclickedQuitButton"));
         quitSkin.add("ClickedQuitButton", resourceManager.getTexture("ClickedQuitButton"));
-        quitButton = initButton(quitSkin, "UnclickedQuitButton", "ClickedQuitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.START);
+        quitButton = initButton(quitSkin, "UnclickedQuitButton", "ClickedQuitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.LEVELS);
 
         stage.addActor(resumeButton);
-        stage.addActor(levelsButton);
+        stage.addActor(restartButton);
         stage.addActor(settingsButton);
         stage.addActor(quitButton);
 

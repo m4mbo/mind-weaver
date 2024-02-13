@@ -36,15 +36,17 @@ public class GameScreen implements Screen {
     private final UtilityStation util;
     private final ShapeDrawer shapeDrawer;
     private final GameInputProcessor inputProcessor;
+    private final int level;
+
     public GameScreen(MindWeaver game, int level, MyResourceManager resourceManager, ScreenManager screenManager) {
 
         this.game = game;
-
+        this.level = level;
         // Creating tile map
         TmxMapLoader mapLoader = new TmxMapLoader();
         TiledMap map = null;
 
-        map = mapLoader.load("Tilemaps/level" + level + ".tmx");
+        map = mapLoader.load("Tilemaps/level" + this.level + ".tmx");
 
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
         world = new World(new Vector2(0, -Constants.G), true);
@@ -118,6 +120,10 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         gamePort.update(width, height);
+    }
+
+    public int getLevel() {
+        return this.level;
     }
 
     @Override
