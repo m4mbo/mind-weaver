@@ -24,7 +24,7 @@ public class MindWeaver extends Game {
 
 		hud = new HUD(batch, resourceManager);
 
-		screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_3);
+		screenManager.pushScreen(Constants.SCREEN_TYPE.START);
 	}
 
 	public void loadSprites() {
@@ -40,10 +40,8 @@ public class MindWeaver extends Game {
 		//Menu Screen buttons
 		resourceManager.loadTexture("Buttons/UnclickedResumeButton.png", "UnclickedResumeButton");
 		resourceManager.loadTexture("Buttons/ClickedResumeButton.png", "ClickedResumeButton");
-		resourceManager.loadTexture("Buttons/UnclickedLevelsButton.png", "UnclickedLevelsButton");
-		resourceManager.loadTexture("Buttons/ClickedLevelsButton.png", "ClickedLevelsButton");
-		resourceManager.loadTexture("Buttons/UnclickedSettingsButton.png", "UnclickedSettingsButton");
-		resourceManager.loadTexture("Buttons/ClickedSettingsButton.png", "ClickedSettingsButton");
+		resourceManager.loadTexture("Buttons/UnclickedRestartButton.png", "UnclickedRestartButton");
+		resourceManager.loadTexture("Buttons/ClickedRestartButton.png", "ClickedRestartButton");
 		resourceManager.loadTexture("Buttons/UnclickedQuitButton.png", "UnclickedQuitButton");
 		resourceManager.loadTexture("Buttons/ClickedQuitButton.png", "ClickedQuitButton");
 

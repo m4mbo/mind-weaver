@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -15,44 +16,42 @@ import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MyResourceManager;
 
 public class LevelsScreen implements Screen {
+    private final MindWeaver game;
     private final ScreenManager screenManager;
     private final float buttonWidth, buttonHeight;
-    private TextButton playButton;
+    private ImageButton playButton;
     private Skin playSkin;
-    private final Stage stage;
+    private Stage stage;
 
-    public LevelsScreen(MindWeaver game, MyResourceManager resourceManager, final ScreenManager screenManager) {
+    public LevelsScreen(MindWeaver game, MyResourceManager resourceManager, ScreenManager screenManager) {
 
+        this.game = game;
         this.screenManager = screenManager;
+        this.stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
         this.buttonWidth = Constants.BUTTON_WIDTH;
         this.buttonHeight = Constants.BUTTON_HEIGHT;
 
-        stage = new Stage(new ScreenViewport());
+        initLevelsScreen(resourceManager);
+    }
 
-        Gdx.input.setInputProcessor(stage);
+    public void initLevelsScreen(MyResourceManager resourceManager) {
 
         playSkin = new Skin();
-
         playSkin.add("UnclickedPlayButton", resourceManager.getTexture("UnclickedPlayButton"));
         playSkin.add("ClickedPlayButton", resourceManager.getTexture("ClickedPlayButton"));
 
-        TextButton.TextButtonStyle PlayButtonStyle = new TextButton.TextButtonStyle();
+        ImageButton.ImageButtonStyle playButtonStyle = new ImageButton.ImageButtonStyle();
+        playButtonStyle.imageUp = playSkin.getDrawable("UnclickedPlayButton");
+        playButtonStyle.imageDown = playSkin.getDrawable("ClickedPlayButton");
 
-        PlayButtonStyle.up = playSkin.getDrawable("UnclickedPlayButton");
-        PlayButtonStyle.down = playSkin.getDrawable("ClickedPlayButton");
-
-        BitmapFont font = new BitmapFont();
-        PlayButtonStyle.font = font;
-
-        playButton = new TextButton(" ", PlayButtonStyle);
-        playButton.setPosition((Gdx.graphics.getWidth() - buttonWidth) / 2, (Gdx.graphics.getHeight() - buttonHeight)/2 - 50);
-        playButton.setSize(buttonWidth, buttonHeight);
+        final ImageButton playButton = new ImageButton(playButtonStyle);
+        playButton.setPosition((Gdx.graphics.getWidth() - playButton.getWidth())/2 , (Gdx.graphics.getHeight() - playButton.getHeight())/2 - 50);
+        playButton.getImageCell().size(buttonWidth, buttonHeight);
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                playButton.getStyle().down = playSkin.getDrawable("ClickedPlayButton");
-                playButton.setStyle(playButton.getStyle());
-
+                playButton.setChecked(false);
                 screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_1);
             }
         });
@@ -61,7 +60,15 @@ public class LevelsScreen implements Screen {
     }
 
     @Override
-    public void show() {
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
+    }
+
+    public void handleInput() {
 
     }
 
@@ -69,39 +76,22 @@ public class LevelsScreen implements Screen {
         handleInput();
     }
 
-    public void handleInput() {
-
-    }
+    @Override
+    public void dispose() { }
 
     @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-    }
-    @Override
-    public void dispose() {
-    }
+    public void show() { }
 
     @Override
-    public void resize(int width, int height) {
-
-    }
+    public void resize(int width, int height) { }
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() { }
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() { }
 
     @Override
-    public void hide() {
-
-    }
-
+    public void hide() { }
 
 }

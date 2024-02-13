@@ -11,6 +11,8 @@ public final class ScreenManager {
     private Screen prevScreen;
     private Screen currScreen;
 
+    private int level;
+
     public ScreenManager(MindWeaver game, MyResourceManager resourceManager) {
         this.game = game;
         this.resourceManager = resourceManager;
@@ -39,10 +41,15 @@ public final class ScreenManager {
             prevScreen = currScreen;
         }
 
+        if (currScreen instanceof GameScreen) level = ((GameScreen) currScreen).getLevel();
+
         // Set the new screen
         switch (screenType) {
             case START:
                 currScreen = new StartScreen(game, resourceManager, this);
+                break;
+            case RESTART:
+                currScreen = new GameScreen(game, level, resourceManager, this);
                 break;
             case LEVELS:
                 currScreen = new LevelsScreen(game, resourceManager, this);
@@ -58,6 +65,9 @@ public final class ScreenManager {
                 break;
             case LEVEL_4:
                 currScreen = new GameScreen(game, 4, resourceManager, this);
+                break;
+            case LEVEL_5:
+                //currScreen = new GameScreen(game, 5, resourceManager, this);
                 break;
             case SETTINGS:
                 currScreen = new SettingsScreen(resourceManager, this);
