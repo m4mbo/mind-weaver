@@ -38,6 +38,8 @@ public class Merchant extends Entity{
         polygonShape.setAsBox(8 / Constants.PPM, 7 / Constants.PPM, new Vector2(0, 0), 0);
         fdef.shape = polygonShape;
         fdef.isSensor = true;
+        fdef.friction = 0;
+        fdef.density = 0;
         fdef.filter.categoryBits = Constants.BIT_GROUND;
         fdef.filter.maskBits = Constants.BIT_MAGE;
         b2body.createFixture(fdef).setUserData(this);

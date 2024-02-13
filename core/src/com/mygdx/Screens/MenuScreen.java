@@ -125,7 +125,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 quitButton.getStyle().down = quitSkin.getDrawable("ClickedQuitButton");
                 quitButton.setStyle(quitButton.getStyle());
-                screenManager.pushScreen(Constants.SCREEN_TYPE.START);
+                screenManager.pushScreen(Constants.SCREEN_TYPE.EXIT);
             }
         });
 

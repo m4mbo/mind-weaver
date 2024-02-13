@@ -60,8 +60,18 @@ public class CutScene extends Actor {
 
         switch (tag) {
             case "intro":
-                messageChain.add("Where am I? yessi ghthg\nfgfgfg fggfgf");
+                messageChain.add("zzz");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_chained")));
+                messageChain.add("Ohhhhh!");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_freed")));
+                messageChain.add("You found me!");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_happy")));
+                messageChain.add(".... ..  ....");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("butterfly")));
+                messageChain.add("How did I end up here?");
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_neutral")));
+                messageChain.add("...           .");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("butterfly")));
                 break;
             case "open_shop":
                 messageChain.add("You found me!");
