@@ -5,15 +5,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.Game.MindWeaver;
 import com.mygdx.Helpers.Constants;
@@ -25,7 +23,6 @@ import java.util.Set;
 
 public class StartScreen implements Screen {
     private final MindWeaver game;
-    private final MyResourceManager resourceManager;
     private final ScreenManager screenManager;
     private Stage stage;
     private ImageButton playButton, settingsButton, exitButton;
@@ -39,7 +36,6 @@ public class StartScreen implements Screen {
     public StartScreen(MindWeaver game, MyResourceManager resourceManager, ScreenManager screenManager) {
 
         this.game = game;
-        this.resourceManager = resourceManager;
         this.screenManager = screenManager;
         this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
@@ -62,6 +58,16 @@ public class StartScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 button.setChecked(false);
                 screenManager.pushScreen(screenType);
+
+                // Add fade-out action to the stage
+                /*stage.addAction(Actions.sequence(
+                        Actions.fadeOut(1),  // Adjust the duration as needed
+                        Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                            }
+                        })
+                ));*/
             }
         });
 
@@ -109,6 +115,18 @@ public class StartScreen implements Screen {
         titleFont.draw(game.batch, text, (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - layout.height)/2 + 650);
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+
+        /*stage.addAction(Actions.sequence(
+                Actions.fadeOut(1),  // Adjust the duration as needed
+                Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Reset the text color and push the new screen
+                        titleFont.setColor(112 / 255f, 41 / 255f, 99 / 255f, 1);
+                    }
+                })
+        ));*/
+
         stage.draw();
 
         game.batch.end();

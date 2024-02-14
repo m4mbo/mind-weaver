@@ -1,6 +1,7 @@
 package com.mygdx.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -8,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.Game.MindWeaver;
@@ -29,6 +29,7 @@ public class LevelsScreen implements Screen {
         this.screenManager = screenManager;
         this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+
         this.buttonWidth = Constants.BUTTON_WIDTH;
         this.buttonHeight = Constants.BUTTON_HEIGHT;
 
@@ -61,6 +62,8 @@ public class LevelsScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        handleInput();
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -69,6 +72,15 @@ public class LevelsScreen implements Screen {
     }
 
     public void handleInput() {
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_1);
+
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_2)) screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_2);
+
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_3)) screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_3);
+
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_4)) screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_4);
+
+        //if (Gdx.input.isKeyPressed(Input.Keys.NUM_5)) screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_5);
 
     }
 
