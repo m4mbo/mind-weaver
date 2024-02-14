@@ -120,7 +120,7 @@ public class GameInputProcessor implements InputProcessor {
                 else character.setMovementState(Constants.MSTATE.HSTILL);
                 break;
             case Input.Keys.ESCAPE:
-                screenManager.pushScreen(SCREEN_TYPE.MENU);
+                screenManager.pushScreen(Constants.SCREEN_TYPE.MENU);
             default:
                 break;
         }
