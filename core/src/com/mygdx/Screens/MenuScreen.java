@@ -17,7 +17,7 @@ import java.util.List;
 
 public class MenuScreen implements Screen {
     private final ScreenManager screenManager;
-    private ImageButton resumeButton, restartButton, settingsButton, levelsbutton, exitButton;
+    private ImageButton resumeButton, restartButton, settingsButton, levelsButton, exitButton;
     private final float buttonWidth, buttonHeight;
     private Stage stage;
     private final List<ImageButton> menuScreenButtons = new ArrayList<>();
@@ -57,29 +57,33 @@ public class MenuScreen implements Screen {
         final Skin resumeSkin = new Skin();
         resumeSkin.add("UnclickedResumeButton", resourceManager.getTexture("UnclickedResumeButton"));
         resumeSkin.add("ClickedResumeButton", resourceManager.getTexture("ClickedResumeButton"));
-        resumeButton = initButton(resumeSkin, "UnclickedResumeButton", "ClickedResumeButton", -150, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.RESUME);
+        resumeButton = initButton(resumeSkin, "UnclickedResumeButton", "ClickedResumeButton", -350, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.RESUME);
 
         final Skin restartSkin = new Skin();
         restartSkin.add("UnclickedRestartButton", resourceManager.getTexture("UnclickedRestartButton"));
         restartSkin.add("ClickedRestartButton", resourceManager.getTexture("ClickedRestartButton"));
-        restartButton = initButton(restartSkin, "UnclickedRestartButton", "ClickedRestartButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.RESTART);
+        restartButton = initButton(restartSkin, "UnclickedRestartButton", "ClickedRestartButton", -150, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.RESTART);
 
         final Skin settingsSkin = new Skin();
         settingsSkin.add("UnclickedSettingsButton", resourceManager.getTexture("UnclickedSettingsButton"));
         settingsSkin.add("ClickedSettingsButton", resourceManager.getTexture("ClickedSettingsButton"));
-        settingsButton = initButton(settingsSkin, "UnclickedSettingsButton", "ClickedSettingsButton", 250, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.SETTINGS);
+        settingsButton = initButton(settingsSkin, "UnclickedSettingsButton", "ClickedSettingsButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.SETTINGS);
 
-        final Skin levels
+        final Skin levelsSkin = new Skin();
+        levelsSkin.add("UnclickedLevelsButton", resourceManager.getTexture("UnclickedLevelsButton"));
+        levelsSkin.add("ClickedLevelsButton", resourceManager.getTexture("ClickedLevelsButton"));
+        levelsButton = initButton(levelsSkin, "UnclickedLevelsButton", "ClickedLevelsButton", 250, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.LEVELS);
 
         final Skin exitSkin = new Skin();
-        quitSkin.add("UnclickedQuitButton", resourceManager.getTexture("UnclickedQuitButton"));
-        quitSkin.add("ClickedQuitButton", resourceManager.getTexture("ClickedQuitButton"));
-        quitButton = initButton(quitSkin, "UnclickedQuitButton", "ClickedQuitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.LEVELS);
+        exitSkin.add("UnclickedExitButton", resourceManager.getTexture("UnclickedExitButton"));
+        exitSkin.add("ClickedExitButton", resourceManager.getTexture("ClickedExitButton"));
+        exitButton = initButton(exitSkin, "UnclickedExitButton", "ClickedExitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.EXIT);
 
         stage.addActor(resumeButton);
         stage.addActor(restartButton);
         stage.addActor(settingsButton);
-        stage.addActor(quitButton);
+        stage.addActor(levelsButton);
+        stage.addActor(exitButton);
 
     }
 
