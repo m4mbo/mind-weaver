@@ -17,7 +17,7 @@ import java.util.List;
 
 public class MenuScreen implements Screen {
     private final ScreenManager screenManager;
-    private ImageButton resumeButton, restartButton, settingsButton, quitButton;
+    private ImageButton resumeButton, restartButton, settingsButton, levelsbutton, exitButton;
     private final float buttonWidth, buttonHeight;
     private Stage stage;
     private final List<ImageButton> menuScreenButtons = new ArrayList<>();
@@ -69,7 +69,9 @@ public class MenuScreen implements Screen {
         settingsSkin.add("ClickedSettingsButton", resourceManager.getTexture("ClickedSettingsButton"));
         settingsButton = initButton(settingsSkin, "UnclickedSettingsButton", "ClickedSettingsButton", 250, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.SETTINGS);
 
-        final Skin quitSkin = new Skin();
+        final Skin levels
+
+        final Skin exitSkin = new Skin();
         quitSkin.add("UnclickedQuitButton", resourceManager.getTexture("UnclickedQuitButton"));
         quitSkin.add("ClickedQuitButton", resourceManager.getTexture("ClickedQuitButton"));
         quitButton = initButton(quitSkin, "UnclickedQuitButton", "ClickedQuitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.LEVELS);
