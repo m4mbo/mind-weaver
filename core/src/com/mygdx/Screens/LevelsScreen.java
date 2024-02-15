@@ -3,7 +3,10 @@ package com.mygdx.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -15,7 +18,7 @@ import com.mygdx.Game.MindWeaver;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MyResourceManager;
 
-public class LevelsScreen implements Screen {
+public class LevelsScreen extends ManagedScreen {
     private final MindWeaver game;
     private final ScreenManager screenManager;
     private final float buttonWidth, buttonHeight;
@@ -52,7 +55,7 @@ public class LevelsScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 playButton.setChecked(false);
-                screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_1);
+                screenManager.pushScreen(Constants.SCREEN_OP.LEVEL_1,"slide_up");
             }
         });
 
@@ -66,6 +69,8 @@ public class LevelsScreen implements Screen {
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+
+        screenManager.render(game.batch, delta);
     }
 
     public void handleInput() {
@@ -94,4 +99,8 @@ public class LevelsScreen implements Screen {
     @Override
     public void hide() { }
 
+    @Override
+    public Matrix4 getProjectionMatrix() {
+        return stage.getBatch().getProjectionMatrix();
+    }
 }

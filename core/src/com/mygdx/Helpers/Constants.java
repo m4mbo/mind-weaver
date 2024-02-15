@@ -29,9 +29,13 @@ public class Constants {
         RUN, JUMP, IDLE, FALL, LAND, OPEN, CLOSED, ATTACK, DEATH
     }
 
-    public enum SCREEN_TYPE {
+    public enum SCREEN_OP {
         START, RESUME, LEVELS, LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, SETTINGS, MENU, LEVEL_COMPLETE, EXIT, RESTART
 
+    }
+
+    public enum SLIDE_DIR {
+        SLIDE_UP, SLIDE_DOWN, SLIDE_RIGHT, SLIDE_LEFT
     }
 
     // Bits for collision masking

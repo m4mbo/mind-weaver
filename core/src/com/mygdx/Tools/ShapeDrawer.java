@@ -53,13 +53,13 @@ public class ShapeDrawer {
 
         @Override
         public void render(SpriteBatch batch) {
-
+            batch.begin();
             if (type.equals("translucent")) {
-                batch.begin();
                 batch.draw(new TextureRegion(resourceManager.getTexture("translucent_pixel")), x, y, width, height);
-                batch.end();
+            } else if (type.equals("gray")) {
+                batch.draw(new TextureRegion(resourceManager.getTexture("gray_pixel")), x, y, width, height);
             }
-
+            batch.end();
         }
     }
 

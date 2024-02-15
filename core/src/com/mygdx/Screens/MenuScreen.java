@@ -1,12 +1,13 @@
 package com.mygdx.Screens;
 
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.Game.MindWeaver;
@@ -18,16 +19,18 @@ import com.mygdx.Helpers.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuScreen implements Screen {
+public class MenuScreen extends ManagedScreen {
     private final ScreenManager screenManager;
     private ImageButton resumeButton, restartButton, settingsButton, quitButton;
     private final float buttonWidth, buttonHeight;
     private Stage stage;
+    private final MindWeaver game;
     private final List<ImageButton> menuScreenButtons = new ArrayList<>();
 
-    public MenuScreen(MyResourceManager resourceManager, ScreenManager screenManager) {
+    public MenuScreen(MyResourceManager resourceManager, ScreenManager screenManager, MindWeaver game) {
 
         this.screenManager = screenManager;
+        this.game = game;
         this.stage = new Stage(new ScreenViewport());
         this.buttonWidth = Constants.BUTTON_WIDTH;
         this.buttonHeight = Constants.BUTTON_HEIGHT;
@@ -37,7 +40,7 @@ public class MenuScreen implements Screen {
         initMenuScreen(resourceManager);
     }
 
-    public ImageButton initButton(final Skin skin, final String unclickedImagePath, final String clickedImagePath, int offset, final float width, final float height, final Constants.SCREEN_TYPE screenType) {
+    public ImageButton initButton(final Skin skin, final String unclickedImagePath, final String clickedImagePath, int offset, final float width, final float height, final Constants.SCREEN_OP screenType) {
         ImageButton.ImageButtonStyle buttonStyle = new ImageButton.ImageButtonStyle();
         buttonStyle.imageUp = skin.getDrawable(unclickedImagePath);
         buttonStyle.imageDown = skin.getDrawable(clickedImagePath);
@@ -49,7 +52,7 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 button.setChecked(false);
-                screenManager.pushScreen(screenType);
+                screenManager.pushScreen(screenType, "slide_up");
             }
         });
 
@@ -60,22 +63,22 @@ public class MenuScreen implements Screen {
         final Skin resumeSkin = new Skin();
         resumeSkin.add("UnclickedResumeButton", resourceManager.getTexture("UnclickedResumeButton"));
         resumeSkin.add("ClickedResumeButton", resourceManager.getTexture("ClickedResumeButton"));
-        resumeButton = initButton(resumeSkin, "UnclickedResumeButton", "ClickedResumeButton", -150, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.RESUME);
+        resumeButton = initButton(resumeSkin, "UnclickedResumeButton", "ClickedResumeButton", -150, buttonWidth, buttonHeight, Constants.SCREEN_OP.RESUME);
 
         final Skin restartSkin = new Skin();
         restartSkin.add("UnclickedRestartButton", resourceManager.getTexture("UnclickedRestartButton"));
         restartSkin.add("ClickedRestartButton", resourceManager.getTexture("ClickedRestartButton"));
-        restartButton = initButton(restartSkin, "UnclickedRestartButton", "ClickedRestartButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.RESTART);
+        restartButton = initButton(restartSkin, "UnclickedRestartButton", "ClickedRestartButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_OP.RESTART);
 
         final Skin settingsSkin = new Skin();
         settingsSkin.add("UnclickedSettingsButton", resourceManager.getTexture("UnclickedSettingsButton"));
         settingsSkin.add("ClickedSettingsButton", resourceManager.getTexture("ClickedSettingsButton"));
-        settingsButton = initButton(settingsSkin, "UnclickedSettingsButton", "ClickedSettingsButton", 250, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.SETTINGS);
+        settingsButton = initButton(settingsSkin, "UnclickedSettingsButton", "ClickedSettingsButton", 250, buttonWidth, buttonHeight, Constants.SCREEN_OP.SETTINGS);
 
         final Skin quitSkin = new Skin();
         quitSkin.add("UnclickedQuitButton", resourceManager.getTexture("UnclickedQuitButton"));
         quitSkin.add("ClickedQuitButton", resourceManager.getTexture("ClickedQuitButton"));
-        quitButton = initButton(quitSkin, "UnclickedQuitButton", "ClickedQuitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.LEVELS);
+        quitButton = initButton(quitSkin, "UnclickedQuitButton", "ClickedQuitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_OP.LEVELS);
 
         stage.addActor(resumeButton);
         stage.addActor(restartButton);
@@ -85,12 +88,14 @@ public class MenuScreen implements Screen {
     }
 
     @Override
-    public void render(float v) {
+    public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);;
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+
+        screenManager.render(game.batch, delta);
 
     }
 
@@ -118,5 +123,10 @@ public class MenuScreen implements Screen {
     @Override
     public void hide() {
 
+    }
+
+    @Override
+    public Matrix4 getProjectionMatrix() {
+        return stage.getBatch().getProjectionMatrix();
     }
 }

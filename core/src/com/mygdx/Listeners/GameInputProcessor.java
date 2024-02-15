@@ -84,7 +84,7 @@ public class GameInputProcessor implements InputProcessor {
                 game.hud.pushInventory();
                 break;
             case Input.Keys.ESCAPE:
-                screenManager.pushScreen(Constants.SCREEN_TYPE.MENU);
+                screenManager.pushScreen(Constants.SCREEN_OP.MENU, "none");
                 break;
             default:
                 break;
@@ -120,7 +120,7 @@ public class GameInputProcessor implements InputProcessor {
                 else character.setMovementState(Constants.MSTATE.HSTILL);
                 break;
             case Input.Keys.ESCAPE:
-                screenManager.pushScreen(SCREEN_TYPE.MENU);
+                screenManager.pushScreen(SCREEN_OP.MENU, "slide_up");
             default:
                 break;
         }

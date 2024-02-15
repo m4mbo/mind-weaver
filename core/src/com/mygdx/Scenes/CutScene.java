@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.FancyFontHelper;
 import com.mygdx.Tools.MyResourceManager;
@@ -116,7 +117,6 @@ public class CutScene extends Actor {
             default:
                 break;
         }
-
     }
 
     @Override
