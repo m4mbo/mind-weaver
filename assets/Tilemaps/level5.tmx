@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="150" height="100" tilewidth="14" tileheight="14" infinite="0" nextlayerid="12" nextobjectid="225">
+ <tileset firstgid="1" source="dungeon padded.tsx"/>
+ <layer id="1" name="background" width="150" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztziERAAAIBLA3pKB/TyJguWNifpWkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAnugDBwAAAAAAAAAAAAAAAGA30F0lHg==
+  </data>
+ </layer>
+ <layer id="10" name="graphics" width="150" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt18tqAjEYBtDgiK2CW3sRqfoCghvbhX2EQld9/zcx4gwNg4tpbBsI58AHyWQW/+JjLiEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAz+xKD0B1RjGTNncxz2XHoQLnTj0k+6fw3S/IlXbqkKxnvfuW/zAL9ev3CoZqYt7a9UvMOjnTK3I1yXoTs032ekWu5sq1Y8x7uPTKfyE5ul69XjmbB/+F5BnHTNs8xiySfZf7YtNRg/OzyzcVv2GVrIf0av+Hs1Cn7p342ctHyaEABvgqPQAAAAAAAAAANzsB3x4Ftg==
+  </data>
+ </layer>
+ <objectgroup id="3" name="ground">
+  <object id="151" x="364.5" y="1036.06" width="55.25" height="14.4375"/>
+  <object id="153" x="350.125" y="1050.13" width="98.0375" height="14.375"/>
+ </objectgroup>
+ <objectgroup id="4" name="seethrough"/>
+ <objectgroup id="5" name="end">
+  <object id="209" x="630.5" y="840.25" width="14" height="41.5"/>
+ </objectgroup>
+ <objectgroup id="6" name="basegoblins">
+  <object id="161" x="420.455" y="1171.55" width="13.6667" height="11"/>
+  <object id="162" x="601.167" y="1102.33" width="11.6667" height="10"/>
+  <object id="176" x="383.13" y="1258.2" width="6" height="6.66667"/>
+  <object id="177" x="570.667" y="1039.33" width="12" height="11.3333"/>
+  <object id="192" x="204.75" y="1043" width="15.25" height="14.75"/>
+  <object id="193" x="146.25" y="1113" width="15" height="13"/>
+ </objectgroup>
+ <objectgroup id="7" name="armourgoblins"/>
+ <objectgroup id="8" name="papaya">
+  <object id="205" x="572.018" y="924.251" width="7.81818" height="7.81818"/>
+ </objectgroup>
+ <objectgroup id="9" name="spikes">
+  <object id="199" x="184.25" y="1192.75" width="109.875" height="11.125"/>
+  <object id="200" x="181.818" y="1162.18" width="10" height="27.2727"/>
+ </objectgroup>
+ <objectgroup id="11" name="merchant">
+  <object id="214" x="507.5" y="858" width="10.25" height="10.25"/>
+ </objectgroup>
+</map>

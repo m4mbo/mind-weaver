@@ -103,16 +103,16 @@ public final class ScreenManager {
     public void handleTransition(String flag) {
         switch (flag){
             case "slide_up":
-                transitionQueue.add(new SlidingTransition(new TextureRegion(currScreen.screenToTexture(fb)), 3, 100, Constants.SLIDE_DIR.SLIDE_UP, currScreen.getProjectionMatrix()));
+                transitionQueue.add(new SlidingTransition(new TextureRegion(currScreen.screenToTexture(fb)), 3, 80, Constants.SLIDE_DIR.SLIDE_UP, currScreen.getProjectionMatrix()));
                 break;
             case "slide_down":
-                transitionQueue.add(new SlidingTransition(new TextureRegion(currScreen.screenToTexture(fb)), 3, 100, Constants.SLIDE_DIR.SLIDE_DOWN, currScreen.getProjectionMatrix()));
+                transitionQueue.add(new SlidingTransition(new TextureRegion(currScreen.screenToTexture(fb)), 3, 80, Constants.SLIDE_DIR.SLIDE_DOWN, currScreen.getProjectionMatrix()));
                 break;
             case "slide_left":
-                transitionQueue.add(new SlidingTransition(new TextureRegion(currScreen.screenToTexture(fb)), 3, 100, Constants.SLIDE_DIR.SLIDE_LEFT, currScreen.getProjectionMatrix()));
+                transitionQueue.add(new SlidingTransition(new TextureRegion(currScreen.screenToTexture(fb)), 3, 80, Constants.SLIDE_DIR.SLIDE_LEFT, currScreen.getProjectionMatrix()));
                 break;
             case "slide_right":
-                transitionQueue.add(new SlidingTransition(new TextureRegion(currScreen.screenToTexture(fb)), 3, 100, Constants.SLIDE_DIR.SLIDE_RIGHT, currScreen.getProjectionMatrix()));
+                transitionQueue.add(new SlidingTransition(new TextureRegion(currScreen.screenToTexture(fb)), 3, 80, Constants.SLIDE_DIR.SLIDE_RIGHT, currScreen.getProjectionMatrix()));
                 break;
             default:
                 break;

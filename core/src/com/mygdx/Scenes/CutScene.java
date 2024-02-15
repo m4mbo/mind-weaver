@@ -34,7 +34,7 @@ public class CutScene extends Actor {
 
         bgRegion = new TextureRegion(resourceManager.getTexture("cutscene_bg"));
 
-        setPosition(stage.getViewport().getWorldWidth() / 2 - 400, 500);
+        setPosition(stage.getViewport().getWorldWidth() / 2 - 600, 580);
 
         handleTag(tag);
 
@@ -95,7 +95,7 @@ public class CutScene extends Actor {
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_bling")));
                 messageChain.add("We both have a BIG \nobsession with that\ntasty, sweet, juicy\nfruit.");
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_neutral")));
-                messageChain.add("I have spent many years \nof my life roaming through\nthis dungeon in search\nof those tasty treats.");
+                messageChain.add("I have spent many years \nof my life roaming\nthrough this dungeon \nin search of those\ntasty treats.");
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_neutral")));
                 messageChain.add("I see... well good luck.");
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_neutral")));
@@ -107,12 +107,35 @@ public class CutScene extends Actor {
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_smell")));
                 break;
             case "closed_shop2":
-                messageChain.add("Find me 3 slices of PAPAYA\nto reveal their secrets.");
+                messageChain.add("Find me 3 slices of\nPAPAYA to reveal their\nsecrets.");
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_papaya3")));
                 break;
             case "open_shop":
-                messageChain.add("Hi there fellow traveler!\nI l");
-                characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_neutral")));
+                messageChain.add("Aha! I can smell those \nslices from a mile \naway.");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_smell")));
+                messageChain.add("As promised, I will \nreveal some very \nIMPORTANT information \nabout this place.");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_bling")));
+                messageChain.add("I captured this little\nfella in the deepest \ncorner of the peruvian\nAmazon forest.");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_bug")));
+                messageChain.add("It is said that he \ncarries very special mind\ncontrolling properties.");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_bug")));
+                messageChain.add("The kind that will\nallow you to penetrate\neven the hardest\nmaterials.");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_bug")));
+                messageChain.add("Please, have it.\nYou will put it\nto a better use.");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("merchant_bug")));
+                messageChain.add("....");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_eating")));
+                messageChain.add("**5@!/=_@)**");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_ate")));
+                messageChain.add("Time to test my new\npowers!");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_happy")));
+                break;
+            case "lesson":
+                messageChain.add("Welcome to Mind Weaver\n101.");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("bug_teacher")));
+                messageChain.add("To move around, feel free\nto choose between\nA and D, or the\nLEFT and RIGHT arrow keys.");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("bug_teacher")));
+                messageChain.add("To jump: SPACE or UP arrow keys.");
                 break;
             default:
                 break;

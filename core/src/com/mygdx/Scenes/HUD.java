@@ -77,6 +77,7 @@ public class HUD {
     }
 
     public void pushCutscene(String tag) {
+        if (tag.equals("open_shop")) tier2Unlocked = true;
         currCutscene = new CutScene(stage, tag, resourceManager);
         stage.addActor(currCutscene);
         currCutscene.setVisible(true);

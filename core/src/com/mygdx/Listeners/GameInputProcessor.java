@@ -98,10 +98,8 @@ public class GameInputProcessor implements InputProcessor {
         if (!(game.getScreen() instanceof GameScreen)) return false;
 
         PlayableCharacter character = characterCycle.getCurrentCharacter();
-        
-        if (character.isStateActive(PSTATE.DYING)) return true;
 
-        if (game.hud.standBy()) return true;
+        if (game.hud.standBy() || character.isStateActive(PSTATE.DYING) || game.hud.getCurrCutscene() != null) return true;
 
         switch (keycode) {
             case Input.Keys.UP:

@@ -64,7 +64,7 @@ public class StartScreen extends ManagedScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 button.setChecked(false);
-                screenManager.pushScreen(screenType,"slide_up");
+                screenManager.pushScreen(screenType,"slide_left");
             }
         });
 

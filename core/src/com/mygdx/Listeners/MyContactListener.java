@@ -8,6 +8,7 @@ import com.mygdx.Objects.Platform;
 import com.mygdx.RoleCast.Merchant;
 import com.mygdx.RoleCast.Mage;
 import com.mygdx.Scenes.HUD;
+import com.mygdx.Screens.ScreenManager;
 import com.mygdx.Tools.UtilityStation;
 import com.mygdx.World.EntityHandler;
 import com.mygdx.Helpers.Constants;
@@ -21,10 +22,12 @@ public class MyContactListener implements ContactListener {
     private Fixture fb;
     private final UtilityStation util;
     private final HUD hud;
+    private final ScreenManager screenManager;
 
-    public MyContactListener(UtilityStation util, HUD hud) {
+    public MyContactListener(UtilityStation util, HUD hud, ScreenManager screenManager) {
         this.util = util;
         this.hud = hud;
+        this.screenManager = screenManager;
     }
 
     @Override
@@ -79,6 +82,9 @@ public class MyContactListener implements ContactListener {
             PlayableCharacter source = (PlayableCharacter) entityHandler.getEntity(fa.getUserData().equals("vision") ? fa.getBody() : fb.getBody());
             PlayableCharacter target = (PlayableCharacter) entityHandler.getEntity((Integer) (fa.getUserData().equals("vision") ? fb : fa).getUserData());
             util.getVisionMap().addTarget(source, target);
+        }
+        else if (fa.getUserData().equals("end") || fb.getUserData().equals("end")) {
+            screenManager.pushScreen(SCREEN_OP.START, "sliding_left");
         }
     }
 
