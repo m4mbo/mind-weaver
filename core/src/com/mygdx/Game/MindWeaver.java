@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class MindWeaver extends Game {
 
 	public SpriteBatch batch;
-	private ScreenManager screenManager;
 	private MyResourceManager resourceManager;
 	public HUD hud;		// HUD holding inventory will remain constant across all screens
 
@@ -18,13 +17,13 @@ public class MindWeaver extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		resourceManager = new MyResourceManager();
-		screenManager = new ScreenManager(this, resourceManager);
+		ScreenManager screenManager = new ScreenManager(this, resourceManager);
 
 		loadSprites();
 
 		hud = new HUD(batch, resourceManager);
 
-		screenManager.pushScreen(Constants.SCREEN_TYPE.START);
+		screenManager.pushScreen(Constants.SCREEN_OP.LEVEL_2, "none");
 	}
 
 	public void loadSprites() {
@@ -101,6 +100,7 @@ public class MindWeaver extends Game {
 		//Shapes
 		resourceManager.loadTexture("Shapes/purple_pixel.png", "purple_pixel");
 		resourceManager.loadTexture("Shapes/translucent_pixel.png", "translucent_pixel");
+		resourceManager.loadTexture("Shapes/gray_pixel.png", "gray_pixel");
 
 		//Cutscenes
 		resourceManager.loadTexture("Cutscenes/cutscene_bg.png", "cutscene_bg");
@@ -116,6 +116,11 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Cutscenes/merchant_papaya.png", "merchant_papaya");
 		resourceManager.loadTexture("Cutscenes/merchant_papaya3.png", "merchant_papaya3");
 		resourceManager.loadTexture("Cutscenes/merchant_smell.png", "merchant_smell");
+		resourceManager.loadTexture("Cutscenes/merchant_bug.png", "merchant_bug");
+		resourceManager.loadTexture("Cutscenes/mage_eating.png", "mage_eating");
+		resourceManager.loadTexture("Cutscenes/mage_ate.png", "mage_ate");
+		resourceManager.loadTexture("Cutscenes/bug_teacher.png", "bug_teacher");
+
 	}
 
 	@Override

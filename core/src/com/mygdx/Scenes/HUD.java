@@ -15,24 +15,21 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.Graphics.ShaderHandler;
 import com.mygdx.Tools.FancyFontHelper;
-import com.mygdx.Objects.Item;
 import com.mygdx.RoleCast.Mage;
 import com.mygdx.Tools.ColorGenerator;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Tools.ShapeDrawer;
 
-import java.util.LinkedList;
-
 public class HUD {
 
-    private LinkedList<Item> inventory;
+    private final boolean[] papayas;
     public Stage stage;
-    private Viewport viewport;
-    private MyResourceManager resourceManager;
-    private InventoryActor inventoryActor;
-    private ShapeDrawer shapeDrawer;
+    private final Viewport viewport;
+    private final MyResourceManager resourceManager;
+    private final InventoryActor inventoryActor;
+    private final ShapeDrawer shapeDrawer;
     private boolean standBy;
-    private boolean tier2Unlocked;
+    private boolean powersUnlocked;
     private CutScene currCutscene;
 
     public HUD(SpriteBatch batch, MyResourceManager resourceManager) {
@@ -40,16 +37,16 @@ public class HUD {
 
         this.shapeDrawer = new ShapeDrawer(new ShaderHandler(new ColorGenerator()), resourceManager);
 
-        inventory = new LinkedList<>();
+        papayas = new boolean[]{false, false, false, false, false};
         viewport = new FitViewport(3840, 2160, new OrthographicCamera());
         stage = new Stage(viewport, batch);
 
         standBy = false;
-        tier2Unlocked = false;
+        powersUnlocked = false;
 
         stage.addActor(new ButtonActor(resourceManager.getTexture("pause"), resourceManager.getTexture("inventory")));
 
-        inventoryActor = new InventoryActor(resourceManager.getTexture("papaya"), resourceManager.getTexture("bug"));
+        inventoryActor = new InventoryActor(resourceManager.getTexture("papaya"));
 
         stage.addActor(inventoryActor);
 
@@ -58,9 +55,12 @@ public class HUD {
         inventoryActor.setVisible(false);
     }
 
-    public void addItem(Item item) {
-        if (item.getName().equals("bug")) tier2Unlocked = true;
-        inventory.add(item);
+    public void addPapaya(int level) {
+        papayas[level] = true;
+    }
+
+    public void removePapaya(int level) {
+        papayas[level] = false;
     }
 
     public void setPlayer(Mage player) {
@@ -78,6 +78,7 @@ public class HUD {
     }
 
     public void pushCutscene(String tag) {
+        if (tag.equals("open_shop")) powersUnlocked = true;
         currCutscene = new CutScene(stage, tag, resourceManager);
         stage.addActor(currCutscene);
         currCutscene.setVisible(true);
@@ -85,6 +86,13 @@ public class HUD {
 
     public void cycleCutscene() {
         if (!currCutscene.cycleMessage()) return;
+        currCutscene.setVisible(false);
+        currCutscene.remove();
+        currCutscene = null;
+    }
+
+    public void removeCutscene() {
+        if (currCutscene == null) return;
         currCutscene.setVisible(false);
         currCutscene.remove();
         currCutscene = null;
@@ -109,14 +117,14 @@ public class HUD {
 
     public boolean enoughPapaya() {
         int papayaCount = 0;
-        for (Item item : inventory) {
-            if (item.getName().equals("papaya")) papayaCount++;
+        for (boolean item : papayas) {
+            if (item) papayaCount++;
         }
         return papayaCount >= 3;
     }
 
-    public boolean isTier2Unlocked() {
-        return tier2Unlocked;
+    public boolean arePowersUnlocked() {
+        return powersUnlocked;
     }
 
     private class LifeActor extends Actor {
@@ -163,15 +171,11 @@ public class HUD {
     }
 
     private class InventoryActor extends Table {
-        private final TextureRegion papayaRegion;
-        private final TextureRegion bugRegion;
-        private Label papayaLabel;
-        private Label bugLabel;
+        private final Label papayaLabel;
 
-        public InventoryActor(Texture papaya, Texture bug) {
+        public InventoryActor(Texture papaya) {
 
-            papayaRegion = new TextureRegion(papaya);
-            bugRegion = new TextureRegion(bug);
+            TextureRegion papayaRegion = new TextureRegion(papaya);
 
             papayaLabel = new Label("x" + 0, new Label.LabelStyle(FancyFontHelper.getInstance().getFont(Color.BLACK, 90), Color.BLACK));
             add(new Image(papayaRegion)).width(150).height(150).pad(10);
@@ -184,24 +188,18 @@ public class HUD {
         public void draw(Batch batch, float parentAlpha) {
 
             int papayaCount = 0;
-            int bugCount = 0;
 
-            for (Item item : inventory) {
-                if (item.getName().equals("papaya")) papayaCount++;
-                if (item.getName().equals("bug")) bugCount++;
+            for (boolean item : papayas) {
+                if (item) papayaCount++;
             }
 
             papayaLabel.setText("x" + papayaCount);
-
-            if (bugCount != 0) {
-                row();
-                add(new Image(bugRegion)).width(50).height(50).pad(10);
-            }
 
             Color color = getColor();
             batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
 
             shapeDrawer.drawRectangle(viewport.getWorldHeight(), viewport.getWorldWidth(), 0, 0, "translucent");
+            shapeDrawer.drawRectangle(600, 600, (viewport.getWorldWidth() - 600) / 2, (viewport.getWorldHeight() - 600) / 2, "gray");
 
             batch.end();
             shapeDrawer.render((SpriteBatch) batch);

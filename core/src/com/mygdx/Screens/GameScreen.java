@@ -1,12 +1,12 @@
 package com.mygdx.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -16,7 +16,6 @@ import com.mygdx.Game.MindWeaver;
 import com.mygdx.Graphics.LightManager;
 import com.mygdx.Graphics.ParticleHandler;
 import com.mygdx.Graphics.ShaderHandler;
-import com.mygdx.Scenes.HUD;
 import com.mygdx.Tools.*;
 import com.mygdx.World.*;
 import com.mygdx.Listeners.MyContactListener;
@@ -25,7 +24,7 @@ import com.mygdx.World.B2WorldHandler;
 import com.mygdx.Helpers.Constants;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class GameScreen implements Screen {
+public class GameScreen extends ManagedScreen {
     private final MyTimer timer;
     private final MindWeaver game;
     private final OrthographicCamera gameCam;
@@ -37,11 +36,14 @@ public class GameScreen implements Screen {
     private final ShapeDrawer shapeDrawer;
     private final GameInputProcessor inputProcessor;
     private final int level;
+    private final ScreenManager screenManager;
 
     public GameScreen(MindWeaver game, int level, MyResourceManager resourceManager, ScreenManager screenManager) {
 
         this.game = game;
         this.level = level;
+        this.screenManager = screenManager;
+
         // Creating tile map
         TmxMapLoader mapLoader = new TmxMapLoader();
         TiledMap map = null;
@@ -74,7 +76,7 @@ public class GameScreen implements Screen {
         // Creating station
         util = new UtilityStation(entityHandler, objectHandler, characterCycle, visionMap, particleHandler, shaderHandler, lightManager);
 
-        world.setContactListener(new MyContactListener(util, game.hud));
+        world.setContactListener(new MyContactListener(util, game.hud, screenManager, level));
         b2dr = new Box2DDebugRenderer();
         new B2WorldHandler(world, map, resourceManager, timer, eidAllocator, util, level, game.hud);     //Creating world
         lightManager.setDim(0.6f);
@@ -111,6 +113,8 @@ public class GameScreen implements Screen {
 
         game.hud.render(game.batch);
 
+        screenManager.render(game.batch, delta);
+
         //b2dr.render(world, gameCam.combined);
 
         gameCam.position.set(util.getCharacterCycle().getCurrentCharacter().getPosition().x, util.getCharacterCycle().getCurrentCharacter().getPosition().y + 20 / Constants.PPM, 0);
@@ -143,4 +147,8 @@ public class GameScreen implements Screen {
         b2dr.dispose();
     }
 
+    @Override
+    public Matrix4 getProjectionMatrix() {
+        return gameCam.combined;
+    }
 }

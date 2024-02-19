@@ -82,7 +82,7 @@ public class VisionMap {
 
     public void attemptConnection(PlayableCharacter source) {
 
-        boolean armourUnlocked = hud.isTier2Unlocked();
+        boolean armourUnlocked = hud.arePowersUnlocked();
 
         if (source instanceof ArmourGoblin && !armourUnlocked) return;
 

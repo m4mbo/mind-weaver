@@ -3,10 +3,13 @@ package com.mygdx.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -23,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class StartScreen implements Screen {
+public class StartScreen extends ManagedScreen {
     private final MindWeaver game;
     private final MyResourceManager resourceManager;
     private final ScreenManager screenManager;
@@ -49,7 +52,7 @@ public class StartScreen implements Screen {
         initStartScreen(resourceManager);
     }
 
-    public ImageButton initButton(final Skin skin, final String unclickedImagePath, final String clickedImagePath, int offset, final float width, final float height, final Constants.SCREEN_TYPE screenType) {
+    public ImageButton initButton(final Skin skin, final String unclickedImagePath, final String clickedImagePath, int offset, final float width, final float height, final Constants.SCREEN_OP screenType) {
         ImageButton.ImageButtonStyle buttonStyle = new ImageButton.ImageButtonStyle();
         buttonStyle.imageUp = skin.getDrawable(unclickedImagePath);
         buttonStyle.imageDown = skin.getDrawable(clickedImagePath);
@@ -61,7 +64,7 @@ public class StartScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 button.setChecked(false);
-                screenManager.pushScreen(screenType);
+                screenManager.pushScreen(screenType,"slide_left");
             }
         });
 
@@ -82,17 +85,17 @@ public class StartScreen implements Screen {
         playSkin = new Skin();
         playSkin.add("UnclickedPlayButton", resourceManager.getTexture("UnclickedPlayButton"));
         playSkin.add("ClickedPlayButton", resourceManager.getTexture("ClickedPlayButton"));
-        playButton = initButton(playSkin, "UnclickedPlayButton", "ClickedPlayButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.LEVELS);
+        playButton = initButton(playSkin, "UnclickedPlayButton", "ClickedPlayButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_OP.LEVELS);
 
         settingsSkin = new Skin();
         settingsSkin.add("UnclickedSettingsButton", resourceManager.getTexture("UnclickedSettingsButton"));
         settingsSkin.add("ClickedSettingsButton", resourceManager.getTexture("ClickedSettingsButton"));
-        settingsButton = initButton(settingsSkin, "UnclickedSettingsButton", "ClickedSettingsButton",  250, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.SETTINGS);
+        settingsButton = initButton(settingsSkin, "UnclickedSettingsButton", "ClickedSettingsButton",  250, buttonWidth, buttonHeight, Constants.SCREEN_OP.SETTINGS);
 
         exitSkin = new Skin();
         exitSkin.add("UnclickedExitButton", resourceManager.getTexture("UnclickedExitButton"));
         exitSkin.add("ClickedExitButton", resourceManager.getTexture("ClickedExitButton"));
-        exitButton = initButton(exitSkin, "UnclickedExitButton", "ClickedExitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.EXIT);
+        exitButton = initButton(exitSkin, "UnclickedExitButton", "ClickedExitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_OP.EXIT);
 
         stage.addActor(playButton);
         stage.addActor(settingsButton);
@@ -125,4 +128,9 @@ public class StartScreen implements Screen {
     public void resume() { }
     @Override
     public void hide() { }
+
+    @Override
+    public Matrix4 getProjectionMatrix() {
+        return stage.getBatch().getProjectionMatrix();
+    }
 }

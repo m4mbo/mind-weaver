@@ -54,6 +54,14 @@ public class B2WorldHandler {
         for (RectangleMapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = object.getRectangle();
             util.getLightManager().addConeLight(rect.getX() / Constants.PPM, (rect.getY() + rect.getHeight() / 2) / Constants.PPM, 60, new Color(96 / 255f, 130 / 255f, 182 / 255f, 1), 180, 90l);
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getHeight() / 2) / Constants.PPM);
+            body = world.createBody(bdef);
+            shape.setAsBox((rect.getWidth() / 2) / Constants.PPM, (rect.getHeight() / 2) / Constants.PPM);
+            fdef.shape = shape;
+            fdef.isSensor = true;
+            fdef.filter.categoryBits = Constants.BIT_GROUND;
+            body.createFixture(fdef).setUserData("end");
         }
 
         // Create spikes
@@ -129,7 +137,7 @@ public class B2WorldHandler {
                 createDoorAndPressurePlate(469, 222, 469, 298.5f, 1, false);
                 createDoorAndPressurePlate(540, 291, 620, 409.5f, 1, false);
                 createDoorAndPressurePlate(540, 348, 620, 368.5f, 1, false);
-                createDoorAndPressurePlate(259, 348, 94, 270.5f, 1, false);
+                createDoorAndPressurePlate(259, 348, 70, 270.5f, 1, false);
                 createDoorAndPressurePlate(175, 278, 130, 270.5f, 1, false);
                 createDoorAndPressurePlate(301, 446, 382, 466.5f, 1, false);
 

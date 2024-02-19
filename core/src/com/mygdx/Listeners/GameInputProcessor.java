@@ -84,7 +84,7 @@ public class GameInputProcessor implements InputProcessor {
                 game.hud.pushInventory();
                 break;
             case Input.Keys.ESCAPE:
-                screenManager.pushScreen(Constants.SCREEN_TYPE.MENU);
+                screenManager.pushScreen(Constants.SCREEN_OP.MENU, "none");
                 break;
             default:
                 break;
@@ -98,10 +98,8 @@ public class GameInputProcessor implements InputProcessor {
         if (!(game.getScreen() instanceof GameScreen)) return false;
 
         PlayableCharacter character = characterCycle.getCurrentCharacter();
-        
-        if (character.isStateActive(PSTATE.DYING)) return true;
 
-        if (game.hud.standBy()) return true;
+        if (game.hud.standBy() || character.isStateActive(PSTATE.DYING) || game.hud.getCurrCutscene() != null) return true;
 
         switch (keycode) {
             case Input.Keys.UP:
@@ -120,7 +118,7 @@ public class GameInputProcessor implements InputProcessor {
                 else character.setMovementState(Constants.MSTATE.HSTILL);
                 break;
             case Input.Keys.ESCAPE:
-                screenManager.pushScreen(SCREEN_TYPE.MENU);
+                screenManager.pushScreen(SCREEN_OP.MENU, "slide_up");
             default:
                 break;
         }
