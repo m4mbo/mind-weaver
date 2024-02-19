@@ -61,6 +61,7 @@ public final class ScreenManager {
                 break;
             case RESTART:
                 game.hud.removeCutscene();
+                game.hud.removePapaya(level);
                 currScreen = new GameScreen(game, level, resourceManager, this);
                 break;
             case LEVELS:

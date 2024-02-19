@@ -76,7 +76,7 @@ public class GameScreen extends ManagedScreen {
         // Creating station
         util = new UtilityStation(entityHandler, objectHandler, characterCycle, visionMap, particleHandler, shaderHandler, lightManager);
 
-        world.setContactListener(new MyContactListener(util, game.hud, screenManager));
+        world.setContactListener(new MyContactListener(util, game.hud, screenManager, level));
         b2dr = new Box2DDebugRenderer();
         new B2WorldHandler(world, map, resourceManager, timer, eidAllocator, util, level, game.hud);     //Creating world
         lightManager.setDim(0.6f);

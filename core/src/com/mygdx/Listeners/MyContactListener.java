@@ -23,10 +23,12 @@ public class MyContactListener implements ContactListener {
     private final UtilityStation util;
     private final HUD hud;
     private final ScreenManager screenManager;
+    private final int level;
 
-    public MyContactListener(UtilityStation util, HUD hud, ScreenManager screenManager) {
+    public MyContactListener(UtilityStation util, HUD hud, ScreenManager screenManager, int level) {
         this.util = util;
         this.hud = hud;
+        this.level = level;
         this.screenManager = screenManager;
     }
 
@@ -45,7 +47,7 @@ public class MyContactListener implements ContactListener {
         } else if (fa.getUserData() instanceof Item || fb.getUserData() instanceof Item) {
             Item item = (Item) (fa.getUserData() instanceof Item ? fa.getUserData() : fb.getUserData());
             util.getObjectHandler().removeObject(item);
-            hud.addItem(item);
+            hud.addPapaya(level);
         } else if (fa.getUserData() instanceof Merchant || fb.getUserData() instanceof Merchant) {
             Mage mage = (Mage) entityHandler.getEntity(fa.getUserData() instanceof Merchant ? fb.getBody() : fa.getBody());
             Merchant merchant = (Merchant) (fa.getUserData() instanceof Merchant ? fa.getUserData() : fb.getUserData());
