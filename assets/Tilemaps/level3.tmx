@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="150" height="100" tilewidth="14" tileheight="14" infinite="0" nextlayerid="11" nextobjectid="155">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="150" height="100" tilewidth="14" tileheight="14" infinite="0" nextlayerid="14" nextobjectid="156">
  <tileset firstgid="1" source="dungeon padded.tsx"/>
  <layer id="1" name="background" width="150" height="100">
   <data encoding="base64" compression="zlib">
@@ -8,7 +8,7 @@
  </layer>
  <layer id="2" name="graphics" width="150" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt2tlu1DAYBlALKDt3QNnfAKSyCgS9Yqfsi4D3fxBiEWvcdOIkU3c6054j/UrTpE46+WrHSUMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIDxrjZ1rmJdW+7psyK6OTpbuf2TldtjPZw/4PZPBf3YUTB1HEv90/0Jx3hQ4Txj3mpla8zvzOLi51tzHHvUWT/R1Om2zkxs68Kc743J1pjM1B67+S999qXP9/FAGzEzpazE7ZvZeq3xs2+clJnDFTN1pbA972NKFTNTykq6/37RLq+HcX3W7RH7sHqG+o0p87G+trp91fOmtkcce8itff78PPFcv3Zq6pjN4rl60tPWt6a+N/UxzK5L3/ztTphdsxuDZ1rP57A3O6nyvvtPu/y5xHM7Kvpy9btd1uivUjsbWeX30+mapkym+hF25/NTof2LE85zrL/tUq6mi/c5Q/dNJU+betZ+neeqO0bFXPXdT+8MHGNnxD65oTnEVHJ1uEr9Vbw2Dysfr29OMTSHmNru0N8WB6vvWsZ7p+7f/K+efac8Xy2N0fvJlXdHq2XetZw3huT3TGm+9b7Q7ocw60Py8a10/YfG9/2M/SzX2FzdbZdbbcV98lzF+dqXbD3mKmYozh/z+zL9yvHQzVXsYy6Fvf3MvXaZ5+pdoWI73UxFcnU8dMeezcK2mLOUq8uh/3lSev41732MXNEV+7aUq5Ato5dNvWrqdVNvmnqbbbvZLrvP8Dme4nvB7Ww9vR/cCrvzlZTeC8oUJYvO2WQKAABgPeX/hwU1bQwUAOvhH0K4Jl0=
+   eJzt2tlu1DAYBlALKDt3QNnfAKSyFIGgV+yUfRHw/g9CLGLVTRMnKe50Oj1H+pVmJnXSyTd2nDQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACY7mpT5yrWtcUePkuim6Ozlds/Wbk9jobzB9z+qaAfWwVzx7HUP92fsY8HFY4z5q1Wtqb8zexf/HxrjmOPOusnmjrd1pmZbV3oeW1KtqZkpvbYzT/psy99vpsjbcTMlLIS31/P1muNn0PjpMwcrpipK4X38z6mVDEzpayk6+/n7fJ6mNZn3Z6wDctnrN+YMx8baqvbVz1ramvCvsfc+s/f7xOP9Uun5o7Z7D9Xjwfa+trUt6Y+hJ3zMjR/uxN2ztmN0SOt51PYm51Ued/9u13+WOCxrYqhXP1qlzX6q9TOWlb59XQ6pymTqb6H3fn8WGj/4ozjnOpPu5Sr+eJ1zth1U8mTpp62P+e56o5RMVdD19PbI/vYnrBNbmwOMZdcHa5SfxXPzcPK+xuaU4zNIea2O/bd4mANnct47dT9zv8c2HbO/dXSGN13LFP7Mc+OlkvfuewbQ/JrpjTfeldo933Y6UPyXJTOf9/4vj7w+tyxn8Wamqu77XKjrbhNnqs4X/ucrcdcxQzF+WN+XaZfOR66uYp9zKWwt5+51y7zXL0tVGynm6lIro6H7hizXngv5izl6nIYvp+U7n/1PY+RK7pi35ZyFbJl9KKpl029aup1U2+y9262y+49fI6n+FxwK1tPzwc3wu58JaXngjJFyZS5mfkaAADA6sj/DwtqWhspAI6Gv6QGJoo=
   </data>
  </layer>
  <objectgroup id="3" name="ground">
@@ -56,6 +56,7 @@
   <object id="150" x="1343.75" y="1063.94" width="125.841" height="13.4545"/>
   <object id="152" x="1036.5" y="1134.25" width="69" height="13.75"/>
   <object id="153" x="1036.13" y="1147.75" width="14.125" height="28.875"/>
+  <object id="155" x="1498.54" y="1162.09" width="27.5" height="13.6957"/>
  </objectgroup>
  <objectgroup id="4" name="seethrough">
   <object id="93" x="952.091" y="1115" width="27.9091" height="4.90909"/>
@@ -73,9 +74,7 @@
  </objectgroup>
  <objectgroup id="7" name="armourgoblins">
   <object id="124" x="705.625" y="1107.38" width="13.875" height="14"/>
-  <object id="138" x="1572" y="1147.33" width="16" height="16"/>
-  <object id="139" x="1608" y="1147" width="16.6667" height="16.3333"/>
-  <object id="140" x="1504" y="1147" width="16" height="16.3333"/>
+  <object id="140" x="1465.75" y="1149.25" width="12.5" height="11.5833"/>
  </objectgroup>
  <objectgroup id="8" name="papaya">
   <object id="123" x="740.25" y="1116.25" width="9.25" height="9.25"/>
@@ -89,4 +88,7 @@
   <object id="113" x="1250.25" y="1178.7" width="10.2159" height="25.0682"/>
  </objectgroup>
  <objectgroup id="10" name="merchant"/>
+ <objectgroup id="11" name="bug"/>
+ <objectgroup id="12" name="x_message"/>
+ <objectgroup id="13" name="shift_message"/>
 </map>

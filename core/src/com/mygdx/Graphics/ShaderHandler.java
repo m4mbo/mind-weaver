@@ -12,6 +12,7 @@ public class ShaderHandler {
     private final ColorGenerator colorGenerator;
     private final ShaderProgram waveShader;
     private final ShaderProgram blinkShader;
+    private final ShaderProgram alphaShader;
     private final ShaderProgram redMaskShader;
     private final ShaderProgram outlineShader;
     private final ShaderProgram randColShader;
@@ -24,6 +25,7 @@ public class ShaderHandler {
         redMaskShader = new ShaderProgram(Gdx.files.internal("Shaders/Vertex.glsl").readString(), Gdx.files.internal("Shaders/RedMask.glsl").readString());
         outlineShader = new ShaderProgram(Gdx.files.internal("Shaders/Vertex.glsl").readString(), Gdx.files.internal("Shaders/Outline.glsl").readString());
         randColShader = new ShaderProgram(Gdx.files.internal("Shaders/Vertex.glsl").readString(), Gdx.files.internal("Shaders/RandomColorMask.glsl").readString());
+        alphaShader = new ShaderProgram(Gdx.files.internal("Shaders/Vertex.glsl").readString(), Gdx.files.internal("Shaders/Alpha.glsl").readString());
         ShaderProgram.pedantic = false;
         if (!waveShader.isCompiled()) {
             System.out.println(waveShader.getLog());
@@ -40,6 +42,9 @@ public class ShaderHandler {
         if (!randColShader.isCompiled()) {
             System.out.println(randColShader.getLog());
         }
+        if (!alphaShader.isCompiled()) {
+            System.out.println(randColShader.getLog());
+        }
     }
 
     public void update(float delta) {
@@ -49,6 +54,8 @@ public class ShaderHandler {
         waveShader.setUniformf("u_resolution", new Vector2(100, 100));
         blinkShader.bind();
         blinkShader.setUniformf("u_time", time);
+        alphaShader.bind();
+        alphaShader.setUniformf("u_time", time);
         randColShader.bind();
         randColShader.setUniformf("r", colorGenerator.getCurrentColor().x);
         randColShader.setUniformf("g", colorGenerator.getCurrentColor().y);
@@ -61,6 +68,7 @@ public class ShaderHandler {
         if (key.equals("redMask")) return redMaskShader;
         if (key.equals("outline")) return outlineShader;
         if (key.equals("rand_col")) return randColShader;
+        if (key.equals("alpha")) return alphaShader;
         return null;
     }
 }

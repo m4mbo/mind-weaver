@@ -1,8 +1,10 @@
 package com.mygdx.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -34,6 +36,7 @@ public class GameScreen extends ManagedScreen {
     private final Box2DDebugRenderer b2dr;
     private final UtilityStation util;
     private final ShapeDrawer shapeDrawer;
+    private final TextureDrawer textureDrawer;
     private final GameInputProcessor inputProcessor;
     private final int level;
     private final ScreenManager screenManager;
@@ -63,6 +66,7 @@ public class GameScreen extends ManagedScreen {
         // Tools and handlers
         ShaderHandler shaderHandler = new ShaderHandler(colorGenerator);
         shapeDrawer = new ShapeDrawer(shaderHandler, resourceManager);
+        textureDrawer = new TextureDrawer(shaderHandler);
         LightManager lightManager = new LightManager(world);
         ObjectHandler objectHandler = new ObjectHandler();
         VisionMap visionMap =  new VisionMap(world, shapeDrawer, game.hud);
@@ -78,7 +82,7 @@ public class GameScreen extends ManagedScreen {
 
         world.setContactListener(new MyContactListener(util, game.hud, screenManager, level));
         b2dr = new Box2DDebugRenderer();
-        new B2WorldHandler(world, map, resourceManager, timer, eidAllocator, util, level, game.hud);     //Creating world
+        new B2WorldHandler(world, map, resourceManager, timer, eidAllocator, util, level, game.hud, textureDrawer);     //Creating world
         lightManager.setDim(0.6f);
     }
 
@@ -111,6 +115,8 @@ public class GameScreen extends ManagedScreen {
 
         shapeDrawer.render(game.batch);
 
+        textureDrawer.render(game.batch);
+
         game.hud.render(game.batch);
 
         screenManager.render(game.batch, delta);
@@ -119,6 +125,7 @@ public class GameScreen extends ManagedScreen {
 
         gameCam.position.set(util.getCharacterCycle().getCurrentCharacter().getPosition().x, util.getCharacterCycle().getCurrentCharacter().getPosition().y + 20 / Constants.PPM, 0);
         gameCam.update();
+
     }
 
     @Override

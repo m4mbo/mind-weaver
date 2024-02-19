@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="50" tilewidth="14" tileheight="14" infinite="0" nextlayerid="11" nextobjectid="28">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="50" tilewidth="14" tileheight="14" infinite="0" nextlayerid="14" nextobjectid="29">
  <tileset firstgid="1" source="dungeon padded.tsx"/>
  <layer id="1" name="background" width="100" height="50">
   <data encoding="base64" compression="zlib">
@@ -38,10 +38,15 @@
  </objectgroup>
  <objectgroup id="6" name="basegoblins">
   <object id="23" x="776.182" y="483.09" width="11.0909" height="10.3636"/>
-  <object id="24" x="632.288" y="597.15" width="11.0909" height="10.3636"/>
+  <object id="24" x="619.851" y="600.192" width="11.0909" height="10.3636"/>
  </objectgroup>
  <objectgroup id="7" name="armourgoblins"/>
  <objectgroup id="8" name="papaya"/>
  <objectgroup id="9" name="spikes"/>
  <objectgroup id="10" name="merchant"/>
+ <objectgroup id="11" name="bug"/>
+ <objectgroup id="12" name="x_message"/>
+ <objectgroup id="13" name="shift_message">
+  <object id="28" x="623.428" y="593.682" width="1.40909" height="3.0625"/>
+ </objectgroup>
 </map>

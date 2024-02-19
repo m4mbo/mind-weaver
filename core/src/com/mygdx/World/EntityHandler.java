@@ -70,7 +70,7 @@ public class EntityHandler {
     public void update(float delta) {
         pet.update(delta);
         for (Entity entity : entities.values()) {
-            if (entity instanceof Mage) System.out.println(((PlayableCharacter) entity).getPosition());
+//            if (entity instanceof Mage) System.out.println(((PlayableCharacter) entity).getPosition());
             entity.update(delta);
         }
         handleEntities();

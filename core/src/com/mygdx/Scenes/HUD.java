@@ -60,7 +60,7 @@ public class HUD {
     }
 
     public void removePapaya(int level) {
-        papayas[level] = false;
+        papayas[level-1] = false;
     }
 
     public void setPlayer(Mage player) {

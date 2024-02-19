@@ -42,6 +42,9 @@ public class ObjectHandler {
         for (Reactable reactable : reactables) {
             reactable.update(delta);
         }
+        for (Item item : items) {
+            item.update(delta);
+        }
     }
 
     public void render(SpriteBatch batch) {
