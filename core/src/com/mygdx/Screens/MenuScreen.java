@@ -12,15 +12,11 @@ import com.badlogic.gdx.Screen;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Helpers.Constants;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MenuScreen implements Screen {
     private final ScreenManager screenManager;
     private ImageButton resumeButton, restartButton, settingsButton, levelsButton, exitButton;
     private final float buttonWidth, buttonHeight;
     private Stage stage;
-    private final List<ImageButton> menuScreenButtons = new ArrayList<>();
 
     public MenuScreen(MyResourceManager resourceManager, ScreenManager screenManager) {
 

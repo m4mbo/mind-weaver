@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,46 +19,18 @@ import com.mygdx.Tools.MyResourceManager;
 public class LevelsScreen implements Screen {
     private final MindWeaver game;
     private final ScreenManager screenManager;
-    private final float buttonWidth, buttonHeight;
-    private ImageButton playButton;
-    private Skin playSkin;
-    private Stage stage;
+    private Texture levelsTexture;
 
     public LevelsScreen(MindWeaver game, MyResourceManager resourceManager, ScreenManager screenManager) {
 
         this.game = game;
         this.screenManager = screenManager;
-        this.stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
-
-        this.buttonWidth = Constants.BUTTON_WIDTH;
-        this.buttonHeight = Constants.BUTTON_HEIGHT;
 
         initLevelsScreen(resourceManager);
     }
 
     public void initLevelsScreen(MyResourceManager resourceManager) {
-
-        playSkin = new Skin();
-        playSkin.add("UnclickedPlayButton", resourceManager.getTexture("UnclickedPlayButton"));
-        playSkin.add("ClickedPlayButton", resourceManager.getTexture("ClickedPlayButton"));
-
-        ImageButton.ImageButtonStyle playButtonStyle = new ImageButton.ImageButtonStyle();
-        playButtonStyle.imageUp = playSkin.getDrawable("UnclickedPlayButton");
-        playButtonStyle.imageDown = playSkin.getDrawable("ClickedPlayButton");
-
-        final ImageButton playButton = new ImageButton(playButtonStyle);
-        playButton.setPosition((Gdx.graphics.getWidth() - playButton.getWidth())/2 , (Gdx.graphics.getHeight() - playButton.getHeight())/2 - 50);
-        playButton.getImageCell().size(buttonWidth, buttonHeight);
-        playButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                playButton.setChecked(false);
-                screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_1);
-            }
-        });
-
-        stage.addActor(playButton);
+        levelsTexture = resourceManager.getTexture("LevelsScreen");
     }
 
     @Override
@@ -67,8 +40,11 @@ public class LevelsScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
+        game.batch.begin();
+
+        game.batch.draw(levelsTexture, (Gdx.graphics.getWidth() - levelsTexture.getWidth()*5)/2, (Gdx.graphics.getHeight() - levelsTexture.getHeight()*5)/2, levelsTexture.getWidth()*5, levelsTexture.getHeight()*5);
+
+        game.batch.end();
     }
 
     public void handleInput() {
