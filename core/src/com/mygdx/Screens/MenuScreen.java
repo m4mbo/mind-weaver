@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -17,7 +18,7 @@ public class MenuScreen implements Screen {
     private ImageButton resumeButton, restartButton, settingsButton, levelsButton, exitButton;
     private final float buttonWidth, buttonHeight;
     private Stage stage;
-
+    private Array<ImageButton> buttons;
     public MenuScreen(MyResourceManager resourceManager, ScreenManager screenManager) {
 
         this.screenManager = screenManager;
@@ -45,11 +46,16 @@ public class MenuScreen implements Screen {
                 screenManager.pushScreen(screenType);
             }
         });
+        buttons.add(button);
+        stage.addActor(button);
 
         return button;
     }
 
     private void initMenuScreen(MyResourceManager resourceManager) {
+
+        buttons = new Array<>();
+
         final Skin resumeSkin = new Skin();
         resumeSkin.add("UnclickedResumeButton", resourceManager.getTexture("UnclickedResumeButton"));
         resumeSkin.add("ClickedResumeButton", resourceManager.getTexture("ClickedResumeButton"));
@@ -74,13 +80,6 @@ public class MenuScreen implements Screen {
         exitSkin.add("UnclickedExitButton", resourceManager.getTexture("UnclickedExitButton"));
         exitSkin.add("ClickedExitButton", resourceManager.getTexture("ClickedExitButton"));
         exitButton = initButton(exitSkin, "UnclickedExitButton", "ClickedExitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.EXIT);
-
-        stage.addActor(resumeButton);
-        stage.addActor(restartButton);
-        stage.addActor(settingsButton);
-        stage.addActor(levelsButton);
-        stage.addActor(exitButton);
-
     }
 
     @Override
@@ -90,32 +89,27 @@ public class MenuScreen implements Screen {
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-
     }
 
     @Override
-    public void dispose() { }
-    @Override
-    public void show() {
+    public void dispose() {
+        stage.dispose();
 
+        for (ImageButton button : buttons) {
+            Skin skin = button.getSkin();
+            if (skin != null) {
+                skin.dispose();
+            }
+        }
     }
     @Override
-    public void resize(int i, int j) {
-
-    }
-
+    public void show() { }
     @Override
-    public void pause() {
-
-    }
-
+    public void resize(int i, int j) { }
     @Override
-    public void resume() {
-
-    }
-
+    public void pause() { }
     @Override
-    public void hide() {
-
-    }
+    public void resume() { }
+    @Override
+    public void hide() { }
 }

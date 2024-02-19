@@ -52,7 +52,7 @@ public final class ScreenManager {
                 currScreen = new GameScreen(game, level, resourceManager, this);
                 break;
             case LEVELS:
-                currScreen = new LevelsScreen(game, resourceManager, this);
+                currScreen = new LevelsScreen(resourceManager, this);
                 break;
             case LEVEL_1:
                 currScreen = new GameScreen(game, 1, resourceManager, this);

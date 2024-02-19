@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.Game.MindWeaver;
 import com.mygdx.Helpers.Constants;
@@ -33,6 +34,7 @@ public class StartScreen implements Screen {
     private final float buttonWidth, buttonHeight;
     private GlyphLayout layout;
     private CharSequence text;
+    private Array<ImageButton> buttons;
     public StartScreen(MindWeaver game, MyResourceManager resourceManager, ScreenManager screenManager) {
 
         this.game = game;
@@ -70,6 +72,8 @@ public class StartScreen implements Screen {
                 ));*/
             }
         });
+        buttons.add(button);
+        stage.addActor(button);
 
         return button;
     }
@@ -85,6 +89,8 @@ public class StartScreen implements Screen {
         text = "Mind Weaver";
         layout = new GlyphLayout(titleFont, text);
 
+        buttons = new Array<>();
+
         playSkin = new Skin();
         playSkin.add("UnclickedPlayButton", resourceManager.getTexture("UnclickedPlayButton"));
         playSkin.add("ClickedPlayButton", resourceManager.getTexture("ClickedPlayButton"));
@@ -99,10 +105,6 @@ public class StartScreen implements Screen {
         exitSkin.add("UnclickedExitButton", resourceManager.getTexture("UnclickedExitButton"));
         exitSkin.add("ClickedExitButton", resourceManager.getTexture("ClickedExitButton"));
         exitButton = initButton(exitSkin, "UnclickedExitButton", "ClickedExitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.EXIT);
-
-        stage.addActor(playButton);
-        stage.addActor(settingsButton);
-        stage.addActor(exitButton);
     }
 
     @Override
@@ -132,11 +134,22 @@ public class StartScreen implements Screen {
         game.batch.end();
     }
     @Override
-    public void dispose() { }
+    public void dispose() {
+        stage.dispose();
+        generator.dispose();
+        titleFont.dispose();
+
+        for (ImageButton button : buttons) {
+            Skin skin = button.getSkin();
+            if (skin != null) {
+                skin.dispose();
+            }
+        }
+    }
     @Override
     public void show() { }
     @Override
-    public void resize(int width, int height) { }
+    public void resize(int i, int j) { }
     @Override
     public void pause() { }
     @Override
