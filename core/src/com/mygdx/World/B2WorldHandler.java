@@ -122,6 +122,8 @@ public class B2WorldHandler {
 
     public void createObjects(int level) {
 
+        PressurePlate pressurePlate;
+
         switch (level) {
             case 1:
                 createDoorAndPressurePlate(567, 151.8f, 598, 116.5f, 1, false);
@@ -130,7 +132,7 @@ public class B2WorldHandler {
                 createDoorAndPressurePlate(819, 278f, 749, 298.5f, 2, false);
                 break;
             case 3:
-                PressurePlate pressurePlate = createDoorAndPressurePlate(1511, 236f, 1626, 256.5f, 1, true);
+                pressurePlate = createDoorAndPressurePlate(1511, 236f, 1626, 256.5f, 1, true);
                 addDoor(1630, 320f, pressurePlate, 1, false);
             case 4:
 
@@ -155,7 +157,11 @@ public class B2WorldHandler {
                 positions.add(new Vector2(198 / Constants.PPM, 259 / Constants.PPM));
                 positions.add(new Vector2(260 / Constants.PPM, 259 / Constants.PPM));
                 createLeverAndPlatform(346.5f, 344, false, positions);
+                break;
+            case 5:
 
+                pressurePlate = createDoorAndPressurePlate(343, 390, 469, 298.5f, 1, false);
+                addDoor(427, 390, pressurePlate, 1, false);
 
                 break;
         }
@@ -181,6 +187,10 @@ public class B2WorldHandler {
             case 4:
                 mage = new Mage(437, 359, world, eidAllocator.getAndIncrement(), timer, resourceManager, util);
                 util.getEntityHandler().addPet(new Pet(world, 1078, 359, eidAllocator.getAndIncrement(), resourceManager, util));
+                break;
+            case 5:
+                mage = new Mage(385, 374, world, eidAllocator.getAndIncrement(), timer, resourceManager, util);
+                util.getEntityHandler().addPet(new Pet(world, 437, 359, eidAllocator.getAndIncrement(), resourceManager, util));
                 break;
             default:
                 break;

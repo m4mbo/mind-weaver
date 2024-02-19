@@ -80,7 +80,7 @@ public final class ScreenManager {
                 currScreen = new GameScreen(game, 4, resourceManager, this);
                 break;
             case LEVEL_5:
-                //currScreen = new GameScreen(game, 5, resourceManager, this);
+                currScreen = new GameScreen(game, 5, resourceManager, this);
                 break;
             case SETTINGS:
                 currScreen = new SettingsScreen(resourceManager, this);
