@@ -123,6 +123,7 @@ public class B2WorldHandler {
     public void createObjects(int level) {
 
         PressurePlate pressurePlate;
+        LinkedList<Vector2> positions;
 
         switch (level) {
             case 1:
@@ -143,7 +144,7 @@ public class B2WorldHandler {
                 createDoorAndPressurePlate(175, 278, 130, 270.5f, 1, false);
                 createDoorAndPressurePlate(301, 446, 382, 466.5f, 1, false);
 
-                LinkedList<Vector2> positions = new LinkedList<>();
+                positions = new LinkedList<>();
                 positions.add(new Vector2(321 / Constants.PPM, 205 / Constants.PPM));
                 positions.add(new Vector2(321 / Constants.PPM, 329 / Constants.PPM));
                 createLeverAndPlatform(367.5f, 140, true, positions);
@@ -160,8 +161,24 @@ public class B2WorldHandler {
                 break;
             case 5:
 
-                pressurePlate = createDoorAndPressurePlate(343, 390, 469, 298.5f, 1, false);
+                pressurePlate = createDoorAndPressurePlate(343, 390, 496, 396.5f, 1, false);
                 addDoor(427, 390, pressurePlate, 1, false);
+
+
+                positions = new LinkedList<>();
+                positions.add(new Vector2(310 / Constants.PPM, 350 / Constants.PPM));
+                positions.add(new Vector2(310 / Constants.PPM, 440 / Constants.PPM));
+                positions.add(new Vector2(490 / Constants.PPM, 440 / Constants.PPM));
+                positions.add(new Vector2(310 / Constants.PPM, 440 / Constants.PPM));
+                Lever lever = createLeverAndPlatforms(367.5f, 369f, true, positions);
+
+                positions = new LinkedList<>();
+                positions.add(new Vector2(310 / Constants.PPM, 335 / Constants.PPM));
+                positions.add(new Vector2(461 / Constants.PPM, 335 / Constants.PPM));
+                positions.add(new Vector2(461 / Constants.PPM, 456 / Constants.PPM));
+                positions.add(new Vector2(461 / Constants.PPM, 335 / Constants.PPM));
+
+                createLeverAndPlatform(402.5f, 369f, false, positions);
 
                 break;
         }
@@ -216,12 +233,25 @@ public class B2WorldHandler {
         pressurePlate.addReactable(door);
     }
 
-    public void createLeverAndPlatform(float xLever, float yLever, boolean right, LinkedList<Vector2> platformPositions) {
+    public Lever createLeverAndPlatform(float xLever, float yLever, boolean right, LinkedList<Vector2> platformPositions) {
         Lever lever = new Lever(xLever, yLever, world, resourceManager, right);
         Platform platform = new Platform(new LinkedList<>(platformPositions), world, resourceManager);
         lever.addReactable(platform);
         util.getObjectHandler().addObject(lever);
         util.getObjectHandler().addObject(platform);
+        return lever;
+    }
+
+    public Lever createLeverAndPlatforms(float xLever, float yLever, boolean right, LinkedList<Vector2> platformPositions,LinkedList<Vector2> platformPositions2) {
+        Lever lever = new Lever(xLever, yLever, world, resourceManager, right);
+        Platform platform = new Platform(new LinkedList<>(platformPositions), world, resourceManager);
+        lever.addReactable(platform);
+        Platform platform2 = new Platform(new LinkedList<>(platformPositions2), world, resourceManager);
+        lever.addReactable(platform2);
+        util.getObjectHandler().addObject(lever);
+        util.getObjectHandler().addObject(platform);
+        util.getObjectHandler().addObject(platform2);
+        return lever;
     }
 
 }
