@@ -17,13 +17,17 @@ public class Item extends B2Sprite {
         this.name = name;
         this.shaderHandler = shaderHandler;
 
-        setAnimation(TextureRegion.split(resourceManager.getTexture("papaya"), 13, 10)[0], 1/4f, true, 0.7f);
+        if (name.equals("papaya")) setAnimation(TextureRegion.split(resourceManager.getTexture("papaya"), 13, 10)[0], 1/4f, true, 0.7f);
+        else if (name.equals("bug")) setAnimation(TextureRegion.split(resourceManager.getTexture("bug"), 11, 13)[0], 1/4f, false, 0.7f);
+
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, y / Constants.PPM);
         bdef.fixedRotation = true;
         bdef.type = BodyDef.BodyType.StaticBody;
         b2body = world.createBody(bdef);
+
+        if (name.equals("bug")) return;
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape polygonShape = new PolygonShape();
@@ -37,7 +41,7 @@ public class Item extends B2Sprite {
     }
 
     public void render(SpriteBatch batch) {
-        batch.setShader(shaderHandler.getShaderProgram("blink"));
+        if (name.equals("papaya")) batch.setShader(shaderHandler.getShaderProgram("blink"));
         super.render(batch);
         batch.setShader(null);
     }

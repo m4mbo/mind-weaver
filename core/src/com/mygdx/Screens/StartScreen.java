@@ -90,7 +90,7 @@ public class StartScreen extends ManagedScreen {
         settingsSkin = new Skin();
         settingsSkin.add("UnclickedSettingsButton", resourceManager.getTexture("UnclickedSettingsButton"));
         settingsSkin.add("ClickedSettingsButton", resourceManager.getTexture("ClickedSettingsButton"));
-        settingsButton = initButton(settingsSkin, "UnclickedSettingsButton", "ClickedSettingsButton",  250, buttonWidth, buttonHeight, Constants.SCREEN_OP.SETTINGS);
+        settingsButton = initButton(settingsSkin, "UnclickedSettingsButton", "ClickedSettingsButton",  250, buttonWidth, buttonHeight, Constants.SCREEN_OP.LEVELS);
 
         exitSkin = new Skin();
         exitSkin.add("UnclickedExitButton", resourceManager.getTexture("UnclickedExitButton"));

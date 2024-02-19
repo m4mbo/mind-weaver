@@ -8,11 +8,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.Objects.*;
 import com.mygdx.RoleCast.*;
-import com.mygdx.Scenes.CutScene;
 import com.mygdx.Scenes.HUD;
 import com.mygdx.Tools.MyTimer;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MyResourceManager;
+import com.mygdx.Tools.TextureDrawer;
 import com.mygdx.Tools.UtilityStation;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -23,7 +23,7 @@ public class B2WorldHandler {
     private final MyResourceManager resourceManager;
     private final UtilityStation util;
 
-    public B2WorldHandler(World world, TiledMap map, MyResourceManager resourceManager, MyTimer timer, AtomicInteger eidAllocator, UtilityStation util, int level, HUD hud) {
+    public B2WorldHandler(World world, TiledMap map, MyResourceManager resourceManager, MyTimer timer, AtomicInteger eidAllocator, UtilityStation util, int level, HUD hud, TextureDrawer textureDrawer) {
 
         this.world = world;
         this.resourceManager = resourceManager;
@@ -61,8 +61,11 @@ public class B2WorldHandler {
             fdef.shape = shape;
             fdef.isSensor = true;
             fdef.filter.categoryBits = Constants.BIT_GROUND;
+            fdef.filter.maskBits = Constants.BIT_MAGE;
             body.createFixture(fdef).setUserData("end");
         }
+
+        fdef = new FixtureDef();
 
         // Create spikes
         for (RectangleMapObject object : map.getLayers().get(8).getObjects().getByType(RectangleMapObject.class)) {
@@ -114,6 +117,22 @@ public class B2WorldHandler {
             util.getEntityHandler().addEntity(new Merchant(rect.getX(), rect.getY(), eidAllocator.getAndIncrement(), world, resourceManager, hud));
         }
 
+        // Create bug
+        for (RectangleMapObject object : map.getLayers().get(10).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = object.getRectangle();
+            util.getObjectHandler().addObject(new Item(rect.getX(), rect.getY(), world, "bug", util.getShaderHandler(), resourceManager));
+        }
+
+        // Create messages
+        for (RectangleMapObject object : map.getLayers().get(11).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = object.getRectangle();
+            textureDrawer.addTexture(resourceManager.getTexture("x"), rect.getX() / Constants.PPM, rect.getY() / Constants.PPM, 0.6f);
+        }
+        for (RectangleMapObject object : map.getLayers().get(12).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = object.getRectangle();
+            textureDrawer.addTexture(resourceManager.getTexture("shift"), rect.getX() / Constants.PPM, rect.getY() / Constants.PPM, 0.6f);
+        }
+
         createObjects(level);
 
         util.getVisionMap().initialize(util.getEntityHandler(), util.getCharacterCycle());
@@ -121,6 +140,9 @@ public class B2WorldHandler {
     }
 
     public void createObjects(int level) {
+
+        PressurePlate pressurePlate;
+        LinkedList<Vector2> positions;
 
         switch (level) {
             case 1:
@@ -130,7 +152,7 @@ public class B2WorldHandler {
                 createDoorAndPressurePlate(819, 278f, 749, 298.5f, 2, false);
                 break;
             case 3:
-                PressurePlate pressurePlate = createDoorAndPressurePlate(1511, 236f, 1626, 256.5f, 1, true);
+                pressurePlate = createDoorAndPressurePlate(1511, 250f, 1626, 256.5f, 1, true);
                 addDoor(1630, 320f, pressurePlate, 1, false);
             case 4:
 
@@ -141,7 +163,7 @@ public class B2WorldHandler {
                 createDoorAndPressurePlate(175, 278, 130, 270.5f, 1, false);
                 createDoorAndPressurePlate(301, 446, 382, 466.5f, 1, false);
 
-                LinkedList<Vector2> positions = new LinkedList<>();
+                positions = new LinkedList<>();
                 positions.add(new Vector2(321 / Constants.PPM, 205 / Constants.PPM));
                 positions.add(new Vector2(321 / Constants.PPM, 329 / Constants.PPM));
                 createLeverAndPlatform(367.5f, 140, true, positions);
@@ -155,7 +177,43 @@ public class B2WorldHandler {
                 positions.add(new Vector2(198 / Constants.PPM, 259 / Constants.PPM));
                 positions.add(new Vector2(260 / Constants.PPM, 259 / Constants.PPM));
                 createLeverAndPlatform(346.5f, 344, false, positions);
+                break;
+            case 5:
 
+                createDoorAndPressurePlate(343, 390, 600, 480.5f, 2, false);
+                createDoorAndPressurePlate(427, 390, 496, 396.5f, 1, false);
+                pressurePlate = createDoorAndPressurePlate(623, 390, 620, 480.5f, 1, false);
+                addDoor(566, 418, pressurePlate, 1, true);
+
+                createDoorAndPressurePlate(819, 390, 675, 410.5f, 1, false);
+                createDoorAndPressurePlate(875, 390, 695, 368.5f, 1, false);
+
+                //Custom platforms
+
+                positions = new LinkedList<>();
+                positions.add(new Vector2(310 / Constants.PPM, 350 / Constants.PPM));
+                positions.add(new Vector2(310 / Constants.PPM, 441 / Constants.PPM));
+                positions.add(new Vector2(485 / Constants.PPM, 441 / Constants.PPM));
+                positions.add(new Vector2(310 / Constants.PPM, 441 / Constants.PPM));
+                Platform platform1 = new Platform(new LinkedList<>(positions), world, resourceManager);
+
+                positions = new LinkedList<>();
+                positions.add(new Vector2(310 / Constants.PPM, 335 / Constants.PPM));
+                positions.add(new Vector2(448 / Constants.PPM, 335 / Constants.PPM));
+                positions.add(new Vector2(448 / Constants.PPM, 456 / Constants.PPM));
+                positions.add(new Vector2(448 / Constants.PPM, 335 / Constants.PPM));
+                Platform platform2 = new Platform(new LinkedList<>(positions), world, resourceManager);
+
+                Lever lever1 = new Lever(367.5f, 370f, world, resourceManager, true);
+                Lever lever2 = new Lever(402.5f, 370f, world, resourceManager, false);
+
+                lever1.addReactable(platform1);
+                lever1.addReactable(platform2);
+                lever2.addReactable(platform2);
+                util.getObjectHandler().addObject(lever1);
+                util.getObjectHandler().addObject(lever2);
+                util.getObjectHandler().addObject(platform1);
+                util.getObjectHandler().addObject(platform2);
 
                 break;
         }
@@ -181,6 +239,10 @@ public class B2WorldHandler {
             case 4:
                 mage = new Mage(437, 359, world, eidAllocator.getAndIncrement(), timer, resourceManager, util);
                 util.getEntityHandler().addPet(new Pet(world, 1078, 359, eidAllocator.getAndIncrement(), resourceManager, util));
+                break;
+            case 5:
+                mage = new Mage(385, 374, world, eidAllocator.getAndIncrement(), timer, resourceManager, util);
+                util.getEntityHandler().addPet(new Pet(world, 470, 340, eidAllocator.getAndIncrement(), resourceManager, util));
                 break;
             default:
                 break;
@@ -213,5 +275,4 @@ public class B2WorldHandler {
         util.getObjectHandler().addObject(lever);
         util.getObjectHandler().addObject(platform);
     }
-
 }

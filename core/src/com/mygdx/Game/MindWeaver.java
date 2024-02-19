@@ -23,7 +23,7 @@ public class MindWeaver extends Game {
 
 		hud = new HUD(batch, resourceManager);
 
-		screenManager.pushScreen(Constants.SCREEN_OP.LEVEL_2, "none");
+		screenManager.pushScreen(Constants.SCREEN_OP.LEVEL_4, "none");
 	}
 
 	public void loadSprites() {
@@ -120,6 +120,10 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Cutscenes/mage_eating.png", "mage_eating");
 		resourceManager.loadTexture("Cutscenes/mage_ate.png", "mage_ate");
 		resourceManager.loadTexture("Cutscenes/bug_teacher.png", "bug_teacher");
+
+		//Messages
+		resourceManager.loadTexture("Messages/press_x.png", "x");
+		resourceManager.loadTexture("Messages/press_shift.png", "shift");
 
 	}
 
