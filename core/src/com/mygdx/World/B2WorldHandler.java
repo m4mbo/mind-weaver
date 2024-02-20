@@ -190,14 +190,14 @@ public class B2WorldHandler {
                 //Custom platforms
 
                 positions = new LinkedList<>();
-                positions.add(new Vector2(310 / Constants.PPM, 350 / Constants.PPM));
-                positions.add(new Vector2(310 / Constants.PPM, 441 / Constants.PPM));
+                positions.add(new Vector2(322 / Constants.PPM, 350 / Constants.PPM));
+                positions.add(new Vector2(322 / Constants.PPM, 441 / Constants.PPM));
                 positions.add(new Vector2(485 / Constants.PPM, 441 / Constants.PPM));
-                positions.add(new Vector2(310 / Constants.PPM, 441 / Constants.PPM));
+                positions.add(new Vector2(322 / Constants.PPM, 441 / Constants.PPM));
                 Platform platform1 = new Platform(new LinkedList<>(positions), world, resourceManager);
 
                 positions = new LinkedList<>();
-                positions.add(new Vector2(310 / Constants.PPM, 335 / Constants.PPM));
+                positions.add(new Vector2(322 / Constants.PPM, 335 / Constants.PPM));
                 positions.add(new Vector2(448 / Constants.PPM, 335 / Constants.PPM));
                 positions.add(new Vector2(448 / Constants.PPM, 441 / Constants.PPM));
                 positions.add(new Vector2(448 / Constants.PPM, 335 / Constants.PPM));

@@ -131,7 +131,8 @@ public class MindWeaver extends Game {
 		//SFX
 		resourceManager.loadSound("SoundEffects/jump.mp3", "jump");
 		resourceManager.loadSound("SoundEffects/land.mp3", "land");
-
+		resourceManager.loadSound("SoundEffects/laugh.wav", "laugh");
+		resourceManager.loadSound("SoundEffects/papaya_picked.wav", "item");
 	}
 
 	@Override

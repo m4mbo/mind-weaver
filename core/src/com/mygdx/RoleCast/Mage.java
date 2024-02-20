@@ -108,6 +108,7 @@ public class Mage extends PlayableCharacter {
         timer.start(0.05f, "hit", this);
         addPlayerState(Constants.PSTATE.HIT);
         if (lives == 0 && !isStateActive(Constants.PSTATE.DYING)) {
+            resourceManager.getSound("laugh").play(0.3f);
             timer.start(2f, "death", this);
             addPlayerState(Constants.PSTATE.DYING);
         }

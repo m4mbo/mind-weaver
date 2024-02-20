@@ -1,10 +1,8 @@
 package com.mygdx.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -68,7 +66,7 @@ public class GameScreen extends ManagedScreen {
         shapeDrawer = new ShapeDrawer(shaderHandler, resourceManager);
         textureDrawer = new TextureDrawer(shaderHandler);
         LightManager lightManager = new LightManager(world);
-        ObjectHandler objectHandler = new ObjectHandler();
+        ObjectHandler objectHandler = new ObjectHandler(resourceManager);
         VisionMap visionMap =  new VisionMap(world, shapeDrawer, game.hud);
         CharacterCycle characterCycle = new CharacterCycle(visionMap, colorGenerator);
         EntityHandler entityHandler = new EntityHandler(characterCycle, shaderHandler, visionMap);

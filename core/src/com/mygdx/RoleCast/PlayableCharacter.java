@@ -120,10 +120,10 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     }
 
     public void land() {
-        resourceManager.getSound("land").play(0.4f);
         addPlayerState(Constants.PSTATE.ON_GROUND);
         addPlayerState(Constants.PSTATE.LANDING);
         if (airIterations >= 5) {
+            resourceManager.getSound("land").play(0.4f);
             util.getParticleHandler().addParticleEffect("dust_ground", facingRight ? b2body.getPosition().x - 5 / Constants.PPM : b2body.getPosition().x - 3 / Constants.PPM, b2body.getPosition().y - 10/Constants.PPM);
             currAState = Constants.ASTATE.LAND;
         }
