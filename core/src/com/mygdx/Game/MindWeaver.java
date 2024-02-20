@@ -47,6 +47,10 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Buttons/UnclickedLevelsButton.png", "UnclickedLevelsButton");
 		resourceManager.loadTexture("Buttons/ClickedLevelsButton.png", "ClickedLevelsButton");
 
+		//Controls buttons
+		resourceManager.loadTexture("Buttons/UnclickedControlsButton.png", "UnclickedControlsButton");
+		resourceManager.loadTexture("Buttons/ClickedControlsButton.png", "ClickedControlsButton");
+
 		// Mage
 		resourceManager.loadTexture("Mage/mage_run.png", "mage_run");
 		resourceManager.loadTexture("Mage/mage_idle.png", "mage_idle");
