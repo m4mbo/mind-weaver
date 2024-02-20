@@ -1,8 +1,6 @@
 package com.mygdx.Screens;
 
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -12,11 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Helpers.Constants;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MenuScreen extends ManagedScreen {
 
@@ -66,14 +61,18 @@ public class MenuScreen extends ManagedScreen {
         resumeSkin.add("UnclickedResumeButton", resourceManager.getTexture("UnclickedResumeButton"));
         resumeSkin.add("ClickedResumeButton", resourceManager.getTexture("ClickedResumeButton"));
 
-        initButton(resumeSkin, "UnclickedResumeButton", "ClickedResumeButton", -150, buttonWidth, buttonHeight, Constants.SCREEN_OP.RESUME);
+        initButton(resumeSkin, "UnclickedResumeButton", "ClickedResumeButton", -350, buttonWidth, buttonHeight, Constants.SCREEN_OP.RESUME);
 
         final Skin restartSkin = new Skin();
         restartSkin.add("UnclickedRestartButton", resourceManager.getTexture("UnclickedRestartButton"));
         restartSkin.add("ClickedRestartButton", resourceManager.getTexture("ClickedRestartButton"));
 
-        initButton(restartSkin, "UnclickedRestartButton", "ClickedRestartButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_OP.RESTART);
+        initButton(restartSkin, "UnclickedRestartButton", "ClickedRestartButton", -150, buttonWidth, buttonHeight, Constants.SCREEN_OP.RESTART);
 
+        final Skin controlsSkin = new Skin();
+        controlsSkin.add("UnclickedControlsButton", resourceManager.getTexture("UnclickedControlsButton"));
+        controlsSkin.add("ClickedControlsButton", resourceManager.getTexture("ClickedControlsButton"));
+        initButton(controlsSkin, "UnclickedControlsButton", "ClickedControlsButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_OP.LEVELS);
         final Skin levelsSkin = new Skin();
         levelsSkin.add("UnclickedLevelsButton", resourceManager.getTexture("UnclickedLevelsButton"));
         levelsSkin.add("ClickedLevelsButton", resourceManager.getTexture("ClickedLevelsButton"));

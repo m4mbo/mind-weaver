@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.Game.MindWeaver;
@@ -38,6 +39,7 @@ public class GameScreen extends ManagedScreen {
     private final GameInputProcessor inputProcessor;
     private final int level;
     private final ScreenManager screenManager;
+    private final boolean[] levelsComplete;
 
     public GameScreen(MindWeaver game, int level, MyResourceManager resourceManager, ScreenManager screenManager) {
 
@@ -50,6 +52,7 @@ public class GameScreen extends ManagedScreen {
         TiledMap map = null;
 
         map = mapLoader.load("Tilemaps/level" + this.level + ".tmx");
+        levelsComplete = new boolean[] {false, false, false, false, false};
 
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
         world = new World(new Vector2(0, -Constants.G), true);
