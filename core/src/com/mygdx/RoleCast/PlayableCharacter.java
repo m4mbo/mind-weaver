@@ -188,7 +188,6 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
                 removePlayerState(Constants.PSTATE.HIT);
                 break;
             case "death_and_disposal":
-                System.out.println("here");
                 dispose();
                 util.getEntityHandler().addEntityOperation(this, "die");
                 break;
