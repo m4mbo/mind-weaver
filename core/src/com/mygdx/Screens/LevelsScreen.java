@@ -1,17 +1,15 @@
 package com.mygdx.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.Helpers.Constants;
@@ -19,30 +17,31 @@ import com.mygdx.Tools.MyResourceManager;
 
 public class LevelsScreen extends ManagedScreen {
 
-    private Stage stage;
-    private final MyResourceManager resourceManager;
+    private final Stage stage;
     private final ScreenManager screenManager;
-    private Texture levelsTexture;
-    private ShapeRenderer shapeRenderer;
+    private final ShapeRenderer shapeRenderer;
     private Array<Polygon> levels;
+    private boolean wasClicked;
+
     public LevelsScreen(MyResourceManager resourceManager, ScreenManager screenManager) {
 
         this.screenManager = screenManager;
-        this.resourceManager = resourceManager;
         this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(null);
 
         shapeRenderer = new ShapeRenderer();
 
         initLevelsScreen(resourceManager);
+
+        wasClicked = false;
     }
 
     public void initLevelsScreen(MyResourceManager resourceManager) {
 
-        levelsTexture = resourceManager.getTexture("LevelsScreen");
+        Texture levelsTexture = resourceManager.getTexture("LevelsScreen");
 
         Image levelsImage = new Image(levelsTexture);
-        levelsImage.setPosition((Gdx.graphics.getWidth() - levelsTexture.getWidth()) / 2, (Gdx.graphics.getHeight() - levelsTexture.getHeight()) / 2);
+        levelsImage.setPosition((float) (Gdx.graphics.getWidth() - levelsTexture.getWidth()) / 2, (float) (Gdx.graphics.getHeight() - levelsTexture.getHeight()) / 2);
         levelsImage.setSize(levelsTexture.getWidth(), levelsTexture.getHeight());
         stage.addActor(levelsImage);
 
@@ -74,7 +73,7 @@ public class LevelsScreen extends ManagedScreen {
         stage.draw();
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(0, 0, 0, 1);
+        shapeRenderer.setColor(0, 0, 0, 0);
         for (Polygon polygon: levels) {
             shapeRenderer.polygon(polygon.getTransformedVertices());
         }
@@ -83,6 +82,7 @@ public class LevelsScreen extends ManagedScreen {
         handleInput();
     }
     public void handleInput() {
+        if (wasClicked) return;
         if (Gdx.input.justTouched()) {
             Vector3 touchPoint = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             stage.getCamera().unproject(touchPoint);
@@ -91,19 +91,24 @@ public class LevelsScreen extends ManagedScreen {
             float touchY = touchPoint.y;
 
             if (Intersector.isPointInPolygon(levels.get(0).getTransformedVertices(), 0, levels.get(0).getVertices().length, touchX, touchY)) {
-                screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_1);
+                wasClicked = true;
+                screenManager.pushScreen(Constants.SCREEN_OP.LEVEL_1, "slide_up");
             }
             if (Intersector.isPointInPolygon(levels.get(1).getTransformedVertices(), 0, levels.get(1).getVertices().length, touchX, touchY)) {
-                screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_2);
+                wasClicked = true;
+                screenManager.pushScreen(Constants.SCREEN_OP.LEVEL_2, "slide_up");
             }
             if (Intersector.isPointInPolygon(levels.get(2).getTransformedVertices(), 0, levels.get(2).getVertices().length, touchX, touchY)) {
-                screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_3);
+                wasClicked = true;
+                screenManager.pushScreen(Constants.SCREEN_OP.LEVEL_3, "slide_up");
             }
             if (Intersector.isPointInPolygon(levels.get(3).getTransformedVertices(), 0, levels.get(3).getVertices().length, touchX, touchY)) {
-                screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_4);
+                wasClicked = true;
+                screenManager.pushScreen(Constants.SCREEN_OP.LEVEL_4, "slide_up");
             }
             if (Intersector.isPointInPolygon(levels.get(4).getTransformedVertices(), 0, levels.get(4).getVertices().length, touchX, touchY)) {
-                //screenManager.pushScreen(Constants.SCREEN_TYPE.LEVEL_5);
+                wasClicked = true;
+                screenManager.pushScreen(Constants.SCREEN_OP.LEVEL_5, "slide_up");
             }
         }
     }
