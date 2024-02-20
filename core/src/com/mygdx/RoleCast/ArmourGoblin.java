@@ -185,7 +185,6 @@ public class ArmourGoblin extends PlayableCharacter {
                 removePlayerState(Constants.PSTATE.HIT);
                 break;
             case "death_and_disposal":
-                System.out.println("here");
                 dispose();
                 util.getEntityHandler().addEntityOperation(this, "die");
                 break;

@@ -31,8 +31,6 @@ public class MindWeaver extends Game {
 		//Start Screen buttons
 		resourceManager.loadTexture("Buttons/UnclickedPlayButton.png", "UnclickedPlayButton");
 		resourceManager.loadTexture("Buttons/ClickedPlayButton.png", "ClickedPlayButton");
-		resourceManager.loadTexture("Buttons/UnclickedSettingsButton.png", "UnclickedSettingsButton");
-		resourceManager.loadTexture("Buttons/ClickedSettingsButton.png", "ClickedSettingsButton");
 		resourceManager.loadTexture("Buttons/UnclickedExitButton.png", "UnclickedExitButton");
 		resourceManager.loadTexture("Buttons/ClickedExitButton.png", "ClickedExitButton");
 
@@ -46,6 +44,10 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Buttons/ClickedRestartButton.png", "ClickedRestartButton");
 		resourceManager.loadTexture("Buttons/UnclickedLevelsButton.png", "UnclickedLevelsButton");
 		resourceManager.loadTexture("Buttons/ClickedLevelsButton.png", "ClickedLevelsButton");
+
+		//Controls buttons
+		resourceManager.loadTexture("Buttons/UnclickedControlsButton.png", "UnclickedControlsButton");
+		resourceManager.loadTexture("Buttons/ClickedControlsButton.png", "ClickedControlsButton");
 
 		// Mage
 		resourceManager.loadTexture("Mage/mage_run.png", "mage_run");

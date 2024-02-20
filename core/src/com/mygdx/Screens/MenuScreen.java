@@ -74,11 +74,6 @@ public class MenuScreen extends ManagedScreen {
 
         initButton(restartSkin, "UnclickedRestartButton", "ClickedRestartButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_OP.RESTART);
 
-        final Skin settingsSkin = new Skin();
-        settingsSkin.add("UnclickedSettingsButton", resourceManager.getTexture("UnclickedSettingsButton"));
-        settingsSkin.add("ClickedSettingsButton", resourceManager.getTexture("ClickedSettingsButton"));
-        initButton(settingsSkin, "UnclickedSettingsButton", "ClickedSettingsButton", 250, buttonWidth, buttonHeight, Constants.SCREEN_OP.LEVELS);
-
         final Skin levelsSkin = new Skin();
         levelsSkin.add("UnclickedLevelsButton", resourceManager.getTexture("UnclickedLevelsButton"));
         levelsSkin.add("ClickedLevelsButton", resourceManager.getTexture("ClickedLevelsButton"));

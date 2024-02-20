@@ -89,16 +89,11 @@ public class StartScreen extends ManagedScreen {
         playSkin.add("ClickedPlayButton", resourceManager.getTexture("ClickedPlayButton"));
         playButton = initButton(playSkin, "UnclickedPlayButton", "ClickedPlayButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_OP.LEVELS);
 
-        settingsSkin = new Skin();
-        settingsSkin.add("UnclickedSettingsButton", resourceManager.getTexture("UnclickedSettingsButton"));
-        settingsSkin.add("ClickedSettingsButton", resourceManager.getTexture("ClickedSettingsButton"));
-        settingsButton = initButton(settingsSkin, "UnclickedSettingsButton", "ClickedSettingsButton",  250, buttonWidth, buttonHeight, Constants.SCREEN_OP.LEVELS);
-
         exitSkin = new Skin();
         exitSkin.add("UnclickedExitButton", resourceManager.getTexture("UnclickedExitButton"));
         exitSkin.add("ClickedExitButton", resourceManager.getTexture("ClickedExitButton"));
 
-        exitButton = initButton(exitSkin, "UnclickedExitButton", "ClickedExitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_OP.EXIT);
+        exitButton = initButton(exitSkin, "UnclickedExitButton", "ClickedExitButton", 250, buttonWidth, buttonHeight, Constants.SCREEN_OP.EXIT);
     }
 
     @Override
