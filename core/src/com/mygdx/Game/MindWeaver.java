@@ -31,8 +31,6 @@ public class MindWeaver extends Game {
 		//Start Screen buttons
 		resourceManager.loadTexture("Buttons/UnclickedPlayButton.png", "UnclickedPlayButton");
 		resourceManager.loadTexture("Buttons/ClickedPlayButton.png", "ClickedPlayButton");
-		resourceManager.loadTexture("Buttons/UnclickedSettingsButton.png", "UnclickedSettingsButton");
-		resourceManager.loadTexture("Buttons/ClickedSettingsButton.png", "ClickedSettingsButton");
 		resourceManager.loadTexture("Buttons/UnclickedExitButton.png", "UnclickedExitButton");
 		resourceManager.loadTexture("Buttons/ClickedExitButton.png", "ClickedExitButton");
 
