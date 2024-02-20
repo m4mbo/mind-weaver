@@ -135,6 +135,10 @@ public class MindWeaver extends Game {
 		resourceManager.loadSound("SoundEffects/land.mp3", "land");
 		resourceManager.loadSound("SoundEffects/laugh.wav", "laugh");
 		resourceManager.loadSound("SoundEffects/papaya_picked.wav", "item");
+		
+		//Art
+		resourceManager.loadTexture("Art/Mind.png", "mind");
+		resourceManager.loadTexture("Art/Weaver.png", "weaver");
 	}
 
 	@Override

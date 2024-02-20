@@ -9,8 +9,8 @@ public class Constants {
     public static final float KNOCKBACK_SCALE = 1f;
     public static final float G = 11;
     public static final float G_ENHANCED = 13;
-    public static final float BUTTON_WIDTH = 345;
-    public static final float BUTTON_HEIGHT = 190.5f;
+    public static final float BUTTON_WIDTH = 330;
+    public static final float BUTTON_HEIGHT = 175.5f;
 
     // Movement state Flag
     public enum MSTATE {
