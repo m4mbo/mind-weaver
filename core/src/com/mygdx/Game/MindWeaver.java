@@ -128,6 +128,10 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Messages/press_x.png", "x");
 		resourceManager.loadTexture("Messages/press_shift.png", "shift");
 
+		//SFX
+		resourceManager.loadSound("SoundEffects/jump.mp3", "jump");
+		resourceManager.loadSound("SoundEffects/land.mp3", "land");
+
 	}
 
 	@Override
