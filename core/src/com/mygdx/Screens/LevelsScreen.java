@@ -46,20 +46,27 @@ public class LevelsScreen extends ManagedScreen {
         stage.addActor(levelsImage);
 
         levels = new Array<>();
+        float width = Gdx.graphics.getWidth();
+        float height = Gdx.graphics.getHeight();
 
-        float[] levelVertices = {425, 365, 510, 410, 510, 515, 425, 575, 344, 515, 344, 410};
+        float[] levelVertices = {width/4.5f, height/3.3f, width/3.76f, height/2.9f, width/3.76f, height/2.3f, width/4.5f, height/2.1f, width/5.6f, height/2.3f, width/5.6f, height/2.9f};
+        //float[] levelVertices = {425, 365, 510, 410, 510, 515, 425, 575, 344, 515, 344, 410};
         levels.add(new Polygon(levelVertices));
 
-        levelVertices = new float[]{690, 605, 774, 650, 774, 755, 690, 815, 608, 755, 608, 650};
+        levelVertices = new float[]{width/2.775f, height/2f, width/2.48f, height/1.825f, width/2.48f, height/1.575f, width/2.775f, height/1.475f, width/3.16f, height/1.575f, width/3.16f, height/1.825f};
+        //levelVertices = new float[]{690, 605, 774, 650, 774, 755, 690, 815, 608, 755, 608, 650};
         levels.add(new Polygon(levelVertices));
 
-        levelVertices = new float[]{955, 365, 1038, 410, 1038, 515, 955, 575, 872, 515, 872, 410};
+        levelVertices = new float[]{width/2.005f, height/3.3f, width/1.85f, height/2.9f, width/1.85f, height/2.3f, width/2.005f, height/2.1f, width/2.2f, height/2.3f, width/2.2f, height/2.9f};
+        //levelVertices = new float[]{955, 365, 1038, 410, 1038, 515, 955, 575, 872, 515, 872, 410};
         levels.add(new Polygon(levelVertices));
 
-        levelVertices = new float[]{1220, 605, 1302, 650, 1302, 755, 1220, 815, 1136, 755, 1136, 650};
+        levelVertices = new float[]{width/1.575f, height/2f, width/1.475f, height/1.825f, width/1.475f, height/1.575f, width/1.575f, height/1.475f, width/1.69f, height/1.575f, width/1.69f, height/1.825f};
+        //levelVertices = new float[]{1220, 605, 1302, 650, 1302, 755, 1220, 815, 1136, 755, 1136, 650};
         levels.add(new Polygon(levelVertices));
 
-        levelVertices = new float[]{1485, 365, 1566, 410, 1566, 515, 1485, 575, 1400, 515, 1400, 410};
+        levelVertices = new float[]{width/1.292f, height/3.3f, width/1.226f, height/2.9f, width/1.226f, height/2.3f, width/1.292f, height/2.1f, width/1.37f, height/2.3f, width/1.37f, height/2.9f};
+        //levelVertices = new float[]{1485, 365, 1566, 410, 1566, 515, 1485, 575, 1400, 515, 1400, 410};
         levels.add(new Polygon(levelVertices));
     }
 
