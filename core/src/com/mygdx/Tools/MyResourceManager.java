@@ -44,4 +44,13 @@
             if (sound != null) sound.dispose();
         }
 
+        public void disposeAll() {
+            for (Sound sound : sounds.values()) {
+                sound.dispose();
+            }
+            for (Texture texture : textures.values()) {
+                texture.dispose();
+            }
+        }
+
     }

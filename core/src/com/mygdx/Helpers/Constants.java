@@ -9,7 +9,7 @@ public class Constants {
     public static final float KNOCKBACK_SCALE = 1f;
     public static final float G = 11;
     public static final float G_ENHANCED = 13;
-    public static final float BUTTON_WIDTH = 330;
+    public static final float BUTTON_WIDTH = 250;
     public static final float BUTTON_HEIGHT = 175.5f;
 
     // Movement state Flag
@@ -30,7 +30,7 @@ public class Constants {
     }
 
     public enum SCREEN_OP {
-        START, RESUME, LEVELS, LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, MENU, LEVEL_COMPLETE, EXIT, RESTART
+        START, RESUME, LEVELS, LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, MENU, LEVEL_COMPLETE, EXIT, RESTART, CONTROLS
 
     }
 

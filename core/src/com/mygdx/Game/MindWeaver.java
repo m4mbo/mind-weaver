@@ -2,6 +2,7 @@ package com.mygdx.Game;
 
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Scenes.HUD;
+import com.mygdx.Tools.FPSCounter;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Screens.*;
 import com.badlogic.gdx.Game;
@@ -135,7 +136,7 @@ public class MindWeaver extends Game {
 		resourceManager.loadSound("SoundEffects/land.mp3", "land");
 		resourceManager.loadSound("SoundEffects/laugh.wav", "laugh");
 		resourceManager.loadSound("SoundEffects/papaya_picked.wav", "item");
-		
+
 		//Art
 		resourceManager.loadTexture("Art/Mind.png", "mind");
 		resourceManager.loadTexture("Art/Weaver.png", "weaver");

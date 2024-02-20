@@ -1,4 +1,5 @@
 package com.mygdx.Screens;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,7 +20,7 @@ public final class ScreenManager {
     private ManagedScreen prevScreen;
     private ManagedScreen currScreen;
     private int level;
-    private FrameBuffer fb;
+    private final FrameBuffer fb;
 
     public ScreenManager(MindWeaver game, MyResourceManager resourceManager) {
         this.game = game;
@@ -39,6 +40,14 @@ public final class ScreenManager {
             prevScreen = temp;
             game.setScreen(currScreen);
             currScreen.resume();
+            return;
+        }  else if (screenType == Constants.SCREEN_OP.CONTROLS) {
+            ManagedScreen temp = currScreen;
+            currScreen = prevScreen;
+            prevScreen = temp;
+            game.setScreen(currScreen);
+            currScreen.resume();
+            game.hud.pushCutscene("lesson");
             return;
         }
 
@@ -89,6 +98,7 @@ public final class ScreenManager {
                 currScreen = new LevelCompleteScreen(resourceManager, this);
                 break;
             case EXIT:
+                resourceManager.disposeAll();
                 Gdx.app.exit();
                 break;
             default:

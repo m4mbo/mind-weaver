@@ -39,7 +39,7 @@ public class GameScreen extends ManagedScreen {
     private final GameInputProcessor inputProcessor;
     private final int level;
     private final ScreenManager screenManager;
-    private final boolean[] levelsComplete;
+    private final FPSCounter fpsCounter;
 
     public GameScreen(MindWeaver game, int level, MyResourceManager resourceManager, ScreenManager screenManager) {
 
@@ -52,7 +52,7 @@ public class GameScreen extends ManagedScreen {
         TiledMap map = null;
 
         map = mapLoader.load("Tilemaps/level" + this.level + ".tmx");
-        levelsComplete = new boolean[] {false, false, false, false, false};
+        fpsCounter = new FPSCounter();
 
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
         world = new World(new Vector2(0, -Constants.G), true);
@@ -91,6 +91,7 @@ public class GameScreen extends ManagedScreen {
     public void show() {  }
 
     public void update(float delta) {
+        fpsCounter.update(delta);
         game.hud.update(delta);
         if (game.hud.standBy()) return;
         util.update(delta, gameCam);
@@ -100,6 +101,9 @@ public class GameScreen extends ManagedScreen {
 
     @Override
     public void render(float delta) {
+
+        //Uncomment this to check fps
+        //System.out.println(fpsCounter.getFramesPerSecond());
 
         update(delta);
 
