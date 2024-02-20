@@ -6,17 +6,16 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.Game.MindWeaver;
 import com.mygdx.Helpers.Constants;
@@ -28,7 +27,6 @@ import java.util.Set;
 
 public class StartScreen extends ManagedScreen {
     private final MindWeaver game;
-    private final MyResourceManager resourceManager;
     private final ScreenManager screenManager;
     private Stage stage;
     private ImageButton playButton, settingsButton, exitButton;
@@ -39,10 +37,10 @@ public class StartScreen extends ManagedScreen {
     private final float buttonWidth, buttonHeight;
     private GlyphLayout layout;
     private CharSequence text;
+    private Array<ImageButton> buttons;
     public StartScreen(MindWeaver game, MyResourceManager resourceManager, ScreenManager screenManager) {
 
         this.game = game;
-        this.resourceManager = resourceManager;
         this.screenManager = screenManager;
         this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
@@ -67,6 +65,8 @@ public class StartScreen extends ManagedScreen {
                 screenManager.pushScreen(screenType,"slide_left");
             }
         });
+        buttons.add(button);
+        stage.addActor(button);
 
         return button;
     }
@@ -82,6 +82,8 @@ public class StartScreen extends ManagedScreen {
         text = "Mind Weaver";
         layout = new GlyphLayout(titleFont, text);
 
+        buttons = new Array<>();
+
         playSkin = new Skin();
         playSkin.add("UnclickedPlayButton", resourceManager.getTexture("UnclickedPlayButton"));
         playSkin.add("ClickedPlayButton", resourceManager.getTexture("ClickedPlayButton"));
@@ -95,11 +97,8 @@ public class StartScreen extends ManagedScreen {
         exitSkin = new Skin();
         exitSkin.add("UnclickedExitButton", resourceManager.getTexture("UnclickedExitButton"));
         exitSkin.add("ClickedExitButton", resourceManager.getTexture("ClickedExitButton"));
-        exitButton = initButton(exitSkin, "UnclickedExitButton", "ClickedExitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_OP.EXIT);
 
-        stage.addActor(playButton);
-        stage.addActor(settingsButton);
-        stage.addActor(exitButton);
+        exitButton = initButton(exitSkin, "UnclickedExitButton", "ClickedExitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.EXIT);
     }
 
     @Override
@@ -112,16 +111,28 @@ public class StartScreen extends ManagedScreen {
         titleFont.draw(game.batch, text, (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - layout.height)/2 + 650);
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+
         stage.draw();
 
         game.batch.end();
     }
     @Override
-    public void dispose() { }
+    public void dispose() {
+        stage.dispose();
+        generator.dispose();
+        titleFont.dispose();
+
+        for (ImageButton button : buttons) {
+            Skin skin = button.getSkin();
+            if (skin != null) {
+                skin.dispose();
+            }
+        }
+    }
     @Override
     public void show() { }
     @Override
-    public void resize(int width, int height) { }
+    public void resize(int i, int j) { }
     @Override
     public void pause() { }
     @Override

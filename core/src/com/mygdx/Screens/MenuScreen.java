@@ -9,25 +9,24 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.mygdx.Game.MindWeaver;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Helpers.Constants;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class MenuScreen extends ManagedScreen {
+
     private final ScreenManager screenManager;
-    private ImageButton resumeButton, restartButton, settingsButton, quitButton;
+    private ImageButton resumeButton, restartButton, settingsButton, levelsButton, exitButton;
     private final float buttonWidth, buttonHeight;
     private Stage stage;
-    private final MindWeaver game;
-    private final List<ImageButton> menuScreenButtons = new ArrayList<>();
+    private Array<ImageButton> buttons;
 
-    public MenuScreen(MyResourceManager resourceManager, ScreenManager screenManager, MindWeaver game) {
+    public MenuScreen(MyResourceManager resourceManager, ScreenManager screenManager) {
 
         this.screenManager = screenManager;
         this.game = game;
@@ -55,19 +54,26 @@ public class MenuScreen extends ManagedScreen {
                 screenManager.pushScreen(screenType, "slide_up");
             }
         });
+        buttons.add(button);
+        stage.addActor(button);
 
         return button;
     }
 
     private void initMenuScreen(MyResourceManager resourceManager) {
+
+        buttons = new Array<>();
+
         final Skin resumeSkin = new Skin();
         resumeSkin.add("UnclickedResumeButton", resourceManager.getTexture("UnclickedResumeButton"));
         resumeSkin.add("ClickedResumeButton", resourceManager.getTexture("ClickedResumeButton"));
+
         resumeButton = initButton(resumeSkin, "UnclickedResumeButton", "ClickedResumeButton", -150, buttonWidth, buttonHeight, Constants.SCREEN_OP.RESUME);
 
         final Skin restartSkin = new Skin();
         restartSkin.add("UnclickedRestartButton", resourceManager.getTexture("UnclickedRestartButton"));
         restartSkin.add("ClickedRestartButton", resourceManager.getTexture("ClickedRestartButton"));
+
         restartButton = initButton(restartSkin, "UnclickedRestartButton", "ClickedRestartButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_OP.RESTART);
 
         final Skin settingsSkin = new Skin();
@@ -75,16 +81,19 @@ public class MenuScreen extends ManagedScreen {
         settingsSkin.add("ClickedSettingsButton", resourceManager.getTexture("ClickedSettingsButton"));
         settingsButton = initButton(settingsSkin, "UnclickedSettingsButton", "ClickedSettingsButton", 250, buttonWidth, buttonHeight, Constants.SCREEN_OP.LEVELS);
 
-        final Skin quitSkin = new Skin();
-        quitSkin.add("UnclickedQuitButton", resourceManager.getTexture("UnclickedQuitButton"));
-        quitSkin.add("ClickedQuitButton", resourceManager.getTexture("ClickedQuitButton"));
-        quitButton = initButton(quitSkin, "UnclickedQuitButton", "ClickedQuitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_OP.LEVELS);
-
         stage.addActor(resumeButton);
         stage.addActor(restartButton);
         stage.addActor(settingsButton);
-        stage.addActor(quitButton);
 
+        final Skin levelsSkin = new Skin();
+        levelsSkin.add("UnclickedLevelsButton", resourceManager.getTexture("UnclickedLevelsButton"));
+        levelsSkin.add("ClickedLevelsButton", resourceManager.getTexture("ClickedLevelsButton"));
+        levelsButton = initButton(levelsSkin, "UnclickedLevelsButton", "ClickedLevelsButton", 250, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.LEVELS);
+
+        final Skin exitSkin = new Skin();
+        exitSkin.add("UnclickedExitButton", resourceManager.getTexture("UnclickedExitButton"));
+        exitSkin.add("ClickedExitButton", resourceManager.getTexture("ClickedExitButton"));
+        exitButton = initButton(exitSkin, "UnclickedExitButton", "ClickedExitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_TYPE.EXIT);
     }
 
     @Override
@@ -94,39 +103,31 @@ public class MenuScreen extends ManagedScreen {
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-
-        screenManager.render(game.batch, delta);
-
     }
 
     @Override
-    public void dispose() { }
-    @Override
-    public void show() {
+    public void dispose() {
+        stage.dispose();
 
+        for (ImageButton button : buttons) {
+            Skin skin = button.getSkin();
+            if (skin != null) {
+                skin.dispose();
+            }
+        }
     }
     @Override
-    public void resize(int i, int j) {
-
-    }
-
+    public void show() { }
     @Override
-    public void pause() {
-
-    }
-
+    public void resize(int i, int j) { }
     @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
+    public void pause() { }
     @Override
     public Matrix4 getProjectionMatrix() {
         return stage.getBatch().getProjectionMatrix();
     }
+    public void resume() { }
+    @Override
+    public void hide() { }
+
 }
