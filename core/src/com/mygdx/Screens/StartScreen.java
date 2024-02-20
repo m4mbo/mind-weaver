@@ -24,7 +24,7 @@ public class StartScreen extends ManagedScreen {
     private final float buttonWidth, buttonHeight;
     private final MyResourceManager resourceManager;
     private Array<ImageButton> buttons;
-    private final TextureRegion mind, weaver, hat;
+    private final TextureRegion mind, weaver, hat, bg;
     private final ShaderHandler shaderHandler;
 
     public StartScreen(MindWeaver game, MyResourceManager resourceManager, ScreenManager screenManager) {
@@ -41,6 +41,7 @@ public class StartScreen extends ManagedScreen {
         mind = new TextureRegion(resourceManager.getTexture("mind"));
         weaver = new TextureRegion(resourceManager.getTexture("weaver"));
         hat = new TextureRegion(resourceManager.getTexture("life"));
+        bg = new TextureRegion(resourceManager.getTexture("start_bg"));
 
         initStartScreen();
     }
@@ -94,6 +95,8 @@ public class StartScreen extends ManagedScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);;
 
         game.batch.begin();
+
+        game.batch.draw(bg, -30, -80, bg.getRegionWidth() * 7.5f, bg.getRegionHeight() * 7.5f);
 
         game.batch.draw(mind, stage.getViewport().getWorldWidth() / 2 - 500, stage.getViewport().getWorldHeight() - 300, mind.getRegionWidth() * 1.4f, mind.getRegionHeight() * 1.4f);
         game.batch.draw(hat, stage.getViewport().getWorldWidth() / 2 - 500, stage.getViewport().getWorldHeight() - 215, hat.getRegionWidth() * 7.8f, hat.getRegionHeight() * 7.8f);

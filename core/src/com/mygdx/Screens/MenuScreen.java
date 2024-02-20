@@ -1,9 +1,11 @@
 package com.mygdx.Screens;
 
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -29,7 +31,14 @@ public class MenuScreen extends ManagedScreen {
 
         Gdx.input.setInputProcessor(stage);
 
+        Texture bg = resourceManager.getTexture("levels_bg");
+        Image levelsBGImage =  new Image(bg);
+        levelsBGImage.setPosition(0, 0);
+        levelsBGImage.setSize(levelsBGImage.getWidth() * 7.5f, levelsBGImage.getHeight() * 7.5f);
+        stage.addActor(levelsBGImage);
+
         initMenuScreen(resourceManager);
+
     }
 
     public ImageButton initButton(final Skin skin, final String unclickedImagePath, final String clickedImagePath, int offset, final float width, final float height, final Constants.SCREEN_OP screenType) {
@@ -92,6 +101,8 @@ public class MenuScreen extends ManagedScreen {
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+
+        screenManager.render(delta);
     }
 
     @Override

@@ -87,6 +87,7 @@ public class MyContactListener implements ContactListener {
             util.getVisionMap().addTarget(source, target);
         }
         else if (fa.getUserData().equals("end") || fb.getUserData().equals("end")) {
+            screenManager.setLevelProgression(level);
             screenManager.pushScreen(SCREEN_OP.LEVELS, "sliding_left");
         }
     }

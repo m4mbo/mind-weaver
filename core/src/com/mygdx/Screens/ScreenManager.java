@@ -20,6 +20,7 @@ public final class ScreenManager {
     private ManagedScreen prevScreen;
     private ManagedScreen currScreen;
     private int level;
+    private int levelProgression;
     private final FrameBuffer fb;
 
     public ScreenManager(MindWeaver game, MyResourceManager resourceManager) {
@@ -28,6 +29,7 @@ public final class ScreenManager {
         this.currScreen = null;
         transitionQueue = new LinkedList<>();
         fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+        levelProgression = 1;
     }
 
     public void pushScreen(Constants.SCREEN_OP screenType, String flag) {
@@ -74,7 +76,7 @@ public final class ScreenManager {
                 currScreen = new GameScreen(game, level, resourceManager, this);
                 break;
             case LEVELS:
-                currScreen = new LevelsScreen(resourceManager, this);
+                currScreen = new LevelsScreen(resourceManager, this, levelProgression);
                 break;
             case LEVEL_1:
                 currScreen = new GameScreen(game, 1, resourceManager, this);
@@ -127,16 +129,22 @@ public final class ScreenManager {
         }
     }
 
-    public void render(SpriteBatch batch, float delta) {
+    public void render(float delta) {
 
         LinkedList<Transition> toRemove = new LinkedList<>();
 
         for (Transition transition : transitionQueue) {
             if (transition.isDone()) toRemove.add(transition);
-            transition.render(batch, delta);
+            transition.render(game.batch, delta);
         }
 
         transitionQueue.remove(toRemove);
+    }
+
+    public void setLevelProgression(int progression) {
+        if (levelProgression < progression) {
+            levelProgression = progression;
+        }
     }
 
 }

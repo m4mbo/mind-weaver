@@ -124,7 +124,7 @@ public class GameScreen extends ManagedScreen {
 
         game.hud.render(game.batch);
 
-        screenManager.render(game.batch, delta);
+        screenManager.render(delta);
 
         //b2dr.render(world, gameCam.combined);
 
