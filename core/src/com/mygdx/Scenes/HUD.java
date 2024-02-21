@@ -177,7 +177,7 @@ public class HUD {
 
             TextureRegion papayaRegion = new TextureRegion(papaya);
 
-            papayaLabel = new Label("x" + 0, new Label.LabelStyle(FancyFontHelper.getInstance().getFont(Color.BLACK, 90), Color.BLACK));
+            papayaLabel = new Label("x" + 0, new Label.LabelStyle(FancyFontHelper.getInstance().getFont(Color.WHITE, 90), Color.WHITE));
             add(new Image(papayaRegion)).width(150).height(150).pad(10);
             add(papayaLabel).pad(10);
 
@@ -199,7 +199,6 @@ public class HUD {
             batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
 
             shapeDrawer.drawRectangle(viewport.getWorldHeight(), viewport.getWorldWidth(), 0, 0, "translucent");
-            shapeDrawer.drawRectangle(600, 600, (viewport.getWorldWidth() - 600) / 2, (viewport.getWorldHeight() - 600) / 2, "gray");
 
             batch.end();
             shapeDrawer.render((SpriteBatch) batch);

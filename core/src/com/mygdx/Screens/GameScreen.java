@@ -1,10 +1,8 @@
 package com.mygdx.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -40,6 +38,7 @@ public class GameScreen extends ManagedScreen {
     private final GameInputProcessor inputProcessor;
     private final int level;
     private final ScreenManager screenManager;
+    private final FPSCounter fpsCounter;
 
     public GameScreen(MindWeaver game, int level, MyResourceManager resourceManager, ScreenManager screenManager) {
 
@@ -52,6 +51,7 @@ public class GameScreen extends ManagedScreen {
         TiledMap map = null;
 
         map = mapLoader.load("Tilemaps/level" + this.level + ".tmx");
+        fpsCounter = new FPSCounter();
 
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
         world = new World(new Vector2(0, -Constants.G), true);
@@ -68,7 +68,7 @@ public class GameScreen extends ManagedScreen {
         shapeDrawer = new ShapeDrawer(shaderHandler, resourceManager);
         textureDrawer = new TextureDrawer(shaderHandler);
         LightManager lightManager = new LightManager(world);
-        ObjectHandler objectHandler = new ObjectHandler();
+        ObjectHandler objectHandler = new ObjectHandler(resourceManager);
         VisionMap visionMap =  new VisionMap(world, shapeDrawer, game.hud);
         CharacterCycle characterCycle = new CharacterCycle(visionMap, colorGenerator);
         EntityHandler entityHandler = new EntityHandler(characterCycle, shaderHandler, visionMap);
@@ -90,6 +90,7 @@ public class GameScreen extends ManagedScreen {
     public void show() {  }
 
     public void update(float delta) {
+        fpsCounter.update(delta);
         game.hud.update(delta);
         if (game.hud.standBy()) return;
         util.update(delta, gameCam);
@@ -99,6 +100,9 @@ public class GameScreen extends ManagedScreen {
 
     @Override
     public void render(float delta) {
+
+        //Uncomment this to check fps
+        //System.out.println(fpsCounter.getFramesPerSecond());
 
         update(delta);
 
@@ -119,7 +123,7 @@ public class GameScreen extends ManagedScreen {
 
         game.hud.render(game.batch);
 
-        screenManager.render(game.batch, delta);
+        screenManager.render(delta);
 
         //b2dr.render(world, gameCam.combined);
 

@@ -102,7 +102,7 @@
   <object id="248" x="853.818" y="952" width="8.54545" height="41.8182"/>
   <object id="253" x="280.333" y="1125.33" width="195.667" height="8.66667"/>
   <object id="254" x="467.5" y="1050" width="8.33367" height="72.3333"/>
-  <object id="309" x="335.5" y="972" width="97.75" height="7.75"/>
+  <object id="309" x="338" y="972" width="95.25" height="7.75"/>
  </objectgroup>
  <objectgroup id="11" name="merchant"/>
  <objectgroup id="12" name="bug">

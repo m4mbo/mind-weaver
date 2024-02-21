@@ -68,6 +68,8 @@ public class GameInputProcessor implements InputProcessor {
             case Input.Keys.SHIFT_LEFT:
                 characterCycle.cycleNext();
                 character.looseControl();
+                if (Gdx.input.isKeyPressed(Input.Keys.A)) characterCycle.getCurrentCharacter().setMovementState(Constants.MSTATE.LEFT);
+                else if (Gdx.input.isKeyPressed(Input.Keys.D)) characterCycle.getCurrentCharacter().setMovementState(Constants.MSTATE.RIGHT);
                 break;
             case Input.Keys.J:
                 if (character instanceof ArmourGoblin) ((ArmourGoblin) character).attack();

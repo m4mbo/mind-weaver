@@ -136,6 +136,7 @@ public class ArmourGoblin extends PlayableCharacter {
 
     public void attack() {
         if (isStateActive(Constants.PSTATE.ATTACK_STUN) || isStateActive(Constants.PSTATE.ATTACKING)) return;
+        resourceManager.getSound("attack").play(0.2f);
         util.getParticleHandler().addParticleEffect(facingRight ? "air_right" : "air_left", b2body.getPosition().x, b2body.getPosition().y - 4 / Constants.PPM);
         addPlayerState(Constants.PSTATE.ATTACKING);
         timer.start(0.1f, "attack_hb", this);
@@ -185,7 +186,6 @@ public class ArmourGoblin extends PlayableCharacter {
                 removePlayerState(Constants.PSTATE.HIT);
                 break;
             case "death_and_disposal":
-                System.out.println("here");
                 dispose();
                 util.getEntityHandler().addEntityOperation(this, "die");
                 break;

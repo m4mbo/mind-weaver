@@ -23,7 +23,7 @@ public class MindWeaver extends Game {
 
 		hud = new HUD(batch, resourceManager);
 
-		screenManager.pushScreen(Constants.SCREEN_OP.LEVEL_4, "none");
+		screenManager.pushScreen(Constants.SCREEN_OP.START, "none");
 	}
 
 	public void loadSprites() {
@@ -31,8 +31,6 @@ public class MindWeaver extends Game {
 		//Start Screen buttons
 		resourceManager.loadTexture("Buttons/UnclickedPlayButton.png", "UnclickedPlayButton");
 		resourceManager.loadTexture("Buttons/ClickedPlayButton.png", "ClickedPlayButton");
-		resourceManager.loadTexture("Buttons/UnclickedSettingsButton.png", "UnclickedSettingsButton");
-		resourceManager.loadTexture("Buttons/ClickedSettingsButton.png", "ClickedSettingsButton");
 		resourceManager.loadTexture("Buttons/UnclickedExitButton.png", "UnclickedExitButton");
 		resourceManager.loadTexture("Buttons/ClickedExitButton.png", "ClickedExitButton");
 
@@ -41,8 +39,12 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Buttons/ClickedResumeButton.png", "ClickedResumeButton");
 		resourceManager.loadTexture("Buttons/UnclickedRestartButton.png", "UnclickedRestartButton");
 		resourceManager.loadTexture("Buttons/ClickedRestartButton.png", "ClickedRestartButton");
-		resourceManager.loadTexture("Buttons/UnclickedQuitButton.png", "UnclickedQuitButton");
-		resourceManager.loadTexture("Buttons/ClickedQuitButton.png", "ClickedQuitButton");
+		resourceManager.loadTexture("Buttons/UnclickedLevelsButton.png", "UnclickedLevelsButton");
+		resourceManager.loadTexture("Buttons/ClickedLevelsButton.png", "ClickedLevelsButton");
+
+		//Controls buttons
+		resourceManager.loadTexture("Buttons/UnclickedControlsButton.png", "UnclickedControlsButton");
+		resourceManager.loadTexture("Buttons/ClickedControlsButton.png", "ClickedControlsButton");
 
 		// Mage
 		resourceManager.loadTexture("Mage/mage_run.png", "mage_run");
@@ -125,6 +127,22 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Messages/press_x.png", "x");
 		resourceManager.loadTexture("Messages/press_shift.png", "shift");
 
+		//SFX
+		resourceManager.loadSound("SoundEffects/jump.mp3", "jump");
+		resourceManager.loadSound("SoundEffects/land.mp3", "land");
+		resourceManager.loadSound("SoundEffects/laugh.wav", "laugh");
+		resourceManager.loadSound("SoundEffects/papaya_picked.wav", "item");
+		resourceManager.loadSound("SoundEffects/attack.mp3", "attack");
+		resourceManager.loadSound("SoundEffects/lever.mp3", "lever");
+		resourceManager.loadSound("SoundEffects/door.mp3", "door");
+
+		//Art
+		resourceManager.loadTexture("Art/Mind.png", "mind");
+		resourceManager.loadTexture("Art/Weaver.png", "weaver");
+		resourceManager.loadTexture("Art/LevelsScreen.png", "LevelsScreen");
+		resourceManager.loadTexture("Art/levels_background.png", "levels_bg");
+		resourceManager.loadTexture("Art/start_background.png", "start_bg");
+		resourceManager.loadTexture("Art/translucent_background.png", "translucent_bg");
 	}
 
 	@Override

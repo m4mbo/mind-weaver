@@ -123,6 +123,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
         addPlayerState(Constants.PSTATE.ON_GROUND);
         addPlayerState(Constants.PSTATE.LANDING);
         if (airIterations >= 5) {
+            resourceManager.getSound("land").play(0.4f);
             util.getParticleHandler().addParticleEffect("dust_ground", facingRight ? b2body.getPosition().x - 5 / Constants.PPM : b2body.getPosition().x - 3 / Constants.PPM, b2body.getPosition().y - 10/Constants.PPM);
             currAState = Constants.ASTATE.LAND;
         }
@@ -132,6 +133,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
     }
 
     public void jump() {
+        resourceManager.getSound("jump").play(0.4f);
         util.getParticleHandler().addParticleEffect("dust_ground", facingRight ? b2body.getPosition().x - 5 / Constants.PPM : b2body.getPosition().x - 3 / Constants.PPM, b2body.getPosition().y - 10/Constants.PPM);
         b2body.applyLinearImpulse(new Vector2(0, 3f), b2body.getWorldCenter(), true);
     }
@@ -188,7 +190,6 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
                 removePlayerState(Constants.PSTATE.HIT);
                 break;
             case "death_and_disposal":
-                System.out.println("here");
                 dispose();
                 util.getEntityHandler().addEntityOperation(this, "die");
                 break;
