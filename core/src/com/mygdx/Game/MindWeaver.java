@@ -139,7 +139,11 @@ public class MindWeaver extends Game {
 		//Art
 		resourceManager.loadTexture("Art/Mind.png", "mind");
 		resourceManager.loadTexture("Art/Weaver.png", "weaver");
-		resourceManager.loadTexture("Art/LevelsScreen.png", "LevelsScreen");
+		resourceManager.loadTexture("Art/Level1.png", "Level1");
+		resourceManager.loadTexture("Art/Level2.png", "Level2");
+		resourceManager.loadTexture("Art/Level3.png", "Level3");
+		resourceManager.loadTexture("Art/Level4.png", "Level4");
+		resourceManager.loadTexture("Art/Level5.png", "Level5");
 		resourceManager.loadTexture("Art/levels_background.png", "levels_bg");
 		resourceManager.loadTexture("Art/start_background.png", "start_bg");
 		resourceManager.loadTexture("Art/translucent_background.png", "translucent_bg");
