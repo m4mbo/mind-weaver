@@ -22,7 +22,7 @@ public class MenuScreen extends ManagedScreen {
     private final Stage stage;
     private Array<ImageButton> buttons;
 
-    public MenuScreen(MyResourceManager resourceManager, ScreenManager screenManager) {
+    public MenuScreen(MyResourceManager resourceManager, ScreenManager screenManager, Texture background) {
 
         this.screenManager = screenManager;
         this.stage = new Stage(new ScreenViewport());
@@ -31,11 +31,15 @@ public class MenuScreen extends ManagedScreen {
 
         Gdx.input.setInputProcessor(stage);
 
-        Texture bg = resourceManager.getTexture("levels_bg");
-        Image levelsBGImage =  new Image(bg);
-        levelsBGImage.setPosition(0, 0);
-        levelsBGImage.setSize(levelsBGImage.getWidth() * 7.5f, levelsBGImage.getHeight() * 7.5f);
+        Image levelsBGImage =  new Image(background);
+        levelsBGImage.setPosition(0, levelsBGImage.getHeight());
+        levelsBGImage.setSize(levelsBGImage.getWidth(), -levelsBGImage.getHeight());
         stage.addActor(levelsBGImage);
+
+        Image transBGImage =  new Image(resourceManager.getTexture("translucent_bg"));
+        transBGImage.setPosition(0,0);
+        transBGImage.setSize(transBGImage.getWidth() * 7.5f, transBGImage.getHeight() * 7.5f);
+        stage.addActor(transBGImage);
 
         initMenuScreen(resourceManager);
 
@@ -53,7 +57,7 @@ public class MenuScreen extends ManagedScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 button.setChecked(false);
-                screenManager.pushScreen(screenType, "slide_up");
+                screenManager.pushScreen(screenType, screenType == Constants.SCREEN_OP.RESUME || screenType == Constants.SCREEN_OP.RESTART || screenType == Constants.SCREEN_OP.CONTROLS ? "none" : "slide_down");
             }
         });
         buttons.add(button);

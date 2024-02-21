@@ -94,7 +94,8 @@ public final class ScreenManager {
                 currScreen = new GameScreen(game, 5, resourceManager, this);
                 break;
             case MENU:
-                currScreen = new MenuScreen(resourceManager, this);
+                assert currScreen != null;
+                currScreen = new MenuScreen(resourceManager, this, currScreen.screenToTexture(fb));
                 break;
             case LEVEL_COMPLETE:
                 currScreen = new LevelCompleteScreen(resourceManager, this);

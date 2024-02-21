@@ -140,6 +140,7 @@ public class MindWeaver extends Game {
 		resourceManager.loadTexture("Art/LevelsScreen.png", "LevelsScreen");
 		resourceManager.loadTexture("Art/levels_background.png", "levels_bg");
 		resourceManager.loadTexture("Art/start_background.png", "start_bg");
+		resourceManager.loadTexture("Art/translucent_background.png", "translucent_bg");
 	}
 
 	@Override
