@@ -54,6 +54,7 @@ public class Lever extends Interactable {
 
     @Override
     public void interact() {
+        resourceManager.getSound("lever").play(0.6f);
         if (currAState == Constants.ASTATE.OPEN) currAState = Constants.ASTATE.CLOSED;
         else currAState = Constants.ASTATE.OPEN;
         for (Reactable reactable : reactables) {

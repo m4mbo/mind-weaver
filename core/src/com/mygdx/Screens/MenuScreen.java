@@ -45,7 +45,8 @@ public class MenuScreen extends ManagedScreen {
 
     }
 
-    public ImageButton initButton(final Skin skin, final String unclickedImagePath, final String clickedImagePath, int offset, final float width, final float height, final Constants.SCREEN_OP screenType) {
+    public void initButton(final Skin skin, final String unclickedImagePath, final String clickedImagePath, int offset, final float width, final float height, final Constants.SCREEN_OP screenType) {
+
         ImageButton.ImageButtonStyle buttonStyle = new ImageButton.ImageButtonStyle();
         buttonStyle.imageUp = skin.getDrawable(unclickedImagePath);
         buttonStyle.imageDown = skin.getDrawable(clickedImagePath);
@@ -63,7 +64,6 @@ public class MenuScreen extends ManagedScreen {
         buttons.add(button);
         stage.addActor(button);
 
-        return button;
     }
 
     private void initMenuScreen(MyResourceManager resourceManager) {
