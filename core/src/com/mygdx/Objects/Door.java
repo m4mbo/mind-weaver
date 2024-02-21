@@ -84,6 +84,7 @@ public class Door extends Reactable {
 
     @Override
     public void react() {
+        resourceManager.getSound("door").play(0.5f);
         open = !open;
         if (open) currAState = Constants.ASTATE.OPEN;
         else currAState = Constants.ASTATE.CLOSED;
