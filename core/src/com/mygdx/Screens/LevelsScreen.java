@@ -23,7 +23,7 @@ public class LevelsScreen extends ManagedScreen {
     private Array<Polygon> levels;
     private boolean wasClicked;
 
-    public LevelsScreen(MyResourceManager resourceManager, ScreenManager screenManager) {
+    public LevelsScreen(MyResourceManager resourceManager, ScreenManager screenManager, int levelProgression) {
 
         this.screenManager = screenManager;
         this.stage = new Stage(new ScreenViewport());
@@ -38,8 +38,13 @@ public class LevelsScreen extends ManagedScreen {
 
     public void initLevelsScreen(MyResourceManager resourceManager) {
 
-        Texture levelsTexture = resourceManager.getTexture("LevelsScreen");
+        Texture bg = resourceManager.getTexture("levels_bg");
+        Image levelsBGImage =  new Image(bg);
+        levelsBGImage.setPosition(0, 0);
+        levelsBGImage.setSize(levelsBGImage.getWidth() * 7.5f, levelsBGImage.getHeight() * 7.5f);
+        stage.addActor(levelsBGImage);
 
+        Texture levelsTexture = resourceManager.getTexture("LevelsScreen");
         Image levelsImage = new Image(levelsTexture);
         levelsImage.setPosition((float) (Gdx.graphics.getWidth() - levelsTexture.getWidth()) / 2, (float) (Gdx.graphics.getHeight() - levelsTexture.getHeight()) / 2);
         levelsImage.setSize(levelsTexture.getWidth(), levelsTexture.getHeight());
@@ -81,6 +86,8 @@ public class LevelsScreen extends ManagedScreen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
+        screenManager.render(delta);
+
         handleInput();
     }
     public void handleInput() {
@@ -114,9 +121,7 @@ public class LevelsScreen extends ManagedScreen {
             }
         }
     }
-    public void update(float delta) {
-        handleInput();
-    }
+
     @Override
     public void dispose() {
         stage.dispose();

@@ -140,6 +140,9 @@ public class CutScene extends Actor {
                 messageChain.add("To interact: X.");
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("bug_teacher")));
                 messageChain.add("To control minds: shift.");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("bug_teacher")));
+                messageChain.add("To attack (?!): J.");
+                characterRegions.add(new TextureRegion(resourceManager.getTexture("bug_teacher")));
                 break;
             default:
                 break;

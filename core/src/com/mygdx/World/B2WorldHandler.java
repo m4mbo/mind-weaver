@@ -184,25 +184,26 @@ public class B2WorldHandler {
                 createDoorAndPressurePlate(427, 390, 496, 396.5f, 1, false);
                 pressurePlate = createDoorAndPressurePlate(623, 390, 620, 480.5f, 1, false);
                 addDoor(566, 418, pressurePlate, 1, true);
-
                 createDoorAndPressurePlate(819, 390, 675, 410.5f, 1, false);
                 createDoorAndPressurePlate(875, 390, 695, 368.5f, 1, false);
 
                 //Custom platforms
 
                 positions = new LinkedList<>();
-                positions.add(new Vector2(310 / Constants.PPM, 350 / Constants.PPM));
-                positions.add(new Vector2(310 / Constants.PPM, 441 / Constants.PPM));
+                positions.add(new Vector2(322 / Constants.PPM, 350 / Constants.PPM));
+                positions.add(new Vector2(322 / Constants.PPM, 441 / Constants.PPM));
                 positions.add(new Vector2(485 / Constants.PPM, 441 / Constants.PPM));
-                positions.add(new Vector2(310 / Constants.PPM, 441 / Constants.PPM));
+                positions.add(new Vector2(322 / Constants.PPM, 441 / Constants.PPM));
                 Platform platform1 = new Platform(new LinkedList<>(positions), world, resourceManager);
 
                 positions = new LinkedList<>();
-                positions.add(new Vector2(310 / Constants.PPM, 335 / Constants.PPM));
+                positions.add(new Vector2(322 / Constants.PPM, 335 / Constants.PPM));
                 positions.add(new Vector2(448 / Constants.PPM, 335 / Constants.PPM));
-                positions.add(new Vector2(448 / Constants.PPM, 456 / Constants.PPM));
+                positions.add(new Vector2(448 / Constants.PPM, 441 / Constants.PPM));
                 positions.add(new Vector2(448 / Constants.PPM, 335 / Constants.PPM));
                 Platform platform2 = new Platform(new LinkedList<>(positions), world, resourceManager);
+
+                pressurePlate.addReactable(platform2);
 
                 Lever lever1 = new Lever(367.5f, 370f, world, resourceManager, true);
                 Lever lever2 = new Lever(402.5f, 370f, world, resourceManager, false);

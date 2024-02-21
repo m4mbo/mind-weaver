@@ -16,6 +16,7 @@ public class ShaderHandler {
     private final ShaderProgram redMaskShader;
     private final ShaderProgram outlineShader;
     private final ShaderProgram randColShader;
+    private final ShaderProgram waterShader;
 
     public ShaderHandler(ColorGenerator colorGenerator) {
         this.colorGenerator = colorGenerator;
@@ -26,6 +27,7 @@ public class ShaderHandler {
         outlineShader = new ShaderProgram(Gdx.files.internal("Shaders/Vertex.glsl").readString(), Gdx.files.internal("Shaders/Outline.glsl").readString());
         randColShader = new ShaderProgram(Gdx.files.internal("Shaders/Vertex.glsl").readString(), Gdx.files.internal("Shaders/RandomColorMask.glsl").readString());
         alphaShader = new ShaderProgram(Gdx.files.internal("Shaders/Vertex.glsl").readString(), Gdx.files.internal("Shaders/Alpha.glsl").readString());
+        waterShader = new ShaderProgram(Gdx.files.internal("Shaders/Vertex.glsl").readString(), Gdx.files.internal("Shaders/Water.glsl").readString());
         ShaderProgram.pedantic = false;
         if (!waveShader.isCompiled()) {
             System.out.println(waveShader.getLog());
@@ -45,21 +47,33 @@ public class ShaderHandler {
         if (!alphaShader.isCompiled()) {
             System.out.println(randColShader.getLog());
         }
+        if (!waterShader.isCompiled()) {
+            System.out.println(randColShader.getLog());
+        }
     }
 
     public void update(float delta) {
         time += delta;
+
         waveShader.bind();
         waveShader.setUniformf("u_time", time);
         waveShader.setUniformf("u_resolution", new Vector2(100, 100));
+
         blinkShader.bind();
         blinkShader.setUniformf("u_time", time);
+
         alphaShader.bind();
         alphaShader.setUniformf("u_time", time);
+
         randColShader.bind();
         randColShader.setUniformf("r", colorGenerator.getCurrentColor().x);
         randColShader.setUniformf("g", colorGenerator.getCurrentColor().y);
         randColShader.setUniformf("b", colorGenerator.getCurrentColor().z);
+
+        waterShader.bind();
+        waterShader.setUniformf("u_amount", 2.5f);
+        waterShader.setUniformf("u_speed", 1f);
+        waterShader.setUniformf("u_time", time);
     }
 
     public ShaderProgram getShaderProgram(String key) {
@@ -69,6 +83,7 @@ public class ShaderHandler {
         if (key.equals("outline")) return outlineShader;
         if (key.equals("rand_col")) return randColShader;
         if (key.equals("alpha")) return alphaShader;
+        if (key.equals("water")) return waterShader;
         return null;
     }
 }

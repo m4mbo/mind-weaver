@@ -1,4 +1,5 @@
 package com.mygdx.Screens;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,7 +20,8 @@ public final class ScreenManager {
     private ManagedScreen prevScreen;
     private ManagedScreen currScreen;
     private int level;
-    private FrameBuffer fb;
+    private int levelProgression;
+    private final FrameBuffer fb;
 
     public ScreenManager(MindWeaver game, MyResourceManager resourceManager) {
         this.game = game;
@@ -27,6 +29,7 @@ public final class ScreenManager {
         this.currScreen = null;
         transitionQueue = new LinkedList<>();
         fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+        levelProgression = 1;
     }
 
     public void pushScreen(Constants.SCREEN_OP screenType, String flag) {
@@ -39,6 +42,14 @@ public final class ScreenManager {
             prevScreen = temp;
             game.setScreen(currScreen);
             currScreen.resume();
+            return;
+        }  else if (screenType == Constants.SCREEN_OP.CONTROLS) {
+            ManagedScreen temp = currScreen;
+            currScreen = prevScreen;
+            prevScreen = temp;
+            game.setScreen(currScreen);
+            currScreen.resume();
+            game.hud.pushCutscene("lesson");
             return;
         }
 
@@ -65,7 +76,7 @@ public final class ScreenManager {
                 currScreen = new GameScreen(game, level, resourceManager, this);
                 break;
             case LEVELS:
-                currScreen = new LevelsScreen(resourceManager, this);
+                currScreen = new LevelsScreen(resourceManager, this, levelProgression);
                 break;
             case LEVEL_1:
                 currScreen = new GameScreen(game, 1, resourceManager, this);
@@ -83,12 +94,14 @@ public final class ScreenManager {
                 currScreen = new GameScreen(game, 5, resourceManager, this);
                 break;
             case MENU:
-                currScreen = new MenuScreen(resourceManager, this);
+                assert currScreen != null;
+                currScreen = new MenuScreen(resourceManager, this, currScreen.screenToTexture(fb));
                 break;
             case LEVEL_COMPLETE:
                 currScreen = new LevelCompleteScreen(resourceManager, this);
                 break;
             case EXIT:
+                resourceManager.disposeAll();
                 Gdx.app.exit();
                 break;
             default:
@@ -117,16 +130,22 @@ public final class ScreenManager {
         }
     }
 
-    public void render(SpriteBatch batch, float delta) {
+    public void render(float delta) {
 
         LinkedList<Transition> toRemove = new LinkedList<>();
 
         for (Transition transition : transitionQueue) {
             if (transition.isDone()) toRemove.add(transition);
-            transition.render(batch, delta);
+            transition.render(game.batch, delta);
         }
 
         transitionQueue.remove(toRemove);
+    }
+
+    public void setLevelProgression(int progression) {
+        if (levelProgression < progression) {
+            levelProgression = progression;
+        }
     }
 
 }

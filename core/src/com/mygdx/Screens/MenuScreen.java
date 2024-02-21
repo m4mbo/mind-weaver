@@ -1,9 +1,11 @@
 package com.mygdx.Screens;
 
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -20,7 +22,7 @@ public class MenuScreen extends ManagedScreen {
     private final Stage stage;
     private Array<ImageButton> buttons;
 
-    public MenuScreen(MyResourceManager resourceManager, ScreenManager screenManager) {
+    public MenuScreen(MyResourceManager resourceManager, ScreenManager screenManager, Texture background) {
 
         this.screenManager = screenManager;
         this.stage = new Stage(new ScreenViewport());
@@ -29,7 +31,18 @@ public class MenuScreen extends ManagedScreen {
 
         Gdx.input.setInputProcessor(stage);
 
+        Image levelsBGImage =  new Image(background);
+        levelsBGImage.setPosition(0, levelsBGImage.getHeight());
+        levelsBGImage.setSize(levelsBGImage.getWidth(), -levelsBGImage.getHeight());
+        stage.addActor(levelsBGImage);
+
+        Image transBGImage =  new Image(resourceManager.getTexture("translucent_bg"));
+        transBGImage.setPosition(0,0);
+        transBGImage.setSize(transBGImage.getWidth() * 7.5f, transBGImage.getHeight() * 7.5f);
+        stage.addActor(transBGImage);
+
         initMenuScreen(resourceManager);
+
     }
 
     public ImageButton initButton(final Skin skin, final String unclickedImagePath, final String clickedImagePath, int offset, final float width, final float height, final Constants.SCREEN_OP screenType) {
@@ -44,7 +57,7 @@ public class MenuScreen extends ManagedScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 button.setChecked(false);
-                screenManager.pushScreen(screenType, "slide_up");
+                screenManager.pushScreen(screenType, screenType == Constants.SCREEN_OP.RESUME || screenType == Constants.SCREEN_OP.RESTART || screenType == Constants.SCREEN_OP.CONTROLS ? "none" : "slide_down");
             }
         });
         buttons.add(button);
@@ -72,7 +85,8 @@ public class MenuScreen extends ManagedScreen {
         final Skin controlsSkin = new Skin();
         controlsSkin.add("UnclickedControlsButton", resourceManager.getTexture("UnclickedControlsButton"));
         controlsSkin.add("ClickedControlsButton", resourceManager.getTexture("ClickedControlsButton"));
-        initButton(controlsSkin, "UnclickedControlsButton", "ClickedControlsButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_OP.LEVELS);
+        initButton(controlsSkin, "UnclickedControlsButton", "ClickedControlsButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_OP.CONTROLS);
+
         final Skin levelsSkin = new Skin();
         levelsSkin.add("UnclickedLevelsButton", resourceManager.getTexture("UnclickedLevelsButton"));
         levelsSkin.add("ClickedLevelsButton", resourceManager.getTexture("ClickedLevelsButton"));
@@ -91,6 +105,8 @@ public class MenuScreen extends ManagedScreen {
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+
+        screenManager.render(delta);
     }
 
     @Override
