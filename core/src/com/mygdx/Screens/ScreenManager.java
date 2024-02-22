@@ -150,7 +150,7 @@ public final class ScreenManager {
     }
 
     public void setLevelProgression(int progression) {
-        if (levelProgression < progression) {
+        if (progression > levelProgression) {
             levelProgression = progression;
         }
     }
