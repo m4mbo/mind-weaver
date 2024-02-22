@@ -20,9 +20,9 @@ import com.mygdx.Tools.MyResourceManager;
 public class StartScreen extends ManagedScreen {
     private final MindWeaver game;
     private final ScreenManager screenManager;
+    private final MyResourceManager resourceManager;
     private final Stage stage;
     private final float buttonWidth, buttonHeight;
-    private final MyResourceManager resourceManager;
     private Array<ImageButton> buttons;
     private final TextureRegion mind, weaver, hat, bg;
     private final ShaderHandler shaderHandler;
@@ -46,9 +46,15 @@ public class StartScreen extends ManagedScreen {
         initStartScreen();
     }
 
-    public void initButton(final Skin skin, final String unclickedImagePath, final String clickedImagePath, int offset, final float width, final float height, final Constants.SCREEN_OP screenType) {
+    public void initButton(final String unclickedImagePath, final String hoverImagePath, final String clickedImagePath, int offset, final float width, final float height, final Constants.SCREEN_OP screenType)  {
+        Skin skin = new Skin();
+        skin.add(unclickedImagePath, resourceManager.getTexture(unclickedImagePath));
+        skin.add(hoverImagePath, resourceManager.getTexture(hoverImagePath));
+        skin.add(clickedImagePath, resourceManager.getTexture(clickedImagePath));
+
         ImageButton.ImageButtonStyle buttonStyle = new ImageButton.ImageButtonStyle();
         buttonStyle.imageUp = skin.getDrawable(unclickedImagePath);
+        buttonStyle.imageOver = skin.getDrawable(hoverImagePath);
         buttonStyle.imageDown = skin.getDrawable(clickedImagePath);
 
         final ImageButton button = new ImageButton(buttonStyle);
@@ -70,16 +76,9 @@ public class StartScreen extends ManagedScreen {
 
         buttons = new Array<>();
 
-        Skin playSkin = new Skin();
-        playSkin.add("UnclickedPlayButton", resourceManager.getTexture("UnclickedPlayButton"));
-        playSkin.add("ClickedPlayButton", resourceManager.getTexture("ClickedPlayButton"));
-        initButton(playSkin, "UnclickedPlayButton", "ClickedPlayButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_OP.LEVELS);
+        initButton("UnclickedPlayButton", "HoverPlayButton", "ClickedPlayButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_OP.LEVELS);
 
-        Skin exitSkin = new Skin();
-        exitSkin.add("UnclickedExitButton", resourceManager.getTexture("UnclickedExitButton"));
-        exitSkin.add("ClickedExitButton", resourceManager.getTexture("ClickedExitButton"));
-
-        initButton(exitSkin, "UnclickedExitButton", "ClickedExitButton", 250, buttonWidth, buttonHeight, Constants.SCREEN_OP.EXIT);
+        initButton("UnclickedExitButton", "HoverExitButton", "ClickedExitButton", 250, buttonWidth, buttonHeight, Constants.SCREEN_OP.EXIT);
     }
 
     public void update(float delta) {
