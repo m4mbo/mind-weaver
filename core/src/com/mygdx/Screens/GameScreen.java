@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.Audio.MusicManager;
 import com.mygdx.Game.MindWeaver;
 import com.mygdx.Graphics.LightManager;
 import com.mygdx.Graphics.ParticleHandler;
@@ -40,7 +41,7 @@ public class GameScreen extends ManagedScreen {
     private final ScreenManager screenManager;
     private final FPSCounter fpsCounter;
 
-    public GameScreen(MindWeaver game, int level, MyResourceManager resourceManager, ScreenManager screenManager) {
+    public GameScreen(MindWeaver game, int level, MyResourceManager resourceManager, ScreenManager screenManager, MusicManager musicManager) {
 
         this.game = game;
         this.level = level;
@@ -74,13 +75,13 @@ public class GameScreen extends ManagedScreen {
         EntityHandler entityHandler = new EntityHandler(characterCycle, shaderHandler, visionMap);
         ParticleHandler particleHandler = new ParticleHandler();
 
-        inputProcessor = new GameInputProcessor(game, screenManager, characterCycle);
+        inputProcessor = new GameInputProcessor(game, screenManager, characterCycle, resourceManager);
         Gdx.input.setInputProcessor(inputProcessor);
 
         // Creating station
-        util = new UtilityStation(entityHandler, objectHandler, characterCycle, visionMap, particleHandler, shaderHandler, lightManager);
+        util = new UtilityStation(entityHandler, objectHandler, characterCycle, visionMap, particleHandler, shaderHandler, lightManager, musicManager);
 
-        world.setContactListener(new MyContactListener(util, game.hud, screenManager, level));
+        world.setContactListener(new MyContactListener(util, game.hud, screenManager, level, resourceManager));
         b2dr = new Box2DDebugRenderer();
         new B2WorldHandler(world, map, resourceManager, timer, eidAllocator, util, level, game.hud, textureDrawer);     //Creating world
         lightManager.setDim(0.6f);

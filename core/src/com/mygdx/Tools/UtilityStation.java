@@ -2,6 +2,7 @@ package com.mygdx.Tools;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.Audio.MusicManager;
 import com.mygdx.Graphics.LightManager;
 import com.mygdx.Graphics.ParticleHandler;
 import com.mygdx.Graphics.ShaderHandler;
@@ -20,8 +21,9 @@ public class UtilityStation {
     private final ParticleHandler particleHandler;
     private final ShaderHandler shaderHandler;
     private final LightManager lightManager;
+    private final MusicManager musicManager;
 
-    public UtilityStation(EntityHandler entityHandler, ObjectHandler objectHandler, CharacterCycle characterCycle, VisionMap visionMap, ParticleHandler particleHandler, ShaderHandler shaderHandler, LightManager lightManager) {
+    public UtilityStation(EntityHandler entityHandler, ObjectHandler objectHandler, CharacterCycle characterCycle, VisionMap visionMap, ParticleHandler particleHandler, ShaderHandler shaderHandler, LightManager lightManager, MusicManager musicManager) {
         this.entityHandler = entityHandler;
         this.objectHandler = objectHandler;
         this.characterCycle = characterCycle;
@@ -29,6 +31,7 @@ public class UtilityStation {
         this.particleHandler = particleHandler;
         this.shaderHandler = shaderHandler;
         this.lightManager = lightManager;
+        this.musicManager = musicManager;
     }
 
     public void update(float delta, OrthographicCamera gameCam) {
@@ -72,5 +75,9 @@ public class UtilityStation {
 
     public LightManager getLightManager() {
         return lightManager;
+    }
+
+    public MusicManager getMusicManager() {
+        return musicManager;
     }
 }

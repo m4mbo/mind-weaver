@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.mygdx.Game.MindWeaver;
 import com.mygdx.RoleCast.Mage;
 import com.mygdx.Screens.ScreenManager;
+import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.World.CharacterCycle;
 import com.mygdx.RoleCast.ArmourGoblin;
 import com.mygdx.RoleCast.PlayableCharacter;
@@ -18,11 +19,13 @@ public class GameInputProcessor implements InputProcessor {
     private final CharacterCycle characterCycle;
     private final MindWeaver game;
     private final ScreenManager screenManager;
+    private final MyResourceManager resourceManager;
 
-    public GameInputProcessor(MindWeaver game, ScreenManager screenManager, CharacterCycle characterCycle) {
+    public GameInputProcessor(MindWeaver game, ScreenManager screenManager, CharacterCycle characterCycle, MyResourceManager resourceManager) {
         this.game = game;
         this.screenManager = screenManager;
         this.characterCycle = characterCycle;
+        this.resourceManager = resourceManager;
     }
 
     @Override
@@ -66,7 +69,7 @@ public class GameInputProcessor implements InputProcessor {
                 character.setMovementState(Constants.MSTATE.LEFT);
                 break;
             case Input.Keys.SHIFT_LEFT:
-                characterCycle.cycleNext();
+                if (characterCycle.cycleNext()) resourceManager.getSound("cycle").play(0.5f);
                 character.looseControl();
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) characterCycle.getCurrentCharacter().setMovementState(Constants.MSTATE.LEFT);
                 else if (Gdx.input.isKeyPressed(Input.Keys.D)) characterCycle.getCurrentCharacter().setMovementState(Constants.MSTATE.RIGHT);

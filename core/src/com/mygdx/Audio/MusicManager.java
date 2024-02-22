@@ -7,8 +7,10 @@ public class MusicManager {
     public MusicManager() {}
 
     public void play(String path) {
-        currTrack.stop();
-        currTrack.dispose();
+        if (currTrack != null) {
+            currTrack.stop();
+            currTrack.dispose();
+        }
         currTrack = Gdx.audio.newMusic(Gdx.files.internal(path));
         currTrack.setLooping(true);
         currTrack.play();
@@ -16,6 +18,10 @@ public class MusicManager {
 
     public void stop() {
         currTrack.stop();
+    }
+
+    public void resume() {
+        currTrack.play();
     }
 
     public void setVolume(float volume) {
