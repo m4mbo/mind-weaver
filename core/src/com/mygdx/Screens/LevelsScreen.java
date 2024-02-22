@@ -23,7 +23,7 @@ public class LevelsScreen extends ManagedScreen {
     private Array<Polygon> levels;
     private boolean wasClicked;
     private Texture levelsTexture;
-    private int currLevel;
+    private final int currLevel;
 
     public LevelsScreen(MyResourceManager resourceManager, ScreenManager screenManager, int levelProgression) {
 
