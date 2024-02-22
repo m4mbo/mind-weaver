@@ -82,6 +82,7 @@ public final class ScreenManager {
                 currScreen = new GameScreen(game, level, resourceManager, this, musicManager);
                 break;
             case LEVELS:
+                musicManager.setVolume(1);
                 currScreen = new LevelsScreen(resourceManager, this, levelProgression);
                 break;
             case LEVEL_1:
@@ -100,12 +101,9 @@ public final class ScreenManager {
                 currScreen = new GameScreen(game, 5, resourceManager, this, musicManager);
                 break;
             case MENU:
-                musicManager.setVolume(0.2f);;
+                musicManager.setVolume(0.2f);
                 assert currScreen != null;
                 currScreen = new MenuScreen(resourceManager, this, currScreen.screenToTexture(fb));
-                break;
-            case LEVEL_COMPLETE:
-                currScreen = new LevelCompleteScreen(resourceManager, this);
                 break;
             case EXIT:
                 resourceManager.disposeAll();
@@ -150,7 +148,7 @@ public final class ScreenManager {
     }
 
     public void setLevelProgression(int progression) {
-        if (levelProgression < progression) {
+        if (progression > levelProgression) {
             levelProgression = progression;
         }
     }
