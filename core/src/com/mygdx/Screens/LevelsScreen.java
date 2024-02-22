@@ -88,7 +88,7 @@ public class LevelsScreen extends ManagedScreen {
         levelVertices = new float[]{width/1.575f, height/2f, width/1.475f, height/1.825f, width/1.475f, height/1.575f, width/1.575f, height/1.475f, width/1.69f, height/1.575f, width/1.69f, height/1.825f};
         levels.add(new Polygon(levelVertices));
 
-        levelVertices = new float[]{width/1.292f, height/3.3f, width/1.226f, height/2.9f, width/1.226f, height/2.3f, width/1.292f, height/2.1f, width/1.37f, height/2.3f, width/1.37f, height/2.9f};
+        levelVertices = new float[]{width/1.292f, height/3.3f, width/1.226f, height/2.9f, width/1.226f, height/2.3f, width/1.292f, height/2.1f, width/1.373f, height/2.3f, width/1.373f, height/2.9f};
         levels.add(new Polygon(levelVertices));
     }
 
