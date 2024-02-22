@@ -25,11 +25,6 @@
             return textures.get(key);
         }
 
-        public void disposeTexture(String key) {
-            Texture texture = textures.get(key);
-            if (texture != null) texture.dispose();
-        }
-
         public void loadSound(String path, String key) {
             Sound sound = Gdx.audio.newSound(Gdx.files.internal(path));
             sounds.put(key, sound);
@@ -37,11 +32,6 @@
 
         public Sound getSound(String key) {
             return sounds.get(key);
-        }
-
-        public void disposeSound(String key) {
-            Sound sound = sounds.get(key);
-            if (sound != null) sound.dispose();
         }
 
         public void disposeAll() {

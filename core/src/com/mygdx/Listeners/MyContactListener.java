@@ -90,7 +90,7 @@ public class MyContactListener implements ContactListener {
         }
         else if (fa.getUserData().equals("end") || fb.getUserData().equals("end")) {
             resourceManager.getSound("level_complete").play(1);
-            screenManager.setLevelProgression(level);
+            screenManager.setLevelProgression(level+1);
             screenManager.pushScreen(SCREEN_OP.LEVELS, "sliding_left");
         }
     }
