@@ -31,11 +31,13 @@ public class CharacterCycle {
         return characters.get(currentIndex);
     }
 
-    public void cycleNext() {
+    public boolean cycleNext() {
+        PlayableCharacter temp = getCurrentCharacter();
         if (!characters.isEmpty()) {
             currentIndex = (currentIndex + 1) % characters.size();
         }
         colorGenerator.getNextColor();
+        return !temp.equals(getCurrentCharacter());
     }
 
     public void resetCurrIndex() {

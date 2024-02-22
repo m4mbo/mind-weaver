@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.mygdx.Audio.MusicManager;
 import com.mygdx.Game.MindWeaver;
 import com.mygdx.Graphics.Transitions.SlidingTransition;
 import com.mygdx.Graphics.Transitions.Transition;
@@ -21,14 +22,18 @@ public final class ScreenManager {
     private int level;
     private int levelProgression;
     private final FrameBuffer fb;
+    private final MusicManager musicManager;
 
-    public ScreenManager(MindWeaver game, MyResourceManager resourceManager) {
+    public ScreenManager(MindWeaver game, MyResourceManager resourceManager, MusicManager musicManager) {
         this.game = game;
         this.resourceManager = resourceManager;
         this.currScreen = null;
         transitionQueue = new LinkedList<>();
         fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
         levelProgression = 1;
+        this.musicManager = musicManager;
+
+        musicManager.play("Music/main_theme.mp3");
     }
 
     public void pushScreen(Constants.SCREEN_OP screenType, String flag) {
@@ -36,6 +41,7 @@ public final class ScreenManager {
         handleTransition(flag);
 
         if (screenType == Constants.SCREEN_OP.RESUME) {
+            musicManager.setVolume(1);
             ManagedScreen temp = currScreen;
             currScreen = prevScreen;
             prevScreen = temp;
@@ -43,6 +49,7 @@ public final class ScreenManager {
             currScreen.resume();
             return;
         }  else if (screenType == Constants.SCREEN_OP.CONTROLS) {
+            musicManager.setVolume(1);
             ManagedScreen temp = currScreen;
             currScreen = prevScreen;
             prevScreen = temp;
@@ -72,27 +79,28 @@ public final class ScreenManager {
             case RESTART:
                 game.hud.removeCutscene();
                 game.hud.removePapaya(level);
-                currScreen = new GameScreen(game, level, resourceManager, this);
+                currScreen = new GameScreen(game, level, resourceManager, this, musicManager);
                 break;
             case LEVELS:
                 currScreen = new LevelsScreen(resourceManager, this, levelProgression);
                 break;
             case LEVEL_1:
-                currScreen = new GameScreen(game, 1, resourceManager, this);
+                currScreen = new GameScreen(game, 1, resourceManager, this, musicManager);
                 break;
             case LEVEL_2:
-                currScreen = new GameScreen(game, 2, resourceManager, this);
+                currScreen = new GameScreen(game, 2, resourceManager, this, musicManager);
                 break;
             case LEVEL_3:
-                currScreen = new GameScreen(game, 3, resourceManager, this);
+                currScreen = new GameScreen(game, 3, resourceManager, this, musicManager);
                 break;
             case LEVEL_4:
-                currScreen = new GameScreen(game, 4, resourceManager, this);
+                currScreen = new GameScreen(game, 4, resourceManager, this, musicManager);
                 break;
             case LEVEL_5:
-                currScreen = new GameScreen(game, 5, resourceManager, this);
+                currScreen = new GameScreen(game, 5, resourceManager, this, musicManager);
                 break;
             case MENU:
+                musicManager.setVolume(0.2f);;
                 assert currScreen != null;
                 currScreen = new MenuScreen(resourceManager, this, currScreen.screenToTexture(fb));
                 break;

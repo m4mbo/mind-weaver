@@ -1,5 +1,6 @@
 package com.mygdx.Game;
 
+import com.mygdx.Audio.MusicManager;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Scenes.HUD;
 import com.mygdx.Tools.MyResourceManager;
@@ -17,7 +18,7 @@ public class MindWeaver extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		resourceManager = new MyResourceManager();
-		ScreenManager screenManager = new ScreenManager(this, resourceManager);
+		ScreenManager screenManager = new ScreenManager(this, resourceManager, new MusicManager());
 
 		loadSprites();
 
@@ -135,6 +136,8 @@ public class MindWeaver extends Game {
 		resourceManager.loadSound("SoundEffects/attack.mp3", "attack");
 		resourceManager.loadSound("SoundEffects/lever.mp3", "lever");
 		resourceManager.loadSound("SoundEffects/door.mp3", "door");
+		resourceManager.loadSound("SoundEffects/cycle.mp3", "cycle");
+		resourceManager.loadSound("SoundEffects/level_complete.mp3", "level_complete");
 
 		//Art
 		resourceManager.loadTexture("Art/Mind.png", "mind");
