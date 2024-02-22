@@ -22,12 +22,15 @@ public class LevelsScreen extends ManagedScreen {
     private final ShapeRenderer shapeRenderer;
     private Array<Polygon> levels;
     private boolean wasClicked;
+    private Texture levelsTexture;
+    private int currLevel;
 
     public LevelsScreen(MyResourceManager resourceManager, ScreenManager screenManager, int levelProgression) {
 
         this.screenManager = screenManager;
         this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(null);
+        currLevel = levelProgression;
 
         shapeRenderer = new ShapeRenderer();
 
@@ -44,7 +47,26 @@ public class LevelsScreen extends ManagedScreen {
         levelsBGImage.setSize(levelsBGImage.getWidth() * 7.5f, levelsBGImage.getHeight() * 7.5f);
         stage.addActor(levelsBGImage);
 
-        Texture levelsTexture = resourceManager.getTexture("LevelsScreen");
+        switch (currLevel) {
+            case 1:
+                levelsTexture = resourceManager.getTexture("LevelsScreen1");
+                break;
+            case 2:
+                levelsTexture = resourceManager.getTexture("LevelsScreen2");
+                break;
+            case 3:
+                levelsTexture = resourceManager.getTexture("LevelsScreen3");
+                break;
+            case 4:
+                levelsTexture = resourceManager.getTexture("LevelsScreen4");
+                break;
+            case 5:
+                levelsTexture = resourceManager.getTexture("LevelsScreen5");
+                break;
+            default:
+                break;
+        }
+
         Image levelsImage = new Image(levelsTexture);
         levelsImage.setPosition((float) (Gdx.graphics.getWidth() - levelsTexture.getWidth()) / 2, (float) (Gdx.graphics.getHeight() - levelsTexture.getHeight()) / 2);
         levelsImage.setSize(levelsTexture.getWidth(), levelsTexture.getHeight());
@@ -99,23 +121,23 @@ public class LevelsScreen extends ManagedScreen {
             float touchX = touchPoint.x;
             float touchY = touchPoint.y;
 
-            if (Intersector.isPointInPolygon(levels.get(0).getTransformedVertices(), 0, levels.get(0).getVertices().length, touchX, touchY)) {
+            if ((currLevel>=1) && (Intersector.isPointInPolygon(levels.get(0).getTransformedVertices(), 0, levels.get(0).getVertices().length, touchX, touchY))) {
                 wasClicked = true;
                 screenManager.pushScreen(Constants.SCREEN_OP.LEVEL_1, "slide_up");
             }
-            if (Intersector.isPointInPolygon(levels.get(1).getTransformedVertices(), 0, levels.get(1).getVertices().length, touchX, touchY)) {
+            if ((currLevel>=2) && (Intersector.isPointInPolygon(levels.get(1).getTransformedVertices(), 0, levels.get(1).getVertices().length, touchX, touchY))) {
                 wasClicked = true;
                 screenManager.pushScreen(Constants.SCREEN_OP.LEVEL_2, "slide_up");
             }
-            if (Intersector.isPointInPolygon(levels.get(2).getTransformedVertices(), 0, levels.get(2).getVertices().length, touchX, touchY)) {
+            if ((currLevel>=3) && (Intersector.isPointInPolygon(levels.get(2).getTransformedVertices(), 0, levels.get(2).getVertices().length, touchX, touchY))) {
                 wasClicked = true;
                 screenManager.pushScreen(Constants.SCREEN_OP.LEVEL_3, "slide_up");
             }
-            if (Intersector.isPointInPolygon(levels.get(3).getTransformedVertices(), 0, levels.get(3).getVertices().length, touchX, touchY)) {
+            if ((currLevel>=4) && (Intersector.isPointInPolygon(levels.get(3).getTransformedVertices(), 0, levels.get(3).getVertices().length, touchX, touchY))) {
                 wasClicked = true;
                 screenManager.pushScreen(Constants.SCREEN_OP.LEVEL_4, "slide_up");
             }
-            if (Intersector.isPointInPolygon(levels.get(4).getTransformedVertices(), 0, levels.get(4).getVertices().length, touchX, touchY)) {
+            if ((currLevel>=5) && (Intersector.isPointInPolygon(levels.get(4).getTransformedVertices(), 0, levels.get(4).getVertices().length, touchX, touchY))) {
                 wasClicked = true;
                 screenManager.pushScreen(Constants.SCREEN_OP.LEVEL_5, "slide_up");
             }
