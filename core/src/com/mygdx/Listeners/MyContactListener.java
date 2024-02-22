@@ -9,6 +9,7 @@ import com.mygdx.RoleCast.Merchant;
 import com.mygdx.RoleCast.Mage;
 import com.mygdx.Scenes.HUD;
 import com.mygdx.Screens.ScreenManager;
+import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Tools.UtilityStation;
 import com.mygdx.World.EntityHandler;
 import com.mygdx.Helpers.Constants;
@@ -24,12 +25,14 @@ public class MyContactListener implements ContactListener {
     private final HUD hud;
     private final ScreenManager screenManager;
     private final int level;
+    private final MyResourceManager resourceManager;
 
-    public MyContactListener(UtilityStation util, HUD hud, ScreenManager screenManager, int level) {
+    public MyContactListener(UtilityStation util, HUD hud, ScreenManager screenManager, int level, MyResourceManager resourceManager) {
         this.util = util;
         this.hud = hud;
         this.level = level;
         this.screenManager = screenManager;
+        this.resourceManager = resourceManager;
     }
 
     @Override
@@ -86,6 +89,7 @@ public class MyContactListener implements ContactListener {
             util.getVisionMap().addTarget(source, target);
         }
         else if (fa.getUserData().equals("end") || fb.getUserData().equals("end")) {
+            resourceManager.getSound("level_complete").play(1);
             screenManager.setLevelProgression(level);
             screenManager.pushScreen(SCREEN_OP.LEVELS, "sliding_left");
         }
