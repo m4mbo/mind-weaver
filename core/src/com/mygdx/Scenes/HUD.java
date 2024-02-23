@@ -31,6 +31,7 @@ public class HUD {
     private boolean standBy;
     private boolean powersUnlocked;
     private CutScene currCutscene;
+    private final LifeActor lifeActor;
 
     public HUD(SpriteBatch batch, MyResourceManager resourceManager) {
         this.resourceManager = resourceManager;
@@ -53,6 +54,9 @@ public class HUD {
         currCutscene = null;
 
         inventoryActor.setVisible(false);
+
+        lifeActor = new LifeActor(resourceManager.getTexture("life"));
+        stage.addActor(lifeActor);
     }
 
     public void addPapaya(int level) {
@@ -63,9 +67,7 @@ public class HUD {
         papayas[level-1] = false;
     }
 
-    public void setPlayer(Mage player) {
-        stage.addActor(new LifeActor(resourceManager.getTexture("life"), player));
-    }
+    public void setPlayer(Mage player) { lifeActor.setPlayer(player); }
 
     public void render(SpriteBatch batch) {
         batch.setProjectionMatrix(stage.getCamera().combined);
@@ -129,15 +131,20 @@ public class HUD {
 
     private class LifeActor extends Actor {
         private final TextureRegion region;
-        private final Mage player;
+        private Mage player;
 
-        public LifeActor(Texture texture, Mage player) {
+        public LifeActor(Texture texture) {
             region = new TextureRegion(texture);
+        }
+
+        public void setPlayer(Mage player) {
             this.player = player;
         }
 
         @Override
         public void draw(Batch batch, float parentAlpha) {
+            if (player == null) return;
+
             Color color = getColor();
             batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
             float x = 20;

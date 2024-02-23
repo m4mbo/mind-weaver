@@ -106,19 +106,6 @@ public class AdjacencyList<E> {
         return vertices;
     }
 
-    // Get all vertices pointing to the given vertex
-    public List<E> getVerticesPointingTo(E destination) {
-        List<E> verticesPointingTo = new ArrayList<>();
-        for (Map.Entry<E, List<E>> entry : adjacencyList.entrySet()) {
-            E vertex = entry.getKey();
-            List<E> neighbors = entry.getValue();
-            if (neighbors.contains(destination)) {
-                verticesPointingTo.add(vertex);
-            }
-        }
-        return verticesPointingTo;
-    }
-
     public LinkedList<E> getNeighbours(E source) {
         return new LinkedList<E>(adjacencyList.get(source));
     }

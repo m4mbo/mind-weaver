@@ -9,9 +9,9 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.Helpers.Constants;
 
+// Class to handle light operations
 public class LightManager {
-
-    private RayHandler rayHandler;
+    private final RayHandler rayHandler;    // Box2d light environment
     public LightManager(World world) {
         rayHandler = new RayHandler(world);
     }
@@ -27,6 +27,7 @@ public class LightManager {
         rayHandler.render();
     }
 
+    // Adding a single point of light
     public void addPointLight(Body body, float distance, short maskBits, Color color) {
         PointLight pointLight = new PointLight(rayHandler, 30, color, distance / Constants.PPM, 0, 0);
         pointLight.attachToBody(body);
@@ -34,15 +35,7 @@ public class LightManager {
         pointLight.setContactFilter(Constants.BIT_LIGHT, (short) 0, maskBits);
     }
 
-    public void addPointLight(float x, float y, float distance, Color color) {
-        PointLight pointLight = new PointLight(rayHandler, 100, color, distance / Constants.PPM, x, y);
-    }
-
-    public void addPointLight(float x, float y, float distance, short maskBits, Color color) {
-        PointLight pointLight = new PointLight(rayHandler, 100, color, distance / Constants.PPM, x, y);
-    }
-
     public void addConeLight(float x, float y, float distance, Color color, float directionDegree, float coneDegree) {
-        ConeLight coneLight = new ConeLight(rayHandler, 100, color, distance / Constants.PPM, x, y, directionDegree, coneDegree);
+        new ConeLight(rayHandler, 100, color, distance / Constants.PPM, x, y, directionDegree, coneDegree);
     }
 }

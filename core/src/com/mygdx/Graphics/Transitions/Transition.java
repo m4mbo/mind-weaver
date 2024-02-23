@@ -5,9 +5,9 @@ import com.badlogic.gdx.math.Matrix4;
 
 public abstract class Transition {
 
-    public float duration;
-    public float timePassed;
-    public Matrix4 screenProjection;
+    public float duration;      // Duration of transition in seconds
+    public float timePassed;    // Time passed since transition creation
+    public Matrix4 screenProjection;    // Screen projection from parent screen
 
     public Transition(float duration, Matrix4 screenProjection) {
         this.duration = duration;
@@ -15,9 +15,7 @@ public abstract class Transition {
         this.screenProjection = screenProjection;
     }
 
-    public void render(SpriteBatch batch, float delta) {
-
-    }
+    public void render(SpriteBatch batch, float delta) { }
 
     public boolean isDone() {
         return duration >= timePassed;

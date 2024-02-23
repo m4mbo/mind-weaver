@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.Tools.ColorGenerator;
 
-
+// Centralised point to manage shader programs
 public class ShaderHandler {
 
     private float time;
@@ -21,6 +21,9 @@ public class ShaderHandler {
     public ShaderHandler(ColorGenerator colorGenerator) {
         this.colorGenerator = colorGenerator;
         time = 0;
+
+        // Initializing shader programs
+
         waveShader = new ShaderProgram(Gdx.files.internal("Shaders/Vertex.glsl").readString(), Gdx.files.internal("Shaders/Wave.glsl").readString());
         blinkShader = new ShaderProgram(Gdx.files.internal("Shaders/Vertex.glsl").readString(), Gdx.files.internal("Shaders/Blink.glsl").readString());
         redMaskShader = new ShaderProgram(Gdx.files.internal("Shaders/Vertex.glsl").readString(), Gdx.files.internal("Shaders/RedMask.glsl").readString());
@@ -28,7 +31,11 @@ public class ShaderHandler {
         randColShader = new ShaderProgram(Gdx.files.internal("Shaders/Vertex.glsl").readString(), Gdx.files.internal("Shaders/RandomColorMask.glsl").readString());
         alphaShader = new ShaderProgram(Gdx.files.internal("Shaders/Vertex.glsl").readString(), Gdx.files.internal("Shaders/Alpha.glsl").readString());
         waterShader = new ShaderProgram(Gdx.files.internal("Shaders/Vertex.glsl").readString(), Gdx.files.internal("Shaders/Water.glsl").readString());
-        ShaderProgram.pedantic = false;
+
+        ShaderProgram.pedantic = false;  // Makes updating uniform variables more flexible
+
+        // Printing error messages, if any
+
         if (!waveShader.isCompiled()) {
             System.out.println(waveShader.getLog());
         }
@@ -54,6 +61,8 @@ public class ShaderHandler {
 
     public void update(float delta) {
         time += delta;
+
+        // Updating shader uniforms
 
         waveShader.bind();
         waveShader.setUniformf("u_time", time);

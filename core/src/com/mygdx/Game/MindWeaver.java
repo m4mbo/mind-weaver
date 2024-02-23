@@ -12,7 +12,12 @@ public class MindWeaver extends Game {
 
 	public SpriteBatch batch;
 	private MyResourceManager resourceManager;
-	public HUD hud;		// HUD holding inventory will remain constant across all screens
+
+	/*
+	 * HUD holding inventory will remain constant across all screens
+	 * This allows transferring of item information through every level
+	 */
+	public HUD hud;
 
 	@Override
 	public void create () {
@@ -27,6 +32,7 @@ public class MindWeaver extends Game {
 		screenManager.pushScreen(Constants.SCREEN_OP.START, "none");
 	}
 
+	// Loading sprites to the resource manager for later use
 	public void loadSprites() {
 
 		//Start Screen buttons

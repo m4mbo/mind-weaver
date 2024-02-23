@@ -61,7 +61,7 @@ public class CutScene extends Actor {
 
         switch (tag) {
             case "intro":
-                messageChain.add("zzz");
+                messageChain.add("zzz\n\n\n(Press X to skip)");
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_chained")));
                 messageChain.add("Ohhhhh!");
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("mage_freed")));
@@ -135,7 +135,7 @@ public class CutScene extends Actor {
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("bug_teacher")));
                 messageChain.add("To move around, feel free\nto choose between\nA and D, or the\nLEFT and RIGHT arrow keys.");
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("bug_teacher")));
-                messageChain.add("To jump: SPACE or \nUP arrow keys.");
+                messageChain.add("To jump (and wall-jump):\nSPACE");
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("bug_teacher")));
                 messageChain.add("To interact: X.");
                 characterRegions.add(new TextureRegion(resourceManager.getTexture("bug_teacher")));

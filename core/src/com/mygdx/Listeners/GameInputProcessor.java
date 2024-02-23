@@ -31,25 +31,30 @@ public class GameInputProcessor implements InputProcessor {
     @Override
     public boolean keyDown (int keycode) {
 
+        // Input multiplexing
         if (!(game.getScreen() instanceof GameScreen)) return false;
 
+        // Getting the character being controlled
         PlayableCharacter character = characterCycle.getCurrentCharacter();
 
         if (character.isStateActive(PSTATE.DYING)) return true;
 
+        // Allowing only cutscene skipping
         if (game.hud.getCurrCutscene() != null) {
+            character.setMovementState(MSTATE.HSTILL);
             if (keycode == Input.Keys.X) game.hud.cycleCutscene();
             return true;
         }
 
+        // Handling inventory in the screen
         if (game.hud.standBy()) {
             if (keycode == Input.Keys.I) game.hud.removeInventory();
             return true;
         }
 
         switch (keycode) {
-            case Input.Keys.UP:
             case Input.Keys.SPACE:
+                // Jumping and wall jumping
                 if (character.isStateActive(PSTATE.ON_GROUND)) {
                     character.jump();
                     break;
@@ -62,22 +67,28 @@ public class GameInputProcessor implements InputProcessor {
                 break;
             case Input.Keys.RIGHT:
             case Input.Keys.D:
+                // Moving right
                 character.setMovementState(Constants.MSTATE.RIGHT);
                 break;
             case Input.Keys.LEFT:
             case Input.Keys.A:
+                // Moving left
                 character.setMovementState(Constants.MSTATE.LEFT);
                 break;
             case Input.Keys.SHIFT_LEFT:
+                // Cycling characters
                 if (characterCycle.cycleNext()) resourceManager.getSound("cycle").play(0.5f);
+                // Making the previous character loose control
                 character.looseControl();
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) characterCycle.getCurrentCharacter().setMovementState(Constants.MSTATE.LEFT);
                 else if (Gdx.input.isKeyPressed(Input.Keys.D)) characterCycle.getCurrentCharacter().setMovementState(Constants.MSTATE.RIGHT);
                 break;
             case Input.Keys.J:
+                // Attacking
                 if (character instanceof ArmourGoblin) ((ArmourGoblin) character).attack();
                 break;
             case Input.Keys.X:
+                // Interacting
                 if (character instanceof Mage && ((Mage) character).getMerchantInRange() != null) {
                     ((Mage) character).getMerchantInRange().interact();
                 } else {
@@ -85,10 +96,12 @@ public class GameInputProcessor implements InputProcessor {
                 }
                 break;
             case Input.Keys.I:
+                // Inventory
                 character.setMovementState(MSTATE.HSTILL);
                 game.hud.pushInventory();
                 break;
             case Input.Keys.ESCAPE:
+                // Menu
                 screenManager.pushScreen(Constants.SCREEN_OP.MENU, "none");
                 break;
             default:
@@ -107,23 +120,23 @@ public class GameInputProcessor implements InputProcessor {
         if (game.hud.standBy() || character.isStateActive(PSTATE.DYING) || game.hud.getCurrCutscene() != null) return true;
 
         switch (keycode) {
-            case Input.Keys.UP:
             case Input.Keys.SPACE:
+                // Increasing gravity, makes movement smoother
                 if (character.isStateActive(PSTATE.ON_GROUND) || character.isStateActive(PSTATE.STUNNED)) break;
                 character.fall();
                 break;
             case Input.Keys.RIGHT:
             case Input.Keys.D:
+                // Stopping and immediately checking for input
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) character.setMovementState(Constants.MSTATE.LEFT);
                 else character.setMovementState(Constants.MSTATE.HSTILL);
                 break;
             case Input.Keys.LEFT:
             case Input.Keys.A:
+                // Stopping and immediately checking for input
                 if (Gdx.input.isKeyPressed(Input.Keys.D)) character.setMovementState(Constants.MSTATE.RIGHT);
                 else character.setMovementState(Constants.MSTATE.HSTILL);
                 break;
-            case Input.Keys.ESCAPE:
-                screenManager.pushScreen(SCREEN_OP.MENU, "slide_up");
             default:
                 break;
         }

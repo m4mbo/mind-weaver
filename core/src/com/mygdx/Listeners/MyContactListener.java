@@ -132,6 +132,7 @@ public class MyContactListener implements ContactListener {
         }
     }
 
+    // Method to collect both fixtures
     public boolean handleFixtures(Contact contact) {
         fa = contact.getFixtureA();
         fb = contact.getFixtureB();

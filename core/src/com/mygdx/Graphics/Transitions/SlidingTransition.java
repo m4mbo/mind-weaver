@@ -7,9 +7,9 @@ import com.mygdx.Helpers.Constants;
 
 public class SlidingTransition extends Transition {
 
-    private final Constants.SLIDE_DIR direction;
-    private final float speed;
-    private final TextureRegion screenRegion;
+    private final Constants.SLIDE_DIR direction;    // Sliding direction
+    private final float speed;      // Speed of the sliding transition (how fast will it move)
+    private final TextureRegion screenRegion;       // Region holding the parent screen
     private float currY, currX;
 
     public SlidingTransition(TextureRegion screenRegion, float duration, float speed, Constants.SLIDE_DIR direction, Matrix4 screenProjection) {

@@ -23,6 +23,8 @@ public class ParticleHandler {
 
         float scaleFactor = 1 / 2000f;
 
+        // Initializing particle effects
+
         ParticleEffect dustGround = new ParticleEffect();
         dustGround.load(Gdx.files.internal("Particles/dust_ground.p"), Gdx.files.internal("Particles"));
         dustGround.scaleEffect(scaleFactor);
@@ -78,8 +80,10 @@ public class ParticleHandler {
     }
 
     public void render(SpriteBatch batch, float delta) {
+        // Linked list to keep track of particles to remove
         LinkedList<ParticleEffect> toRemove = new LinkedList<>();
 
+        //Rendering all particles
         batch.begin();
         for (int i = effects.size() - 1; i >= 0; i--) {
             PooledEffect effect = effects.get(i);

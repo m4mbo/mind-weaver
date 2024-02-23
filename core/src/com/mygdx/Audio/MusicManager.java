@@ -3,10 +3,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 
 public class MusicManager {
-    private Music currTrack;
+    private Music currTrack;        // Track being played
     public MusicManager() {}
 
     public void play(String path) {
+        // Dispose of the previous track
         if (currTrack != null) {
             currTrack.stop();
             currTrack.dispose();
