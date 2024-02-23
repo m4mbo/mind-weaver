@@ -10,24 +10,24 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MindWeaver extends Game {
 
-	public SpriteBatch batch;
-	private MyResourceManager resourceManager;
+	public SpriteBatch batch;	//instantiate sprite batch
 	public HUD hud;		// HUD holding inventory will remain constant across all screens
+	private MyResourceManager resourceManager; //instantiate resource manager
 
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		resourceManager = new MyResourceManager();
+		batch = new SpriteBatch();					//instantiate and initialise batch
+		resourceManager = new MyResourceManager();	//initialise resource manager
+		//instantiate and initialise screen manager
 		ScreenManager screenManager = new ScreenManager(this, resourceManager, new MusicManager());
-
 		loadSprites();
 
-		hud = new HUD(batch, resourceManager);
+		hud = new HUD(batch, resourceManager);	//heads up display for lives
 
-		screenManager.pushScreen(Constants.SCREEN_OP.START, "none");
+		screenManager.pushScreen(Constants.SCREEN_OP.START, "none");	//set screen to start screen
 	}
 
-	public void loadSprites() {
+	public void loadSprites() {		//load every sprite required for the game
 
 		//Start Screen buttons
 		resourceManager.loadTexture("Buttons/UnclickedPlayButton.png", "UnclickedPlayButton");
