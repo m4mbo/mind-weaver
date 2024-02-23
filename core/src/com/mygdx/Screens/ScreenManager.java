@@ -79,7 +79,6 @@ public final class ScreenManager {
             case RESTART:
                 musicManager.setVolume(1);
                 game.hud.removeCutscene();
-                game.hud.removePapaya(level);
                 currScreen = new GameScreen(game, level, resourceManager, this, musicManager);
                 break;
             case LEVELS:
