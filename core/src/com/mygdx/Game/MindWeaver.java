@@ -10,26 +10,26 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MindWeaver extends Game {
 
-	public SpriteBatch batch;
-	private MyResourceManager resourceManager;
-
 	/*
 	 * HUD holding inventory will remain constant across all screens
 	 * This allows transferring of item information through every level
 	 */
 	public HUD hud;
+	public SpriteBatch batch;	//instantiate sprite batch
+	private MyResourceManager resourceManager; //instantiate resource manager
+
 
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		resourceManager = new MyResourceManager();
+		batch = new SpriteBatch();					//instantiate and initialise batch
+		resourceManager = new MyResourceManager();	//initialise resource manager
+		//instantiate and initialise screen manager
 		ScreenManager screenManager = new ScreenManager(this, resourceManager, new MusicManager());
-
 		loadSprites();
 
-		hud = new HUD(batch, resourceManager);
+		hud = new HUD(batch, resourceManager);	//heads up display for lives
 
-		screenManager.pushScreen(Constants.SCREEN_OP.START, "none");
+		screenManager.pushScreen(Constants.SCREEN_OP.START, "none");	//set screen to start screen
 	}
 
 	// Loading sprites to the resource manager for later use
