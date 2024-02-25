@@ -47,7 +47,7 @@ public class StartScreen extends ManagedScreen {
         initStartScreen();  //initialize start screen
     }
 
-    /* method to set up buttons using skins, buttonstyle, image buttons*/
+    //method to set up buttons using skins, buttonstyle, image buttons
     public void initButton(final String unclickedImagePath, final String hoverImagePath, final String clickedImagePath, int offset, final float width, final float height, final Constants.SCREEN_OP screenType)  {
         Skin skin = new Skin(); //use skin to store different button image
         skin.add(unclickedImagePath, resourceManager.getTexture(unclickedImagePath));
@@ -128,9 +128,7 @@ public class StartScreen extends ManagedScreen {
         }
     }
     @Override
-    public Matrix4 getProjectionMatrix() {          //method for screen transition
-        return stage.getBatch().getProjectionMatrix();
-    }
+    public Matrix4 getProjectionMatrix() { return stage.getBatch().getProjectionMatrix();  }  //method for screen transition
     @Override
     public void show() { }
     @Override

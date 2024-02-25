@@ -32,11 +32,13 @@ public class MenuScreen extends ManagedScreen {
 
         Gdx.input.setInputProcessor(stage);
 
+        //load image of current level
         Image levelsBGImage =  new Image(background);
         levelsBGImage.setPosition(0, levelsBGImage.getHeight());
         levelsBGImage.setSize(levelsBGImage.getWidth(), -levelsBGImage.getHeight());
         stage.addActor(levelsBGImage);
 
+        //load translucent background
         Image transBGImage =  new Image(resourceManager.getTexture("translucent_bg"));
         transBGImage.setPosition(0,0);
         transBGImage.setSize(transBGImage.getWidth() * 7.5f, transBGImage.getHeight() * 7.5f);
@@ -46,6 +48,7 @@ public class MenuScreen extends ManagedScreen {
 
     }
 
+    //method to set up buttons using skins, buttonstyle, image buttons
     public void initButton(final String unclickedImagePath, final String hoverImagePath, final String clickedImagePath, int offset, final float width, final float height, final Constants.SCREEN_OP screenType) {
         Skin skin = new Skin();
         skin.add(unclickedImagePath, resourceManager.getTexture(unclickedImagePath));
@@ -72,7 +75,7 @@ public class MenuScreen extends ManagedScreen {
 
     }
 
-    private void initMenuScreen() {
+    private void initMenuScreen() { //method that calls initButton for every menu screen button
 
         buttons = new Array<>();
 
@@ -93,16 +96,15 @@ public class MenuScreen extends ManagedScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);;
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
+        stage.draw(); //draw buttons
 
         screenManager.render(delta);
     }
 
     @Override
     public void dispose() {
-        stage.dispose();
-
-        for (ImageButton button : buttons) {
+        stage.dispose();    //dispose stage
+        for (ImageButton button : buttons) {         //dispose menu screen buttons' skins
             Skin skin = button.getSkin();
             if (skin != null) {
                 skin.dispose();
@@ -110,15 +112,13 @@ public class MenuScreen extends ManagedScreen {
         }
     }
     @Override
+    public Matrix4 getProjectionMatrix() { return stage.getBatch().getProjectionMatrix(); }    //method for screen transition
+    @Override
     public void show() { }
     @Override
     public void resize(int i, int j) { }
     @Override
     public void pause() { }
-    @Override
-    public Matrix4 getProjectionMatrix() {
-        return stage.getBatch().getProjectionMatrix();
-    }
     public void resume() { }
     @Override
     public void hide() { }
