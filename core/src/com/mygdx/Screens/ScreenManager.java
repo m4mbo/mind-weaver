@@ -30,14 +30,14 @@ public final class ScreenManager {
         this.currScreen = null;
         transitionQueue = new LinkedList<>();
         fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
-        levelProgression = 1;
+        levelProgression = 1;           //set levels completed to level 1
         this.musicManager = musicManager;
 
-        musicManager.play("Music/main_theme.mp3");
+        musicManager.play("Music/main_theme.mp3");  //play background music
     }
 
     public void pushScreen(Constants.SCREEN_OP screenType, String flag) {
-
+        //method to change screen with flag (if the transition has been performed or not)
         handleTransition(flag);
 
         if (screenType == Constants.SCREEN_OP.RESUME) {
@@ -68,55 +68,56 @@ public final class ScreenManager {
         if (currScreen != null) {
             prevScreen = currScreen;
         }
-
+        //if the current screen is a game screen, set the level to the current screen's level
         if (currScreen instanceof GameScreen) level = ((GameScreen) currScreen).getLevel();
 
         // Set the new screen
         switch (screenType) {
-            case START:
+            case START: //load start screen
                 currScreen = new StartScreen(game, resourceManager, this);
                 break;
-            case RESTART:
+            case RESTART: //load new game screen
                 musicManager.setVolume(1);
                 game.hud.removeCutscene();
                 currScreen = new GameScreen(game, level, resourceManager, this, musicManager);
                 break;
-            case LEVELS:
+            case LEVELS:    //load choose levels screen
                 musicManager.setVolume(1);
                 currScreen = new LevelsScreen(resourceManager, this, levelProgression);
                 break;
-            case LEVEL_1:
+            case LEVEL_1:   //load level 1
                 currScreen = new GameScreen(game, 1, resourceManager, this, musicManager);
                 break;
-            case LEVEL_2:
+            case LEVEL_2:   //load level 2
                 currScreen = new GameScreen(game, 2, resourceManager, this, musicManager);
                 break;
-            case LEVEL_3:
+            case LEVEL_3:   //load level 3
                 currScreen = new GameScreen(game, 3, resourceManager, this, musicManager);
                 break;
-            case LEVEL_4:
+            case LEVEL_4:   //load level 4
                 currScreen = new GameScreen(game, 4, resourceManager, this, musicManager);
                 break;
-            case LEVEL_5:
+            case LEVEL_5:   //load level 5
                 currScreen = new GameScreen(game, 5, resourceManager, this, musicManager);
                 break;
-            case MENU:
+            case MENU:      //load menu screen
                 musicManager.setVolume(0.2f);
                 assert currScreen != null;
                 currScreen = new MenuScreen(resourceManager, this, currScreen.screenToTexture(fb));
                 break;
-            case EXIT:
-                resourceManager.disposeAll();
+            case EXIT:  //dispose all resources and exit the application
+                resourceManager.disposeAll();   //state will dispose all resources
                 Gdx.app.exit();
                 break;
             default:
                 break;
         }
 
-        game.setScreen(currScreen);
+        game.setScreen(currScreen); //set screen to new screen
     }
 
     public void handleTransition(String flag) {
+        //method to apply transitions
         switch (flag){
             case "slide_up":
                 transitionQueue.add(new SlidingTransition(new TextureRegion(currScreen.screenToTexture(fb)), 3, 80, Constants.SLIDE_DIR.SLIDE_UP, currScreen.getProjectionMatrix()));
@@ -136,7 +137,7 @@ public final class ScreenManager {
     }
 
     public void render(float delta) {
-
+        //method to keep track which transitions have been performed and have to be removed
         LinkedList<Transition> toRemove = new LinkedList<>();
 
         for (Transition transition : transitionQueue) {
@@ -148,7 +149,9 @@ public final class ScreenManager {
     }
 
     public void setLevelProgression(int progression) {
+        //if the level has been completed and is greater than highest completed level
         if (progression > levelProgression) {
+            //highest completed level contains new level
             levelProgression = progression;
         }
     }
