@@ -1,9 +1,10 @@
 package com.mygdx.Helpers;
 import java.util.*;
 
-public class AdjacencyList<E> {
+public class AdjacencyList<E> { //Adjacency list to maintain the wave connection between the mage and the goblins
     private final Map<E, List<E>> adjacencyList;
 
+    // Declare adjacency list as a hash map
     public AdjacencyList() {
         adjacencyList = new HashMap<>();
     }
@@ -14,6 +15,7 @@ public class AdjacencyList<E> {
         adjacencyList.put(vertex, new ArrayList<E>());
     }
 
+    //  Remove a vertex from the graph
     public void removeVertex(E vertex) {
         adjacencyList.remove(vertex);
         for (List<E> edges : adjacencyList.values()) {
@@ -29,6 +31,7 @@ public class AdjacencyList<E> {
         return true;
     }
 
+    //Remove an edge between two vertices
     public boolean removeEdge(E source, E destination) {
         if (source == null || destination == null) return false;
         if (!adjacencyList.get(source).contains(destination)) return false;
@@ -58,6 +61,7 @@ public class AdjacencyList<E> {
         }
     }
 
+    // Depth-first search to keep track of the visited neighbours
     private boolean dfs(E current, E destination, Set<E> visited) {
         if (current.equals(destination)) return true;
         for (E neighbor : adjacencyList.get(current)) {
@@ -96,6 +100,7 @@ public class AdjacencyList<E> {
         return dfs(source, destination, visited);
     }
 
+    // Get vertices that have neighbours as a linked list
     public LinkedList<E> getVerticesWithNeighbours() {
         LinkedList<E> vertices = new LinkedList<>();
         for (Map.Entry<E, List<E>> entry : adjacencyList.entrySet()) {
@@ -106,6 +111,7 @@ public class AdjacencyList<E> {
         return vertices;
     }
 
+    // Get neighbours of a given source as a linked list
     public LinkedList<E> getNeighbours(E source) {
         return new LinkedList<E>(adjacencyList.get(source));
     }
