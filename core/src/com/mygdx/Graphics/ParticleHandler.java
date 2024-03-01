@@ -52,9 +52,10 @@ public class ParticleHandler {
         auraEffectPool = new ParticleEffectPool(aura, 1, 2);
     }
 
-    public void addParticleEffect(String tag, float x, float y) {
+    // Adding particle effect based on the provided key
+    public void addParticleEffect(String key, float x, float y) {
         PooledEffect effect = null;
-        switch (tag) {
+        switch (key) {
             case "dust_ground":
                 effect = dustGroundEffectPool.obtain();
                 break;
@@ -74,6 +75,7 @@ public class ParticleHandler {
                 break;
         }
 
+        // Making sure the effect is not null
         assert effect != null;
         effect.setPosition(x, y);
         effects.add(effect);

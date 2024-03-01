@@ -21,9 +21,10 @@ public class Door extends Reactable {
 
         this.level = level;
 
-        height = 14;
-        currHeight = height;
+        height = 14;            // Max fixture height
+        currHeight = height;    // Current height
 
+        // Animation states
         currAState = isOpen ? Constants.ASTATE.OPEN : Constants.ASTATE.CLOSED;
         prevAState = currAState;
 
@@ -31,6 +32,7 @@ public class Door extends Reactable {
 
         setAnimation(TextureRegion.split(resourceManager.getTexture(isOpen ? (level == 1 ? "door_open" : "door_open2") : (level == 1 ? "door_closed" : "door_closed2")), 13, 28)[0], 1/22f, true, 1f);
 
+        // Creating body and fixture
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, (y + 2) / Constants.PPM);
         bdef.type = BodyDef.BodyType.StaticBody;
@@ -58,11 +60,13 @@ public class Door extends Reactable {
         step();
     }
 
+    // Changing animation depending on the current state
     public void handleAnimation() {
         if (currAState == Constants.ASTATE.OPEN) setAnimation(TextureRegion.split(resourceManager.getTexture(level == 1 ? "door_open" : "door_open2"), 13, 28)[0], 1/22f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
         else setAnimation(TextureRegion.split(resourceManager.getTexture(level == 1 ? "door_closed" : "door_closed2"), 13, 28)[0], 1/22f, true, 1f, animation.getFrameNumber() - animation.getCurrentFrame());
     }
 
+    // Changing the current fixture height by a step factor
     public void step() {
 
         if (currHeight <= 0 && open)  {
@@ -82,6 +86,7 @@ public class Door extends Reactable {
         b2body.createFixture(fdef).setUserData("door");
     }
 
+    // Opening or closing door
     @Override
     public void react() {
         resourceManager.getSound("door").play(0.5f);

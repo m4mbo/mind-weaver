@@ -14,6 +14,7 @@ public class Lever extends Interactable {
     public Lever(float x, float y, World world, MyResourceManager resourceManager, boolean right) {
         super(world, resourceManager);
 
+        // Creating body and sensor
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / Constants.PPM, y / Constants.PPM);
         bdef.type = BodyDef.BodyType.StaticBody;
@@ -54,7 +55,7 @@ public class Lever extends Interactable {
 
     @Override
     public void interact() {
-        resourceManager.getSound("lever").play(0.6f);
+        resourceManager.getSound("lever").play(0.9f);
         if (currAState == Constants.ASTATE.OPEN) currAState = Constants.ASTATE.CLOSED;
         else currAState = Constants.ASTATE.OPEN;
         for (Reactable reactable : reactables) {

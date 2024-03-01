@@ -14,6 +14,7 @@ import com.mygdx.Screens.GameScreen;
 import com.mygdx.Helpers.Constants;
 import com.mygdx.Helpers.Constants.*;
 
+// Game screen input processor
 public class GameInputProcessor implements InputProcessor {
     
     private final CharacterCycle characterCycle;
@@ -28,6 +29,7 @@ public class GameInputProcessor implements InputProcessor {
         this.resourceManager = resourceManager;
     }
 
+    // When a key is pressed
     @Override
     public boolean keyDown (int keycode) {
 
@@ -110,6 +112,7 @@ public class GameInputProcessor implements InputProcessor {
         return true;
     }
 
+    // When a key is released
     @Override
     public boolean keyUp (int keycode) {
 
