@@ -28,8 +28,9 @@ public class SlidingTransition extends Transition {
 
         batch.setProjectionMatrix(screenProjection);
 
-        timePassed += delta;
+        timePassed += delta; //record how long the time taken to perform transition
 
+        //change position of x or y according to transition type
         if (direction == Constants.SLIDE_DIR.SLIDE_DOWN) currY -= speed;
         else if (direction == Constants.SLIDE_DIR.SLIDE_UP) currY += speed;
         else if (direction == Constants.SLIDE_DIR.SLIDE_LEFT) currX -= speed;
