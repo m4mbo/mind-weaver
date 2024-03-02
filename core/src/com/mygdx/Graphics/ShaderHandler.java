@@ -8,15 +8,15 @@ import com.mygdx.Tools.ColorGenerator;
 // Centralised point to manage shader programs
 public class ShaderHandler {
 
-    private float time;
-    private final ColorGenerator colorGenerator;
-    private final ShaderProgram waveShader;
-    private final ShaderProgram blinkShader;
-    private final ShaderProgram alphaShader;
-    private final ShaderProgram redMaskShader;
-    private final ShaderProgram outlineShader;
-    private final ShaderProgram randColShader;
-    private final ShaderProgram waterShader;
+    private float time;         // Current program time
+    private final ColorGenerator colorGenerator;        // Random color generator
+    private final ShaderProgram waveShader;             // Wave signal
+    private final ShaderProgram blinkShader;            // Blinking objects (original colours - white)
+    private final ShaderProgram alphaShader;            // Alpha blinking objects (original colours - alpha 0)
+    private final ShaderProgram redMaskShader;          // Tinting objects red
+    private final ShaderProgram outlineShader;          // Making the outlines purple
+    private final ShaderProgram randColShader;          // Random color tinting
+    private final ShaderProgram waterShader;            // Water like movement
 
     public ShaderHandler(ColorGenerator colorGenerator) {
         this.colorGenerator = colorGenerator;
@@ -85,6 +85,7 @@ public class ShaderHandler {
         waterShader.setUniformf("u_time", time);
     }
 
+    // Returning shader program depending on key
     public ShaderProgram getShaderProgram(String key) {
         if (key.equals("wave")) return waveShader;
         if (key.equals("blink")) return blinkShader;

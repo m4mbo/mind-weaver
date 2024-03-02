@@ -63,10 +63,6 @@ public class HUD {
         papayas[level] = true;
     }
 
-    public void removePapaya(int level) {
-        papayas[level-1] = false;
-    }
-
     public void setPlayer(Mage player) { lifeActor.setPlayer(player); }
 
     public void render(SpriteBatch batch) {

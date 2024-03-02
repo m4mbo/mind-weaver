@@ -10,7 +10,7 @@ import com.mygdx.Helpers.Constants;
 
 public class Mage extends PlayableCharacter {
 
-    private Vector2 currCheckPoint;
+    private final Vector2 currCheckPoint;
     private Merchant merchantInRange;
 
     public Mage(float x, float y, World world, int id, MyTimer timer, MyResourceManager myResourceManager, UtilityStation utilityStation) {
