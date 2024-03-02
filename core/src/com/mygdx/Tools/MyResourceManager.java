@@ -16,24 +16,29 @@
             textures = new HashMap<>();
             sounds = new HashMap<>();
         }
+        //Loads texture from assets and places it in a hash map
         public void loadTexture(String path, String key) {
             Texture texture = new Texture(Gdx.files.internal(path));
             textures.put(key, texture);
         }
 
+        //Gets texture from hash map based on unique texture key
         public Texture getTexture(String key) {
             return textures.get(key);
         }
 
+        //Loads sound from assets and places it in a hash map
         public void loadSound(String path, String key) {
             Sound sound = Gdx.audio.newSound(Gdx.files.internal(path));
             sounds.put(key, sound);
         }
 
+        //Gets sound from hash map based on unique sound key
         public Sound getSound(String key) {
             return sounds.get(key);
         }
 
+        //Method to dispose all textures and sounds from both hash maps
         public void disposeAll() {
             for (Sound sound : sounds.values()) {
                 sound.dispose();

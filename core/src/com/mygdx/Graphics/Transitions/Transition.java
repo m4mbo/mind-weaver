@@ -15,6 +15,7 @@ public abstract class Transition {
         this.screenProjection = screenProjection;
     }
 
+    // Method will depend on implementation
     public void render(SpriteBatch batch, float delta) { }
 
     //method that will return a boolean if the transition is done
