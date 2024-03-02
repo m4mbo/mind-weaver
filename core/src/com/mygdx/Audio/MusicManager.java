@@ -12,21 +12,21 @@ public class MusicManager {
             currTrack.stop();
             currTrack.dispose();
         }
-        currTrack = Gdx.audio.newMusic(Gdx.files.internal(path));
-        currTrack.setLooping(true);
-        currTrack.play();
+        currTrack = Gdx.audio.newMusic(Gdx.files.internal(path));   //Set new track to play
+        currTrack.setLooping(true);                                 //Repeat playing track
+        currTrack.play();                                           //Start playing track
     }
 
     public void stop() {
         currTrack.stop();
-    }
+    }   //Stop playing track
 
     public void resume() {
         currTrack.play();
-    }
+    }   //Start playing track
 
     public void setVolume(float volume) {
         currTrack.setVolume(volume);
-    }
+    }   //Set track volume
 
 }
