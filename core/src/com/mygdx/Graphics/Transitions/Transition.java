@@ -17,6 +17,7 @@ public abstract class Transition {
 
     public void render(SpriteBatch batch, float delta) { }
 
+    //method that will return a boolean if the transition is done
     public boolean isDone() {
         return duration >= timePassed;
     }
