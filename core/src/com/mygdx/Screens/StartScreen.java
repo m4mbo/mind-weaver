@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.Game.MindWeaver;
 import com.mygdx.Graphics.ShaderHandler;
 import com.mygdx.Helpers.Constants;
-import com.mygdx.Tools.ColorGenerator;
+import com.mygdx.Tools.ColourGenerator;
 import com.mygdx.Tools.MyResourceManager;
 
 public class StartScreen extends ManagedScreen {
@@ -32,7 +32,7 @@ public class StartScreen extends ManagedScreen {
         this.game = game;
         this.screenManager = screenManager;
         this.resourceManager = resourceManager;
-        this.shaderHandler = new ShaderHandler(new ColorGenerator());
+        this.shaderHandler = new ShaderHandler(new ColourGenerator());
         this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         this.buttonWidth = Constants.BUTTON_WIDTH;

@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.Graphics.ShaderHandler;
 import com.mygdx.Tools.FancyFontHelper;
 import com.mygdx.RoleCast.Mage;
-import com.mygdx.Tools.ColorGenerator;
+import com.mygdx.Tools.ColourGenerator;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Tools.ShapeDrawer;
 
@@ -36,7 +36,7 @@ public class HUD {
     public HUD(SpriteBatch batch, MyResourceManager resourceManager) {
         this.resourceManager = resourceManager;
 
-        this.shapeDrawer = new ShapeDrawer(new ShaderHandler(new ColorGenerator()), resourceManager);
+        this.shapeDrawer = new ShapeDrawer(new ShaderHandler(new ColourGenerator()), resourceManager);
 
         papayas = new boolean[]{false, false, false, false, false};
         viewport = new FitViewport(3840, 2160, new OrthographicCamera());

@@ -57,19 +57,19 @@ public class GameScreen extends ManagedScreen {
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(Constants.TILE_SIZE * 30 / Constants.PPM, Constants.TILE_SIZE * 17 / Constants.PPM, gameCam);
 
-        ColorGenerator colorGenerator = new ColorGenerator();
+        ColourGenerator colourGenerator = new ColourGenerator();
         AtomicInteger eidAllocator = new AtomicInteger();
 
         timer = new MyTimer();
 
         // Tools and handlers
-        ShaderHandler shaderHandler = new ShaderHandler(colorGenerator);
+        ShaderHandler shaderHandler = new ShaderHandler(colourGenerator);
         shapeDrawer = new ShapeDrawer(shaderHandler, resourceManager);
         textureDrawer = new TextureDrawer(shaderHandler);
         LightManager lightManager = new LightManager(world);
         ObjectHandler objectHandler = new ObjectHandler(resourceManager);
         VisionMap visionMap =  new VisionMap(world, shapeDrawer, game.hud);
-        CharacterCycle characterCycle = new CharacterCycle(visionMap, colorGenerator);
+        CharacterCycle characterCycle = new CharacterCycle(visionMap, colourGenerator);
         EntityHandler entityHandler = new EntityHandler(characterCycle, shaderHandler, visionMap);
         ParticleHandler particleHandler = new ParticleHandler();
 

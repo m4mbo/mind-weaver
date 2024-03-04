@@ -3,13 +3,13 @@ package com.mygdx.Graphics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.Tools.ColorGenerator;
+import com.mygdx.Tools.ColourGenerator;
 
 // Centralised point to manage shader programs
 public class ShaderHandler {
 
     private float time;         // Current program time
-    private final ColorGenerator colorGenerator;        // Random color generator
+    private final ColourGenerator colourGenerator;        // Random color generator
     private final ShaderProgram waveShader;             // Wave signal
     private final ShaderProgram blinkShader;            // Blinking objects (original colours - white)
     private final ShaderProgram alphaShader;            // Alpha blinking objects (original colours - alpha 0)
@@ -18,8 +18,8 @@ public class ShaderHandler {
     private final ShaderProgram randColShader;          // Random color tinting
     private final ShaderProgram waterShader;            // Water like movement
 
-    public ShaderHandler(ColorGenerator colorGenerator) {
-        this.colorGenerator = colorGenerator;
+    public ShaderHandler(ColourGenerator colourGenerator) {
+        this.colourGenerator = colourGenerator;
         time = 0;
 
         // Initializing shader programs
@@ -75,9 +75,9 @@ public class ShaderHandler {
         alphaShader.setUniformf("u_time", time);
 
         randColShader.bind();
-        randColShader.setUniformf("r", colorGenerator.getCurrentColor().x);
-        randColShader.setUniformf("g", colorGenerator.getCurrentColor().y);
-        randColShader.setUniformf("b", colorGenerator.getCurrentColor().z);
+        randColShader.setUniformf("r", colourGenerator.getCurrentColour().x);
+        randColShader.setUniformf("g", colourGenerator.getCurrentColour().y);
+        randColShader.setUniformf("b", colourGenerator.getCurrentColour().z);
 
         waterShader.bind();
         waterShader.setUniformf("u_amount", 2.5f);

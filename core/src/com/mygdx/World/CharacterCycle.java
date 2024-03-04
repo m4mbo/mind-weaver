@@ -1,19 +1,19 @@
 package com.mygdx.World;
 
 import com.mygdx.RoleCast.PlayableCharacter;
-import com.mygdx.Tools.ColorGenerator;
+import com.mygdx.Tools.ColourGenerator;
 import java.util.*;
 
 public class CharacterCycle {
     private List<PlayableCharacter> characters;
     private int currentIndex;
     private final VisionMap visionMap;
-    private final ColorGenerator colorGenerator;
+    private final ColourGenerator colourGenerator;
 
-    public CharacterCycle(VisionMap visionMap, ColorGenerator colorGenerator) {
+    public CharacterCycle(VisionMap visionMap, ColourGenerator colourGenerator) {
         characters = new ArrayList<>();
         this.visionMap = visionMap;
-        this.colorGenerator = colorGenerator;
+        this.colourGenerator = colourGenerator;
         currentIndex = 0;
     }
     
@@ -36,7 +36,7 @@ public class CharacterCycle {
         if (!characters.isEmpty()) {
             currentIndex = (currentIndex + 1) % characters.size();
         }
-        colorGenerator.getNextColor();
+        colourGenerator.getNextColor();
         return !temp.equals(getCurrentCharacter());
     }
 
