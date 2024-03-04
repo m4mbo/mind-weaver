@@ -17,6 +17,7 @@ public class ShapeDrawer {
         this.resourceManager = resourceManager;
     }
 
+    //draw the shapes in shapes
     public void render(SpriteBatch batch) {
         for (Shape shape : shapes) {
             shape.render(batch);
@@ -24,14 +25,15 @@ public class ShapeDrawer {
         shapes.clear();
     }
 
+    //add instances of waves to draw to shapes
     public void drawWave(Vector2 start, Vector2 end, float height) {
         shapes.add(new Wave(start, end, height));
     }
 
+    //add instances of rectangles to draw to shapes
     public void drawRectangle(float height, float width, float x, float y, String type) { shapes.add(new Rectangle(height, width, x, y, type)); }
 
-
-    private interface Shape {
+    private interface Shape {   //Rectangle and Wave implement this interface
         void render(SpriteBatch batch);
     }
 
@@ -51,6 +53,7 @@ public class ShapeDrawer {
             this.type = type;
         }
 
+        //draw pixel according to colour
         @Override
         public void render(SpriteBatch batch) {
             batch.begin();
@@ -63,7 +66,7 @@ public class ShapeDrawer {
         }
     }
 
-    private class Wave implements Shape {
+    private class Wave implements Shape {   //class to draw wave connection between player and controllable characters
         Vector2 start;
         Vector2 end;
         float height;
@@ -75,9 +78,9 @@ public class ShapeDrawer {
             this.height = height;
             angle = MathWizard.angle(start, end);
             width = MathWizard.distance(start, end);
-
         }
 
+        //draw wave of purple pixels
         @Override
         public void render(SpriteBatch batch) {
             batch.setShader(shaderHandler.getShaderProgram("wave"));

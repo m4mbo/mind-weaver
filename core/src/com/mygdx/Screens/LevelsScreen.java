@@ -29,7 +29,7 @@ public class LevelsScreen extends ManagedScreen {
 
         this.screenManager = screenManager;
         this.stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(null);
+        Gdx.input.setInputProcessor(null);  //Don't use any input processor
         currLevel = levelProgression;
 
         shapeRenderer = new ShapeRenderer();
@@ -76,7 +76,7 @@ public class LevelsScreen extends ManagedScreen {
         levelsImage.setSize(levelsTexture.getWidth(), levelsTexture.getHeight());
         stage.addActor(levelsImage);
 
-        levels = new Array<>(); //to store the hexagon polygon around the levels platforms for relevant level input
+        levels = new Array<>(); //to store the hexagons around the levels platforms for relevant level input
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
 
@@ -154,6 +154,7 @@ public class LevelsScreen extends ManagedScreen {
     public void dispose() {
         stage.dispose();
         shapeRenderer.dispose();
+        levelsTexture.dispose();
     }
     @Override
     public void show() { }

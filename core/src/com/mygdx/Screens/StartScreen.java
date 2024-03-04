@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.Game.MindWeaver;
 import com.mygdx.Graphics.ShaderHandler;
 import com.mygdx.Helpers.Constants;
-import com.mygdx.Tools.ColorGenerator;
+import com.mygdx.Tools.ColourGenerator;
 import com.mygdx.Tools.MyResourceManager;
 
 public class StartScreen extends ManagedScreen {
@@ -32,7 +32,7 @@ public class StartScreen extends ManagedScreen {
         this.game = game;
         this.screenManager = screenManager;
         this.resourceManager = resourceManager;
-        this.shaderHandler = new ShaderHandler(new ColorGenerator());
+        this.shaderHandler = new ShaderHandler(new ColourGenerator());
         this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         this.buttonWidth = Constants.BUTTON_WIDTH;
@@ -96,11 +96,11 @@ public class StartScreen extends ManagedScreen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);;
 
-        //draw game title mind
         game.batch.begin();
 
+        //draw background
         game.batch.draw(bg, -30, -80, bg.getRegionWidth() * 7.5f, bg.getRegionHeight() * 7.5f);
-
+        //draw game title mind
         game.batch.draw(mind, stage.getViewport().getWorldWidth() / 2 - 500, stage.getViewport().getWorldHeight() - 300, mind.getRegionWidth() * 1.4f, mind.getRegionHeight() * 1.4f);
         //draw hat graphic
         game.batch.draw(hat, stage.getViewport().getWorldWidth() / 2 - 500, stage.getViewport().getWorldHeight() - 215, hat.getRegionWidth() * 7.8f, hat.getRegionHeight() * 7.8f);
