@@ -26,6 +26,7 @@ public class Pet extends Entity {
         angle = 0;
         time = 0;
 
+        // Initializing sprite
         setAnimation(TextureRegion.split(resourceManager.getTexture("pet"), 7, 7)[0], 1/4f, false, 0.7f);
 
         BodyDef bdef = new BodyDef();
@@ -36,13 +37,14 @@ public class Pet extends Entity {
         b2body.setGravityScale(0);
         b2body.setLinearDamping(5);
 
+        //Load butterfly's light
         util.getLightManager().addPointLight(b2body, 80, Constants.BIT_GROUND, new Color(70f/255, 11f/255, 93f/255, 0.8f));
 
     }
 
     public void update(float delta) {
         time += delta;
-        if (time >= 0.2f) {
+        if (time >= 0.2f) { //animate butterfly flapping
             time = 0;
             util.getParticleHandler().addParticleEffect("aura", b2body.getPosition().x - 4 / Constants.PPM, b2body.getPosition().y + 8 / Constants.PPM);
         }
