@@ -18,12 +18,12 @@ public class CutScene extends Actor {
     private final MyResourceManager resourceManager;
     private LinkedList<String> messageChain;
     private LinkedList<TextureRegion> characterRegions;
-    private int currIndex;
-    private final BitmapFont font;
-    private float stringCompleteness;
-    private TextureRegion bgRegion;
-    private int bgWidth = 3000;
-    private int bgHeight = 800;
+    private int currIndex;              //Letter printing position
+    private final BitmapFont font;      //Cutscene font
+    private float stringCompleteness;   //Text animation
+    private TextureRegion bgRegion;     //Background region
+    private int bgWidth = 3000;         //Background width
+    private int bgHeight = 800;         //Background height
 
     public CutScene(Stage stage, String tag, MyResourceManager resourceManager) {
         this.stage = stage;
@@ -43,10 +43,12 @@ public class CutScene extends Actor {
         font = FancyFontHelper.getInstance().getFont(Color.WHITE, 80);
     }
 
+    //Animate text printing
     public void update(float delta) {
         stringCompleteness += Constants.TEXT_SPEED * delta;
     }
 
+    //Cycle through the message in the message chain and reset
     public boolean cycleMessage() {
         currIndex++;
         stringCompleteness = 0;
@@ -57,6 +59,7 @@ public class CutScene extends Actor {
         return false;
     }
 
+    //Load custcenes according to game situation
     private void handleTag(String tag) {
 
         switch (tag) {
