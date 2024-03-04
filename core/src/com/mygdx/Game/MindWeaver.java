@@ -29,7 +29,7 @@ public class MindWeaver extends Game {
 
 		hud = new HUD(batch, resourceManager);	//heads up display for lives and papayas
 
-		screenManager.pushScreen(Constants.SCREEN_OP.LEVEL_3, "none");	//set screen to start screen
+		screenManager.pushScreen(Constants.SCREEN_OP.START, "none");	//set screen to start screen
 	}
 
 	// Loading sprites to the resource manager for later use
