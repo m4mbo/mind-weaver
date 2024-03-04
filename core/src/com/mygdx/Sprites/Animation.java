@@ -2,15 +2,18 @@ package com.mygdx.Sprites;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-// Custom animation class
+/*
+ * Custom animation class
+ * Implemented to gain more control over animations
+ * Limited customization from libgdx animation
+ */
 public class Animation {
 
-    private TextureRegion[] frames;
+    private TextureRegion[] frames;     // Animation frames
     private float time;
-    private float delay;
+    private float delay;                // Delay in between frame rendering
     private int currentFrame;
-    private int timesPlayed;
-    private boolean loopLastFrame;
+    private boolean loopLastFrame;      // If true, keep rendering the last frame of the array once reached
 
     public Animation() {}
 
@@ -28,7 +31,6 @@ public class Animation {
         this.loopLastFrame = loopLastFrame;
         this.currentFrame = currentFrame;
         time = 0;
-        timesPlayed = 0;
     }
 
     public void update(float delta) {
@@ -46,7 +48,6 @@ public class Animation {
         if (currentFrame == frames.length) {
             if (loopLastFrame) currentFrame--;
             else currentFrame = 0;
-            timesPlayed++;
         }
     }
 
@@ -56,6 +57,4 @@ public class Animation {
         if (frames == null) return 0;
         return frames.length;
     }
-    public int getTimesPlayed() { return timesPlayed; }
-
 }

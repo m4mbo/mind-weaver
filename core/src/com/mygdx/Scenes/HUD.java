@@ -117,6 +117,7 @@ public class HUD {
         return currCutscene;
     }
 
+    // Checking if player has collected the required 3 papayas
     public boolean enoughPapaya() {
         int papayaCount = 0;
         for (boolean item : papayas) {
@@ -129,6 +130,7 @@ public class HUD {
         return powersUnlocked;
     }
 
+    // Actor used to draw mage's lives
     private class LifeActor extends Actor {
         private final TextureRegion region;
         private Mage player;
@@ -157,6 +159,7 @@ public class HUD {
         }
     }
 
+    // Actor used to draw the ESC and I buttons
     private class ButtonActor extends Actor {
         private final TextureRegion region1;
         private final TextureRegion region2;
@@ -177,6 +180,7 @@ public class HUD {
         }
     }
 
+    // Actor used to draw the inventory
     private class InventoryActor extends Table {
         private final Label papayaLabel;
 
@@ -205,6 +209,7 @@ public class HUD {
             Color color = getColor();
             batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
 
+            // Translucent mask over the screen
             shapeDrawer.drawRectangle(viewport.getWorldHeight(), viewport.getWorldWidth(), 0, 0, "translucent");
 
             batch.end();

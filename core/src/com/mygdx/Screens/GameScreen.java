@@ -26,9 +26,9 @@ import com.mygdx.Helpers.Constants;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameScreen extends ManagedScreen {
-    private final MyTimer timer;
+    private final MyTimer timer;                    // Timer distributed to any other classes that require it
     private final MindWeaver game;
-    private final OrthographicCamera gameCam;
+    private final OrthographicCamera gameCam;       // Camera that will follow the player
     private final Viewport gamePort;
     private final OrthogonalTiledMapRenderer renderer;
     private final World world;    // World holding all the physical objects
@@ -49,9 +49,7 @@ public class GameScreen extends ManagedScreen {
 
         // Creating tile map
         TmxMapLoader mapLoader = new TmxMapLoader();
-        TiledMap map = null;
-
-        map = mapLoader.load("Tilemaps/level" + this.level + ".tmx");
+        TiledMap map = mapLoader.load("Tilemaps/level" + this.level + ".tmx");
         fpsCounter = new FPSCounter();
 
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
@@ -84,7 +82,7 @@ public class GameScreen extends ManagedScreen {
         world.setContactListener(new MyContactListener(util, game.hud, screenManager, level, resourceManager));
         b2dr = new Box2DDebugRenderer();
         new B2WorldHandler(world, map, resourceManager, timer, eidAllocator, util, level, game.hud, textureDrawer);     //Creating world
-        lightManager.setDim(0.6f);
+        lightManager.setDim(0.6f);  // Making the environment 40% less bright
     }
 
     @Override

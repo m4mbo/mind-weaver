@@ -16,7 +16,7 @@ public class CharacterCycle {
         this.colorGenerator = colorGenerator;
         currentIndex = 0;
     }
-
+    
     public void initialize(PlayableCharacter currCharacter) { characters.add(currCharacter); }
 
     public void updateCycle() {
