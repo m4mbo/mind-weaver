@@ -23,5 +23,5 @@ public abstract class Entity extends B2Sprite {
         return lives;
     }
 
-    public void die() {}    //Method to override for player
+    public void die() {}    //Method to override for player and base goblin
 }

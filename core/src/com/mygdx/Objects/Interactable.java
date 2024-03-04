@@ -28,6 +28,7 @@ public abstract class Interactable extends B2Sprite {
         }
     }
 
+    //Keep track of what reactable will react according to interaction with interactable
     public void addReactable(Reactable reactable) {
         reactables.add(reactable);
     }
