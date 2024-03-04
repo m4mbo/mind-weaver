@@ -29,7 +29,7 @@ public class MindWeaver extends Game {
 
 		hud = new HUD(batch, resourceManager);	//heads up display for lives and papayas
 
-		screenManager.pushScreen(Constants.SCREEN_OP.START, "none");	//set screen to start screen
+		screenManager.pushScreen(Constants.SCREEN_OP.LEVEL_3, "none");	//set screen to start screen
 	}
 
 	// Loading sprites to the resource manager for later use
@@ -140,6 +140,7 @@ public class MindWeaver extends Game {
 		//Messages
 		resourceManager.loadTexture("Messages/press_x.png", "x");
 		resourceManager.loadTexture("Messages/press_shift.png", "shift");
+		resourceManager.loadTexture("Messages/press_space.png", "space");
 
 		//SFX
 		resourceManager.loadSound("SoundEffects/jump.mp3", "jump");

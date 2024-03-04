@@ -132,6 +132,10 @@ public class B2WorldHandler {
             Rectangle rect = object.getRectangle();
             textureDrawer.addTexture(resourceManager.getTexture("shift"), rect.getX() / Constants.PPM, rect.getY() / Constants.PPM, 0.6f);
         }
+        for (RectangleMapObject object : map.getLayers().get(13).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = object.getRectangle();
+            textureDrawer.addTexture(resourceManager.getTexture("space"), rect.getX() / Constants.PPM, rect.getY() / Constants.PPM, 0.6f);
+        }
 
         createObjects(level);
 
