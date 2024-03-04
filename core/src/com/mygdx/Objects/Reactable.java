@@ -5,6 +5,7 @@ import com.mygdx.Helpers.Constants;
 import com.mygdx.Sprites.B2Sprite;
 import com.mygdx.Tools.MyResourceManager;
 
+// Class from where door and platform will inherit from
 public abstract class Reactable extends B2Sprite {
 
     protected World world;
