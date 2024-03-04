@@ -44,7 +44,7 @@ public class Pet extends Entity {
 
     public void update(float delta) {
         time += delta;
-        if (time >= 0.2f) { //animate butterfly flapping
+        if (time >= 0.2f) { // Adding aura particle effect every 0.2 seconds
             time = 0;
             util.getParticleHandler().addParticleEffect("aura", b2body.getPosition().x - 4 / Constants.PPM, b2body.getPosition().y + 8 / Constants.PPM);
         }
@@ -52,6 +52,7 @@ public class Pet extends Entity {
         assess();
     }
 
+    // Testing if butterfly is not within a certain distance threshold from current character
     public void assess() {
         PlayableCharacter character = util.getCharacterCycle().getCurrentCharacter();
         if (MathWizard.inRange(character.getPosition(), b2body.getPosition(), 0.1f / Constants.PPM)) {
@@ -70,12 +71,13 @@ public class Pet extends Entity {
         // Apply linear velocity
         b2body.setLinearVelocity(new Vector2(normalized.x * Constants.MAX_SPEED_X / 1.1f, normalized.y * Constants.MAX_SPEED_X / 2));
 
+        // Computing animation angle from character and butterfly position
         angle = MathWizard.angle(character.getPosition(), b2body.getPosition());
     }
 
     public void render(SpriteBatch batch) {
         batch.begin();
-        batch.setShader(util.getShaderHandler().getShaderProgram("rand_col"));
+        batch.setShader(util.getShaderHandler().getShaderProgram("rand_col"));  // Masking butterfly with random color
         batch.draw(animation.getFrame(), facingRight ? b2body.getPosition().x - (width / Constants.PPM) / 2 : b2body.getPosition().x + (width / Constants.PPM) / 2 , b2body.getPosition().y - (height / Constants.PPM) / 2, 0, 0, (facingRight ? width : -width) / Constants.PPM, height / Constants.PPM, 1, 1, angle);
         batch.setShader(null);
         batch.end();

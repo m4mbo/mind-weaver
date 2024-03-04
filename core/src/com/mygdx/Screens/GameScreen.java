@@ -126,6 +126,7 @@ public class GameScreen extends ManagedScreen {
 
         screenManager.render(delta);
 
+        //Uncomment this to render fixture outlines
         //b2dr.render(world, gameCam.combined);
 
         gameCam.position.set(util.getCharacterCycle().getCurrentCharacter().getPosition().x, util.getCharacterCycle().getCurrentCharacter().getPosition().y + 20 / Constants.PPM, 0);

@@ -9,17 +9,21 @@ import com.mygdx.Helpers.Constants;
 import com.mygdx.Tools.MyResourceManager;
 
 public class PressurePlate extends Interactable {
-    private Body b2body2;
-    private DistanceJoint distanceJoint;
-    private float threshold;
-    private int level;
-    private int pressedIterations;
+    private final DistanceJoint distanceJoint;
+    private final float threshold;
+    private final int level;
+
+    /*
+     * Counting for how many ticks was a pressure plate pressed or not
+     * Done to avoid spamming pressing behaviour
+     */
+    private int openIterations;
     private int closedIterations;
-    private boolean isPressed;
-    private float currHeight;
-    private float height;
-    private PolygonShape polygonShape;
-    private FixtureDef fdef;
+    private boolean isPressed;  // Is the current pressure plate pressed
+    private float currHeight;   // Current height of plate fixture
+    private final float height;     // Default height of plate fixture
+    private final PolygonShape polygonShape;
+    private final FixtureDef fdef;
 
     public PressurePlate(World world, MyResourceManager resourceManager, float x, float y, int level) {
 
@@ -27,7 +31,7 @@ public class PressurePlate extends Interactable {
 
         this.level = level;
 
-        pressedIterations = 0;
+        openIterations = 0;
         closedIterations = 0;
         height = 3;
         currHeight = height;
@@ -41,7 +45,7 @@ public class PressurePlate extends Interactable {
 
         bdef.position.set(x / Constants.PPM, y / Constants.PPM);
         bdef.type = BodyDef.BodyType.StaticBody;
-        b2body2 = world.createBody(bdef);
+        Body b2body2 = world.createBody(bdef);
 
         // Creating the fixtures
 
@@ -57,6 +61,7 @@ public class PressurePlate extends Interactable {
         fdef.filter.maskBits = Constants.BIT_SUPPORT | Constants.BIT_FEET | Constants.BIT_MAGE | Constants.BIT_GOBLIN;
         b2body.createFixture(fdef).setUserData("plate");
 
+        // Adding supports to keep the plate in place
         polygonShape.setAsBox(0.2f / Constants.PPM, 20 / Constants.PPM, new Vector2(-9f / Constants.PPM, -20 / Constants.PPM), 0);
         fdef.shape = polygonShape;
         fdef.filter.categoryBits = Constants.BIT_SUPPORT;
@@ -69,10 +74,12 @@ public class PressurePlate extends Interactable {
         fdef.filter.maskBits = Constants.BIT_GROUND;
         b2body2.createFixture(fdef).setUserData("support");
 
+        // Creating base where the plate will be hanging from
         polygonShape.setAsBox(8 / Constants.PPM, 0.2f / Constants.PPM, new Vector2(0, 0), 0);
         fdef.shape = polygonShape;
         b2body2.createFixture(fdef).setUserData("base");
 
+        // Creating distance joint between base and plate to measure the forces applied to the plate
         DistanceJointDef djd = new DistanceJointDef();
 
         djd.bodyA = b2body;
@@ -105,19 +112,25 @@ public class PressurePlate extends Interactable {
 
     public void update(float delta) {
 
-        if (distanceJoint.getReactionForce(delta).y < threshold) pressedIterations++;
+        /*
+         * Testing reaction force from joint
+         * this will tell us if n characters are standing on top of plate
+         */
+        if (distanceJoint.getReactionForce(delta).y < threshold) openIterations++;
         else { closedIterations++; }
 
-        if (pressedIterations >= 10) {
-            pressedIterations = 0;
+        // If pressed for 10 ticks, open
+        if (openIterations >= 10) {
+            openIterations = 0;
             closedIterations = 0;
             currAState = Constants.ASTATE.OPEN;
             isPressed = true;
         }
 
+        // If not pressed for 10 ticks, close
         if (closedIterations >= 10) {
             closedIterations = 0;
-            pressedIterations = 0;
+            openIterations = 0;
             currAState = Constants.ASTATE.CLOSED;
             isPressed = false;
         }

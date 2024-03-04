@@ -145,6 +145,7 @@ public abstract class PlayableCharacter extends Entity implements Subscriber {
 
     public void wallJump() {
         if (isStateActive(Constants.PSTATE.STUNNED)) return;
+        b2body.setLinearDamping(0);
         if (wallState == -1) {
             util.getParticleHandler().addParticleEffect("dust_wall", b2body.getPosition().x - 8 / Constants.PPM, b2body.getPosition().y);
             b2body.applyLinearImpulse(new Vector2(1, 3), b2body.getWorldCenter(), true);

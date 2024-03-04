@@ -22,14 +22,14 @@ import com.mygdx.Tools.ShapeDrawer;
 
 public class HUD {
 
-    private final boolean[] papayas;
+    private final boolean[] papayas;    // Each index in this array determines if the papaya has been collected at that level
     public Stage stage;
     private final Viewport viewport;
     private final MyResourceManager resourceManager;
     private final InventoryActor inventoryActor;
     private final ShapeDrawer shapeDrawer;
-    private boolean standBy;
-    private boolean powersUnlocked;
+    private boolean standBy;        // Will determine if input processor can receive input or not
+    private boolean powersUnlocked;     // Will determine if player has sold all 3 papayas to the merchant
     private CutScene currCutscene;
     private final LifeActor lifeActor;
 
@@ -70,11 +70,13 @@ public class HUD {
         stage.draw();
     }
 
+    // Inventory will be rendered
     public void pushInventory() {
         standBy = true;
         inventoryActor.setVisible(true);
     }
 
+    // Creating a cutscene and rendering it
     public void pushCutscene(String tag) {
         if (tag.equals("open_shop")) powersUnlocked = true;
         currCutscene = new CutScene(stage, tag, resourceManager);
@@ -82,6 +84,7 @@ public class HUD {
         currCutscene.setVisible(true);
     }
 
+    // Cycle to the next cutscene text in chain
     public void cycleCutscene() {
         if (!currCutscene.cycleMessage()) return;
         currCutscene.setVisible(false);
@@ -89,6 +92,7 @@ public class HUD {
         currCutscene = null;
     }
 
+    // Removing cutscene from the screen
     public void removeCutscene() {
         if (currCutscene == null) return;
         currCutscene.setVisible(false);

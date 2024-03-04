@@ -17,7 +17,7 @@ public class FPSCounter {
         timeSinceLastTick += delta;
         framesThisTick++;
 
-        if (timeSinceLastTick >= 0.5F) { // every 0.5 seconds
+        if (timeSinceLastTick >= 0.5f) { // every 0.5 seconds
             // Update FPS counter per second
             if (secondHalf) {
                 fps = framesThisTick + framesLastTick;

@@ -14,9 +14,9 @@ import java.util.LinkedList;
 
 public class Platform extends Reactable {
 
-    private LinkedList<Vector2> positionCycle;
+    private final LinkedList<Vector2> positionCycle;
 
-    private LinkedList<Entity> entitiesOnTop;
+    private final LinkedList<Entity> entitiesOnTop;
 
     private int currPosition;
 

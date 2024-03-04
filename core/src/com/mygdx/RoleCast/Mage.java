@@ -106,12 +106,13 @@ public class Mage extends PlayableCharacter {
     @Override
     public void die() {
         lives--;
-        timer.start(0.05f, "hit", this);
+        timer.start(0.05f, "hit", this);    // Adding hit red mask
         addPlayerState(Constants.PSTATE.HIT);
+        // When player looses all 3 lives, respawn
         if (lives == 0 && !isStateActive(Constants.PSTATE.DYING)) {
             util.getMusicManager().stop();
             resourceManager.getSound("laugh").play(0.3f);
-            timer.start(2f, "death", this);
+            timer.start(2f, "death", this);     // Adding death operation in 2 seconds
             addPlayerState(Constants.PSTATE.DYING);
         }
     }
