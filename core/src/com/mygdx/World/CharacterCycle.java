@@ -4,8 +4,9 @@ import com.mygdx.RoleCast.PlayableCharacter;
 import com.mygdx.Tools.ColorGenerator;
 import java.util.*;
 
+// Class holding playable character cycle
 public class CharacterCycle {
-    private List<PlayableCharacter> characters;
+    private List<PlayableCharacter> characters;     // Characters ready to cotrol
     private int currentIndex;
     private final VisionMap visionMap;
     private final ColorGenerator colorGenerator;
@@ -16,9 +17,13 @@ public class CharacterCycle {
         this.colorGenerator = colorGenerator;
         currentIndex = 0;
     }
-    
+
     public void initialize(PlayableCharacter currCharacter) { characters.add(currCharacter); }
 
+    /*
+     * Updating cycle based on vision map bullseye stream
+     * Reachable nodes from mage
+     */
     public void updateCycle() {
         characters = visionMap.getBullseyeStream();
         if (characters.size() >= currentIndex) {
@@ -34,7 +39,7 @@ public class CharacterCycle {
     public boolean cycleNext() {
         PlayableCharacter temp = getCurrentCharacter();
         if (!characters.isEmpty()) {
-            currentIndex = (currentIndex + 1) % characters.size();
+            currentIndex = (currentIndex + 1) % characters.size();  // Adjusting index to avoid going over list size
         }
         colorGenerator.getNextColor();
         return !temp.equals(getCurrentCharacter());

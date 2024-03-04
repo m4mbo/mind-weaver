@@ -8,6 +8,7 @@ import com.mygdx.Tools.MyResourceManager;
 
 import java.util.LinkedList;
 
+// Class to render and update objects: Interactables, Reactables and Items
 public class ObjectHandler {
 
     private LinkedList<Interactable> interactables;

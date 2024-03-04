@@ -13,14 +13,14 @@ import java.util.LinkedList;
 
 // Class to handle risky operations outside world step and map entities to their id
 public class EntityHandler {
-    private final HashMap<Integer, Entity> entities;
-    private final LinkedList<EntityOp> entityOps;
+    private final HashMap<Integer, Entity> entities;        // Map of entities with id
+    private final LinkedList<EntityOp> entityOps;           // Entity operations to handle
     private final CharacterCycle characterCycle;
     private final ShaderHandler shaderHandler;
     private final VisionMap visionMap;
     private Pet pet;
 
-    public EntityHandler (CharacterCycle characterCycle, ShaderHandler shaderHandler, VisionMap visionMap) {
+    public EntityHandler(CharacterCycle characterCycle, ShaderHandler shaderHandler, VisionMap visionMap) {
         entityOps = new LinkedList<>();
         entities = new HashMap<>();
         this.characterCycle = characterCycle;
@@ -36,16 +36,18 @@ public class EntityHandler {
         entities.put(entity.getID(), entity);
     }
 
+    // Returning entity based on id
     public Entity getEntity(int id) {
         return entities.get(id);
     }
-    
+
+    // Returning entity based on box2d body
     public Entity getEntity(Body b2body) {
         for (Entity entity : entities.values()) {
             if (entity.getB2body().equals(b2body)) {
                 return entity;
             }
-        }        
+        }
         return null;
     }
 
@@ -53,24 +55,18 @@ public class EntityHandler {
         entityOps.add(new EntityOp(entity, operation));
     }
 
+    // Handling all entity operations
     public void handleEntities() {
         for (EntityOp entityOp : entityOps) {
-            if (entityOp.operation.equals("die")) {
-                if (!(entityOp.entity instanceof Mage) && (entityOp.entity instanceof PlayableCharacter)) {
-                    visionMap.removeCharacter((PlayableCharacter) entityOp.entity);
-                    entities.remove(entityOp.entity.getID());
-                } else if (entityOp.entity instanceof Mage) {
-                    ((Mage) entityOp.entity).respawn();
-                }
-            }
+            entityOp.resolve();
         }
         entityOps.clear();
     }
 
     public void update(float delta) {
         pet.update(delta);
+        // Updating all entities
         for (Entity entity : entities.values()) {
-//            if (entity instanceof Mage) System.out.println(((PlayableCharacter) entity).getPosition());
             entity.update(delta);
         }
         handleEntities();
@@ -78,12 +74,15 @@ public class EntityHandler {
 
     public void render(SpriteBatch batch) {
         pet.render(batch);
+        // Rendering entities
         for (Entity entity : entities.values()) {
             if (entity instanceof PlayableCharacter) {
+                // Applying red mask if entity is hit
                 if (((PlayableCharacter) entity).isStateActive(Constants.PSTATE.HIT)) {
                     batch.setShader(shaderHandler.getShaderProgram("redMask"));
                 }
             }
+            // Changing outline color if goblin is being controlled
             if (characterCycle.getCurrentCharacter().equals(entity) && !(entity instanceof Mage)) {
                 batch.setShader(shaderHandler.getShaderProgram("outline"));
             }
@@ -96,12 +95,26 @@ public class EntityHandler {
         return new LinkedList<>(entities.values());
     }
 
-    private static class EntityOp {
+    // Helper entity operation class mapping an entity with an operation
+    private class EntityOp {
         public Entity entity;
         public String operation;
+
         public EntityOp(Entity entity, String op) {
             this.entity = entity;
             this.operation = op;
         }
+
+        public void resolve() {
+            if (operation.equals("die")) {
+                if (!(entity instanceof Mage) && (entity instanceof PlayableCharacter)) {
+                    visionMap.removeCharacter((PlayableCharacter) entity);
+                    entities.remove(entity.getID());
+                } else if (entity instanceof Mage) {
+                    ((Mage) entity).respawn();
+                }
+            }
+        }
     }
 }
+
