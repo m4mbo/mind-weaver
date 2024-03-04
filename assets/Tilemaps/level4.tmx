@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="150" height="100" tilewidth="14" tileheight="14" infinite="0" nextlayerid="15" nextobjectid="226">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="150" height="100" tilewidth="14" tileheight="14" infinite="0" nextlayerid="16" nextobjectid="226">
  <tileset firstgid="1" source="dungeon padded.tsx"/>
  <layer id="1" name="background" width="150" height="100">
   <data encoding="base64" compression="zlib">
@@ -86,4 +86,5 @@
   <object id="225" x="343.085" y="1041.8" width="2.63636" height="2.72727"/>
  </objectgroup>
  <objectgroup id="14" name="shift_message"/>
+ <objectgroup id="15" name="wall_jump_message"/>
 </map>

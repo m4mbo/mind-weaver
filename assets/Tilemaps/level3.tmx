@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="150" height="100" tilewidth="14" tileheight="14" infinite="0" nextlayerid="14" nextobjectid="156">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="150" height="100" tilewidth="14" tileheight="14" infinite="0" nextlayerid="15" nextobjectid="157">
  <tileset firstgid="1" source="dungeon padded.tsx"/>
  <layer id="1" name="background" width="150" height="100">
   <data encoding="base64" compression="zlib">
@@ -91,4 +91,7 @@
  <objectgroup id="11" name="bug"/>
  <objectgroup id="12" name="x_message"/>
  <objectgroup id="13" name="shift_message"/>
+ <objectgroup id="14" name="wall_jump_message">
+  <object id="156" x="1315.63" y="1196.38" width="1.75" height="1.25"/>
+ </objectgroup>
 </map>
