@@ -18,6 +18,7 @@ public abstract class Reactable extends B2Sprite {
         this.world = world;
     }
 
+    //Update state
     public void react() {
 
     }
