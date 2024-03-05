@@ -49,6 +49,7 @@ public class UtilityStation {
         entityHandler.render(batch);
     }
 
+    //Method that return instances of interactions handlers
     public CharacterCycle getCharacterCycle() {
         return characterCycle;
     }
