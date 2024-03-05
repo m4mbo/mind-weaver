@@ -1,17 +1,18 @@
 package com.mygdx.Tools;
 
-public class FPSCounter {
+public class FPSCounter {   //track frames per second
 
-    private float timeSinceLastTick = 0;
-    private int framesThisTick = 0, framesLastTick = 0;
-    private boolean secondHalf = false;
-    private int fps = 0;
+    private float timeSinceLastTick = 0;    //stores time elapsed since last FPS update
+    private int framesThisTick = 0; //counts frames since the last update
+    private int framesLastTick = 0; //stores number of frames in the previous update
+    private boolean secondHalf = false; //used to change between updating FPS and counters reset
+    private int fps = 0;    //stores computed FPS value
 
     public FPSCounter() {}
 
     public int getFramesPerSecond() {
         return fps;
-    }
+    } //get current frames per second value.
 
     public void update(float delta) {
         timeSinceLastTick += delta;
