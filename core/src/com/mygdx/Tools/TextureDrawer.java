@@ -8,6 +8,7 @@ import com.mygdx.Helpers.Constants;
 
 import java.util.LinkedList;
 
+//Used to draw textures
 public class TextureDrawer {
 
     private LinkedList<CoordTexture> textures;
@@ -29,7 +30,7 @@ public class TextureDrawer {
         }
     }
 
-    private class CoordTexture {
+    private class CoordTexture {    //Used to draw texture with x and y coordinates using alpha shader
 
         TextureRegion region;
         float x, y, width, height, resize;
