@@ -43,7 +43,7 @@ public class MathWizard {
         return normalize(new Vector2(directionX, directionY));
     }
 
-
+    //calculate the distance between two points
     public static float distance(Vector2 pos1, Vector2 pos2) {
         return (float) Math.sqrt(Math.pow(pos2.x - pos1.x, 2) + Math.pow(pos2.y - pos1.y, 2));
     }
