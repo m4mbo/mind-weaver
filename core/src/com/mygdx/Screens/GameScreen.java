@@ -26,9 +26,9 @@ import com.mygdx.Helpers.Constants;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameScreen extends ManagedScreen {
-    private final MyTimer timer;
+    private final MyTimer timer;                    // Timer distributed to any other classes that require it
     private final MindWeaver game;
-    private final OrthographicCamera gameCam;
+    private final OrthographicCamera gameCam;       // Camera that will follow the player
     private final Viewport gamePort;
     private final OrthogonalTiledMapRenderer renderer;
     private final World world;    // World holding all the physical objects
@@ -49,9 +49,7 @@ public class GameScreen extends ManagedScreen {
 
         // Creating tile map
         TmxMapLoader mapLoader = new TmxMapLoader();
-        TiledMap map = null;
-
-        map = mapLoader.load("Tilemaps/level" + this.level + ".tmx");
+        TiledMap map = mapLoader.load("Tilemaps/level" + this.level + ".tmx");
         fpsCounter = new FPSCounter();
 
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
@@ -59,19 +57,19 @@ public class GameScreen extends ManagedScreen {
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(Constants.TILE_SIZE * 30 / Constants.PPM, Constants.TILE_SIZE * 17 / Constants.PPM, gameCam);
 
-        ColorGenerator colorGenerator = new ColorGenerator();
+        ColourGenerator colourGenerator = new ColourGenerator();
         AtomicInteger eidAllocator = new AtomicInteger();
 
         timer = new MyTimer();
 
         // Tools and handlers
-        ShaderHandler shaderHandler = new ShaderHandler(colorGenerator);
+        ShaderHandler shaderHandler = new ShaderHandler(colourGenerator);
         shapeDrawer = new ShapeDrawer(shaderHandler, resourceManager);
         textureDrawer = new TextureDrawer(shaderHandler);
         LightManager lightManager = new LightManager(world);
         ObjectHandler objectHandler = new ObjectHandler(resourceManager);
         VisionMap visionMap =  new VisionMap(world, shapeDrawer, game.hud);
-        CharacterCycle characterCycle = new CharacterCycle(visionMap, colorGenerator);
+        CharacterCycle characterCycle = new CharacterCycle(visionMap, colourGenerator);
         EntityHandler entityHandler = new EntityHandler(characterCycle, shaderHandler, visionMap);
         ParticleHandler particleHandler = new ParticleHandler();
 
@@ -84,7 +82,7 @@ public class GameScreen extends ManagedScreen {
         world.setContactListener(new MyContactListener(util, game.hud, screenManager, level, resourceManager));
         b2dr = new Box2DDebugRenderer();
         new B2WorldHandler(world, map, resourceManager, timer, eidAllocator, util, level, game.hud, textureDrawer);     //Creating world
-        lightManager.setDim(0.6f);
+        lightManager.setDim(0.6f);  // Making the environment 40% less bright
     }
 
     @Override
@@ -126,6 +124,7 @@ public class GameScreen extends ManagedScreen {
 
         screenManager.render(delta);
 
+        //Uncomment this to render fixture outlines
         //b2dr.render(world, gameCam.combined);
 
         gameCam.position.set(util.getCharacterCycle().getCurrentCharacter().getPosition().x, util.getCharacterCycle().getCurrentCharacter().getPosition().y + 20 / Constants.PPM, 0);

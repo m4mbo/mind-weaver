@@ -47,6 +47,8 @@ public class Merchant extends Entity{
         interactionNumber = 0;
     }
 
+    //Push correct merchant cutscenes according to the following situations:
+    //number of papayas, meeting the merchant first time and goal of the game(collecting papayas)
     public void interact() {
         if (hud.enoughPapaya()) hud.pushCutscene("open_shop");
         else if (interactionNumber == 0) hud.pushCutscene("closed_shop");

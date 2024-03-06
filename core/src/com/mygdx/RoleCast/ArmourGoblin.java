@@ -101,6 +101,7 @@ public class ArmourGoblin extends PlayableCharacter {
         else b2body.setLinearVelocity(-Constants.MAX_SPEED_X + 0.9f, b2body.getLinearVelocity().y);
     }
 
+    //Method to set animation according to AState
     @Override
     public void handleAnimation() {
         switch (currAState) {
@@ -128,6 +129,7 @@ public class ArmourGoblin extends PlayableCharacter {
         }
     }
 
+    //Methods to perform relevant actions according to state
     @Override
     public void jump() {
         util.getParticleHandler().addParticleEffect("dust_ground", facingRight ? b2body.getPosition().x - 5 / Constants.PPM : b2body.getPosition().x - 3 / Constants.PPM, b2body.getPosition().y - 10/Constants.PPM);
@@ -149,6 +151,7 @@ public class ArmourGoblin extends PlayableCharacter {
         timer.start(0.1f, "attack_anim", this);
     }
 
+    //Method to update armour goblin's state based on flag
     @Override
     public void notify(String flag) {
         switch (flag) {

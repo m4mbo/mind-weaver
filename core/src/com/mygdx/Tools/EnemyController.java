@@ -9,14 +9,14 @@ import com.mygdx.RoleCast.PlayableCharacter;
 
 import java.util.Random;
 
-public class EnemyController implements Subscriber {
-    private PlayableCharacter enemy;
-    private PlayableCharacter player;
+public class EnemyController implements Subscriber {    //control enemy
+    private final PlayableCharacter enemy;    //enemy to control
+    private final PlayableCharacter player;   //player
     private VisionMap visionMap;
     private MyTimer timer;
     private boolean jumpCoolDown;
-    private boolean eyesOnPlayer;
-    private final Random random;
+    private boolean eyesOnPlayer;       //checks if enemy can see player
+    private final Random random;        //compute random behaviour
 
     public EnemyController(PlayableCharacter player, PlayableCharacter enemy, VisionMap visionMap, MyTimer timer) {
         this.player = player;
@@ -29,6 +29,7 @@ public class EnemyController implements Subscriber {
 
     public void update() {
 
+        //if enemy or player is in a dying state, adjust movement accordingly
         if (enemy.isStateActive(Constants.PSTATE.DYING)) return;
 
         if (player.isStateActive(Constants.PSTATE.DYING)) {
@@ -82,6 +83,7 @@ public class EnemyController implements Subscriber {
         }
     }
 
+    //change movement of enemy to follow player
     public void follow(Vector2 enemyPos, Vector2 playerPos) {
         if (enemyPos.x < playerPos.x) {
             enemy.setMovementState(Constants.MSTATE.RIGHT);

@@ -29,7 +29,7 @@ public class LevelsScreen extends ManagedScreen {
 
         this.screenManager = screenManager;
         this.stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(null);
+        Gdx.input.setInputProcessor(null);  //Don't use any input processor
         currLevel = levelProgression;
 
         shapeRenderer = new ShapeRenderer();
@@ -39,14 +39,17 @@ public class LevelsScreen extends ManagedScreen {
         wasClicked = false;
     }
 
+    //method to initialise levels screen
     public void initLevelsScreen(MyResourceManager resourceManager) {
 
+        //draw background
         Texture bg = resourceManager.getTexture("levels_bg");
         Image levelsBGImage =  new Image(bg);
         levelsBGImage.setPosition(0, 0);
         levelsBGImage.setSize(levelsBGImage.getWidth() * 7.5f, levelsBGImage.getHeight() * 7.5f);
         stage.addActor(levelsBGImage);
 
+        //load relevant texture according to levels completed
         switch (currLevel) {
             case 1:
                 levelsTexture = resourceManager.getTexture("LevelsScreen1");
@@ -67,15 +70,17 @@ public class LevelsScreen extends ManagedScreen {
                 break;
         }
 
+        //convert levels texture to image
         Image levelsImage = new Image(levelsTexture);
         levelsImage.setPosition((float) (Gdx.graphics.getWidth() - levelsTexture.getWidth()) / 2, (float) (Gdx.graphics.getHeight() - levelsTexture.getHeight()) / 2);
         levelsImage.setSize(levelsTexture.getWidth(), levelsTexture.getHeight());
         stage.addActor(levelsImage);
 
-        levels = new Array<>();
+        levels = new Array<>(); //to store the hexagons around the levels platforms for relevant level input
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
 
+        //calculate the position of the vertices for the hexagon according to width and height
         float[] levelVertices = {width/4.5f, height/3.3f, width/3.76f, height/2.9f, width/3.76f, height/2.3f, width/4.5f, height/2.1f, width/5.6f, height/2.3f, width/5.6f, height/2.9f};
         levels.add(new Polygon(levelVertices));
 
@@ -98,6 +103,7 @@ public class LevelsScreen extends ManagedScreen {
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        //draw hexagons
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(0, 0, 0, 0);
         for (Polygon polygon: levels) {
@@ -106,13 +112,14 @@ public class LevelsScreen extends ManagedScreen {
         shapeRenderer.end();
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
+        stage.draw();   //draw background image and levels texture
 
         screenManager.render(delta);
 
         handleInput();
     }
     public void handleInput() {
+        //method that will load the relevant level with a transition only if the previous level was completed
         if (wasClicked) return;
         if (Gdx.input.justTouched()) {
             Vector3 touchPoint = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -143,11 +150,11 @@ public class LevelsScreen extends ManagedScreen {
             }
         }
     }
-
     @Override
     public void dispose() {
         stage.dispose();
         shapeRenderer.dispose();
+        levelsTexture.dispose();
     }
     @Override
     public void show() { }

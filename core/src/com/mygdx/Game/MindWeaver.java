@@ -10,41 +10,54 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MindWeaver extends Game {
 
-	public SpriteBatch batch;
-	private MyResourceManager resourceManager;
-	public HUD hud;		// HUD holding inventory will remain constant across all screens
+	/*
+	 * HUD holding inventory will remain constant across all screens
+	 * This allows transferring of item information through every level
+	 */
+	public HUD hud;
+	public SpriteBatch batch;	//instantiate sprite batch
+	private MyResourceManager resourceManager; //instantiate resource manager
+
 
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		resourceManager = new MyResourceManager();
+		batch = new SpriteBatch();					//instantiate and initialise batch
+		resourceManager = new MyResourceManager();	//initialise resource manager
+		//instantiate and initialise screen manager
 		ScreenManager screenManager = new ScreenManager(this, resourceManager, new MusicManager());
-
 		loadSprites();
 
-		hud = new HUD(batch, resourceManager);
+		hud = new HUD(batch, resourceManager);	//heads up display for lives and papayas
 
-		screenManager.pushScreen(Constants.SCREEN_OP.START, "none");
+		screenManager.pushScreen(Constants.SCREEN_OP.START, "none");	//set screen to start screen
 	}
 
+	// Loading sprites to the resource manager for later use
 	public void loadSprites() {
 
 		//Start Screen buttons
 		resourceManager.loadTexture("Buttons/UnclickedPlayButton.png", "UnclickedPlayButton");
+		resourceManager.loadTexture("Buttons/HoverPlayButton.png", "HoverPlayButton");
 		resourceManager.loadTexture("Buttons/ClickedPlayButton.png", "ClickedPlayButton");
 		resourceManager.loadTexture("Buttons/UnclickedExitButton.png", "UnclickedExitButton");
+		resourceManager.loadTexture("Buttons/HoverExitButton.png", "HoverExitButton");
 		resourceManager.loadTexture("Buttons/ClickedExitButton.png", "ClickedExitButton");
 
 		//Menu Screen buttons
 		resourceManager.loadTexture("Buttons/UnclickedResumeButton.png", "UnclickedResumeButton");
+		resourceManager.loadTexture("Buttons/HoverResumeButton.png", "HoverResumeButton");
 		resourceManager.loadTexture("Buttons/ClickedResumeButton.png", "ClickedResumeButton");
+
 		resourceManager.loadTexture("Buttons/UnclickedRestartButton.png", "UnclickedRestartButton");
+		resourceManager.loadTexture("Buttons/HoverRestartButton.png", "HoverRestartButton");
 		resourceManager.loadTexture("Buttons/ClickedRestartButton.png", "ClickedRestartButton");
+
 		resourceManager.loadTexture("Buttons/UnclickedLevelsButton.png", "UnclickedLevelsButton");
+		resourceManager.loadTexture("Buttons/HoverLevelsButton.png", "HoverLevelsButton");
 		resourceManager.loadTexture("Buttons/ClickedLevelsButton.png", "ClickedLevelsButton");
 
-		//Controls buttons
 		resourceManager.loadTexture("Buttons/UnclickedControlsButton.png", "UnclickedControlsButton");
+		resourceManager.loadTexture("Buttons/HoverControlsButton.png", "HoverControlsButton");
 		resourceManager.loadTexture("Buttons/ClickedControlsButton.png", "ClickedControlsButton");
 
 		// Mage
@@ -127,6 +140,7 @@ public class MindWeaver extends Game {
 		//Messages
 		resourceManager.loadTexture("Messages/press_x.png", "x");
 		resourceManager.loadTexture("Messages/press_shift.png", "shift");
+		resourceManager.loadTexture("Messages/press_space.png", "space");
 
 		//SFX
 		resourceManager.loadSound("SoundEffects/jump.mp3", "jump");

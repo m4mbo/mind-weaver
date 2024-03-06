@@ -23,6 +23,8 @@ public class ParticleHandler {
 
         float scaleFactor = 1 / 2000f;
 
+        // Initializing particle effects
+
         ParticleEffect dustGround = new ParticleEffect();
         dustGround.load(Gdx.files.internal("Particles/dust_ground.p"), Gdx.files.internal("Particles"));
         dustGround.scaleEffect(scaleFactor);
@@ -50,9 +52,10 @@ public class ParticleHandler {
         auraEffectPool = new ParticleEffectPool(aura, 1, 2);
     }
 
-    public void addParticleEffect(String tag, float x, float y) {
+    // Adding particle effect based on the provided key
+    public void addParticleEffect(String key, float x, float y) {
         PooledEffect effect = null;
-        switch (tag) {
+        switch (key) {
             case "dust_ground":
                 effect = dustGroundEffectPool.obtain();
                 break;
@@ -72,14 +75,17 @@ public class ParticleHandler {
                 break;
         }
 
+        // Making sure the effect is not null
         assert effect != null;
         effect.setPosition(x, y);
         effects.add(effect);
     }
 
     public void render(SpriteBatch batch, float delta) {
+        // Linked list to keep track of particles to remove
         LinkedList<ParticleEffect> toRemove = new LinkedList<>();
 
+        //Rendering all particles
         batch.begin();
         for (int i = effects.size() - 1; i >= 0; i--) {
             PooledEffect effect = effects.get(i);

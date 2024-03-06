@@ -1,0 +1,3 @@
+cd ..
+./gradlew
+./gradlew run

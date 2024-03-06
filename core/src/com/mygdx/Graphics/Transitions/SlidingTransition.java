@@ -7,9 +7,9 @@ import com.mygdx.Helpers.Constants;
 
 public class SlidingTransition extends Transition {
 
-    private final Constants.SLIDE_DIR direction;
-    private final float speed;
-    private final TextureRegion screenRegion;
+    private final Constants.SLIDE_DIR direction;    // Sliding direction
+    private final float speed;      // Speed of the sliding transition (how fast will it move)
+    private final TextureRegion screenRegion;       // Region holding the parent screen
     private float currY, currX;
 
     public SlidingTransition(TextureRegion screenRegion, float duration, float speed, Constants.SLIDE_DIR direction, Matrix4 screenProjection) {
@@ -28,8 +28,9 @@ public class SlidingTransition extends Transition {
 
         batch.setProjectionMatrix(screenProjection);
 
-        timePassed += delta;
+        timePassed += delta; //record how long the time taken to perform transition
 
+        //change position of x or y according to transition type
         if (direction == Constants.SLIDE_DIR.SLIDE_DOWN) currY -= speed;
         else if (direction == Constants.SLIDE_DIR.SLIDE_UP) currY += speed;
         else if (direction == Constants.SLIDE_DIR.SLIDE_LEFT) currX -= speed;

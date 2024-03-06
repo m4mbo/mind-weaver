@@ -66,6 +66,7 @@ public class BaseGoblin extends PlayableCharacter{
         b2body.createFixture(fdef).setUserData("bottomSensor");
     }
 
+    //Method to set animation according to AState
     @Override
     public void handleAnimation() {
         switch (currAState) {
@@ -90,6 +91,7 @@ public class BaseGoblin extends PlayableCharacter{
         }
     }
 
+    //Methods to perform relevant actions according to state
     public void land() {
         addPlayerState(Constants.PSTATE.ON_GROUND);
         addPlayerState(Constants.PSTATE.LANDING);

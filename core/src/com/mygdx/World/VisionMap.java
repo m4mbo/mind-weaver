@@ -19,7 +19,7 @@ public class VisionMap {
     private final AdjacencyList<PlayableCharacter> targetMap;       // Map keeping characters in target, helps with performance
     private final AdjacencyList<PlayableCharacter> bullseyeMap;
 
-    // Avoiding spanning tree creation at every frame
+    // Avoiding spanning tree creation at every frame, performance tweak
     private boolean bullseyeChange;
     private Map<PlayableCharacter, List<PlayableCharacter>> bullseyeStream;     // Spanning tree of bullseyeMap
     private final World world;
@@ -60,17 +60,23 @@ public class VisionMap {
     }
 
     public void update(float delta) {
+
         for (PlayableCharacter character : targetMap.getVerticesWithNeighbours()) {
+            // Modifying graph edges
             attemptConnection(character);
         }
+        // Solidifying connection according to updated edges
         solidifyConnections();
     }
 
     public void solidifyConnections() {
         if (bullseyeChange) {
-            bullseyeStream = bullseyeMap.getSpanningTree(mage);
+            // Computing spanning tree with source node as the mage
+            bullseyeStream = bullseyeMap.getSpanningTree(mage);     // We can assume that the bullseyeMap has already been successfully modified
             bullseyeChange = false;
         }
+
+        // Handling tree connections
         for (PlayableCharacter character : bullseyeStream.keySet()) {
             for (PlayableCharacter neighbour : bullseyeStream.get(character)) {
                 if (!character.isStateActive(Constants.PSTATE.DYING) && !neighbour.isStateActive(Constants.PSTATE.DYING)) {
@@ -82,33 +88,38 @@ public class VisionMap {
 
     public void attemptConnection(PlayableCharacter source) {
 
-        boolean armourUnlocked = hud.arePowersUnlocked();
+        boolean armourUnlocked = hud.arePowersUnlocked();   // Not counting armour goblins if powers not unlocked
 
         if (source instanceof ArmourGoblin && !armourUnlocked) return;
 
         LinkedList<PlayableCharacter> targets = targetMap.getNeighbours(source);
+
+        // Iterating through characters in target map
         for (PlayableCharacter target : targets) {
 
             if (target instanceof ArmourGoblin && !armourUnlocked) continue;
 
+            // Sending ray from source to target, if reached
             if (sendSignal(source, target)) {
                 if (source instanceof Mage || traceable(mage, source)) {
                     if (bullseyeMap.addEdge(source, target)) {
-                        characterCycle.updateCycle();
+                        characterCycle.updateCycle();   // Updating cycle with new connection
                         bullseyeChange = true;
                     }
                 }
             } else {
+                // If ray not reached
                 if (bullseyeMap.removeEdge(source, target) || bullseyeMap.removeEdge(target, source)) {
-                    characterCycle.updateCycle();
+                    characterCycle.updateCycle();   // If successfully removed edge (meaning it was part of graph before)
                     bullseyeChange = true;
                 }
-                if (!traceable(target)) target.looseControl();
-                if (!traceable(source)) source.looseControl();
+                if (!traceable(target)) target.looseControl();  // If the target cannot be traced from mage
+                if (!traceable(source)) source.looseControl();  // If the source ``
             }
         }
     }
 
+    // Sending ray cast from source to target
     public boolean sendSignal(PlayableCharacter source, PlayableCharacter target) {
         final Vector2 targetPos = target.getPosition();
         RayCastCallback callback = new RayCastCallback() {
@@ -130,6 +141,7 @@ public class VisionMap {
         }
     }
 
+    // Drawing connection wave between characters
     public void establishConnection(PlayableCharacter source, PlayableCharacter target) {
 
         float targetX = target.getPosition().x;

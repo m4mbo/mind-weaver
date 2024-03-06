@@ -16,8 +16,8 @@ import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Helpers.Constants;
 
 public class MenuScreen extends ManagedScreen {
-
     private final ScreenManager screenManager;
+    private final MyResourceManager resourceManager;
     private final float buttonWidth, buttonHeight;
     private final Stage stage;
     private Array<ImageButton> buttons;
@@ -25,30 +25,39 @@ public class MenuScreen extends ManagedScreen {
     public MenuScreen(MyResourceManager resourceManager, ScreenManager screenManager, Texture background) {
 
         this.screenManager = screenManager;
+        this.resourceManager = resourceManager;
         this.stage = new Stage(new ScreenViewport());
         this.buttonWidth = Constants.BUTTON_WIDTH;
         this.buttonHeight = Constants.BUTTON_HEIGHT;
 
         Gdx.input.setInputProcessor(stage);
 
+        //load image of current level
         Image levelsBGImage =  new Image(background);
         levelsBGImage.setPosition(0, levelsBGImage.getHeight());
         levelsBGImage.setSize(levelsBGImage.getWidth(), -levelsBGImage.getHeight());
         stage.addActor(levelsBGImage);
 
+        //load translucent background
         Image transBGImage =  new Image(resourceManager.getTexture("translucent_bg"));
         transBGImage.setPosition(0,0);
         transBGImage.setSize(transBGImage.getWidth() * 7.5f, transBGImage.getHeight() * 7.5f);
         stage.addActor(transBGImage);
 
-        initMenuScreen(resourceManager);
+        initMenuScreen();
 
     }
 
-    public void initButton(final Skin skin, final String unclickedImagePath, final String clickedImagePath, int offset, final float width, final float height, final Constants.SCREEN_OP screenType) {
+    //method to set up buttons using skins, buttonstyle, image buttons
+    public void initButton(final String unclickedImagePath, final String hoverImagePath, final String clickedImagePath, int offset, final float width, final float height, final Constants.SCREEN_OP screenType) {
+        Skin skin = new Skin();
+        skin.add(unclickedImagePath, resourceManager.getTexture(unclickedImagePath));
+        skin.add(hoverImagePath, resourceManager.getTexture(hoverImagePath));
+        skin.add(clickedImagePath, resourceManager.getTexture(clickedImagePath));
 
         ImageButton.ImageButtonStyle buttonStyle = new ImageButton.ImageButtonStyle();
         buttonStyle.imageUp = skin.getDrawable(unclickedImagePath);
+        buttonStyle.imageOver = skin.getDrawable(hoverImagePath);
         buttonStyle.imageDown = skin.getDrawable(clickedImagePath);
 
         final ImageButton button = new ImageButton(buttonStyle);
@@ -66,36 +75,19 @@ public class MenuScreen extends ManagedScreen {
 
     }
 
-    private void initMenuScreen(MyResourceManager resourceManager) {
+    private void initMenuScreen() { //method that calls initButton for every menu screen button
 
         buttons = new Array<>();
 
-        final Skin resumeSkin = new Skin();
-        resumeSkin.add("UnclickedResumeButton", resourceManager.getTexture("UnclickedResumeButton"));
-        resumeSkin.add("ClickedResumeButton", resourceManager.getTexture("ClickedResumeButton"));
+        initButton("UnclickedResumeButton", "HoverResumeButton", "ClickedResumeButton", -350, buttonWidth, buttonHeight, Constants.SCREEN_OP.RESUME);
 
-        initButton(resumeSkin, "UnclickedResumeButton", "ClickedResumeButton", -350, buttonWidth, buttonHeight, Constants.SCREEN_OP.RESUME);
+        initButton("UnclickedRestartButton", "HoverRestartButton","ClickedRestartButton", -150, buttonWidth, buttonHeight, Constants.SCREEN_OP.RESTART);
 
-        final Skin restartSkin = new Skin();
-        restartSkin.add("UnclickedRestartButton", resourceManager.getTexture("UnclickedRestartButton"));
-        restartSkin.add("ClickedRestartButton", resourceManager.getTexture("ClickedRestartButton"));
+        initButton("UnclickedControlsButton", "HoverControlsButton","ClickedControlsButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_OP.CONTROLS);
 
-        initButton(restartSkin, "UnclickedRestartButton", "ClickedRestartButton", -150, buttonWidth, buttonHeight, Constants.SCREEN_OP.RESTART);
+        initButton("UnclickedLevelsButton", "HoverLevelsButton","ClickedLevelsButton", 250, buttonWidth, buttonHeight, Constants.SCREEN_OP.LEVELS);
 
-        final Skin controlsSkin = new Skin();
-        controlsSkin.add("UnclickedControlsButton", resourceManager.getTexture("UnclickedControlsButton"));
-        controlsSkin.add("ClickedControlsButton", resourceManager.getTexture("ClickedControlsButton"));
-        initButton(controlsSkin, "UnclickedControlsButton", "ClickedControlsButton", 50, buttonWidth, buttonHeight, Constants.SCREEN_OP.CONTROLS);
-
-        final Skin levelsSkin = new Skin();
-        levelsSkin.add("UnclickedLevelsButton", resourceManager.getTexture("UnclickedLevelsButton"));
-        levelsSkin.add("ClickedLevelsButton", resourceManager.getTexture("ClickedLevelsButton"));
-        initButton(levelsSkin, "UnclickedLevelsButton", "ClickedLevelsButton", 250, buttonWidth, buttonHeight, Constants.SCREEN_OP.LEVELS);
-
-        final Skin exitSkin = new Skin();
-        exitSkin.add("UnclickedExitButton", resourceManager.getTexture("UnclickedExitButton"));
-        exitSkin.add("ClickedExitButton", resourceManager.getTexture("ClickedExitButton"));
-        initButton(exitSkin, "UnclickedExitButton", "ClickedExitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_OP.EXIT);
+        initButton("UnclickedExitButton", "HoverExitButton","ClickedExitButton", 450, buttonWidth, buttonHeight, Constants.SCREEN_OP.EXIT);
     }
 
     @Override
@@ -104,16 +96,15 @@ public class MenuScreen extends ManagedScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);;
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
+        stage.draw(); //draw buttons
 
         screenManager.render(delta);
     }
 
     @Override
     public void dispose() {
-        stage.dispose();
-
-        for (ImageButton button : buttons) {
+        stage.dispose();    //dispose stage
+        for (ImageButton button : buttons) {         //dispose menu screen buttons' skins
             Skin skin = button.getSkin();
             if (skin != null) {
                 skin.dispose();
@@ -121,15 +112,13 @@ public class MenuScreen extends ManagedScreen {
         }
     }
     @Override
+    public Matrix4 getProjectionMatrix() { return stage.getBatch().getProjectionMatrix(); }    //method for screen transition
+    @Override
     public void show() { }
     @Override
     public void resize(int i, int j) { }
     @Override
     public void pause() { }
-    @Override
-    public Matrix4 getProjectionMatrix() {
-        return stage.getBatch().getProjectionMatrix();
-    }
     public void resume() { }
     @Override
     public void hide() { }

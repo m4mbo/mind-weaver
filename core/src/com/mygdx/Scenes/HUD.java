@@ -16,26 +16,27 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.Graphics.ShaderHandler;
 import com.mygdx.Tools.FancyFontHelper;
 import com.mygdx.RoleCast.Mage;
-import com.mygdx.Tools.ColorGenerator;
+import com.mygdx.Tools.ColourGenerator;
 import com.mygdx.Tools.MyResourceManager;
 import com.mygdx.Tools.ShapeDrawer;
 
 public class HUD {
 
-    private final boolean[] papayas;
+    private final boolean[] papayas;    // Each index in this array determines if the papaya has been collected at that level
     public Stage stage;
     private final Viewport viewport;
     private final MyResourceManager resourceManager;
     private final InventoryActor inventoryActor;
     private final ShapeDrawer shapeDrawer;
-    private boolean standBy;
-    private boolean powersUnlocked;
+    private boolean standBy;        // Will determine if input processor can receive input or not
+    private boolean powersUnlocked;     // Will determine if player has sold all 3 papayas to the merchant
     private CutScene currCutscene;
+    private final LifeActor lifeActor;
 
     public HUD(SpriteBatch batch, MyResourceManager resourceManager) {
         this.resourceManager = resourceManager;
 
-        this.shapeDrawer = new ShapeDrawer(new ShaderHandler(new ColorGenerator()), resourceManager);
+        this.shapeDrawer = new ShapeDrawer(new ShaderHandler(new ColourGenerator()), resourceManager);
 
         papayas = new boolean[]{false, false, false, false, false};
         viewport = new FitViewport(3840, 2160, new OrthographicCamera());
@@ -53,30 +54,29 @@ public class HUD {
         currCutscene = null;
 
         inventoryActor.setVisible(false);
+
+        lifeActor = new LifeActor(resourceManager.getTexture("life"));
+        stage.addActor(lifeActor);
     }
 
     public void addPapaya(int level) {
         papayas[level] = true;
     }
 
-    public void removePapaya(int level) {
-        papayas[level-1] = false;
-    }
-
-    public void setPlayer(Mage player) {
-        stage.addActor(new LifeActor(resourceManager.getTexture("life"), player));
-    }
+    public void setPlayer(Mage player) { lifeActor.setPlayer(player); }
 
     public void render(SpriteBatch batch) {
         batch.setProjectionMatrix(stage.getCamera().combined);
         stage.draw();
     }
 
+    // Inventory will be rendered
     public void pushInventory() {
         standBy = true;
         inventoryActor.setVisible(true);
     }
 
+    // Creating a cutscene and rendering it
     public void pushCutscene(String tag) {
         if (tag.equals("open_shop")) powersUnlocked = true;
         currCutscene = new CutScene(stage, tag, resourceManager);
@@ -84,6 +84,7 @@ public class HUD {
         currCutscene.setVisible(true);
     }
 
+    // Cycle to the next cutscene text in chain
     public void cycleCutscene() {
         if (!currCutscene.cycleMessage()) return;
         currCutscene.setVisible(false);
@@ -91,6 +92,7 @@ public class HUD {
         currCutscene = null;
     }
 
+    // Removing cutscene from the screen
     public void removeCutscene() {
         if (currCutscene == null) return;
         currCutscene.setVisible(false);
@@ -115,6 +117,7 @@ public class HUD {
         return currCutscene;
     }
 
+    // Checking if player has collected the required 3 papayas
     public boolean enoughPapaya() {
         int papayaCount = 0;
         for (boolean item : papayas) {
@@ -127,17 +130,23 @@ public class HUD {
         return powersUnlocked;
     }
 
+    // Actor used to draw mage's lives
     private class LifeActor extends Actor {
         private final TextureRegion region;
-        private final Mage player;
+        private Mage player;
 
-        public LifeActor(Texture texture, Mage player) {
+        public LifeActor(Texture texture) {
             region = new TextureRegion(texture);
+        }
+
+        public void setPlayer(Mage player) {
             this.player = player;
         }
 
         @Override
         public void draw(Batch batch, float parentAlpha) {
+            if (player == null) return;
+
             Color color = getColor();
             batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
             float x = 20;
@@ -150,6 +159,7 @@ public class HUD {
         }
     }
 
+    // Actor used to draw the ESC and I buttons
     private class ButtonActor extends Actor {
         private final TextureRegion region1;
         private final TextureRegion region2;
@@ -170,6 +180,7 @@ public class HUD {
         }
     }
 
+    // Actor used to draw the inventory
     private class InventoryActor extends Table {
         private final Label papayaLabel;
 
@@ -198,6 +209,7 @@ public class HUD {
             Color color = getColor();
             batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
 
+            // Translucent mask over the screen
             shapeDrawer.drawRectangle(viewport.getWorldHeight(), viewport.getWorldWidth(), 0, 0, "translucent");
 
             batch.end();
