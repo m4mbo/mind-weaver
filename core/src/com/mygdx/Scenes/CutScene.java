@@ -76,6 +76,12 @@ public class CutScene extends Actor {
                 regionChain.add(new TextureRegion(resourceManager.getTexture("mage_neutral")));
                 messageChain.add("...    .");
                 regionChain.add(new TextureRegion(resourceManager.getTexture("butterfly")));
+                messageChain.add("What is that? There \nis a controls section?");
+                regionChain.add(new TextureRegion(resourceManager.getTexture("mage_happy")));
+                messageChain.add("........");
+                regionChain.add(new TextureRegion(resourceManager.getTexture("butterfly")));
+                messageChain.add("Great! I will find it\nin the menu by\npressing ESC");
+                regionChain.add(new TextureRegion(resourceManager.getTexture("mage_neutral")));
                 break;
             case "closed_shop":
                 messageChain.add("Hi there fellow\ntraveler!");
