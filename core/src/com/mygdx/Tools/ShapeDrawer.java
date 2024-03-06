@@ -7,9 +7,9 @@ import com.mygdx.Graphics.ShaderHandler;
 import java.util.LinkedList;
 
 public class ShapeDrawer {
-    private LinkedList<Shape> shapes;
-    private ShaderHandler shaderHandler;
-    private MyResourceManager resourceManager;
+    private final LinkedList<Shape> shapes;
+    private final ShaderHandler shaderHandler;
+    private final MyResourceManager resourceManager;
 
     public ShapeDrawer(ShaderHandler shaderHandler, MyResourceManager resourceManager) {
         shapes = new LinkedList<>();

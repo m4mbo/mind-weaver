@@ -24,7 +24,6 @@ public class FancyFontHelper {
         return INSTANCE;
     }
 
-    // The only really useful method, which requires the desired font colour and size
     public BitmapFont getFont(Color aColor, int size) {
         FreeTypeFontParameter fontParams = new FreeTypeFontParameter();
         fontParams.borderColor = Color.BLACK;

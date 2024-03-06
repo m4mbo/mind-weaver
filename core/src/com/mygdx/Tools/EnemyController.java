@@ -10,8 +10,8 @@ import com.mygdx.RoleCast.PlayableCharacter;
 import java.util.Random;
 
 public class EnemyController implements Subscriber {    //control enemy
-    private PlayableCharacter enemy;    //enemy to control
-    private PlayableCharacter player;   //game player
+    private final PlayableCharacter enemy;    //enemy to control
+    private final PlayableCharacter player;   //player
     private VisionMap visionMap;
     private MyTimer timer;
     private boolean jumpCoolDown;

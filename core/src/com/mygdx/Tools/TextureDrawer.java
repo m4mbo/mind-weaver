@@ -11,9 +11,9 @@ import java.util.LinkedList;
 //Used to draw textures
 public class TextureDrawer {
 
-    private LinkedList<CoordTexture> textures;
+    private final LinkedList<CoordTexture> textures;
 
-    private ShaderHandler shaderHandler;
+    private final ShaderHandler shaderHandler;
 
     public TextureDrawer(ShaderHandler shaderHandler) {
         textures = new LinkedList<>();

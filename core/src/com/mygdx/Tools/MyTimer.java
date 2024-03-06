@@ -6,7 +6,7 @@ import com.mygdx.Helpers.Subscriber;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-//Used to start timers and notify any subscribers subscribed to this when the timer elapsed
+//Used to start timers and notify any subscribers subscribed to this when the timer elapses
 public class MyTimer implements Publisher {
     private final LinkedList<TIMER_MD> timers;
     private final LinkedList<TIMER_MD> timersToAdd;
