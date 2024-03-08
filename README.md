@@ -13,3 +13,6 @@ Unix based systems:
 cd scripts
 ./run.sh
 ```
+
+![start_background](https://github.com/m4mbo/mind-weaver/assets/115642529/2f902043-7335-4218-ae84-ff10c8d45bd0)
+
