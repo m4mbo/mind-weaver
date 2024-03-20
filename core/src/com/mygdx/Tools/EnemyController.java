@@ -58,7 +58,7 @@ public class EnemyController implements Subscriber {    //control enemy
         Vector2 enemyPos = enemy.getPosition();
         Vector2 playerPos = player.getPosition();
 
-        if (MathWizard.inRange(enemyPos.x, playerPos.x, 20 / Constants.PPM)) {
+        if (MathWizard.inRange(enemyPos.x, playerPos.x, 16 / Constants.PPM)) {
             enemy.setMovementState(Constants.MSTATE.HSTILL);
             if (MathWizard.inRange(enemyPos.y, playerPos.y, 8 / Constants.PPM)) {
                 ((ArmourGoblin) enemy).attack();
