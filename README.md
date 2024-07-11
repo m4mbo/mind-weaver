@@ -24,13 +24,13 @@ For more information on the controls, please refer to the 'Controls' section ins
 
 <div style="display: flex; justify-content: center;">
     <div style="flex: 33.33%; padding: 5px;">
-        <img src="assets/github/lights.png" style="width: 100%;" />
+        <img src="assets/github/lights.png" style="width: 50%;" />
     </div>
     <div style="flex: 33.33%; padding: 5px;">
-        <img src="assets/github/puzzles.png" style="width: 100%;" />
+        <img src="assets/github/puzzles.png" style="width: 50%;" />
     </div>
     <div style="flex: 33.33%; padding: 5px;">
-        <img src="assets/github/papaya.png" style="width: 100%;" />
+        <img src="assets/github/papaya.png" style="width: 50%;" />
     </div>
 </div>
 
