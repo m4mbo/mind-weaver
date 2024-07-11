@@ -21,18 +21,20 @@ For more information on the controls, please refer to the 'Controls' section ins
 * Brain wrecking **puzzles** 
 * **PAPAYA** ![ppy](assets/Items/papaya.png)![ppy](assets/Items/papaya.png)![ppy](assets/Items/papaya.png)
 
-
-<div style="display: flex; justify-content: center;">
-    <div style="flex: 33.33%; padding: 5px;">
+<div style="display: flex; justify-content: center; flex-wrap: wrap;">
+    <div style="flex: 50%; padding: 5px;">
         <img src="assets/github/lights.png" style="width: 50%;" />
     </div>
-    <div style="flex: 33.33%; padding: 5px;">
-        <img src="assets/github/puzzles.png" style="width: 50%;" />
-    </div>
-    <div style="flex: 33.33%; padding: 5px;">
-        <img src="assets/github/papaya.png" style="width: 50%;" />
+    <div style="flex: 50%; display: flex; flex-wrap: wrap;">
+        <div style="flex: 100%; padding: 5px;">
+            <img src="assets/github/puzzles.png" style="width: 50%;" />
+        </div>
+        <div style="flex: 100%; padding: 5px;">
+            <img src="assets/github/papaya.png" style="width: 50%;" />
+        </div>
     </div>
 </div>
+
 
 
 
