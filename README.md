@@ -21,24 +21,7 @@ For more information on the controls, please refer to the 'Controls' section ins
 * Brain wrecking **puzzles** 
 * **PAPAYA** ![ppy](assets/Items/papaya.png)![ppy](assets/Items/papaya.png)![ppy](assets/Items/papaya.png)
 
-<div style="display: flex; justify-content: center;">
-    <div style="flex: 0 1 auto; padding: 5px;">
-        <img src="assets/github/papaya.png" style="width: 70%;" />
-    </div>
-    <div style="flex: 0 1 auto; padding: 5px;">
-        <img src="assets/github/puzzles.png" style="width: 70%;" />
-    </div>
-</div>
-
-<div style="display: flex; justify-content: center;">
-    <div style="flex: 0 1 auto; padding: 5px;">
-        <img src="assets/github/lights.png" style="width: 70%;" />
-    </div>
-</div>
-
-
-
-
+Refer to [screenshots](#screenshots).
 
 
 ## Dependencies
@@ -59,4 +42,24 @@ cd scripts
 * [m4mbo](https://github.com/m4mbo) ![ppy](assets/Items/bug.png) - Game idea, Art, Code
 * [RedHatParichay](https://github.com/RedHatParichay) - UI related code
 
+## Screenshots
+
+<div style="text-align: center;">
+  <img src="assets/github/puzzles.png" alt="papaya">
+</div>
+
+**Description:** Puzzles
+
+<div style="text-align: center;">
+  <img src="assets/github/lights.png" alt="papaya">
+</div>
+
+**Description:** Lights, shaders, animation and particle effects.
+
+
+<div style="text-align: center;">
+  <img src="assets/github/papaya.png" alt="papaya">
+</div>
+
+**Description:** PAPAYA
 
