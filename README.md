@@ -23,16 +23,16 @@ For more information on the controls, please refer to the 'Controls' section ins
 
 <div style="display: flex; justify-content: center;">
     <div style="flex: 0 1 auto; padding: 5px;">
-        <img src="assets/github/papaya.png" style="width: 30%;" />
+        <img src="assets/github/papaya.png" style="width: 70%;" />
     </div>
     <div style="flex: 0 1 auto; padding: 5px;">
-        <img src="assets/github/puzzles.png" style="width: 30%;" />
+        <img src="assets/github/puzzles.png" style="width: 70%;" />
     </div>
 </div>
 
 <div style="display: flex; justify-content: center;">
     <div style="flex: 0 1 auto; padding: 5px;">
-        <img src="assets/github/lights.png" style="width: 30%;" />
+        <img src="assets/github/lights.png" style="width: 70%;" />
     </div>
 </div>
 
