@@ -59,16 +59,17 @@ public final class ScreenManager {
             return;
         }
 
-        // Dispose resources of the current screen if it exists
+        // Dispose resources of the previous screen if it exists
         if(prevScreen != null) {
             prevScreen.dispose();
         }
 
-        // Dispose resources of the current screen if it exists
+        // Set previous screen to current
         if (currScreen != null) {
             prevScreen = currScreen;
         }
-        //if the current screen is a game screen, set the level to the current screen's level
+
+        // If the current screen is a game screen, set the level to the current screen's level
         if (currScreen instanceof GameScreen) level = ((GameScreen) currScreen).getLevel();
 
         // Set the new screen

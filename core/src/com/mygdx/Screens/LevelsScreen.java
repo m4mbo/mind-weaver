@@ -154,7 +154,6 @@ public class LevelsScreen extends ManagedScreen {
     public void dispose() {
         stage.dispose();
         shapeRenderer.dispose();
-        levelsTexture.dispose();
     }
     @Override
     public void show() { }
