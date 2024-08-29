@@ -5,7 +5,8 @@ You wake up as a mage, trapped deep within the confines of a dungeon ruled by go
 
 ## How to play
 
-Download the latest version (jar file) from the [Releases](https://github.com/m4mbo/mind-weaver/releases) section or alternatively [build from source](#building-from-source).
+Download the latest version (jar file) from the [Releases](https://github.com/m4mbo/mind-weaver/releases) section or alternatively [build from source](#building-from-source). 
+***Update:*** Now also available on [Steam](https://store.steampowered.com/app/3158220/Mind_Weaver/)!
 
 ### Controls
 
