@@ -16,14 +16,13 @@ For more information on the controls, please refer to the 'Controls' section ins
 
 ## What to expect?
 
-* **Lights** and **animation** 
+* **Lights** and **particle effects** 
 * *Pixel perfect movement*
 * 5 levels of **increasing** diffculty 
 * Brain wrecking **puzzles** 
 * **PAPAYA** ![ppy](assets/Items/papaya.png)![ppy](assets/Items/papaya.png)![ppy](assets/Items/papaya.png)
 
 Refer to [screenshots](#screenshots).
-
 
 ## Dependencies
 
