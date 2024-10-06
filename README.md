@@ -12,7 +12,9 @@ Download the latest version (jar file) from the [Releases](https://github.com/m4
 
 For more information on the controls, please refer to the 'Controls' section inside the game's main menu (ESC).
 
-![controls](assets/github/controls.png)
+<div align="center">
+  <img src="assets/github/controls.png" alt="demo" width="300"/>
+</div>
 
 ## What to expect?
 
@@ -44,21 +46,21 @@ cd scripts
 
 ## Screenshots
 
-<div style="text-align: center;">
-  <img src="assets/github/puzzles.png" alt="papaya">
+<div align="center">
+  <img src="assets/github/puzzles.png" alt="papaya", width="550"/>
 </div>
 
 **Description:** Puzzles
 
-<div style="text-align: center;">
-  <img src="assets/github/lights.png" alt="papaya">
+<div align="center">
+  <img src="assets/github/lights.png" alt="papaya", width="550"/>
 </div>
 
 **Description:** Lights, shaders, animation and particle effects.
 
 
-<div style="text-align: center;">
-  <img src="assets/github/papaya.png" alt="papaya">
+<div align="center">
+  <img src="assets/github/papaya.png" alt="papaya", width="550"/>
 </div>
 
 **Description:** PAPAYA
